@@ -1,4 +1,5 @@
 "use client";
+
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getCotizacionesDolar } from "@/services/DolarService";
 import { DolarDTO } from "@/types/Dolar";
@@ -40,6 +41,13 @@ export default function DolarSection() {
     fetchData();
   }, [fetchData]);
 
+  useEffect(() => {
+    const id = setInterval(() => {
+      fetchData();
+    }, 300_000);
+    return () => clearInterval(id); 
+  }, [fetchData]);
+
   const firstRow = useMemo(() => data.slice(0, 4), [data]);
   const secondRow = useMemo(() => data.slice(4), [data]);
 
@@ -59,17 +67,14 @@ export default function DolarSection() {
           <Typography variant="h5" sx={{ fontWeight: 800, color: "#39ff14" }}>
             Cotizaciones del dólar
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Tipos: Oficial, Blue, MEP/Bolsa, CCL, Mayorista, Cripto, Tarjeta, etc.
-          </Typography>
-        </Box>
-
-        <Stack direction="row" spacing={1} alignItems="center">
           {updatedAt && (
-            <Typography variant="caption" color="text.secondary" sx={{ mr: 1 }}>
+            <Typography variant="caption" color="text.secondary">
               Última actualización: {updatedAt.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" })}
             </Typography>
           )}
+        </Box>
+
+        <Stack direction="row" spacing={1} alignItems="center">
           <Button
             onClick={fetchData}
             variant="outlined"
@@ -85,6 +90,7 @@ export default function DolarSection() {
 
       <Divider sx={{ my: 2.5, borderColor: "rgba(57,255,20,0.25)" }} />
 
+      {/* Grid filas */}
       <Grid container spacing={3} justifyContent="center" sx={{ mb: secondRow.length ? 1 : 0 }}>
         {firstRow.map((c) => (
           <Grid item xs={12} sm={6} md={3} key={`row1-${c.nombre}`} component="div">
