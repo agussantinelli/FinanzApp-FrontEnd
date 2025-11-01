@@ -89,7 +89,7 @@ export default function CryptoSection() {
       >
         <Box>
           <Typography variant="h5" sx={{ fontWeight: 800, color: "#39ff14" }}>
-            Cripto (Top 8 Market Cap, sin stables)
+            CriptoMonedas Top 10 por Market Cap
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Precios en USD — fuente: CoinGecko/CoinCap.
@@ -133,7 +133,7 @@ export default function CryptoSection() {
               sm={6}
               md={3}
               key={`row1-${c.symbol}`}
-              sx={{ display: "flex" }} // 👈 para que el Card pueda ocupar todo el alto
+              sx={{ display: "flex" }} 
             >
               {CryptoCard(c)}
             </Grid>
