@@ -1,11 +1,39 @@
 import { createTheme } from "@mui/material/styles";
 
-export const theme = createTheme({
+const theme = createTheme({
   palette: {
-    mode: "light",
-    primary: { main: "#0ea5e9" },
-    secondary: { main: "#a78bfa" },
-    background: { default: "transparent", paper: "rgba(255,255,255,0.82)" },
+    mode: "dark",
+    background: { default: "#000000", paper: "#0b0b0b" },
+    primary: { main: "#39ff14" },      
+    secondary: { main: "#00e676" },
+    text: { primary: "#e5e7eb", secondary: "#9ca3af" },
   },
-  shape: { borderRadius: 10 },
+  shape: { borderRadius: 12 },
+  components: {
+    MuiAppBar: {
+      styleOverrides: {
+        root: { background: "rgba(0,0,0,.5)", backdropFilter: "blur(8px)" },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: { root: { backgroundImage: "none" } },
+    },
+  },
+  typography: {
+    fontFamily: [
+      "Inter",
+      "-apple-system",
+      "BlinkMacSystemFont",
+      "Segoe UI",
+      "Roboto",
+      "Helvetica Neue",
+      "Arial",
+      "sans-serif",
+    ].join(","),
+    h1: { fontWeight: 700 },
+    h2: { fontWeight: 700 },
+    h3: { fontWeight: 700 },
+  },
 });
+
+export default theme;
