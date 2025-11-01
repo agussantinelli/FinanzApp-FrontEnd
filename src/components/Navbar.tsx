@@ -30,36 +30,69 @@ export default function Navbar() {
   return (
     <>
       <AppBar position="sticky" elevation={0}>
-        <Toolbar sx={{ minHeight: 72 }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+        <Toolbar
+          sx={{
+            minHeight: { xs: 84, md: 96 }, 
+            px: { xs: 2, md: 3 },
+            backdropFilter: "blur(6px)",
+            bgcolor: "rgba(0,0,0,0.45)",
+          }}
+        >
+          <Box
+            component={Link}
+            href="/"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1.5,
+              textDecoration: "none",
+              color: "inherit",
+              cursor: "pointer",
+            }}
+          >
             <Image
-              src="/favicon.png"  
+              src="/favicon.png"             
               alt="FinanzApp"
-              width={32}
-              height={32}
-              style={{ borderRadius: 8 }}
+              width={87}                      
+              height={48}
+              style={{ borderRadius: 12 }}
               priority
             />
-            <Typography variant="h6" sx={{ letterSpacing: 0.5 }}>
+            <Typography
+              variant="h4"                    // ⬆️ más grande
+              sx={{
+                fontWeight: 800,
+                letterSpacing: 0.6,
+                fontSize: { xs: "1.6rem", sm: "1.9rem", md: "2.1rem" },
+                lineHeight: 1,
+              }}
+            >
               FinanzApp
             </Typography>
           </Box>
 
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
+
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1.2 }}>
             {navItems.map((item) => (
               <Button
                 key={item.href}
                 component={Link}
                 href={item.href}
                 color="inherit"
-                sx={{ textTransform: "none", fontWeight: 500 }}
+                sx={{
+                  textTransform: "none",
+                  fontWeight: 600,
+                  fontSize: "1rem",
+                  px: 2,
+                }}
               >
                 {item.label}
               </Button>
             ))}
           </Box>
 
+          {/* Menú mobile */}
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton color="inherit" onClick={toggle(true)} aria-label="menu">
               <MenuIcon />
@@ -71,7 +104,7 @@ export default function Navbar() {
       <Drawer anchor="right" open={open} onClose={toggle(false)}>
         <Box
           role="presentation"
-          sx={{ width: 260, mt: 2 }}
+          sx={{ width: 280, mt: 2 }}
           onClick={toggle(false)}
           onKeyDown={toggle(false)}
         >
