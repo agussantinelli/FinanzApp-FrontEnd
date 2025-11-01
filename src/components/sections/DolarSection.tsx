@@ -80,7 +80,6 @@ export default function DolarSection() {
 
       <Divider sx={{ my: 2.5, borderColor: "rgba(57,255,20,0.25)" }} />
 
-      {/* ✅ Dos filas separadas con spacing */}
       <Stack spacing={{ xs: 2, md: 3 }}>
         <Grid container spacing={3} justifyContent="center">
           {firstRow.map((c) => {

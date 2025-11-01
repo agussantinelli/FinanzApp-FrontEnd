@@ -42,7 +42,6 @@ export default function CryptoSection() {
         alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
         <div>
           <Typography variant="h5" sx={{ fontWeight: 800, color: "#39ff14" }}>Cripto (Binance)</Typography>
-          <Typography variant="body2" color="text.secondary">Actualiza automáticamente cada 5 minutos.</Typography>
           {updatedAt && (
             <Typography variant="caption" color="text.secondary">
               Última actualización: {updatedAt.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" })}
