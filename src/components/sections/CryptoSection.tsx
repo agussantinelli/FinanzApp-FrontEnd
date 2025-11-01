@@ -42,7 +42,7 @@ export default function CryptoSection() {
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
         alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
         <div>
-          <Typography variant="h5" sx={{ fontWeight: 800, color: "#39ff14" }}>Cripto (Top 6 Market Cap)</Typography>
+          <Typography variant="h5" sx={{ fontWeight: 800, color: "#39ff14" }}>Cripto</Typography>
           <Typography variant="body2" color="text.secondary">Precios en USD – fuente: CoinGecko.</Typography>
           {updatedAt && (
             <Typography variant="caption" color="text.secondary">
