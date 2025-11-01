@@ -3,25 +3,24 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getCotizacionesDolar } from "@/services/DolarService";
 import { DolarDTO } from "@/types/Dolar";
-
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CircularProgress from "@mui/material/CircularProgress";
+import {
+  Paper, Box, Stack, Typography, Divider, Button, Grid, Card,
+  CardContent, CircularProgress
+} from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
-function formatMoney(n: number) {
-  try {
-    return n.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 1 });
-  } catch {
-    return `$${n}`;
-  }
+function formatARS(n: number) {
+  return n.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 1 });
+}
+
+function normalizeName(nombreRaw: string) {
+  const n = nombreRaw.trim().toLowerCase();
+  if (n.includes("contado") || n.includes("liqui") || n.includes("liquid")) return "CCL";
+  if (n.includes("mep")) return "MEP";
+  if (n.includes("oficial")) return "Oficial";
+  if (n.includes("blue")) return "Blue";
+  if (n.includes("cripto") || n.includes("crypto")) return "Cripto";
+  return nombreRaw;
 }
 
 export default function DolarSection() {
@@ -39,30 +38,23 @@ export default function DolarSection() {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      fetchData();
-    }, 300_000);
-    return () => clearInterval(id); 
+    const id = setInterval(fetchData, 300_000); // 5 min
+    return () => clearInterval(id);
   }, [fetchData]);
 
   const firstRow = useMemo(() => data.slice(0, 4), [data]);
   const secondRow = useMemo(() => data.slice(4), [data]);
 
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        p: { xs: 2.5, md: 3 },
-        bgcolor: "rgba(0,255,0,0.03)",
-        border: "1px solid rgba(57,255,20,0.35)",
-        borderRadius: 3,
-        backdropFilter: "blur(3px)",
-      }}
-    >
-      <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
+    <Paper sx={{
+      p: { xs: 2.5, md: 3 },
+      bgcolor: "rgba(0,255,0,0.03)",
+      border: "1px solid rgba(57,255,20,0.35)",
+      borderRadius: 3,
+      backdropFilter: "blur(3px)",
+    }}>
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
+        alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
         <Box>
           <Typography variant="h5" sx={{ fontWeight: 800, color: "#39ff14" }}>
             Cotizaciones del dólar
@@ -74,84 +66,90 @@ export default function DolarSection() {
           )}
         </Box>
 
-        <Stack direction="row" spacing={1} alignItems="center">
-          <Button
-            onClick={fetchData}
-            variant="outlined"
-            color="success"
-            startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
-            disabled={loading}
-            sx={{ borderColor: "#39ff14", color: "#39ff14", "&:hover": { borderColor: "#39ff14" } }}
-          >
-            {loading ? "Actualizando..." : "Actualizar"}
-          </Button>
-        </Stack>
+        <Button
+          onClick={fetchData}
+          variant="outlined"
+          color="success"
+          startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
+          disabled={loading}
+          sx={{ borderColor: "#39ff14", color: "#39ff14", "&:hover": { borderColor: "#39ff14" } }}
+        >
+          {loading ? "Actualizando..." : "Actualizar"}
+        </Button>
       </Stack>
 
       <Divider sx={{ my: 2.5, borderColor: "rgba(57,255,20,0.25)" }} />
 
-      {/* Grid filas */}
-      <Grid container spacing={3} justifyContent="center" sx={{ mb: secondRow.length ? 1 : 0 }}>
-        {firstRow.map((c) => (
-          <Grid item xs={12} sm={6} md={3} key={`row1-${c.nombre}`} component="div">
-            <Card
-              sx={{
-                bgcolor: "rgba(0,255,0,0.05)",
-                border: "1px solid #39ff14",
-                borderRadius: 3,
-                textAlign: "center",
-                boxShadow: "0 0 12px rgba(57,255,20,0.25)",
-                transition: "all 0.3s ease",
-                "&:hover": { transform: "translateY(-5px)", boxShadow: "0 0 18px rgba(57,255,20,0.5)" },
-              }}
-            >
-              <CardContent>
-                <Typography variant="h6" sx={{ color: "#39ff14", fontWeight: 700, mb: 0.5 }}>
-                  {c.nombre}
-                </Typography>
-                <Typography variant="body2" color="white">
-                  Compra: <strong>{formatMoney(c.compra)}</strong>
-                </Typography>
-                <Typography variant="body2" color="white">
-                  Venta: <strong>{formatMoney(c.venta)}</strong>
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      {secondRow.length > 0 && (
+      {/* ✅ Dos filas separadas con spacing */}
+      <Stack spacing={{ xs: 2, md: 3 }}>
         <Grid container spacing={3} justifyContent="center">
-          {secondRow.map((c) => (
-            <Grid item xs={12} sm={6} md={3} key={`row2-${c.nombre}`} component="div">
-              <Card
-                sx={{
-                  bgcolor: "rgba(0,255,0,0.05)",
-                  border: "1px solid #39ff14",
-                  borderRadius: 3,
-                  textAlign: "center",
-                  boxShadow: "0 0 12px rgba(57,255,20,0.25)",
-                  transition: "all 0.3s ease",
-                  "&:hover": { transform: "translateY(-5px)", boxShadow: "0 0 18px rgba(57,255,20,0.5)" },
-                }}
-              >
-                <CardContent>
-                  <Typography variant="h6" sx={{ color: "#39ff14", fontWeight: 700, mb: 0.5 }}>
-                    {c.nombre}
-                  </Typography>
-                  <Typography variant="body2" color="white">
-                    Compra: <strong>{formatMoney(c.compra)}</strong>
-                  </Typography>
-                  <Typography variant="body2" color="white">
-                    Venta: <strong>{formatMoney(c.venta)}</strong>
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
+          {firstRow.map((c) => {
+            const normalized = normalizeName(c.nombre);
+            return (
+              <Grid item xs={12} sm={6} md={3} key={`row1-${c.nombre}`} component="div">
+                <Card
+                  sx={{
+                    bgcolor: "rgba(0,255,0,0.05)",
+                    border: "1px solid #39ff14",
+                    borderRadius: 3,
+                    textAlign: "center",
+                    boxShadow: "0 0 12px rgba(57,255,20,0.25)",
+                    transition: "all 0.3s ease",
+                    "&:hover": { transform: "translateY(-5px)", boxShadow: "0 0 18px rgba(57,255,20,0.5)" },
+                  }}
+                >
+                  <CardContent>
+                    <Typography variant="h6" sx={{ color: "#39ff14", fontWeight: 700, mb: 0.5 }}>
+                      {normalized}
+                    </Typography>
+                    <Typography variant="body2" color="white">
+                      Compra: <strong>{formatARS(c.compra)}</strong>
+                    </Typography>
+                    <Typography variant="body2" color="white">
+                      Venta: <strong>{formatARS(c.venta)}</strong>
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            );
+          })}
         </Grid>
-      )}
+
+        {secondRow.length > 0 && (
+          <Grid container spacing={3} justifyContent="center">
+            {secondRow.map((c) => {
+              const normalized = normalizeName(c.nombre);
+              return (
+                <Grid item xs={12} sm={6} md={3} key={`row2-${c.nombre}`} component="div">
+                  <Card
+                    sx={{
+                      bgcolor: "rgba(0,255,0,0.05)",
+                      border: "1px solid #39ff14",
+                      borderRadius: 3,
+                      textAlign: "center",
+                      boxShadow: "0 0 12px rgba(57,255,20,0.25)",
+                      transition: "all 0.3s ease",
+                      "&:hover": { transform: "translateY(-5px)", boxShadow: "0 0 18px rgba(57,255,20,0.5)" },
+                    }}
+                  >
+                    <CardContent>
+                      <Typography variant="h6" sx={{ color: "#39ff14", fontWeight: 700, mb: 0.5 }}>
+                        {normalized}
+                      </Typography>
+                      <Typography variant="body2" color="white">
+                        Compra: <strong>{formatARS(c.compra)}</strong>
+                      </Typography>
+                      <Typography variant="body2" color="white">
+                        Venta: <strong>{formatARS(c.venta)}</strong>
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              );
+            })}
+          </Grid>
+        )}
+      </Stack>
     </Paper>
   );
 }
