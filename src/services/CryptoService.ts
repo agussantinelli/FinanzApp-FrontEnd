@@ -1,10 +1,10 @@
 import axios from "axios";
-import { QuoteDTO } from "@/types/Market";
+import { CryptoTopDTO } from "@/types/Crypto";
+
 
 const API = process.env.NEXT_PUBLIC_API_BASE || "https://localhost:7209/api";
 
-export async function getCryptoQuotes(symbols: string[]): Promise<QuoteDTO[]> {
-  const url = `${API}/crypto/quotes`;
-  const res = await axios.get<QuoteDTO[]>(url, { params: { symbols: symbols.join(",") } });
+export async function getTopCryptos(limit = 6): Promise<CryptoTopDTO[]> {
+  const res = await axios.get<CryptoTopDTO[]>(`${API}/crypto/top`, { params: { limit } });
   return res.data;
 }
