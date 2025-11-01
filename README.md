@@ -1,51 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💹 FinanzApp
 
-## Getting Started
+## 🎯 Objetivo
+Ofrecer una visión clara, consolidada y actualizada del portafolio completo (efectivo + inversiones) para inversores argentinos, con conversión correcta según el tipo de cambio que corresponda a cada activo.
 
-First, run the development server:
+## 🧭 Visión General
+- Consulta de tipos de cambio relevantes para Argentina (oficial, MEP, CCL, blue, etc.)
+- Consolidación de cripto, acciones locales, CEDEARs y ONs en una sola interfaz
+- Conversión ARS ↔ USD aplicando el tipo de dólar adecuado por clase de activo
+- Indicadores clave: patrimonio total, distribución por clase de activo y evolución
+- UI moderna, tema oscuro y acentos verde neón para una experiencia clara y agradable
+
+## 💼 Problema
+En Argentina:
+- La información financiera está fragmentada entre brokers, exchanges y sitios de cotizaciones
+- Existen múltiples tipos de cambio y no siempre se aplica el correcto para valuar
+- Falta una vista consolidada y en tiempo real del patrimonio total
+
+## 🚀 Propuesta de Valor
+- Unificar datos y cotizaciones en un único lugar
+- Normalizar conversiones entre ARS y USD según clase de activo
+- Centralizar el seguimiento del portafolio con métricas simples y relevantes
+- Automatizar actualizaciones con adaptadores a proveedores de datos
+
+## 🧮 Meta
+Que FinanzApp sea el "panel patrimonial" de referencia para el inversor argentino.
+
+## 🧩 Alcance Inicial (MVP)
+- Alta y gestión de activos: CRYPTO, ACCION_LOCAL, CEDEAR, ON
+- Consulta de cotizaciones por clase de activo
+- Conversión a ARS/USD usando MEP/CCL/Oficial/Blue (configurable)
+- Reportes base: patrimonio total y distribución por clase
+
+## 🌐 Frontend (este repositorio)
+
+### Stack Tecnológico
+- **Framework:** Next.js 16 (App Router)
+- **Lenguaje:** TypeScript
+- **UI:** Material UI (MUI)
+- **Tema:** Oscuro + verde flúor `#39ff14`
+- **Fondo:** Efecto de partículas neón (ligero y compatible con SSR)
+
+### ⚙️ Empezar (Frontend)
 
 ```bash
 npm run dev
-# or
+# o
 yarn dev
-# or
+# o
 pnpm dev
-# or
+# o
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ⚙️ Variables de Entorno (Frontend)
+Crea `.env.local`:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+# Base de la API (cambiar por prod al desplegar)
+NEXT_PUBLIC_API_BASE=https://localhost:7088
+Cuando integremos el backend, todos los fetch apuntarán a NEXT_PUBLIC_API_BASE.
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ☁️ Deploy (Vercel)
 
-## Learn More
+1. **Conectá el repo a Vercel**
+2. **Seteá las Environment Variables** (ej. `NEXT_PUBLIC_API_BASE`)
+3. **Hacé deploy** (Vercel detecta Next.js automáticamente)
 
-To learn more about Next.js, take a look at the following resources:
+**Docs útiles:** [Deploy Next.js en Vercel](https://vercel.com/docs/frameworks/nextjs)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔌 Integraciones Planeadas (Datos)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Cripto:** CoinGecko / Binance API (precios en USD)
+- **Acciones / CEDEARs / ONs:** BYMA / Rava / MAV (precios en ARS)
+- **Tipos de cambio:** DólarHoy / Ámbito / BCRA (MEP, CCL, blue, oficial, etc.)
 
-## Deploy on Vercel
+Se implementarán como adaptadores de proveedor para poder cambiar la fuente sin tocar el resto del sistema.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🗺️ Roadmap
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **MVP:** portafolio manual + cotizaciones + conversión ARS/USD
+- **Autenticación y espacios personales**
+- **Series temporales y reportes de evolución**
+- **Importación** (CSV/Excel, brokers y exchanges)
+- **Alertas de precio y rebalanceo**
+- **App móvil** (MAUI / React Native)
+
+## 🤝 Contribuir
+
+1. **Fork**, rama `feature/...`, **PR**
+2. **Asegurate de correr linters y tests** (cuando estén)
+3. **Explicá cambios con claridad**
+
+## ⚖️ Licencia
+
+MIT – ver archivo LICENSE.
 
 ---
 
-## 🧠 Resumen General – FinanzApp Frontend Setup
-#### ⚙️ Stack principal
+### 📝 Notas
 
-_Framework:_ Next.js 16 (App Router).
+Este repo es frontend. El backend (ASP.NET Core + PostgreSQL) vive en un repo aparte y expone Swagger/OpenAPI.
 
-_Lenguaje:_ TypeScript.
-
-_UI Library:_ Material UI (MUI).
-
-_Theme:_ Oscuro + acentos verde flúor.
-
-_Fondo:_ Efecto de partículas neón (negro con líneas y puntos verdes).
+Cuando esté público, agregaremos un badge de API y una sección de integración con ejemplos de requests.
