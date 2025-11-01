@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "FinanzApp",
   description: "Gestión financiera personal",
   icons: {
-    icon: [{ url: "/favicon.png" }], 
+    icon: [{ url: "/logo.png" }], 
   },
 };
 
