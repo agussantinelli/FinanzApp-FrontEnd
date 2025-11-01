@@ -40,15 +40,12 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## 🧠 Resumen General – FinanzApp Frontend Setup
 #### ⚙️ Stack principal
 
-_Framework:_ Next.js 16 (App Router)
+_Framework:_ Next.js 16 (App Router).
 
-_Lenguaje:_ TypeScript
+_Lenguaje:_ TypeScript.
 
-_UI Library:_ Material UI (MUI)
+_UI Library:_ Material UI (MUI).
 
-_Theme:_ Oscuro + acentos verde flúor (#39ff14)
+_Theme:_ Oscuro + acentos verde flúor.
 
-_Fondo:_ Efecto de partículas neón (negro con líneas y puntos verdes)
-
-_Logo:_ src/icons/logo.png
-
+_Fondo:_ Efecto de partículas neón (negro con líneas y puntos verdes).
