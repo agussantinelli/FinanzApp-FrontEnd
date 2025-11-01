@@ -8,6 +8,10 @@ import Stack from "@mui/material/Stack";
 import Link from "next/link";
 
 import DolarSection from "@/components/sections/DolarSection";
+import CedearsSection from "@/components/sections/CedearsSection";
+import CryptoSection from "@/components/sections/CryptoSection";
+import AccionesARSection from "@/components/sections/AccionesARSection";
+
 
 export default function HomePage() {
   return (
@@ -30,7 +34,10 @@ export default function HomePage() {
         </Stack>
       </Box>
 
-      <DolarSection />
+      <Box sx={{ mt: 6 }}><DolarSection /></Box>
+      <Box sx={{ mt: 6 }}><AccionesARSection /></Box>
+      <Box sx={{ mt: 6 }}><CedearsSection /></Box>
+      <Box sx={{ mt: 6 }}><CryptoSection /></Box>
     </Container>
   );
 }
