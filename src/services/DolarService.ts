@@ -1,17 +1,25 @@
+import axios from "axios";
 import { DolarDTO } from "@/types/Dolar";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE || "https://localhost:7209/api";
 
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
 export async function getCotizacionesDolar(): Promise<DolarDTO[]> {
   try {
-    const res = await fetch(`${API_BASE_URL}/dolar/cotizaciones`, {
-      cache: "no-store",
+    const response = await api.get<DolarDTO[]>("/dolar/cotizaciones", {
+      headers: { "Cache-Control": "no-cache" },
     });
-    if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
-    return (await res.json()) as DolarDTO[];
+
+    return response.data;
   } catch (error) {
-    console.error("Error al obtener cotizaciones:", error);
+    console.error("❌ Error al obtener cotizaciones:", error);
     return [];
   }
 }
