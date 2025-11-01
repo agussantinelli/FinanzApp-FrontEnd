@@ -154,7 +154,7 @@ Cuando integremos el backend, todos los fetch apuntarán a NEXT_PUBLIC_API_BASE.
 <p>Aunque el frontend solo consume la API de nuestro backend, las siguientes integraciones definen la fuente de los datos que se mostrarán:</p>
 
 <ul>
-    <li><strong>Cripto:</strong> Binance API (precios en USD)</li>
+    <li><strong>Cripto:</strong> Binance API / CoinGecko</li>
     <li><strong>Acciones / CEDEARs / ONs:</strong> Yahoo Finance / BYMA / Rava / MAV (precios en ARS)</li>
     <li><strong>Tipos de cambio:</strong> DolarAPI / DólarHoy / Ámbito / BCRA (MEP, CCL, blue, oficial, etc.)</li>
 </ul>
