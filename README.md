@@ -34,3 +34,21 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+---
+
+## 🧠 Resumen General – FinanzApp Frontend Setup
+#### ⚙️ Stack principal
+
+_Framework:_ Next.js 16 (App Router)
+
+_Lenguaje:_ TypeScript
+
+_UI Library:_ Material UI (MUI)
+
+_Theme:_ Oscuro + acentos verde flúor (#39ff14)
+
+_Fondo:_ Efecto de partículas neón (negro con líneas y puntos verdes)
+
+_Logo:_ src/icons/logo.png
+
