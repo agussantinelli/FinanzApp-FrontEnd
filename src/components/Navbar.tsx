@@ -15,7 +15,6 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import Image from "next/image";
-import logoSrc from "@/icons/logo.png"; 
 
 const navItems = [
   { label: "Inicio", href: "/" },
@@ -34,7 +33,7 @@ export default function Navbar() {
         <Toolbar sx={{ minHeight: 72 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
             <Image
-              src={logoSrc}
+              src="/favicon.png"  
               alt="FinanzApp"
               width={32}
               height={32}
@@ -47,8 +46,6 @@ export default function Navbar() {
           </Box>
 
           <Box sx={{ flexGrow: 1 }} />
-
-          {/* Desktop */}
           <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
             {navItems.map((item) => (
               <Button
@@ -63,7 +60,6 @@ export default function Navbar() {
             ))}
           </Box>
 
-          {/* Mobile */}
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton color="inherit" onClick={toggle(true)} aria-label="menu">
               <MenuIcon />

@@ -8,13 +8,16 @@ import NeonParticlesBg from "@/components/NeonParticlesBg";
 export const metadata: Metadata = {
   title: "FinanzApp",
   description: "Gestión financiera personal",
+  icons: {
+    icon: [{ url: "/favicon.png" }], 
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
       <body style={{ margin: 0 }}>
-        <NeonParticlesBg /> 
+        <NeonParticlesBg />
         <Providers>
           <Navbar />
           <main
