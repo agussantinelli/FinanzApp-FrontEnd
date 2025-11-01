@@ -1,16 +1,12 @@
 "use client";
 
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-
 export default function HomePage() {
   return (
-    <Container maxWidth="lg">
-      <Box sx={{ py: 4 }}>
-        <Typography variant="h4" gutterBottom>FinanzApp</Typography>
-        <Typography>¡Bienvenido! Este es mi Home.</Typography>
-      </Box>
-    </Container>
+    <div style={{ textAlign: "center", maxWidth: 900 }}>
+      <h1 style={{ marginBottom: 8 }}>FinanzApp</h1>
+      <p style={{ opacity: 0.9 }}>
+        Bienvenido. Fondo negro con detalles verde neón ✔️
+      </p>
+    </div>
   );
 }
