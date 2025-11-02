@@ -1,5 +1,5 @@
 import { Typography, Grid } from "@mui/material";
-import GridV1 from "@mui/material/Grid"; // evita el choque con Grid2
+import GridV1 from "@mui/material/Grid"; 
 import DolarBarChart from "@/components/charts/DolarBarChart";
 
 export default function Reportes() {
