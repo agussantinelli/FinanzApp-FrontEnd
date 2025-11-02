@@ -9,11 +9,13 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^2.0.59",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.4",
     "@mui/material": "^7.3.4",
     "@mui/system": "^7.3.3",
+    "ai": "^5.0.86",
     "axios": "^1.13.1",
     "chart.js": "^4.5.1",
     "next": "16.0.1",
@@ -22,7 +24,8 @@
     "react-dom": "19.2.0",
     "react-tsparticles": "^2.12.2",
     "tsparticles": "^3.9.1",
-    "tsparticles-slim": "^2.12.0"
+    "tsparticles-slim": "^2.12.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/node": "^20",
