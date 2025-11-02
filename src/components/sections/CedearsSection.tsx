@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { getCedearDuals } from "@/services/CedearsService";
 import { DualQuoteDTO } from "@/types/Market";
 import {
@@ -14,6 +14,12 @@ function formatARS(n: number) {
 }
 function formatUSD(n: number) {
   return n.toLocaleString("es-AR", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
+}
+
+function chunk<T>(arr: T[], size: number): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
 }
 
 export default function CedearsSection() {
@@ -35,6 +41,20 @@ export default function CedearsSection() {
     return () => clearInterval(id);
   }, [fetchData]);
 
+  const symbolsWanted = useMemo(
+    () => new Set([
+      "AAPL.BA","AMZN.BA","NVDA.BA","MSFT.BA","GOOGL.BA","META.BA","TSLA.BA","BRKB.BA","KO.BA"
+    ]),
+    []
+  );
+
+  const filtered = useMemo(
+    () => data.filter(d => symbolsWanted.has(d.localSymbol.toUpperCase())),
+    [data, symbolsWanted]
+  );
+
+  const rows = useMemo(() => chunk(filtered, 3), [filtered]);
+
   return (
     <Paper sx={{
       p: { xs: 2.5, md: 3 },
@@ -46,7 +66,7 @@ export default function CedearsSection() {
         alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
         <div>
           <Typography variant="h5" sx={{ fontWeight: 800, color: "#39ff14" }}>
-            CEDEARs ↔ Acción USA (con ratio y paridad)
+            CEDEARs ↔ Acción USA
           </Typography>
           {updatedAt && (
             <Typography variant="caption" color="text.secondary">
@@ -64,37 +84,41 @@ export default function CedearsSection() {
 
       <Divider sx={{ my: 2.5, borderColor: "rgba(57,255,20,0.25)" }} />
 
-      <Grid container spacing={3}>
-        {data.map(d => (
-          <Grid item xs={12} md={6} key={d.localSymbol}>
-            <Card sx={{
-              bgcolor: "rgba(0,255,0,0.05)",
-              border: "1px solid #39ff14",
-              borderRadius: 3,
-              boxShadow: "0 0 12px rgba(57,255,20,0.25)",
-              transition: "all .3s",
-              "&:hover": { transform: "translateY(-5px)", boxShadow: "0 0 18px rgba(57,255,20,0.5)" }
-            }}>
-              <CardContent>
-                <Typography variant="h6" sx={{ color: "#39ff14", fontWeight: 700 }}>
-                  {d.localSymbol} (ratio {d.cedearRatio ?? "?"}) ↔ {d.usSymbol}
-                </Typography>
+      {filtered.length === 0 && !loading && (
+        <Typography color="text.secondary">No se encontraron cotizaciones.</Typography>
+      )}
 
-                <Typography>CEDEAR (ARS): <strong>{formatARS(d.localPriceARS)}</strong></Typography>
-                <Typography>Acción USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong></Typography>
+      <Stack spacing={3}>
+        {rows.map((row, idx) => (
+          <Grid key={idx} container spacing={3}>
+            {row.map(d => (
+              <Grid item xs={12} md={4} key={d.localSymbol}>
+                <Card sx={{
+                  bgcolor: "rgba(0,255,0,0.05)",
+                  border: "1px solid #39ff14",
+                  borderRadius: 3,
+                  boxShadow: "0 0 12px rgba(57,255,20,0.25)",
+                  transition: "all .3s",
+                  "&:hover": { transform: "translateY(-5px)", boxShadow: "0 0 18px rgba(57,255,20,0.5)" }
+                }}>
+                  <CardContent>
+                    <Typography variant="h6" sx={{ color: "#39ff14", fontWeight: 700 }}>
+                      {d.localSymbol} (ratio {d.cedearRatio ?? "?"}) ↔ {d.usSymbol}
+                    </Typography>
 
-                {d.theoreticalCedearARS != null && (
-                  <Typography>Paridad teórica (USD×{d.dollarRateName}/ratio): <strong>{formatARS(d.theoreticalCedearARS!)}</strong></Typography>
-                )}
+                    <Typography>CEDEAR (ARS): <strong>{formatARS(d.localPriceARS)}</strong></Typography>
+                    <Typography>Acción USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong></Typography>
 
-                <Typography variant="caption" color="text.secondary">
-                  Tasa usada: {d.dollarRateName} = {d.usedDollarRate.toLocaleString("es-AR")}
-                </Typography>
-              </CardContent>
-            </Card>
+                    <Typography variant="caption" color="text.secondary">
+                      Tasa usada: {d.dollarRateName} = {d.usedDollarRate.toLocaleString("es-AR")}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
           </Grid>
         ))}
-      </Grid>
+      </Stack>
     </Paper>
   );
 }
