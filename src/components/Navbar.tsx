@@ -21,6 +21,7 @@ const navItems = [
   { label: "Movimientos", href: "/movimientos" },
   { label: "Activos", href: "/activos" },
   { label: "Reportes", href: "/reportes" },
+  { label: "Noticias", href: "/noticias" }, 
 ];
 
 export default function Navbar() {
@@ -59,7 +60,7 @@ export default function Navbar() {
               priority
             />
             <Typography
-              variant="h4"                    // ⬆️ más grande
+              variant="h4"                    
               sx={{
                 fontWeight: 800,
                 letterSpacing: 0.6,
@@ -92,7 +93,6 @@ export default function Navbar() {
             ))}
           </Box>
 
-          {/* Menú mobile */}
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton color="inherit" onClick={toggle(true)} aria-label="menu">
               <MenuIcon />
