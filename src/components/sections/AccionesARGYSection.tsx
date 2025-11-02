@@ -29,7 +29,7 @@ function isCCL(nombreRaw: string) {
 const ENERGETICO = [
   { localBA: "YPFD.BA",  usa: "YPF",  name: "YPF" },
   { localBA: "PAMP.BA",  usa: "PAM",  name: "Pampa Energía" },
-  { localBA: "VISTA.BA", usa: "VIST", name: "Vista Energy" },
+  { localBA: "VIST.BA", usa: "VIST", name: "Vista Energy" },
 ];
 const BANCARIO = [
   { localBA: "BMA.BA",  usa: "BMA",  name: "Banco Macro" },

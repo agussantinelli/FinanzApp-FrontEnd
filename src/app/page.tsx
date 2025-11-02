@@ -10,7 +10,7 @@ import Link from "next/link";
 import DolarSection from "@/components/sections/DolarSection";
 import CedearsSection from "@/components/sections/CedearsSection";
 import CryptoSection from "@/components/sections/CryptoSection";
-import AccionesARSection from "@/components/sections/AccionesARSection";
+import AccionesARGYSection from "@/components/sections/AccionesARGYSection";
 
 
 export default function HomePage() {
@@ -35,7 +35,7 @@ export default function HomePage() {
       </Box>
 
       <Box sx={{ mt: 6 }}><DolarSection /></Box>
-      <Box sx={{ mt: 6 }}><AccionesARSection /></Box>
+      <Box sx={{ mt: 6 }}><AccionesARGYSection /></Box>
       <Box sx={{ mt: 6 }}><CedearsSection /></Box>
       <Box sx={{ mt: 6 }}><CryptoSection /></Box>
     </Container>
