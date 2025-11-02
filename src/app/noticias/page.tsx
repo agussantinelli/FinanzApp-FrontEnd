@@ -5,7 +5,6 @@ import {
   CardContent,
   CardActions,
   Typography,
-  Grid,
   Button,
   Divider,
   Stack,
@@ -28,7 +27,7 @@ const SOURCES: NewsSource[] = [
     key: "cmc",
     title: "CoinDesk / CoinMarketCap",
     subtitle: "Lo más leído y últimas de cripto global",
-    href: "https://www.coindesk.com/", 
+    href: "https://www.coindesk.com/",
     icon: <PublicIcon fontSize="large" />,
     notes: [
       "Cobertura cripto internacional, precios y macro.",
@@ -66,19 +65,23 @@ export default function Noticias() {
         Noticias
       </Typography>
       <Typography variant="body2" color="text.secondary" paragraph>
-        Acceso rápido a fuentes confiables para seguir cripto, CCL/MEP y mercado
-        local. Próximamente: feed integrado y filtros por tema.
+        Acceso rápido a fuentes confiables para seguir cripto, CCL/MEP y mercado local.  
+        Próximamente: feed integrado y filtros por tema.
       </Typography>
 
-      <Grid container spacing={3}>
-        {SOURCES.map((s) => (
-          <Grid item xs={12} md={6} key={s.key}>
+      <Box sx={{ maxWidth: 800, mx: "auto" }}>
+        <Stack spacing={3}>
+          {SOURCES.map((s) => (
             <Card
+              key={s.key}
               sx={{
-                height: "100%",
+                minHeight: 220,
                 borderRadius: 2,
                 border: "1px solid",
                 borderColor: "divider",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
               }}
             >
               <CardContent>
@@ -101,9 +104,9 @@ export default function Noticias() {
                   </Box>
                 ) : null}
               </CardContent>
+
               <Divider />
               <CardActions sx={{ justifyContent: "flex-end", p: 2 }}>
-                {/* Link afuera del Button para evitar pasar funciones cliente como prop */}
                 <Link href={s.href} target="_blank" rel="noopener noreferrer">
                   <Button variant="contained" size="small">
                     Ver ahora
@@ -111,9 +114,9 @@ export default function Noticias() {
                 </Link>
               </CardActions>
             </Card>
-          </Grid>
-        ))}
-      </Grid>
+          ))}
+        </Stack>
+      </Box>
     </main>
   );
 }
