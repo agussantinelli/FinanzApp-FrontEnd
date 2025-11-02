@@ -8,7 +8,7 @@ import {
   Paper, Stack, Alert, Typography, Button, Card, CardContent,
   CircularProgress, Divider
 } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 import RefreshIcon from "@mui/icons-material/Refresh";
 
