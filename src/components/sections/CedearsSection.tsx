@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getCedearDuals } from "@/services/CedearsService";
+import { getCotizacionesDolar } from "@/services/DolarService";
 import { DualQuoteDTO } from "@/types/Market";
 import {
   Paper, Stack, Typography, Button, Grid, Card, CardContent,
@@ -15,25 +16,50 @@ function formatARS(n: number) {
 function formatUSD(n: number) {
   return n.toLocaleString("es-AR", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 }
-
 function chunk<T>(arr: T[], size: number): T[][] {
   const out: T[][] = [];
   for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
   return out;
 }
+function isCCL(nombreRaw: string) {
+  const n = (nombreRaw || "").toLowerCase();
+  return n.includes("contado") || n.includes("liqui") || n.includes("liquid") || n.includes("ccl");
+}
+
+const COMPANY: Record<string, string> = {
+  "AAPL.BA": "Apple",
+  "AMZN.BA": "Amazon",
+  "NVDA.BA": "NVIDIA",
+  "MSFT.BA": "Microsoft",
+  "GOOGL.BA": "Alphabet",
+  "META.BA": "Meta",
+  "TSLA.BA": "Tesla",
+  "BRKB.BA": "Berkshire Hathaway",
+  "KO.BA": "Coca-Cola Company",
+};
 
 export default function CedearsSection() {
   const [data, setData] = useState<DualQuoteDTO[]>([]);
   const [loading, setLoading] = useState(false);
   const [updatedAt, setUpdatedAt] = useState<Date | null>(null);
+  const [cclRate, setCclRate] = useState<number | null>(null);
+
+  const fetchCCL = useCallback(async () => {
+    const cot = await getCotizacionesDolar();
+    const ccl = cot.find(c => isCCL(c.nombre ?? c.nombre)); // compat con back/front
+    setCclRate(ccl?.venta ?? ccl?.venta ?? null);
+  }, []);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const res = await getCedearDuals("CCL");
-    setData(res);
+    const [ced, _] = await Promise.all([
+      getCedearDuals("CCL"),
+      fetchCCL()
+    ]);
+    setData(ced);
     setUpdatedAt(new Date());
     setLoading(false);
-  }, []);
+  }, [fetchCCL]);
 
   useEffect(() => {
     fetchData();
@@ -42,9 +68,7 @@ export default function CedearsSection() {
   }, [fetchData]);
 
   const symbolsWanted = useMemo(
-    () => new Set([
-      "AAPL.BA","AMZN.BA","NVDA.BA","MSFT.BA","GOOGL.BA","META.BA","TSLA.BA","BRKB.BA","KO.BA"
-    ]),
+    () => new Set(["AAPL.BA","AMZN.BA","NVDA.BA","MSFT.BA","GOOGL.BA","META.BA","TSLA.BA","BRKB.BA","KO.BA"]),
     []
   );
 
@@ -53,7 +77,20 @@ export default function CedearsSection() {
     [data, symbolsWanted]
   );
 
-  const rows = useMemo(() => chunk(filtered, 3), [filtered]);
+  const withUnifiedRate = useMemo(() => {
+    if (!cclRate || cclRate <= 0) return filtered;
+    return filtered.map(d => ({
+      ...d,
+      usedDollarRate: cclRate,
+      localPriceUSD: +(d.localPriceARS / cclRate).toFixed(2),
+      usPriceARS: +(d.usPriceUSD * cclRate).toFixed(2),
+      theoreticalCedearARS: d.cedearRatio
+        ? +((d.usPriceUSD * cclRate) / d.cedearRatio).toFixed(2)
+        : d.theoreticalCedearARS
+    }));
+  }, [filtered, cclRate]);
+
+  const rows = useMemo(() => chunk(withUnifiedRate, 3), [withUnifiedRate]);
 
   return (
     <Paper sx={{
@@ -84,7 +121,7 @@ export default function CedearsSection() {
 
       <Divider sx={{ my: 2.5, borderColor: "rgba(57,255,20,0.25)" }} />
 
-      {filtered.length === 0 && !loading && (
+      {withUnifiedRate.length === 0 && !loading && (
         <Typography color="text.secondary">No se encontraron cotizaciones.</Typography>
       )}
 
@@ -102,15 +139,21 @@ export default function CedearsSection() {
                   "&:hover": { transform: "translateY(-5px)", boxShadow: "0 0 18px rgba(57,255,20,0.5)" }
                 }}>
                   <CardContent>
-                    <Typography variant="h6" sx={{ color: "#39ff14", fontWeight: 700 }}>
-                      {d.localSymbol} (ratio {d.cedearRatio ?? "?"}) ↔ {d.usSymbol}
+                    <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.5 }}>
+                      {COMPANY[d.localSymbol.toUpperCase()] ?? d.usSymbol}
                     </Typography>
-
-                    <Typography>CEDEAR (ARS): <strong>{formatARS(d.localPriceARS)}</strong></Typography>
-                    <Typography>Acción USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong></Typography>
-
-                    <Typography variant="caption" color="text.secondary">
-                      Tasa usada: {d.dollarRateName} = {d.usedDollarRate.toLocaleString("es-AR")}
+                    <Typography sx={{ color: "#39ff14", fontWeight: 700 }}>
+                      {d.localSymbol} ↔ {d.usSymbol}
+                    </Typography>
+                    <Typography sx={{ mt: 1 }}>
+                      CEDEAR (ARS): <strong>{formatARS(d.localPriceARS)}</strong>
+                    </Typography>
+                    <Typography>
+                      Acción USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong>
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 1 }}>
+                      {d.cedearRatio ? `Ratio: ${d.cedearRatio} | ` : ""}
+                      Tasa (CCL): { (cclRate ?? d.usedDollarRate).toLocaleString("es-AR") }
                     </Typography>
                   </CardContent>
                 </Card>
