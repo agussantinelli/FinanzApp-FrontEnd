@@ -112,10 +112,9 @@ export default function DolarSection() {
       </Box>
 
       <Stack direction="row" spacing={1.5}>
-        {/* Botón para ir al gráfico */}
         <Button
           component={Link}
-          href="/reportes#dolar"
+          href="/reportes/dolar"
           variant="contained"
           color="success"
           startIcon={<BarChartIcon />}
@@ -124,7 +123,6 @@ export default function DolarSection() {
           Ver gráfico
         </Button>
 
-        {/* Botón actualizar (tu botón actual) */}
         <Button
           onClick={fetchData}
           variant="outlined"
