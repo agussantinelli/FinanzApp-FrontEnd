@@ -177,7 +177,7 @@ export default function AccionesARSection() {
       <Divider sx={{ my: 2.5, borderColor: "rgba(57,255,20,0.25)" }} />
 
       <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, color: "#39ff14" }}>
-        Sector energético
+        Sector Energético
       </Typography>
       <Stack spacing={3}>
         {rowsEnergetico.map((row, idx) => (
@@ -194,7 +194,7 @@ export default function AccionesARSection() {
       <Divider sx={{ my: 2.5, borderColor: "rgba(57,255,20,0.15)" }} />
 
       <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, color: "#39ff14" }}>
-        Sector bancario
+        Sector Bancario
       </Typography>
       <Stack spacing={3}>
         {rowsBancario.map((row, idx) => (

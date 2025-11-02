@@ -1,11 +1,10 @@
 import axios from "axios";
 import { DolarDTO } from "@/types/Dolar";
+import { API } from "./Api";
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE || "https://localhost:7209/api";
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: API,
   headers: {
     "Content-Type": "application/json",
   },
