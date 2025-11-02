@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Card, CardContent, CardHeader, CircularProgress, Box, Typography } from "@mui/material";
+import { Card, CardContent, CardHeader, Box, Typography, Stack, Chip, Skeleton } from "@mui/material";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
-import { getCotizacionesDolar } from "@/services/DolarService"; 
-import type { DolarDTO } from "@/types/Dolar"; 
+import { getCotizacionesDolar } from "@/services/DolarService";
+import type { DolarDTO } from "@/types/Dolar";
 
-type DatoDolar = Pick<DolarDTO, "nombre" | "venta" | "compra"> & { fuente?: string };
+type DatoDolar = Pick<DolarDTO, "nombre" | "venta" | "compra">;
+
+const ARS = (n: number) =>
+  n.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 });
 
 export default function DolarBarChart() {
   const [data, setData] = useState<DatoDolar[]>([]);
@@ -19,16 +22,8 @@ export default function DolarBarChart() {
     (async () => {
       try {
         setLoading(true);
-        setError(null);
         const res = (await getCotizacionesDolar()) as DatoDolar[];
-        // Orden opcional: destacar tipos más comunes
-        const prioridad = ["Oficial", "MEP", "CCL", "Blue"];
-        const ordered = [...res].sort((a, b) => {
-          const ia = prioridad.indexOf(normalize(a.nombre));
-          const ib = prioridad.indexOf(normalize(b.nombre));
-          return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
-        });
-        setData(ordered);
+        setData(res);
         setUpdatedAt(new Date());
       } catch (e: any) {
         setError(e?.message ?? "No se pudieron obtener las cotizaciones");
@@ -38,24 +33,34 @@ export default function DolarBarChart() {
     })();
   }, []);
 
-  const chart = useMemo(() => {
+  const { chart, kpis } = useMemo(() => {
     const labels = data.map((d) => shortName(d.nombre));
     const ventas = data.map((d) => d.venta ?? 0);
     const compras = data.map((d) => d.compra ?? 0);
 
-    return {
+    // KPIs simples
+    const maxVenta = Math.max(...ventas.filter((v) => Number.isFinite(v)));
+    const minVenta = Math.min(...ventas.filter((v) => Number.isFinite(v)));
+    const avgVenta =
+      ventas.reduce((a, b) => a + (Number.isFinite(b) ? b : 0), 0) / (ventas.length || 1);
+
+    const chart = {
       data: {
         labels,
         datasets: [
           {
             label: "Venta",
             data: ventas,
-            borderWidth: 1,
+            backgroundColor: "#39ff14", 
+            borderRadius: 8,
+            barThickness: 28,
           },
           {
             label: "Compra",
             data: compras,
-            borderWidth: 1,
+            backgroundColor: "rgba(255,255,255,0.28)",
+            borderRadius: 8,
+            barThickness: 28,
           },
         ],
       },
@@ -63,28 +68,46 @@ export default function DolarBarChart() {
         responsive: true,
         maintainAspectRatio: false as const,
         plugins: {
-          legend: { position: "top" as const },
-          title: { display: false, text: "" },
-        },
-        scales: {
-          y: {
-            beginAtZero: false,
-            ticks: {
-              callback: (v: any) =>
-                Number(v).toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }),
+          legend: { position: "top" as const, labels: { boxWidth: 14 } },
+          tooltip: {
+            callbacks: {
+              label: (ctx: any) => `${ctx.dataset.label}: ${ARS(ctx.parsed.y)}`,
             },
           },
         },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { maxRotation: 0, autoSkip: true },
+          },
+          y: {
+            beginAtZero: false,
+            grid: { color: "rgba(255,255,255,0.08)" },
+            ticks: {
+              callback: (v: any) => ARS(Number(v)),
+            },
+          },
+        },
+      },
+    };
+
+    return {
+      chart,
+      kpis: {
+        maxVenta,
+        minVenta,
+        avgVenta,
       },
     };
   }, [data]);
 
   if (loading) {
     return (
-      <Card sx={{ height: 420 }}>
+      <Card sx={{ height: 460 }}>
         <CardHeader title="Cotizaciones de Dólar (ARS)" subheader="Cargando…" />
-        <CardContent sx={{ height: 340, display: "grid", placeItems: "center" }}>
-          <CircularProgress />
+        <CardContent>
+          <Skeleton variant="rounded" height={36} sx={{ mb: 2 }} />
+          <Skeleton variant="rounded" height={320} />
         </CardContent>
       </Card>
     );
@@ -92,39 +115,47 @@ export default function DolarBarChart() {
 
   if (error) {
     return (
-      <Card sx={{ height: 420 }}>
-        <CardHeader title="Cotizaciones de Dólar (ARS)" subheader="Error" />
-        <CardContent sx={{ height: 340, display: "grid", placeItems: "center" }}>
-          <Typography color="error">{error}</Typography>
-        </CardContent>
+      <Card sx={{ p: 3 }}>
+        <Typography color="error">{error}</Typography>
       </Card>
     );
   }
 
   return (
-    <Card sx={{ height: 420 }}>
+    <Card
+      sx={{
+        height: 460,
+        borderRadius: 2,
+        border: "1px solid",
+        borderColor: "divider",
+        background:
+          "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 100%)",
+      }}
+    >
       <CardHeader
         title="Cotizaciones de Dólar (ARS)"
         subheader={updatedAt ? `Actualizado: ${updatedAt.toLocaleString("es-AR")}` : undefined}
       />
-      <CardContent sx={{ height: 340 }}>
+
+      {/* KPIs arriba del chart */}
+      <Box sx={{ px: 2, pb: 1 }}>
+        <Stack direction="row" spacing={1} flexWrap="wrap">
+          <Chip size="small" label={`Máximo venta: ${ARS(kpis.maxVenta || 0)}`} />
+          <Chip size="small" label={`Mínimo venta: ${ARS(kpis.minVenta || 0)}`} />
+          <Chip size="small" label={`Promedio venta: ${ARS(kpis.avgVenta || 0)}`} />
+        </Stack>
+      </Box>
+
+      <CardContent sx={{ height: 330, pt: 1 }}>
         <Box sx={{ height: "100%" }}>
-          <Bar data={chart.data} options={chart.options} />
+          <Bar data={chart.data as any} options={chart.options as any} />
         </Box>
       </CardContent>
     </Card>
   );
 }
 
-function normalize(nombre: string) {
-  const n = nombre.toLowerCase();
-  if (n.includes("ccl") || n.includes("contado con liqui")) return "CCL";
-  if (n.includes("mep")) return "MEP";
-  if (n.includes("oficial")) return "Oficial";
-  if (n.includes("blue") || n.includes("informal")) return "Blue";
-  return nombre;
-}
 function shortName(nombre: string) {
-  const n = normalize(nombre);
-  return n.length > 16 ? n.slice(0, 16) + "…" : n;
+  const n = nombre.trim();
+  return n.length > 18 ? n.slice(0, 18) + "…" : n;
 }
