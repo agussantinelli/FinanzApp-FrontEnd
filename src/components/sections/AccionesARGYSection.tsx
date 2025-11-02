@@ -6,7 +6,7 @@ import { getCotizacionesDolar } from "@/services/DolarService";
 import { DualQuoteDTO } from "@/types/Market";
 import {
   Paper, Stack, Alert, Typography, Button, Grid, Card, CardContent,
-  CircularProgress, Divider, Box
+  CircularProgress, Divider
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
@@ -26,18 +26,21 @@ function isCCL(nombreRaw: string) {
   return n.includes("contado") || n.includes("liqui") || n.includes("liquid") || n.includes("ccl");
 }
 
+// --- Pares locales/USA por sector ---
 const ENERGETICO = [
   { localBA: "YPFD.BA",  usa: "YPF",  name: "YPF" },
   { localBA: "PAMP.BA",  usa: "PAM",  name: "Pampa Energía" },
-  { localBA: "VIST.BA", usa: "VIST", name: "Vista Energy" },
+  { localBA: "VIST.BA",  usa: "VIST", name: "Vista Energy" },
 ];
 const BANCARIO = [
   { localBA: "BMA.BA",  usa: "BMA",  name: "Banco Macro" },
   { localBA: "GGAL.BA", usa: "GGAL", name: "Banco Galicia" },
   { localBA: "SUPV.BA", usa: "SUPV", name: "Banco Supervielle" },
 ];
+// ➜ Agrego MELI como CEDEAR junto a Central Puerto
 const EXTRA = [
   { localBA: "CEPU.BA", usa: "CEPU", name: "Central Puerto" },
+  { localBA: "MELI.BA", usa: "MELI", name: "Mercado Libre (CEDEAR)" },
 ];
 
 export default function AccionesARSection() {
@@ -46,14 +49,13 @@ export default function AccionesARSection() {
   const [loading, setLoading] = useState(false);
   const [updatedAt, setUpdatedAt] = useState<Date | null>(null);
   const [cclRate, setCclRate] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchCCL = useCallback(async () => {
     const cot = await getCotizacionesDolar();
-    const ccl = cot.find(c => isCCL(c.nombre ?? c.nombre));
-    setCclRate(ccl?.venta ?? ccl?.venta ?? null);
+    const ccl = cot.find(c => isCCL(c.nombre));
+    setCclRate(ccl?.venta ?? null);
   }, []);
-
-  const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -79,7 +81,10 @@ export default function AccionesARSection() {
     return () => clearInterval(id);
   }, [fetchData]);
 
-  const bySymbol = useMemo(() => new Map(data.map(d => [d.localSymbol.toUpperCase(), d])), [data]);
+  const bySymbol = useMemo(
+    () => new Map(data.map(d => [d.localSymbol.toUpperCase(), d])),
+    [data]
+  );
 
   function pick(list: { localBA: string; usa: string; name: string }[]) {
     const arr: (DualQuoteDTO & { name: string })[] = [];
@@ -107,14 +112,16 @@ export default function AccionesARSection() {
   const rowsExtra      = useMemo(() => chunk(extra, 3),      [extra]);
 
   const CardDual = (d: DualQuoteDTO & { name?: string }) => (
-    <Card sx={{
-      bgcolor: "rgba(0,255,0,0.05)",
-      border: "1px solid #39ff14",
-      borderRadius: 3,
-      boxShadow: "0 0 12px rgba(57,255,20,0.25)",
-      transition: "all .3s",
-      "&:hover": { transform: "translateY(-5px)", boxShadow: "0 0 18px rgba(57,255,20,0.5)" }
-    }}>
+    <Card
+      sx={{
+        bgcolor: "rgba(0,255,0,0.05)",
+        border: "1px solid #39ff14",
+        borderRadius: 3,
+        boxShadow: "0 0 12px rgba(57,255,20,0.25)",
+        transition: "all .3s",
+        "&:hover": { transform: "translateY(-5px)", boxShadow: "0 0 18px rgba(57,255,20,0.5)" }
+      }}
+    >
       <CardContent>
         <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.5 }}>
           {d.name ?? d.usSymbol}
@@ -145,14 +152,9 @@ export default function AccionesARSection() {
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
         alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
         <div>
-          {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {error}
-            </Alert>
-          )}
-
+          {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
           <Typography variant="h5" sx={{ fontWeight: 800, color: "#39ff14" }}>
-            Empresas Argentinas ↔ ADR en USA
+            Empresas Argentinas ↔ ADR / CEDEARs
           </Typography>
           {updatedAt && (
             <Typography variant="caption" color="text.secondary">
@@ -160,10 +162,14 @@ export default function AccionesARSection() {
             </Typography>
           )}
         </div>
-        <Button onClick={fetchData} variant="outlined" color="success"
+        <Button
+          onClick={fetchData}
+          variant="outlined"
+          color="success"
           startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
           disabled={loading}
-          sx={{ borderColor: "#39ff14", color: "#39ff14", "&:hover": { borderColor: "#39ff14" } }}>
+          sx={{ borderColor: "#39ff14", color: "#39ff14", "&:hover": { borderColor: "#39ff14" } }}
+        >
           {loading ? "Actualizando..." : "Actualizar"}
         </Button>
       </Stack>
@@ -188,7 +194,7 @@ export default function AccionesARSection() {
       <Divider sx={{ my: 2.5, borderColor: "rgba(57,255,20,0.15)" }} />
 
       <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, color: "#39ff14" }}>
-        Sector Bancario
+        Sector bancario
       </Typography>
       <Stack spacing={3}>
         {rowsBancario.map((row, idx) => (
@@ -204,6 +210,9 @@ export default function AccionesARSection() {
 
       <Divider sx={{ my: 2.5, borderColor: "rgba(57,255,20,0.15)" }} />
 
+      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, color: "#39ff14" }}>
+        Otros
+      </Typography>
       <Stack spacing={3}>
         {rowsExtra.map((row, idx) => (
           <Grid container spacing={3} key={`ex-${idx}`}>
@@ -215,19 +224,6 @@ export default function AccionesARSection() {
           </Grid>
         ))}
       </Stack>
-
-      <Box sx={{ mt: 3 }}>
-        <Card sx={{ bgcolor: "rgba(0,255,0,0.03)", border: "1px dashed #39ff14", borderRadius: 3 }}>
-          <CardContent>
-            <Typography variant="h6" sx={{ fontWeight: 700 }}>
-              Mercado Libre (MELI)
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Mostrado aparte. (Según tu nota: sin CEDEAR.)
-            </Typography>
-          </CardContent>
-        </Card>
-      </Box>
     </Paper>
   );
 }
