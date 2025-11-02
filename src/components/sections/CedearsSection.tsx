@@ -52,14 +52,21 @@ export default function CedearsSection() {
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const [ced, _] = await Promise.all([
-      getCedearDuals("CCL"),
-      fetchCCL()
-    ]);
-    setData(ced);
-    setUpdatedAt(new Date());
-    setLoading(false);
+    try {
+      const [ced] = await Promise.all([
+        getCedearDuals("CCL"),
+        fetchCCL()
+      ]);
+      setData(ced);
+      setUpdatedAt(new Date());
+    } catch (e) {
+      console.error("❌ Error en CedearsSection:", e);
+      // opcional: setError("No se pudo cargar. Reintentá.")
+    } finally {
+      setLoading(false);
+    }
   }, [fetchCCL]);
+
 
   useEffect(() => {
     fetchData();

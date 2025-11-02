@@ -9,18 +9,42 @@ import {
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
-function formatARS(n: number) {
+function formatARS(n?: number) {
+  if (typeof n !== "number" || Number.isNaN(n)) return "—";
   return n.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 1 });
 }
 
-function normalizeName(nombreRaw: string) {
+function titleCase(s: string) {
+  return s
+    .trim()
+    .replace(/\s+/g, " ")
+    .split(" ")
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+function normalizeName(nombreRaw?: string | null) {
+  if (!nombreRaw) return "";
   const n = nombreRaw.trim().toLowerCase();
-  if (n.includes("contado") || n.includes("liqui") || n.includes("liquid")) return "CCL";
-  if (n.includes("mep")) return "MEP";
-  if (n.includes("oficial")) return "Oficial";
-  if (n.includes("blue")) return "Blue";
-  if (n.includes("cripto") || n.includes("crypto")) return "Cripto";
-  return nombreRaw;
+
+  // Sinónimos y variantes comunes
+  if (n.includes("contado con liqui") || n.includes("contado") || n.includes("liqui") || n.includes("liquid"))
+    return "CCL";
+  if (n.includes("bolsa") || n.includes("mep"))
+    return "MEP";
+  if (n.includes("oficial"))
+    return "Oficial";
+  if (n.includes("blue") || n.includes("informal"))
+    return "Blue";
+  if (n.includes("tarjeta") || n.includes("qatar") || n.includes("solidario") || n.includes("turista") || n.includes("card"))
+    return "Tarjeta";
+  if (n.includes("mayorista"))
+    return "Mayorista";
+  if (n.includes("cripto") || n.includes("crypto"))
+    return "Cripto";
+
+  // Fallback: el mismo texto prolijo (sirve para "Euro", "Real", etc.)
+  return titleCase(nombreRaw);
 }
 
 export default function DolarSection() {
@@ -31,7 +55,7 @@ export default function DolarSection() {
   const fetchData = useCallback(async () => {
     setLoading(true);
     const res = await getCotizacionesDolar();
-    setData(res);
+    setData(res ?? []);
     setUpdatedAt(new Date());
     setLoading(false);
   }, []);
@@ -42,8 +66,21 @@ export default function DolarSection() {
     return () => clearInterval(id);
   }, [fetchData]);
 
-  const firstRow = useMemo(() => data.slice(0, 4), [data]);
-  const secondRow = useMemo(() => data.slice(4), [data]);
+  const uniqueData = useMemo(() => {
+    const seen = new Set<string>();
+    const out: DolarDTO[] = [];
+    for (const c of data ?? []) {
+      const n = normalizeName(c?.nombre);
+      if (!n || n === "—") continue;               
+      if (seen.has(n)) continue;                   
+      seen.add(n);
+      out.push({ ...c, nombre: n });               
+    }
+    return out;
+  }, [data]);
+
+  const firstRow  = useMemo(() => uniqueData.slice(0, 4), [uniqueData]);
+  const secondRow = useMemo(() => uniqueData.slice(4),     [uniqueData]);
 
   return (
     <Paper sx={{
@@ -82,10 +119,10 @@ export default function DolarSection() {
 
       <Stack spacing={{ xs: 2, md: 3 }}>
         <Grid container spacing={3} justifyContent="center">
-          {firstRow.map((c) => {
-            const normalized = normalizeName(c.nombre);
+          {firstRow.map((c, i) => {
+            const label = normalizeName(c?.nombre) || "—";
             return (
-              <Grid item xs={12} sm={6} md={3} key={`row1-${c.nombre}`} component="div">
+              <Grid item xs={12} sm={6} md={3} key={`row1-${i}`} component="div">
                 <Card
                   sx={{
                     bgcolor: "rgba(0,255,0,0.05)",
@@ -99,13 +136,13 @@ export default function DolarSection() {
                 >
                   <CardContent>
                     <Typography variant="h6" sx={{ color: "#39ff14", fontWeight: 700, mb: 0.5 }}>
-                      {normalized}
+                      {label}
                     </Typography>
                     <Typography variant="body2" color="white">
-                      Compra: <strong>{formatARS(c.compra)}</strong>
+                      Compra: <strong>{formatARS(c?.compra)}</strong>
                     </Typography>
                     <Typography variant="body2" color="white">
-                      Venta: <strong>{formatARS(c.venta)}</strong>
+                      Venta: <strong>{formatARS(c?.venta)}</strong>
                     </Typography>
                   </CardContent>
                 </Card>
@@ -116,10 +153,10 @@ export default function DolarSection() {
 
         {secondRow.length > 0 && (
           <Grid container spacing={3} justifyContent="center">
-            {secondRow.map((c) => {
-              const normalized = normalizeName(c.nombre);
+            {secondRow.map((c, i) => {
+              const label = normalizeName(c?.nombre) || "—";
               return (
-                <Grid item xs={12} sm={6} md={3} key={`row2-${c.nombre}`} component="div">
+                <Grid item xs={12} sm={6} md={3} key={`row2-${i}`} component="div">
                   <Card
                     sx={{
                       bgcolor: "rgba(0,255,0,0.05)",
@@ -133,13 +170,13 @@ export default function DolarSection() {
                   >
                     <CardContent>
                       <Typography variant="h6" sx={{ color: "#39ff14", fontWeight: 700, mb: 0.5 }}>
-                        {normalized}
+                        {label}
                       </Typography>
                       <Typography variant="body2" color="white">
-                        Compra: <strong>{formatARS(c.compra)}</strong>
+                        Compra: <strong>{formatARS(c?.compra)}</strong>
                       </Typography>
                       <Typography variant="body2" color="white">
-                        Venta: <strong>{formatARS(c.venta)}</strong>
+                        Venta: <strong>{formatARS(c?.venta)}</strong>
                       </Typography>
                     </CardContent>
                   </Card>

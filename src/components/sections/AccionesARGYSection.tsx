@@ -5,7 +5,7 @@ import { getStockDuals } from "@/services/StocksService";
 import { getCotizacionesDolar } from "@/services/DolarService";
 import { DualQuoteDTO } from "@/types/Market";
 import {
-  Paper, Stack, Typography, Button, Grid, Card, CardContent,
+  Paper, Stack, Alert, Typography, Button, Grid, Card, CardContent,
   CircularProgress, Divider, Box
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -53,15 +53,24 @@ export default function AccionesARSection() {
     setCclRate(ccl?.venta ?? ccl?.venta ?? null);
   }, []);
 
+  const [error, setError] = useState<string | null>(null);
+
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const [duals, _] = await Promise.all([
-      getStockDuals(ALL_PAIRS, "CCL"),
-      fetchCCL()
-    ]);
-    setData(duals);
-    setUpdatedAt(new Date());
-    setLoading(false);
+    setError(null);
+    try {
+      const [duals] = await Promise.all([
+        getStockDuals(ALL_PAIRS, "CCL"),
+        fetchCCL(),
+      ]);
+      setData(duals);
+      setUpdatedAt(new Date());
+    } catch (e: any) {
+      console.error(e);
+      setError(e?.response?.data?.title ?? "No se pudo cargar. Reintentá.");
+    } finally {
+      setLoading(false);
+    }
   }, [ALL_PAIRS, fetchCCL]);
 
   useEffect(() => {
@@ -136,6 +145,12 @@ export default function AccionesARSection() {
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
         alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
         <div>
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+
           <Typography variant="h5" sx={{ fontWeight: 800, color: "#39ff14" }}>
             Empresas Argentinas ↔ ADR en USA
           </Typography>
