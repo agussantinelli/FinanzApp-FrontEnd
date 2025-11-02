@@ -8,6 +8,9 @@ import {
   CardContent, CircularProgress
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import Link from "next/link";
+import BarChartIcon from "@mui/icons-material/BarChart";
+
 
 function formatARS(n?: number) {
   if (typeof n !== "number" || Number.isNaN(n)) return "—";
@@ -90,19 +93,38 @@ export default function DolarSection() {
       borderRadius: 3,
       backdropFilter: "blur(3px)",
     }}>
-      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
-        alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
-        <Box>
-          <Typography variant="h5" sx={{ fontWeight: 800, color: "#39ff14" }}>
-            Cotizaciones del dólar
+    <Stack
+      direction={{ xs: "column", sm: "row" }}
+      spacing={2}
+      alignItems={{ xs: "flex-start", sm: "center" }}
+      justifyContent="space-between"
+    >
+      <Box>
+        <Typography variant="h5" sx={{ fontWeight: 800, color: "#39ff14" }}>
+          Cotizaciones del dólar
+        </Typography>
+        {updatedAt && (
+          <Typography variant="caption" color="text.secondary">
+            Última actualización:{" "}
+            {updatedAt.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" })}
           </Typography>
-          {updatedAt && (
-            <Typography variant="caption" color="text.secondary">
-              Última actualización: {updatedAt.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" })}
-            </Typography>
-          )}
-        </Box>
+        )}
+      </Box>
 
+      <Stack direction="row" spacing={1.5}>
+        {/* Botón para ir al gráfico */}
+        <Button
+          component={Link}
+          href="/reportes#dolar"
+          variant="contained"
+          color="success"
+          startIcon={<BarChartIcon />}
+          sx={{ bgcolor: "#39ff14", color: "#000", "&:hover": { bgcolor: "#39ff14" } }}
+        >
+          Ver gráfico
+        </Button>
+
+        {/* Botón actualizar (tu botón actual) */}
         <Button
           onClick={fetchData}
           variant="outlined"
@@ -114,6 +136,7 @@ export default function DolarSection() {
           {loading ? "Actualizando..." : "Actualizar"}
         </Button>
       </Stack>
+    </Stack>
 
       <Divider sx={{ my: 2.5, borderColor: "rgba(57,255,20,0.25)" }} />
 
