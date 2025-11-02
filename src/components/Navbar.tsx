@@ -19,7 +19,7 @@ import Image from "next/image";
 const navItems = [
   { label: "Inicio", href: "/" },
   { label: "Movimientos", href: "/movimientos" },
-  { label: "Categorías", href: "/categorias" },
+  { label: "Activos", href: "/activos" },
   { label: "Reportes", href: "/reportes" },
 ];
 
