@@ -1,3 +1,3 @@
-export default function Categorias() {
-  return <main style={{ padding: 24 }}>Categorías</main>;
+export default function Movimientos() {
+  return <main style={{ padding: 24 }}>Movimientos</main>;
 }

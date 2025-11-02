@@ -5,9 +5,11 @@ import { getStockDuals } from "@/services/StocksService";
 import { getCotizacionesDolar } from "@/services/DolarService";
 import { DualQuoteDTO } from "@/types/Market";
 import {
-  Paper, Stack, Alert, Typography, Button, Grid, Card, CardContent,
+  Paper, Stack, Alert, Typography, Button, Card, CardContent,
   CircularProgress, Divider
 } from "@mui/material";
+import Grid from "@mui/material/Grid2";
+
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 function formatARS(n: number) {
