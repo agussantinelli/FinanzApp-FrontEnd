@@ -28,7 +28,7 @@ const SOURCES: NewsSource[] = [
     key: "cmc",
     title: "CoinDesk / CoinMarketCap",
     subtitle: "Lo más leído y últimas de cripto global",
-    href: "https://www.coindesk.com/", // página principal con feed y tops
+    href: "https://www.coindesk.com/", 
     icon: <PublicIcon fontSize="large" />,
     notes: [
       "Cobertura cripto internacional, precios y macro.",

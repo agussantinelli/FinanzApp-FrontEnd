@@ -1,4 +1,5 @@
-"use client"; 
+"use client";
+
 import Link from "next/link";
 import {
   Box,
@@ -11,7 +12,6 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-// 👇 Grid clásico (v1)
 import Grid from "@mui/material/Grid";
 
 import PaymentsIcon from "@mui/icons-material/Payments";
@@ -54,12 +54,15 @@ const CARDS: AssetCard[] = [
     title: "Cripto",
     subtitle: "Activos digitales (BTC, ETH, etc.)",
     icon: <TimelineIcon fontSize="large" />,
-    tcInfo:
-      "Cotización en USD (exchange/API). Conversión a ARS con CCL/MEP (configurable).",
+    tcInfo: "Cotización en USD (exchange/API). Conversión a ARS con CCL/MEP (configurable).",
     what:
       "Criptomonedas y tokens listados en exchanges. Alta volatilidad y mercados 24/7.",
     pros: ["Liquidez alta en pares principales.", "Diversificación.", "Mercado 24/7."],
-    cons: ["Volatilidad elevada.", "Riesgo de custodia/contra-parte.", "Marco regulatorio cambiante."],
+    cons: [
+      "Volatilidad elevada.",
+      "Riesgo de custodia/contra-parte.",
+      "Marco regulatorio cambiante.",
+    ],
     href: "/activos/crypto",
   },
   {
@@ -67,8 +70,7 @@ const CARDS: AssetCard[] = [
     title: "Acciones Argentinas",
     subtitle: "Renta variable local (BYMA)",
     icon: <ShowChartIcon fontSize="large" />,
-    tcInfo:
-      "Precio en ARS (rueda local). Para consolidar en USD podés usar MEP/CCL.",
+    tcInfo: "Precio en ARS (rueda local). Para consolidar en USD podés usar MEP/CCL.",
     what:
       "Participaciones de empresas listadas en Argentina. Expuestas a riesgo país y regulatorio local.",
     pros: ["Acceso directo local.", "Posibles dividendos.", "Estrategias con MEP/CCL."],
@@ -84,7 +86,11 @@ const CARDS: AssetCard[] = [
       "Precio en ARS reflejando subyacente USD * ratio CEDEAR y tipo de cambio implícito (CCL).",
     what:
       "Certificados de acciones/ETFs del exterior que cotizan en ARS. Exposición global desde el mercado local.",
-    pros: ["Diversificación internacional.", "Cobertura parcial vía CCL implícito.", "Amplia oferta."],
+    pros: [
+      "Diversificación internacional.",
+      "Cobertura parcial vía CCL implícito.",
+      "Amplia oferta.",
+    ],
     cons: ["Ratios y spreads confunden.", "Liquidez variable.", "Riesgo de la estructura del programa."],
     href: "/activos/cedears",
   },
@@ -97,7 +103,11 @@ const CARDS: AssetCard[] = [
       "Valuación por paridad/precio sucio. Conversión a ARS/USD según especie y consolidación.",
     what:
       "Deuda de empresas. Pagan cupones y capital al vencimiento; riesgo/retorno dependen del emisor.",
-    pros: ["Ingresos más predecibles.", "Riesgo corporativo (menos soberano).", "Variedad de monedas/plazos."],
+    pros: [
+      "Ingresos más predecibles.",
+      "Riesgo corporativo (menos soberano).",
+      "Variedad de monedas/plazos.",
+    ],
     cons: ["Riesgo de crédito.", "Liquidez heterogénea.", "Sensibles a tasas/riesgo país."],
     href: "/activos/ons",
   },
@@ -113,76 +123,78 @@ export default function Activos() {
         Vista general del portafolio: definiciones, valuación y conversión ARS ↔ USD por clase de activo.
       </Typography>
 
-      <Grid container spacing={3}>
+      <Stack spacing={3}>
         {CARDS.map((c) => (
-          <Grid key={c.key} item xs={12} md={6}>
-            <Card
-              sx={{
-                height: "100%",
-                borderRadius: "16px",
-                overflow: "hidden",
-                border: "1px solid",
-                borderColor: "divider",
-                backdropFilter: "blur(4px)",
-              }}
-            >
-              <CardContent>
-                <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
-                  {c.icon}
-                  <Box>
-                    <Typography variant="h6">{c.title}</Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {c.subtitle}
-                    </Typography>
-                  </Box>
-                </Stack>
-
-                <Box sx={{ my: 1 }}>
-                  <Chip label={c.tcInfo} variant="outlined" size="small" sx={{ maxWidth: "100%" }} />
+          <Card
+            key={c.key}
+            sx={{
+              minHeight: 320,
+              borderRadius: "16px",
+              overflow: "hidden",
+              border: "1px solid",
+              borderColor: "divider",
+              backdropFilter: "blur(4px)",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <CardContent>
+              <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
+                {c.icon}
+                <Box>
+                  <Typography variant="h6">{c.title}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {c.subtitle}
+                  </Typography>
                 </Box>
+              </Stack>
 
-                <Typography variant="body2" sx={{ mt: 2, mb: 1.5 }}>
-                  {c.what}
-                </Typography>
+              <Box sx={{ my: 1 }}>
+                <Chip label={c.tcInfo} variant="outlined" size="small" sx={{ maxWidth: "100%" }} />
+              </Box>
 
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Ventajas
-                    </Typography>
-                    <Stack component="ul" sx={{ pl: 2, m: 0 }} spacing={0.5}>
-                      {c.pros.map((p, i) => (
-                        <Typography key={i} component="li" variant="body2">
-                          {p}
-                        </Typography>
-                      ))}
-                    </Stack>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Desventajas
-                    </Typography>
-                    <Stack component="ul" sx={{ pl: 2, m: 0 }} spacing={0.5}>
-                      {c.cons.map((p, i) => (
-                        <Typography key={i} component="li" variant="body2">
-                          {p}
-                        </Typography>
-                      ))}
-                    </Stack>
-                  </Grid>
+              <Typography variant="body2" sx={{ mt: 2, mb: 1.5 }}>
+                {c.what}
+              </Typography>
+
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                    Ventajas
+                  </Typography>
+                  <Stack component="ul" sx={{ pl: 2, m: 0 }} spacing={0.5}>
+                    {c.pros.map((p, i) => (
+                      <Typography key={i} component="li" variant="body2">
+                        {p}
+                      </Typography>
+                    ))}
+                  </Stack>
                 </Grid>
-              </CardContent>
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                    Desventajas
+                  </Typography>
+                  <Stack component="ul" sx={{ pl: 2, m: 0 }} spacing={0.5}>
+                    {c.cons.map((p, i) => (
+                      <Typography key={i} component="li" variant="body2">
+                        {p}
+                      </Typography>
+                    ))}
+                  </Stack>
+                </Grid>
+              </Grid>
+            </CardContent>
 
-              <Divider />
-              <CardActions sx={{ justifyContent: "flex-end", p: 2 }}>
-                <Button component={Link} href={c.href} variant="contained" size="small">
-                  Ver sección
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
+            <Divider />
+            <CardActions sx={{ justifyContent: "flex-end", p: 2 }}>
+              <Button component={Link} href={c.href} variant="contained" size="small">
+                Ver sección
+              </Button>
+            </CardActions>
+          </Card>
         ))}
-      </Grid>
+      </Stack>
     </main>
   );
 }
