@@ -18,10 +18,10 @@ import Image from "next/image";
 
 const navItems = [
   { label: "Inicio", href: "/" },
-  { label: "Movimientos", href: "/movimientos" },
+  //{ label: "Movimientos", href: "/movimientos" },
   { label: "Activos", href: "/activos" },
-  { label: "Reportes", href: "/reportes" },
   { label: "Noticias", href: "/noticias" }, 
+  { label: "Reportes", href: "/reportes" },
 ];
 
 export default function Navbar() {
