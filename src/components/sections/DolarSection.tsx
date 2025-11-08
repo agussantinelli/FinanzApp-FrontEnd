@@ -13,8 +13,14 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 
 function formatARS(n?: number) {
   if (typeof n !== "number" || Number.isNaN(n)) return "—";
-  return n.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 1 });
+  return n.toLocaleString("es-AR", {
+    style: "currency",
+    currency: "ARS",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }
+
 
 function titleCase(s: string) {
   return s.trim().replace(/\s+/g, " ").split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
