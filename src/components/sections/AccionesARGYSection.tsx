@@ -6,19 +6,9 @@ import { getCotizacionesDolar } from "@/services/DolarService";
 import { DualQuoteDTO } from "@/types/Market";
 import {
   Paper, Stack, Alert, Typography, Button, Card, CardContent,
-  CircularProgress, Divider
+  CircularProgress, Divider, Grid
 } from "@mui/material";
-import Grid from "@mui/material/Grid";
 import RefreshIcon from "@mui/icons-material/Refresh";
-
-const NEON = "#39ff14";
-const PAPER_BG = "rgba(0,255,0,0.03)";
-const CARD_BG = "rgba(0,255,0,0.05)";
-const BORDER = `1px solid ${NEON}`;
-const SHADOW = "0 0 12px rgba(57,255,20,0.25)";
-const SHADOW_HOVER = "0 0 18px rgba(57,255,20,0.5)";
-const DIVIDER = "rgba(57,255,20,0.25)";
-const DIVIDER_SOFT = "rgba(57,255,20,0.15)";
 
 function formatARS(n: number) {
   return n.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 2 });
@@ -38,7 +28,6 @@ function isCCL(nombreRaw: string) {
 
 type PairReq = { localBA: string; usa: string; name: string; cedearRatio?: number | null };
 
-// Pares locales/USA por sector
 const ENERGETICO: PairReq[] = [
   { localBA: "YPFD.BA", usa: "YPF",  name: "YPF" },
   { localBA: "PAMP.BA", usa: "PAM",  name: "Pampa Energía" },
@@ -49,12 +38,10 @@ const BANCARIO: PairReq[] = [
   { localBA: "GGAL.BA", usa: "GGAL", name: "Banco Galicia" },
   { localBA: "SUPV.BA", usa: "SUPV", name: "Banco Supervielle" },
 ];
-
-// “Otros” mezcla locales y CEDEARs (ej. MELI es CEDEAR).
 const EXTRA: PairReq[] = [
-  { localBA: "LOMA.BA", usa: "LOMA", name: "Loma Negra" },                  // Acción local
-  { localBA: "CEPU.BA", usa: "CEPU", name: "Central Puerto" },              // Acción local
-  { localBA: "MELI.BA", usa: "MELI", name: "Mercado Libre (CEDEAR)", cedearRatio: 2 }, // CEDEAR
+  { localBA: "LOMA.BA", usa: "LOMA", name: "Loma Negra" },
+  { localBA: "CEPU.BA", usa: "CEPU", name: "Central Puerto" },
+  { localBA: "MELI.BA", usa: "MELI", name: "Mercado Libre", cedearRatio: 2 },
 ];
 
 export default function AccionesARSection() {
@@ -80,10 +67,7 @@ export default function AccionesARSection() {
         usa: p.usa,
         cedearRatio: p.cedearRatio ?? null,
       }));
-      const [duals] = await Promise.all([
-        getStockDuals(pairsForApi as any, "CCL"),
-        fetchCCL(),
-      ]);
+      const [duals] = await Promise.all([getStockDuals(pairsForApi as any, "CCL"), fetchCCL()]);
       setData(duals);
       setUpdatedAt(new Date());
     } catch (e: any) {
@@ -100,27 +84,16 @@ export default function AccionesARSection() {
     return () => clearInterval(id);
   }, [fetchData]);
 
-  const bySymbol = useMemo(
-    () => new Map(data.map(d => [d.localSymbol.toUpperCase(), d])),
-    [data]
-  );
+  const bySymbol = useMemo(() => new Map(data.map(d => [d.localSymbol.toUpperCase(), d])), [data]);
 
   function pick(list: PairReq[]) {
     const arr: (DualQuoteDTO & { name: string })[] = [];
     for (const p of list) {
       const d = bySymbol.get(p.localBA.toUpperCase());
       if (!d) continue;
-
-      // Si el backend no envía ratio pero el par lo trae, lo completamos
       const ratio = d.cedearRatio ?? p.cedearRatio ?? null;
-
       const rate = cclRate && cclRate > 0 ? cclRate : d.usedDollarRate;
-      arr.push({
-        ...d,
-        name: p.name,
-        cedearRatio: ratio,
-        usedDollarRate: rate,
-      });
+      arr.push({ ...d, name: p.name, cedearRatio: ratio, usedDollarRate: rate });
     }
     return arr;
   }
@@ -137,26 +110,25 @@ export default function AccionesARSection() {
     const isCedearLocal = d.cedearRatio != null;
     return (
       <Card
-        sx={{
-          bgcolor: CARD_BG,
-          border: BORDER,
+        sx={(t) => ({
+          bgcolor: t.custom.cardBg,
+          border: `1px solid ${t.custom.borderColor}`,
           borderRadius: 3,
-          boxShadow: SHADOW,
+          boxShadow: t.custom.shadow,
           transition: "all .3s",
-          "&:hover": { transform: "translateY(-5px)", boxShadow: SHADOW_HOVER }
-        }}
+          "&:hover": { transform: "translateY(-5px)", boxShadow: t.custom.shadowHover }
+        })}
       >
         <CardContent>
           <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.25 }}>
             {d.name ?? d.usSymbol}
           </Typography>
+
           <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 0.75 }}>
-            {isCedearLocal
-              ? `Precio local = CEDEAR · Ratio ${d.cedearRatio}:1`
-              : "Precio local = Acción BYMA (no CEDEAR)"}
+            {isCedearLocal ? `Precio local = CEDEAR · Ratio ${d.cedearRatio}:1` : "Precio local = Acción BYMA (no CEDEAR)"}
           </Typography>
 
-          <Typography sx={{ color: NEON, fontWeight: 700 }}>
+          <Typography sx={(t)=>({ color: t.palette.primary.main, fontWeight: 700 })}>
             {d.localSymbol} ↔ {d.usSymbol}
           </Typography>
 
@@ -176,17 +148,17 @@ export default function AccionesARSection() {
   };
 
   return (
-    <Paper sx={{
+    <Paper sx={(t)=>({
       p: { xs: 2.5, md: 3 },
-      bgcolor: PAPER_BG,
-      border: `1px solid ${NEON}59`,
+      bgcolor: t.custom.paperBg,
+      border: `1px solid ${t.custom.borderColor}59`,
       borderRadius: 3,
-    }}>
+    })}>
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
         alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
         <div>
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-          <Typography variant="h5" sx={{ fontWeight: 800, color: NEON }}>
+          <Typography variant="h5" sx={(t)=>({ fontWeight: 800, color: t.palette.primary.main })}>
             Empresas Argentinas ↔ ADR / CEDEARs
           </Typography>
           {updatedAt && (
@@ -198,18 +170,18 @@ export default function AccionesARSection() {
         <Button
           onClick={fetchData}
           variant="outlined"
-          color="success"
+          color="primary"
           startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
           disabled={loading}
-          sx={{ borderColor: NEON, color: NEON, "&:hover": { borderColor: NEON } }}
+          sx={(t)=>({ borderColor: t.palette.primary.main, color: t.palette.primary.main, "&:hover": { borderColor: t.palette.primary.main } })}
         >
           {loading ? "Actualizando..." : "Actualizar"}
         </Button>
       </Stack>
 
-      <Divider sx={{ my: 2.5, borderColor: DIVIDER }} />
+      <Divider sx={(t)=>({ my: 2.5, borderColor: t.custom.divider })} />
 
-      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, color: NEON }}>
+      <Typography variant="subtitle1" sx={(t)=>({ fontWeight: 700, mb: 1, color: t.palette.primary.main })}>
         Sector Energético
       </Typography>
       <Stack spacing={3}>
@@ -224,9 +196,9 @@ export default function AccionesARSection() {
         ))}
       </Stack>
 
-      <Divider sx={{ my: 2.5, borderColor: DIVIDER_SOFT }} />
+      <Divider sx={(t)=>({ my: 2.5, borderColor: t.custom.dividerSoft })} />
 
-      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, color: NEON }}>
+      <Typography variant="subtitle1" sx={(t)=>({ fontWeight: 700, mb: 1, color: t.palette.primary.main })}>
         Sector Bancario
       </Typography>
       <Stack spacing={3}>
@@ -241,9 +213,9 @@ export default function AccionesARSection() {
         ))}
       </Stack>
 
-      <Divider sx={{ my: 2.5, borderColor: DIVIDER_SOFT }} />
+      <Divider sx={(t)=>({ my: 2.5, borderColor: t.custom.dividerSoft })} />
 
-      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, color: NEON }}>
+      <Typography variant="subtitle1" sx={(t)=>({ fontWeight: 700, mb: 1, color: t.palette.primary.main })}>
         Otros
       </Typography>
       <Stack spacing={3}>

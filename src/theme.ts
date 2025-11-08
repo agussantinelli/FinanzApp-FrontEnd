@@ -1,6 +1,32 @@
 import { createTheme } from "@mui/material/styles";
 import { colors, radius } from "@/design-tokens";
 
+declare module "@mui/material/styles" {
+  interface Theme {
+    custom: {
+      paperBg: string;
+      cardBg: string;
+      divider: string;
+      dividerSoft: string;
+      shadow: string;
+      shadowHover: string;
+      borderColor: string;
+    };
+  }
+  // para poder usar theme.custom en sx
+  interface ThemeOptions {
+    custom?: {
+      paperBg?: string;
+      cardBg?: string;
+      divider?: string;
+      dividerSoft?: string;
+      shadow?: string;
+      shadowHover?: string;
+      borderColor?: string;
+    };
+  }
+}
+
 const theme = createTheme({
   palette: {
     mode: "dark",
@@ -10,16 +36,6 @@ const theme = createTheme({
     text: { primary: colors.textPrimary, secondary: colors.textSecondary },
   },
   shape: { borderRadius: radius },
-  components: {
-    MuiAppBar: {
-      styleOverrides: {
-        root: { background: "rgba(0,0,0,.5)", backdropFilter: "blur(8px)" },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: { root: { backgroundImage: "none" } },
-    },
-  },
   typography: {
     fontFamily: [
       "Inter",
@@ -34,6 +50,25 @@ const theme = createTheme({
     h1: { fontWeight: 700 },
     h2: { fontWeight: 700 },
     h3: { fontWeight: 700 },
+  },
+  components: {
+    MuiAppBar: {
+      styleOverrides: {
+        root: { background: "rgba(0,0,0,.5)", backdropFilter: "blur(8px)" },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: { root: { backgroundImage: "none" } },
+    },
+  },
+  custom: {
+    paperBg: colors.paperBgTranslucent,
+    cardBg: colors.cardBgTranslucent,
+    divider: colors.divider,
+    dividerSoft: colors.dividerSoft,
+    shadow: colors.shadow,
+    shadowHover: colors.shadowHover,
+    borderColor: colors.primary,
   },
 });
 

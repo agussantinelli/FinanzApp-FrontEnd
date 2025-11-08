@@ -10,14 +10,6 @@ import {
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
-const NEON = "#39ff14";
-const PAPER_BG = "rgba(0,255,0,0.03)";
-const CARD_BG = "rgba(0,255,0,0.05)";
-const BORDER = `1px solid ${NEON}`;
-const SHADOW = "0 0 12px rgba(57,255,20,0.25)";
-const SHADOW_HOVER = "0 0 18px rgba(57,255,20,0.5)";
-const DIVIDER = "rgba(57,255,20,0.25)";
-
 function formatARS(n: number) {
   return n.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 2 });
 }
@@ -35,15 +27,9 @@ function isCCL(nombreRaw: string) {
 }
 
 const COMPANY: Record<string, string> = {
-  "AAPL.BA": "Apple",
-  "AMZN.BA": "Amazon",
-  "NVDA.BA": "NVIDIA",
-  "MSFT.BA": "Microsoft",
-  "GOOGL.BA": "Alphabet",
-  "META.BA": "Meta",
-  "TSLA.BA": "Tesla",
-  "BRKB.BA": "Berkshire Hathaway",
-  "KO.BA": "Coca-Cola Company",
+  "AAPL.BA": "Apple", "AMZN.BA": "Amazon", "NVDA.BA": "NVIDIA",
+  "MSFT.BA": "Microsoft", "GOOGL.BA": "Alphabet", "META.BA": "Meta",
+  "TSLA.BA": "Tesla", "BRKB.BA": "Berkshire Hathaway", "KO.BA": "Coca-Cola Company",
 };
 
 export default function CedearsSection() {
@@ -102,26 +88,25 @@ export default function CedearsSection() {
     const company = COMPANY[d.localSymbol?.toUpperCase() || ""] ?? d.usSymbol;
     return (
       <Card
-        sx={{
-          bgcolor: CARD_BG,
-          border: BORDER,
+        sx={(t)=>({
+          bgcolor: t.custom.cardBg,
+          border: `1px solid ${t.custom.borderColor}`,
           borderRadius: 3,
-          boxShadow: SHADOW,
+          boxShadow: t.custom.shadow,
           transition: "all .3s",
-          "&:hover": { transform: "translateY(-5px)", boxShadow: SHADOW_HOVER }
-        }}
+          "&:hover": { transform: "translateY(-5px)", boxShadow: t.custom.shadowHover }
+        })}
       >
         <CardContent>
           <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.25 }}>
             {company}
           </Typography>
+
           <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 0.75 }}>
-            {isCedearLocal
-              ? `Precio local = CEDEAR · Ratio ${d.cedearRatio}:1`
-              : "Precio local = Acción BYMA (no CEDEAR)"}
+            {isCedearLocal ? `Precio local = CEDEAR · Ratio ${d.cedearRatio}:1` : "Precio local = Acción BYMA (no CEDEAR)"}
           </Typography>
 
-          <Typography sx={{ color: NEON, fontWeight: 700 }}>
+          <Typography sx={(t)=>({ color: t.palette.primary.main, fontWeight: 700 })}>
             {d.localSymbol} ↔ {d.usSymbol}
           </Typography>
 
@@ -141,16 +126,16 @@ export default function CedearsSection() {
   };
 
   return (
-    <Paper sx={{
+    <Paper sx={(t)=>({
       p: { xs: 2.5, md: 3 },
-      bgcolor: PAPER_BG,
-      border: `1px solid ${NEON}59`,
+      bgcolor: t.custom.paperBg,
+      border: `1px solid ${t.custom.borderColor}59`,
       borderRadius: 3,
-    }}>
+    })}>
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
         alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
         <div>
-          <Typography variant="h5" sx={{ fontWeight: 800, color: NEON }}>
+          <Typography variant="h5" sx={(t)=>({ fontWeight: 800, color: t.palette.primary.main })}>
             CEDEARs ↔ Acción USA
           </Typography>
           {updatedAt && (
@@ -162,16 +147,16 @@ export default function CedearsSection() {
         <Button
           onClick={fetchData}
           variant="outlined"
-          color="success"
+          color="primary"
           startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
           disabled={loading}
-          sx={{ borderColor: NEON, color: NEON, "&:hover": { borderColor: NEON } }}
+          sx={(t)=>({ borderColor: t.palette.primary.main, color: t.palette.primary.main, "&:hover": { borderColor: t.palette.primary.main } })}
         >
           {loading ? "Actualizando..." : "Actualizar"}
         </Button>
       </Stack>
 
-      <Divider sx={{ my: 2.5, borderColor: DIVIDER }} />
+      <Divider sx={(t)=>({ my: 2.5, borderColor: t.custom.divider })} />
 
       {withDerived.length === 0 && !loading && (
         <Typography color="text.secondary">No se encontraron cotizaciones.</Typography>

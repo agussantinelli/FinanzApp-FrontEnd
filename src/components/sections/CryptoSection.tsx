@@ -9,14 +9,6 @@ import {
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
-const NEON = "#39ff14";
-const PAPER_BG = "rgba(0,255,0,0.03)";
-const CARD_BG = "rgba(0,255,0,0.05)";
-const BORDER = `1px solid ${NEON}`;
-const SHADOW = "0 0 12px rgba(57,255,20,0.25)";
-const SHADOW_HOVER = "0 0 18px rgba(57,255,20,0.5)";
-const DIVIDER = "rgba(57,255,20,0.25)";
-
 function formatUSD(n: number) {
   return n.toLocaleString("es-AR", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 }
@@ -45,21 +37,21 @@ export default function CryptoSection() {
 
   const CryptoCard = (c: CryptoTopDTO) => (
     <Card
-      sx={{
-        bgcolor: CARD_BG,
-        border: BORDER,
+      sx={(t)=>({
+        bgcolor: t.custom.cardBg,
+        border: `1px solid ${t.custom.borderColor}`,
         borderRadius: 3,
-        boxShadow: SHADOW,
+        boxShadow: t.custom.shadow,
         transition: "all .3s",
-        "&:hover": { transform: "translateY(-5px)", boxShadow: SHADOW_HOVER },
+        "&:hover": { transform: "translateY(-5px)", boxShadow: t.custom.shadowHover },
         height: "100%",
         width: "100%",
         display: "flex",
         flexDirection: "column",
-      }}
+      })}
     >
       <CardContent sx={{ flexGrow: 1, minHeight: 110 }}>
-        <Typography variant="h6" sx={{ color: NEON, fontWeight: 700 }} noWrap title={`${c.name} (${c.symbol})`}>
+        <Typography variant="h6" sx={(t)=>({ color: t.palette.primary.main, fontWeight: 700 })} noWrap title={`${c.name} (${c.symbol})`}>
           {c.name} ({c.symbol})
         </Typography>
         <Typography>
@@ -73,16 +65,16 @@ export default function CryptoSection() {
   );
 
   return (
-    <Paper sx={{
+    <Paper sx={(t)=>({
       p: { xs: 2.5, md: 3 },
-      bgcolor: PAPER_BG,
-      border: `1px solid ${NEON}59`,
+      bgcolor: t.custom.paperBg,
+      border: `1px solid ${t.custom.borderColor}59`,
       borderRadius: 3,
-    }}>
+    })}>
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
         alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
         <Box>
-          <Typography variant="h5" sx={{ fontWeight: 800, color: NEON }}>
+          <Typography variant="h5" sx={(t)=>({ fontWeight: 800, color: t.palette.primary.main })}>
             CriptoMonedas Top 10 por Market Cap
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -98,16 +90,16 @@ export default function CryptoSection() {
         <Button
           onClick={fetchData}
           variant="outlined"
-          color="success"
+          color="primary"
           startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
           disabled={loading}
-          sx={{ borderColor: NEON, color: NEON, "&:hover": { borderColor: NEON } }}
+          sx={(t)=>({ borderColor: t.palette.primary.main, color: t.palette.primary.main, "&:hover": { borderColor: t.palette.primary.main } })}
         >
           {loading ? "Actualizando..." : "Actualizar"}
         </Button>
       </Stack>
 
-      <Divider sx={{ my: 2.5, borderColor: DIVIDER }} />
+      <Divider sx={(t)=>({ my: 2.5, borderColor: t.custom.divider })} />
 
       <Stack spacing={{ xs: 2, md: 3 }}>
         <Grid container spacing={3} alignItems="stretch">
