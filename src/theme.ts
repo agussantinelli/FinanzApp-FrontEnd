@@ -1,14 +1,15 @@
 import { createTheme } from "@mui/material/styles";
+import { colors, radius } from "@/design-tokens";
 
 const theme = createTheme({
   palette: {
     mode: "dark",
-    background: { default: "#000000", paper: "#0b0b0b" },
-    primary: { main: "#39ff14" },      
-    secondary: { main: "#00e676" },
-    text: { primary: "#e5e7eb", secondary: "#9ca3af" },
+    background: { default: colors.black, paper: colors.paper },
+    primary: { main: colors.primary },
+    secondary: { main: colors.secondary },
+    text: { primary: colors.textPrimary, secondary: colors.textSecondary },
   },
-  shape: { borderRadius: 12 },
+  shape: { borderRadius: radius },
   components: {
     MuiAppBar: {
       styleOverrides: {

@@ -3,13 +3,13 @@ import "@/app/styles/globals.css";
 import Providers from "@/components/Providers";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import NeonParticlesBg from "@/components/NeonParticlesBg";
+import ClientBackground from "@/components/ClientBackground"; 
 
 export const metadata: Metadata = {
   title: "FinanzApp",
   description: "Gestión financiera personal",
   icons: {
-    icon: [{ url: "/logo.png" }], 
+    icon: [{ url: "/logo.png" }],
   },
 };
 
@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es">
       <body style={{ margin: 0 }}>
-        <NeonParticlesBg />
+        <ClientBackground />
         <Providers>
           <Navbar />
           <main

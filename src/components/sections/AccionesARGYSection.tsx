@@ -51,7 +51,6 @@ const BANCARIO: PairReq[] = [
 ];
 
 // “Otros” mezcla locales y CEDEARs (ej. MELI es CEDEAR).
-// ⚠️ Ratio de ejemplo para MELI = 2 (ajustá si tu catálogo difiere).
 const EXTRA: PairReq[] = [
   { localBA: "LOMA.BA", usa: "LOMA", name: "Loma Negra" },                  // Acción local
   { localBA: "CEPU.BA", usa: "CEPU", name: "Central Puerto" },              // Acción local
