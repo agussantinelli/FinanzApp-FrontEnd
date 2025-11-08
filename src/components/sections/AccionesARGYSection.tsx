@@ -11,6 +11,15 @@ import {
 import Grid from "@mui/material/Grid";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
+const NEON = "#39ff14";
+const PAPER_BG = "rgba(0,255,0,0.03)";
+const CARD_BG = "rgba(0,255,0,0.05)";
+const BORDER = `1px solid ${NEON}`;
+const SHADOW = "0 0 12px rgba(57,255,20,0.25)";
+const SHADOW_HOVER = "0 0 18px rgba(57,255,20,0.5)";
+const DIVIDER = "rgba(57,255,20,0.25)";
+const DIVIDER_SOFT = "rgba(57,255,20,0.15)";
+
 function formatARS(n: number) {
   return n.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 2 });
 }
@@ -107,16 +116,11 @@ export default function AccionesARSection() {
       const ratio = d.cedearRatio ?? p.cedearRatio ?? null;
 
       const rate = cclRate && cclRate > 0 ? cclRate : d.usedDollarRate;
-      const localUsd = +(d.localPriceARS / rate).toFixed(2);
-      const usArs = +(d.usPriceUSD * rate).toFixed(2);
-
       arr.push({
         ...d,
         name: p.name,
         cedearRatio: ratio,
         usedDollarRate: rate,
-        localPriceUSD: localUsd,
-        usPriceARS: usArs,
       });
     }
     return arr;
@@ -135,12 +139,12 @@ export default function AccionesARSection() {
     return (
       <Card
         sx={{
-          bgcolor: "rgba(0,255,0,0.05)",
-          border: "1px solid #39ff14",
+          bgcolor: CARD_BG,
+          border: BORDER,
           borderRadius: 3,
-          boxShadow: "0 0 12px rgba(57,255,20,0.25)",
+          boxShadow: SHADOW,
           transition: "all .3s",
-          "&:hover": { transform: "translateY(-5px)", boxShadow: "0 0 18px rgba(57,255,20,0.5)" }
+          "&:hover": { transform: "translateY(-5px)", boxShadow: SHADOW_HOVER }
         }}
       >
         <CardContent>
@@ -153,7 +157,7 @@ export default function AccionesARSection() {
               : "Precio local = Acción BYMA (no CEDEAR)"}
           </Typography>
 
-          <Typography sx={{ color: "#39ff14", fontWeight: 700 }}>
+          <Typography sx={{ color: NEON, fontWeight: 700 }}>
             {d.localSymbol} ↔ {d.usSymbol}
           </Typography>
 
@@ -175,15 +179,15 @@ export default function AccionesARSection() {
   return (
     <Paper sx={{
       p: { xs: 2.5, md: 3 },
-      bgcolor: "rgba(0,255,0,0.03)",
-      border: "1px solid rgba(57,255,20,0.35)",
+      bgcolor: PAPER_BG,
+      border: `1px solid ${NEON}59`,
       borderRadius: 3,
     }}>
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
         alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
         <div>
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-          <Typography variant="h5" sx={{ fontWeight: 800, color: "#39ff14" }}>
+          <Typography variant="h5" sx={{ fontWeight: 800, color: NEON }}>
             Empresas Argentinas ↔ ADR / CEDEARs
           </Typography>
           {updatedAt && (
@@ -198,15 +202,15 @@ export default function AccionesARSection() {
           color="success"
           startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
           disabled={loading}
-          sx={{ borderColor: "#39ff14", color: "#39ff14", "&:hover": { borderColor: "#39ff14" } }}
+          sx={{ borderColor: NEON, color: NEON, "&:hover": { borderColor: NEON } }}
         >
           {loading ? "Actualizando..." : "Actualizar"}
         </Button>
       </Stack>
 
-      <Divider sx={{ my: 2.5, borderColor: "rgba(57,255,20,0.25)" }} />
+      <Divider sx={{ my: 2.5, borderColor: DIVIDER }} />
 
-      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, color: "#39ff14" }}>
+      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, color: NEON }}>
         Sector Energético
       </Typography>
       <Stack spacing={3}>
@@ -221,9 +225,9 @@ export default function AccionesARSection() {
         ))}
       </Stack>
 
-      <Divider sx={{ my: 2.5, borderColor: "rgba(57,255,20,0.15)" }} />
+      <Divider sx={{ my: 2.5, borderColor: DIVIDER_SOFT }} />
 
-      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, color: "#39ff14" }}>
+      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, color: NEON }}>
         Sector Bancario
       </Typography>
       <Stack spacing={3}>
@@ -238,9 +242,9 @@ export default function AccionesARSection() {
         ))}
       </Stack>
 
-      <Divider sx={{ my: 2.5, borderColor: "rgba(57,255,20,0.15)" }} />
+      <Divider sx={{ my: 2.5, borderColor: DIVIDER_SOFT }} />
 
-      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, color: "#39ff14" }}>
+      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, color: NEON }}>
         Otros
       </Typography>
       <Stack spacing={3}>

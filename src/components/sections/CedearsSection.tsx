@@ -10,6 +10,14 @@ import {
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
+const NEON = "#39ff14";
+const PAPER_BG = "rgba(0,255,0,0.03)";
+const CARD_BG = "rgba(0,255,0,0.05)";
+const BORDER = `1px solid ${NEON}`;
+const SHADOW = "0 0 12px rgba(57,255,20,0.25)";
+const SHADOW_HOVER = "0 0 18px rgba(57,255,20,0.5)";
+const DIVIDER = "rgba(57,255,20,0.25)";
+
 function formatARS(n: number) {
   return n.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 2 });
 }
@@ -53,10 +61,7 @@ export default function CedearsSection() {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const [ced] = await Promise.all([
-        getCedearDuals("CCL"),
-        fetchCCL()
-      ]);
+      const [ced] = await Promise.all([getCedearDuals("CCL"), fetchCCL()]);
       setData(ced);
       setUpdatedAt(new Date());
     } catch (e) {
@@ -72,7 +77,6 @@ export default function CedearsSection() {
     return () => clearInterval(id);
   }, [fetchData]);
 
-  // Filtro de ejemplo (dejá todos si querés)
   const symbolsWanted = useMemo(
     () => new Set(["AAPL.BA","AMZN.BA","NVDA.BA","MSFT.BA","GOOGL.BA","META.BA","TSLA.BA","BRKB.BA","KO.BA"]),
     []
@@ -87,29 +91,24 @@ export default function CedearsSection() {
     const rate = (cclRate && cclRate > 0) ? cclRate : undefined;
     return filtered.map(d => {
       const usedRate = rate ?? d.usedDollarRate;
-      return {
-        ...d,
-        usedDollarRate: usedRate,
-        localPriceUSD: +(d.localPriceARS / usedRate).toFixed(2),
-        usPriceARS: +(d.usPriceUSD * usedRate).toFixed(2),
-      };
+      return { ...d, usedDollarRate: usedRate };
     });
   }, [filtered, cclRate]);
 
   const rows = useMemo(() => chunk(withDerived, 3), [withDerived]);
 
   const UnifiedCard = (d: DualQuoteDTO) => {
-    const isCedearLocal = d.cedearRatio != null; // acá siempre deberían ser CEDEARs
+    const isCedearLocal = d.cedearRatio != null;
     const company = COMPANY[d.localSymbol?.toUpperCase() || ""] ?? d.usSymbol;
     return (
       <Card
         sx={{
-          bgcolor: "rgba(0,255,0,0.05)",
-          border: "1px solid #39ff14",
+          bgcolor: CARD_BG,
+          border: BORDER,
           borderRadius: 3,
-          boxShadow: "0 0 12px rgba(57,255,20,0.25)",
+          boxShadow: SHADOW,
           transition: "all .3s",
-          "&:hover": { transform: "translateY(-5px)", boxShadow: "0 0 18px rgba(57,255,20,0.5)" }
+          "&:hover": { transform: "translateY(-5px)", boxShadow: SHADOW_HOVER }
         }}
       >
         <CardContent>
@@ -122,16 +121,17 @@ export default function CedearsSection() {
               : "Precio local = Acción BYMA (no CEDEAR)"}
           </Typography>
 
-          <Typography sx={{ color: "#39ff14", fontWeight: 700 }}>
+          <Typography sx={{ color: NEON, fontWeight: 700 }}>
             {d.localSymbol} ↔ {d.usSymbol}
           </Typography>
 
           <Typography sx={{ mt: 1 }}>
-            Local (ARS): <strong>{formatARS(d.localPriceARS)}</strong>
+            CEDEAR (ARS): <strong>{formatARS(d.localPriceARS)}</strong>
           </Typography>
           <Typography>
-            USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong>
+            Acción USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong>
           </Typography>
+
           <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 1 }}>
             Tasa (CCL): {d.usedDollarRate.toLocaleString("es-AR")}
           </Typography>
@@ -143,14 +143,14 @@ export default function CedearsSection() {
   return (
     <Paper sx={{
       p: { xs: 2.5, md: 3 },
-      bgcolor: "rgba(0,255,0,0.03)",
-      border: "1px solid rgba(57,255,20,0.35)",
+      bgcolor: PAPER_BG,
+      border: `1px solid ${NEON}59`,
       borderRadius: 3,
     }}>
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
         alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
         <div>
-          <Typography variant="h5" sx={{ fontWeight: 800, color: "#39ff14" }}>
+          <Typography variant="h5" sx={{ fontWeight: 800, color: NEON }}>
             CEDEARs ↔ Acción USA
           </Typography>
           {updatedAt && (
@@ -159,15 +159,19 @@ export default function CedearsSection() {
             </Typography>
           )}
         </div>
-        <Button onClick={fetchData} variant="outlined" color="success"
+        <Button
+          onClick={fetchData}
+          variant="outlined"
+          color="success"
           startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
           disabled={loading}
-          sx={{ borderColor: "#39ff14", color: "#39ff14", "&:hover": { borderColor: "#39ff14" } }}>
+          sx={{ borderColor: NEON, color: NEON, "&:hover": { borderColor: NEON } }}
+        >
           {loading ? "Actualizando..." : "Actualizar"}
         </Button>
       </Stack>
 
-      <Divider sx={{ my: 2.5, borderColor: "rgba(57,255,20,0.25)" }} />
+      <Divider sx={{ my: 2.5, borderColor: DIVIDER }} />
 
       {withDerived.length === 0 && !loading && (
         <Typography color="text.secondary">No se encontraron cotizaciones.</Typography>
