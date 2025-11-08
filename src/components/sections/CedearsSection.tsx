@@ -46,8 +46,8 @@ export default function CedearsSection() {
 
   const fetchCCL = useCallback(async () => {
     const cot = await getCotizacionesDolar();
-    const ccl = cot.find(c => isCCL(c.nombre ?? c.nombre)); // compat con back/front
-    setCclRate(ccl?.venta ?? ccl?.venta ?? null);
+    const ccl = cot.find(c => isCCL(c.nombre ?? c.nombre));
+    setCclRate(ccl?.venta ?? null);
   }, []);
 
   const fetchData = useCallback(async () => {
@@ -61,12 +61,10 @@ export default function CedearsSection() {
       setUpdatedAt(new Date());
     } catch (e) {
       console.error("❌ Error en CedearsSection:", e);
-      // opcional: setError("No se pudo cargar. Reintentá.")
     } finally {
       setLoading(false);
     }
   }, [fetchCCL]);
-
 
   useEffect(() => {
     fetchData();
@@ -74,30 +72,73 @@ export default function CedearsSection() {
     return () => clearInterval(id);
   }, [fetchData]);
 
+  // Filtro de ejemplo (dejá todos si querés)
   const symbolsWanted = useMemo(
     () => new Set(["AAPL.BA","AMZN.BA","NVDA.BA","MSFT.BA","GOOGL.BA","META.BA","TSLA.BA","BRKB.BA","KO.BA"]),
     []
   );
 
   const filtered = useMemo(
-    () => data.filter(d => symbolsWanted.has(d.localSymbol.toUpperCase())),
+    () => data.filter(d => symbolsWanted.has((d.localSymbol || "").toUpperCase())),
     [data, symbolsWanted]
   );
 
-  const withUnifiedRate = useMemo(() => {
-    if (!cclRate || cclRate <= 0) return filtered;
-    return filtered.map(d => ({
-      ...d,
-      usedDollarRate: cclRate,
-      localPriceUSD: +(d.localPriceARS / cclRate).toFixed(2),
-      usPriceARS: +(d.usPriceUSD * cclRate).toFixed(2),
-      theoreticalCedearARS: d.cedearRatio
-        ? +((d.usPriceUSD * cclRate) / d.cedearRatio).toFixed(2)
-        : d.theoreticalCedearARS
-    }));
+  const withDerived = useMemo(() => {
+    const rate = (cclRate && cclRate > 0) ? cclRate : undefined;
+    return filtered.map(d => {
+      const usedRate = rate ?? d.usedDollarRate;
+      return {
+        ...d,
+        usedDollarRate: usedRate,
+        localPriceUSD: +(d.localPriceARS / usedRate).toFixed(2),
+        usPriceARS: +(d.usPriceUSD * usedRate).toFixed(2),
+      };
+    });
   }, [filtered, cclRate]);
 
-  const rows = useMemo(() => chunk(withUnifiedRate, 3), [withUnifiedRate]);
+  const rows = useMemo(() => chunk(withDerived, 3), [withDerived]);
+
+  const UnifiedCard = (d: DualQuoteDTO) => {
+    const isCedearLocal = d.cedearRatio != null; // acá siempre deberían ser CEDEARs
+    const company = COMPANY[d.localSymbol?.toUpperCase() || ""] ?? d.usSymbol;
+    return (
+      <Card
+        sx={{
+          bgcolor: "rgba(0,255,0,0.05)",
+          border: "1px solid #39ff14",
+          borderRadius: 3,
+          boxShadow: "0 0 12px rgba(57,255,20,0.25)",
+          transition: "all .3s",
+          "&:hover": { transform: "translateY(-5px)", boxShadow: "0 0 18px rgba(57,255,20,0.5)" }
+        }}
+      >
+        <CardContent>
+          <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.25 }}>
+            {company}
+          </Typography>
+          <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 0.75 }}>
+            {isCedearLocal
+              ? `Precio local = CEDEAR · Ratio ${d.cedearRatio}:1`
+              : "Precio local = Acción BYMA (no CEDEAR)"}
+          </Typography>
+
+          <Typography sx={{ color: "#39ff14", fontWeight: 700 }}>
+            {d.localSymbol} ↔ {d.usSymbol}
+          </Typography>
+
+          <Typography sx={{ mt: 1 }}>
+            Local (ARS): <strong>{formatARS(d.localPriceARS)}</strong>
+          </Typography>
+          <Typography>
+            USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong>
+          </Typography>
+          <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 1 }}>
+            Tasa (CCL): {d.usedDollarRate.toLocaleString("es-AR")}
+          </Typography>
+        </CardContent>
+      </Card>
+    );
+  };
 
   return (
     <Paper sx={{
@@ -128,7 +169,7 @@ export default function CedearsSection() {
 
       <Divider sx={{ my: 2.5, borderColor: "rgba(57,255,20,0.25)" }} />
 
-      {withUnifiedRate.length === 0 && !loading && (
+      {withDerived.length === 0 && !loading && (
         <Typography color="text.secondary">No se encontraron cotizaciones.</Typography>
       )}
 
@@ -137,33 +178,7 @@ export default function CedearsSection() {
           <Grid key={idx} container spacing={3}>
             {row.map(d => (
               <Grid item xs={12} md={4} key={d.localSymbol}>
-                <Card sx={{
-                  bgcolor: "rgba(0,255,0,0.05)",
-                  border: "1px solid #39ff14",
-                  borderRadius: 3,
-                  boxShadow: "0 0 12px rgba(57,255,20,0.25)",
-                  transition: "all .3s",
-                  "&:hover": { transform: "translateY(-5px)", boxShadow: "0 0 18px rgba(57,255,20,0.5)" }
-                }}>
-                  <CardContent>
-                    <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.5 }}>
-                      {COMPANY[d.localSymbol.toUpperCase()] ?? d.usSymbol}
-                    </Typography>
-                    <Typography sx={{ color: "#39ff14", fontWeight: 700 }}>
-                      {d.localSymbol} ↔ {d.usSymbol}
-                    </Typography>
-                    <Typography sx={{ mt: 1 }}>
-                      CEDEAR (ARS): <strong>{formatARS(d.localPriceARS)}</strong>
-                    </Typography>
-                    <Typography>
-                      Acción USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong>
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 1 }}>
-                      {d.cedearRatio ? `Ratio: ${d.cedearRatio} | ` : ""}
-                      Tasa (CCL): { (cclRate ?? d.usedDollarRate).toLocaleString("es-AR") }
-                    </Typography>
-                  </CardContent>
-                </Card>
+                {UnifiedCard(d)}
               </Grid>
             ))}
           </Grid>

@@ -9,7 +9,6 @@ import {
   CircularProgress, Divider
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
-
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 function formatARS(n: number) {
@@ -28,22 +27,26 @@ function isCCL(nombreRaw: string) {
   return n.includes("contado") || n.includes("liqui") || n.includes("liquid") || n.includes("ccl");
 }
 
-// Pares locales/USA por sector 
-const ENERGETICO = [
-  { localBA: "YPFD.BA",  usa: "YPF",  name: "YPF" },
-  { localBA: "PAMP.BA",  usa: "PAM",  name: "Pampa Energía" },
-  { localBA: "VIST.BA",  usa: "VIST", name: "Vista Energy" },
+type PairReq = { localBA: string; usa: string; name: string; cedearRatio?: number | null };
+
+// Pares locales/USA por sector
+const ENERGETICO: PairReq[] = [
+  { localBA: "YPFD.BA", usa: "YPF",  name: "YPF" },
+  { localBA: "PAMP.BA", usa: "PAM",  name: "Pampa Energía" },
+  { localBA: "VIST.BA", usa: "VIST", name: "Vista Energy" },
 ];
-const BANCARIO = [
+const BANCARIO: PairReq[] = [
   { localBA: "BMA.BA",  usa: "BMA",  name: "Banco Macro" },
   { localBA: "GGAL.BA", usa: "GGAL", name: "Banco Galicia" },
   { localBA: "SUPV.BA", usa: "SUPV", name: "Banco Supervielle" },
 ];
 
-const EXTRA = [
-  { localBA: "LOMA.BA", usa: "LOMA", name: "Loma Negra" },
-  { localBA: "CEPU.BA", usa: "CEPU", name: "Central Puerto" },
-  { localBA: "MELI.BA", usa: "MELI", name: "Mercado Libre (CEDEAR)" },
+// “Otros” mezcla locales y CEDEARs (ej. MELI es CEDEAR).
+// ⚠️ Ratio de ejemplo para MELI = 2 (ajustá si tu catálogo difiere).
+const EXTRA: PairReq[] = [
+  { localBA: "LOMA.BA", usa: "LOMA", name: "Loma Negra" },                  // Acción local
+  { localBA: "CEPU.BA", usa: "CEPU", name: "Central Puerto" },              // Acción local
+  { localBA: "MELI.BA", usa: "MELI", name: "Mercado Libre (CEDEAR)", cedearRatio: 2 }, // CEDEAR
 ];
 
 export default function AccionesARSection() {
@@ -64,8 +67,13 @@ export default function AccionesARSection() {
     setLoading(true);
     setError(null);
     try {
+      const pairsForApi = ALL_PAIRS.map(p => ({
+        localBA: p.localBA,
+        usa: p.usa,
+        cedearRatio: p.cedearRatio ?? null,
+      }));
       const [duals] = await Promise.all([
-        getStockDuals(ALL_PAIRS, "CCL"),
+        getStockDuals(pairsForApi as any, "CCL"),
         fetchCCL(),
       ]);
       setData(duals);
@@ -89,18 +97,26 @@ export default function AccionesARSection() {
     [data]
   );
 
-  function pick(list: { localBA: string; usa: string; name: string }[]) {
+  function pick(list: PairReq[]) {
     const arr: (DualQuoteDTO & { name: string })[] = [];
     for (const p of list) {
       const d = bySymbol.get(p.localBA.toUpperCase());
       if (!d) continue;
+
+      // Si el backend no envía ratio pero el par lo trae, lo completamos
+      const ratio = d.cedearRatio ?? p.cedearRatio ?? null;
+
       const rate = cclRate && cclRate > 0 ? cclRate : d.usedDollarRate;
+      const localUsd = +(d.localPriceARS / rate).toFixed(2);
+      const usArs = +(d.usPriceUSD * rate).toFixed(2);
+
       arr.push({
         ...d,
         name: p.name,
+        cedearRatio: ratio,
         usedDollarRate: rate,
-        localPriceUSD: +(d.localPriceARS / rate).toFixed(2),
-        usPriceARS: +(d.usPriceUSD * rate).toFixed(2),
+        localPriceUSD: localUsd,
+        usPriceARS: usArs,
       });
     }
     return arr;
@@ -114,36 +130,47 @@ export default function AccionesARSection() {
   const rowsBancario   = useMemo(() => chunk(bancario, 3),   [bancario]);
   const rowsExtra      = useMemo(() => chunk(extra, 3),      [extra]);
 
-  const CardDual = (d: DualQuoteDTO & { name?: string }) => (
-    <Card
-      sx={{
-        bgcolor: "rgba(0,255,0,0.05)",
-        border: "1px solid #39ff14",
-        borderRadius: 3,
-        boxShadow: "0 0 12px rgba(57,255,20,0.25)",
-        transition: "all .3s",
-        "&:hover": { transform: "translateY(-5px)", boxShadow: "0 0 18px rgba(57,255,20,0.5)" }
-      }}
-    >
-      <CardContent>
-        <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.5 }}>
-          {d.name ?? d.usSymbol}
-        </Typography>
-        <Typography sx={{ color: "#39ff14", fontWeight: 700 }}>
-          {d.localSymbol} ↔ {d.usSymbol}
-        </Typography>
-        <Typography sx={{ mt: 1 }}>
-          Local (ARS): <strong>{formatARS(d.localPriceARS)}</strong>
-        </Typography>
-        <Typography>
-          USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong>
-        </Typography>
-        <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 1 }}>
-          Tasa (CCL): {d.usedDollarRate.toLocaleString("es-AR")}
-        </Typography>
-      </CardContent>
-    </Card>
-  );
+  const UnifiedCard = (d: DualQuoteDTO & { name?: string }) => {
+    const isCedearLocal = d.cedearRatio != null;
+    return (
+      <Card
+        sx={{
+          bgcolor: "rgba(0,255,0,0.05)",
+          border: "1px solid #39ff14",
+          borderRadius: 3,
+          boxShadow: "0 0 12px rgba(57,255,20,0.25)",
+          transition: "all .3s",
+          "&:hover": { transform: "translateY(-5px)", boxShadow: "0 0 18px rgba(57,255,20,0.5)" }
+        }}
+      >
+        <CardContent>
+          <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.25 }}>
+            {d.name ?? d.usSymbol}
+          </Typography>
+          <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 0.75 }}>
+            {isCedearLocal
+              ? `Precio local = CEDEAR · Ratio ${d.cedearRatio}:1`
+              : "Precio local = Acción BYMA (no CEDEAR)"}
+          </Typography>
+
+          <Typography sx={{ color: "#39ff14", fontWeight: 700 }}>
+            {d.localSymbol} ↔ {d.usSymbol}
+          </Typography>
+
+          <Typography sx={{ mt: 1 }}>
+            Local (ARS): <strong>{formatARS(d.localPriceARS)}</strong>
+          </Typography>
+          <Typography>
+            USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong>
+          </Typography>
+
+          <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 1 }}>
+            Tasa (CCL): {d.usedDollarRate.toLocaleString("es-AR")}
+          </Typography>
+        </CardContent>
+      </Card>
+    );
+  };
 
   return (
     <Paper sx={{
@@ -187,7 +214,7 @@ export default function AccionesARSection() {
           <Grid container spacing={3} key={`en-${idx}`}>
             {row.map(d => (
               <Grid item xs={12} md={4} key={d.localSymbol}>
-                {CardDual(d)}
+                {UnifiedCard(d)}
               </Grid>
             ))}
           </Grid>
@@ -204,7 +231,7 @@ export default function AccionesARSection() {
           <Grid container spacing={3} key={`ban-${idx}`}>
             {row.map(d => (
               <Grid item xs={12} md={4} key={d.localSymbol}>
-                {CardDual(d)}
+                {UnifiedCard(d)}
               </Grid>
             ))}
           </Grid>
@@ -221,7 +248,7 @@ export default function AccionesARSection() {
           <Grid container spacing={3} key={`ex-${idx}`}>
             {row.map(d => (
               <Grid item xs={12} md={4} key={d.localSymbol}>
-                {CardDual(d)}
+                {UnifiedCard(d)}
               </Grid>
             ))}
           </Grid>
