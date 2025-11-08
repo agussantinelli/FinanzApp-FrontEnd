@@ -28,7 +28,7 @@ function isCCL(nombreRaw: string) {
   return n.includes("contado") || n.includes("liqui") || n.includes("liquid") || n.includes("ccl");
 }
 
-// --- Pares locales/USA por sector ---
+// Pares locales/USA por sector 
 const ENERGETICO = [
   { localBA: "YPFD.BA",  usa: "YPF",  name: "YPF" },
   { localBA: "PAMP.BA",  usa: "PAM",  name: "Pampa Energía" },
@@ -39,8 +39,9 @@ const BANCARIO = [
   { localBA: "GGAL.BA", usa: "GGAL", name: "Banco Galicia" },
   { localBA: "SUPV.BA", usa: "SUPV", name: "Banco Supervielle" },
 ];
-// ➜ Agrego MELI como CEDEAR junto a Central Puerto
+
 const EXTRA = [
+  { localBA: "LOMA.BA", usa: "LOMA", name: "Loma Negra" },
   { localBA: "CEPU.BA", usa: "CEPU", name: "Central Puerto" },
   { localBA: "MELI.BA", usa: "MELI", name: "Mercado Libre (CEDEAR)" },
 ];
