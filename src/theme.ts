@@ -37,15 +37,8 @@ const theme = createTheme({
   },
   shape: { borderRadius: radius },
   typography: {
-    fontFamily: [
-      "Inter",
-      "-apple-system",
-      "BlinkMacSystemFont",
-      "Segoe UI",
+    fontFamily: [,
       "Roboto",
-      "Helvetica Neue",
-      "Arial",
-      "sans-serif",
     ].join(","),
     h1: { fontWeight: 700 },
     h2: { fontWeight: 700 },
