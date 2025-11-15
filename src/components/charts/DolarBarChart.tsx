@@ -137,7 +137,6 @@ export default function DolarBarChart() {
         subheader={updatedAt ? `Actualizado: ${updatedAt.toLocaleString("es-AR")}` : undefined}
       />
 
-      {/* KPIs arriba del chart */}
       <Box sx={{ px: 2, pb: 1 }}>
         <Stack direction="row" spacing={1} flexWrap="wrap">
           <Chip size="small" label={`Máximo venta: ${ARS(kpis.maxVenta || 0)}`} />
