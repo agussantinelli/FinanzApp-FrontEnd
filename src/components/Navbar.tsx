@@ -13,15 +13,21 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
 import Link from "next/link";
 import Image from "next/image";
 
 const navItems = [
   { label: "Inicio", href: "/" },
-  //{ label: "Movimientos", href: "/movimientos" },
+  // { label: "Movimientos", href: "/movimientos" },
   { label: "Activos", href: "/activos" },
-  { label: "Noticias", href: "/noticias" }, 
+  { label: "Noticias", href: "/noticias" },
   { label: "Reportes", href: "/reportes" },
+];
+
+const authItems = [
+  { label: "Iniciar sesión", href: "/auth/login" },
+  { label: "Registrarse", href: "/auth/register" },
 ];
 
 export default function Navbar() {
@@ -33,7 +39,7 @@ export default function Navbar() {
       <AppBar position="sticky" elevation={0}>
         <Toolbar
           sx={{
-            minHeight: { xs: 84, md: 96 }, 
+            minHeight: { xs: 84, md: 96 },
             px: { xs: 2, md: 3 },
             backdropFilter: "blur(6px)",
             bgcolor: "rgba(0,0,0,0.45)",
@@ -52,15 +58,15 @@ export default function Navbar() {
             }}
           >
             <Image
-              src="/favicon.png"             
+              src="/favicon.png"
               alt="FinanzApp"
-              width={87}                      
+              width={87}
               height={48}
               style={{ borderRadius: 12 }}
               priority
             />
             <Typography
-              variant="h4"                    
+              variant="h4"
               sx={{
                 fontWeight: 800,
                 letterSpacing: 0.6,
@@ -74,7 +80,13 @@ export default function Navbar() {
 
           <Box sx={{ flexGrow: 1 }} />
 
-          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1.2 }}>
+          <Box
+            sx={{
+              display: { xs: "none", md: "flex" },
+              gap: 1.2,
+              alignItems: "center",
+            }}
+          >
             {navItems.map((item) => (
               <Button
                 key={item.href}
@@ -91,6 +103,40 @@ export default function Navbar() {
                 {item.label}
               </Button>
             ))}
+
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{ mx: 1.5, borderColor: "rgba(255,255,255,0.2)" }}
+            />
+
+            <Button
+              component={Link}
+              href="/auth/login"
+              color="inherit"
+              sx={{
+                textTransform: "none",
+                fontWeight: 600,
+                fontSize: "0.95rem",
+                px: 2,
+              }}
+            >
+              Iniciar sesión
+            </Button>
+            <Button
+              component={Link}
+              href="/auth/register"
+              variant="contained"
+              sx={{
+                textTransform: "none",
+                fontWeight: 700,
+                fontSize: "0.95rem",
+                px: 2.5,
+                borderRadius: 999,
+              }}
+            >
+              Registrarse
+            </Button>
           </Box>
 
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
@@ -110,6 +156,18 @@ export default function Navbar() {
         >
           <List>
             {navItems.map((item) => (
+              <ListItem key={item.href} disablePadding>
+                <ListItemButton component={Link} href={item.href}>
+                  <ListItemText primary={item.label} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+
+          <Divider sx={{ my: 1 }} />
+
+          <List>
+            {authItems.map((item) => (
               <ListItem key={item.href} disablePadding>
                 <ListItemButton component={Link} href={item.href}>
                   <ListItemText primary={item.label} />
