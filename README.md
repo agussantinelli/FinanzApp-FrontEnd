@@ -134,8 +134,23 @@ bun dev
 
 <pre><code># Base de la API (cambiar por prod al desplegar)
 NEXT_PUBLIC_API_BASE=https://localhost:7088
-Cuando integremos el backend, todos los fetch apuntarán a NEXT_PUBLIC_API_BASE.
 </code></pre>
+
+<p>Todos los <code>fetch</code> del frontend apuntan a <code>NEXT_PUBLIC_API_BASE</code> (incluidos los endpoints protegidos con JWT).</p>
+
+<h3>🔐 Autenticación (JWT)</h3>
+
+<p>El backend utiliza <strong>JWT Bearer</strong> para proteger los endpoints de la API. El flujo esperado es:</p>
+<ul>
+    <li>El usuario se autentica (ej. endpoint de <code>/api/auth/login</code> en el backend).</li>
+    <li>El backend devuelve un <strong>token JWT</strong>.</li>
+    <li>El frontend almacena el token de forma segura (ej. memoria, context, storage según la estrategia elegida).</li>
+    <li>En cada request a endpoints protegidos, el frontend envía:
+        <pre><code>Authorization: Bearer &lt;token_jwt&gt;</code></pre>
+    </li>
+</ul>
+
+<hr>
 
 <h2>☁️ Deploy (Vercel)</h2>
 
@@ -190,4 +205,4 @@ Cuando integremos el backend, todos los fetch apuntarán a NEXT_PUBLIC_API_BASE.
 
 <p>Este repo es estrictamente el <strong>Frontend</strong>. Toda la lógica de negocio, agregación de datos de APIs externas y la persistencia de datos reside en el repositorio <a href="https://github.com/agussantinelli/FinanzApp-BackEnd.git">FinanzApp-BackEnd</a>.</p>
 
-<p>Cuando el Backend esté público, agregaremos un badge de API y una sección de integración con ejemplos de requests.</p>
+<p>A medida que se consolide la API (incluyendo autenticación JWT y rutas protegidas), se agregarán ejemplos de requests y flujos completos de login desde el frontend.</p>
