@@ -46,7 +46,6 @@ export default function RegisterPage() {
 
   const router = useRouter();
 
-  // Carga inicial de países/provincias/localidades
   React.useEffect(() => {
     let mounted = true;
 
@@ -103,7 +102,7 @@ export default function RegisterPage() {
     setErrorSubmit(null);
     setSuccessSubmit(null);
 
-    // Validaciones: TODOS los datos obligatorios
+    // Validaciones
     if (!nombre.trim()) {
       setErrorSubmit("El nombre es obligatorio.");
       return;
@@ -141,7 +140,6 @@ export default function RegisterPage() {
       return;
     }
 
-    // Si reside en Argentina, provincia y localidad también obligatorias
     if (esResidenciaArgentina) {
       if (!provinciaResidenciaId) {
         setErrorSubmit("La provincia de residencia es obligatoria.");
@@ -172,30 +170,17 @@ export default function RegisterPage() {
 
     try {
       setSubmitting(true);
-      const resp = await registerService(payload);
-
-      if (typeof window !== "undefined") {
-        localStorage.setItem("fa_token", resp.token);
-        localStorage.setItem(
-          "fa_user",
-          JSON.stringify({
-            id: resp.personaId,
-            nombre: resp.nombre,
-            apellido: resp.apellido,
-            email: resp.email,
-            rol: resp.rol,
-          })
-        );
-      }
+      await registerService(payload);
 
       setSuccessSubmit("Cuenta creada correctamente. Redirigiendo…");
-      // Pequeño delay para que se vea el mensaje de éxito
       setTimeout(() => {
         router.push("/auth/login");
       }, 800);
     } catch (err) {
       console.error("Error registro:", err);
-      setErrorSubmit("No se pudo completar el registro. Revisá los datos e intentá de nuevo.");
+      setErrorSubmit(
+        "No se pudo completar el registro. Revisá los datos e intentá de nuevo."
+      );
     } finally {
       setSubmitting(false);
     }

@@ -2,7 +2,7 @@ import { http } from "./Http";
 import { RegisterGeoDataDTO } from "@/types/RegisterGeoData";
 import { LoginRequest } from "@/types/LoginRequest";
 import { RegisterRequest } from "@/types/RegisterRequest";
-import { LoginResponseDTO } from "@/types/LoginResponse";
+import { LoginResponseDTO } from "@/types/LoginResponse"; 
 
 export function setAuthSession(resp: LoginResponseDTO) {
   if (typeof window === "undefined") return;
@@ -57,7 +57,6 @@ export async function getRegisterGeoData(): Promise<RegisterGeoDataDTO> {
 
 export async function login(data: LoginRequest): Promise<LoginResponseDTO> {
   const response = await http.post<LoginResponseDTO>("/auth/login", data);
-  // Guardar sesión apenas loguea
   setAuthSession(response.data);
   return response.data;
 }
