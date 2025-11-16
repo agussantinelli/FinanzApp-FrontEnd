@@ -8,33 +8,34 @@ import {
   Grid,
   Stack,
   Button,
+  Chip,
+  Divider,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   getCurrentUser,
   clearAuthSession,
   type AuthUser,
 } from "@/services/AuthService";
 
-export default function InvestorDashboardPage() {
+export default function DashboardPage() {
   const router = useRouter();
   const [user, setUser] = React.useState<AuthUser | null>(null);
   const [checking, setChecking] = React.useState(true);
 
   React.useEffect(() => {
     const u = getCurrentUser();
-
     if (!u) {
-      // No logueado → al login
       router.replace("/auth/login");
       return;
     }
 
-    if (u.rol === "Admin") {
-      router.replace("/admin");
-      return;
-    }
+    // Si quisieras separar admin:
+    // if (u.rol === "Admin") {
+    //   router.replace("/admin");
+    //   return;
+    // }
 
     setUser(u);
     setChecking(false);
@@ -56,7 +57,7 @@ export default function InvestorDashboardPage() {
         }}
       >
         <Typography variant="body1" color="text.secondary">
-          Cargando panel...
+          Cargando tu panel de inversor...
         </Typography>
       </Box>
     );
@@ -71,6 +72,7 @@ export default function InvestorDashboardPage() {
       }}
     >
       <Grid container spacing={3}>
+        {/* HEADER / BIENVENIDA */}
         <Grid item xs={12}>
           <Paper
             sx={{
@@ -87,31 +89,38 @@ export default function InvestorDashboardPage() {
               spacing={2}
             >
               <Box>
-                <Typography
-                  variant="h4"
-                  sx={{ fontWeight: 800, mb: 0.5, letterSpacing: 0.4 }}
-                >
-                  Hola, {user.nombre} 👋
-                </Typography>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <Typography
+                    variant="h4"
+                    sx={{ fontWeight: 800, mb: 0.5, letterSpacing: 0.4 }}
+                  >
+                    Hola, {user.nombre} 👋
+                  </Typography>
+                  <Chip
+                    label={user.rol === "Admin" ? "Admin" : "Inversor"}
+                    size="small"
+                    color={user.rol === "Admin" ? "secondary" : "primary"}
+                    sx={{ fontWeight: 600 }}
+                  />
+                </Stack>
                 <Typography variant="body2" color="text.secondary">
-                  Este es tu panel de inversor en FinanzApp. Desde acá vas a poder
-                  seguir el dólar, tus CEDEARs, acciones, cripto y reportes.
+                  Bienvenido a tu panel de FinanzApp. Acá vas a ver un resumen
+                  general y accesos rápidos a las secciones principales.
                 </Typography>
               </Box>
 
               <Stack direction="row" spacing={1.5}>
                 <Button
+                  component={Link}
+                  href="/perfil"
                   variant="outlined"
                   color="inherit"
                   size="small"
-                  component={Link}
-                  href="/auth/me" // si después armás un perfil
                   sx={{ textTransform: "none" }}
                 >
                   Ver perfil
                 </Button>
                 <Button
-                  variant="text"
                   color="error"
                   size="small"
                   onClick={handleLogout}
@@ -124,8 +133,8 @@ export default function InvestorDashboardPage() {
           </Paper>
         </Grid>
 
-        {/* CARDS PRINCIPALES */}
-        <Grid item xs={12} md={6} lg={3}>
+        {/* RESUMEN RÁPIDO (ESTADÍSTICAS FAKE POR AHORA) */}
+        <Grid item xs={12} md={3}>
           <Paper
             sx={{
               p: 2.5,
@@ -135,29 +144,20 @@ export default function InvestorDashboardPage() {
               boxShadow: "0 0 18px rgba(0,255,135,0.12)",
             }}
           >
-            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              Dólar & tipos de cambio
+            <Typography variant="caption" color="text.secondary">
+              Valor estimado del portafolio
             </Typography>
-            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-              Cotizaciones en tiempo real
+            <Typography variant="h5" sx={{ fontWeight: 800, mt: 0.5 }}>
+              $ 0
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              MEP, CCL, tarjeta y oficiales en un solo lugar. Ideal para
-              calcular tu costo de entrada/salida.
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              En la próxima iteración podés sumar la suma de tus posiciones en
+              CEDEARs, acciones y cripto.
             </Typography>
-            <Button
-              component={Link}
-              href="/dolar"
-              size="small"
-              variant="contained"
-              sx={{ textTransform: "none" }}
-            >
-              Ver cotizaciones
-            </Button>
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={6} lg={3}>
+        <Grid item xs={12} md={3}>
           <Paper
             sx={{
               p: 2.5,
@@ -166,29 +166,23 @@ export default function InvestorDashboardPage() {
               border: "1px solid rgba(255,255,255,0.08)",
             }}
           >
-            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              CEDEARs & acciones
+            <Typography variant="caption" color="text.secondary">
+              Resultado diario (P&L)
             </Typography>
-            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-              Duales local / USA
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Compará precios entre CEDEAR y acción en NY, calculá CCL implícito
-              y detectá oportunidades rápido.
-            </Typography>
-            <Button
-              component={Link}
-              href="/cedears"
-              size="small"
-              variant="outlined"
-              sx={{ textTransform: "none" }}
+            <Typography
+              variant="h5"
+              sx={{ fontWeight: 800, mt: 0.5, color: "#39ff14" }}
             >
-              Ver CEDEARs
-            </Button>
+              + 0,00 %
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              Acá podrías calcular variación diaria de tu cartera a partir de
+              las últimas cotizaciones.
+            </Typography>
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={6} lg={3}>
+        <Grid item xs={12} md={3}>
           <Paper
             sx={{
               p: 2.5,
@@ -197,29 +191,20 @@ export default function InvestorDashboardPage() {
               border: "1px solid rgba(255,255,255,0.08)",
             }}
           >
-            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              Criptomonedas
+            <Typography variant="caption" color="text.secondary">
+              Cantidad de activos
             </Typography>
-            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-              Top market cap
+            <Typography variant="h5" sx={{ fontWeight: 800, mt: 0.5 }}>
+              0
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              BTC, ETH y las principales altcoins con precio en USD y estimación
-              en pesos según el dólar que elijas.
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              Número de instrumentos distintos en los que invertís (CEDEARs,
+              acciones, bonos, cripto, etc.).
             </Typography>
-            <Button
-              component={Link}
-              href="/crypto"
-              size="small"
-              variant="outlined"
-              sx={{ textTransform: "none" }}
-            >
-              Ver cripto
-            </Button>
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={6} lg={3}>
+        <Grid item xs={12} md={3}>
           <Paper
             sx={{
               p: 2.5,
@@ -228,28 +213,154 @@ export default function InvestorDashboardPage() {
               border: "1px solid rgba(255,255,255,0.08)",
             }}
           >
-            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              Reportes & análisis
+            <Typography variant="caption" color="text.secondary">
+              Exposición en cripto
             </Typography>
-            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-              Resumen de tu portafolio
+            <Typography variant="h5" sx={{ fontWeight: 800, mt: 0.5 }}>
+              0 %
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Reportes de posición, P&L y exposición por activo/moneda. Ideal
-              para imprimir o compartir.
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              Más adelante podés calcular qué porcentaje de tu portafolio está
+              en criptomonedas.
             </Typography>
-            <Button
-              component={Link}
-              href="/reportes"
-              size="small"
-              variant="outlined"
-              sx={{ textTransform: "none" }}
-            >
-              Ver reportes
-            </Button>
           </Paper>
         </Grid>
 
+        {/* ATALHOS / SECCIONES CLAVE */}
+        <Grid item xs={12} md={6}>
+          <Paper
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              bgcolor: "rgba(10,10,10,0.95)",
+              border: "1px solid rgba(255,255,255,0.08)",
+            }}
+          >
+            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+              Atajos rápidos
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Entrá directo a las secciones que más vas a usar para el análisis
+              diario.
+            </Typography>
+
+            <Stack spacing={1.2}>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Box>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                    Cotizaciones de dólar
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    MEP, CCL, oficial, tarjeta. Todo en un mismo panel.
+                  </Typography>
+                </Box>
+                <Button
+                  component={Link}
+                  href="/dolar"
+                  size="small"
+                  variant="outlined"
+                  sx={{ textTransform: "none" }}
+                >
+                  Ver
+                </Button>
+              </Stack>
+
+              <Divider flexItem sx={{ my: 1 }} />
+
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Box>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                    CEDEARs & acciones
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Compará precios locales vs. USA y CCL implícito.
+                  </Typography>
+                </Box>
+                <Button
+                  component={Link}
+                  href="/cedears"
+                  size="small"
+                  variant="outlined"
+                  sx={{ textTransform: "none" }}
+                >
+                  Ver
+                </Button>
+              </Stack>
+
+              <Divider flexItem sx={{ my: 1 }} />
+
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Box>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                    Criptomonedas
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Seguimiento del top de mercado y precios en ARS.
+                  </Typography>
+                </Box>
+                <Button
+                  component={Link}
+                  href="/crypto"
+                  size="small"
+                  variant="outlined"
+                  sx={{ textTransform: "none" }}
+                >
+                  Ver
+                </Button>
+              </Stack>
+            </Stack>
+          </Paper>
+        </Grid>
+
+        {/* BLOQUE “PRÓXIMOS PASOS / TP” */}
+        <Grid item xs={12} md={6}>
+          <Paper
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              bgcolor: "rgba(10,10,10,0.95)",
+              border: "1px solid rgba(255,255,255,0.05)",
+            }}
+          >
+            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+              Próximos pasos en FinanzApp
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Ideas de cosas que podés ir sumando para enriquecer el TP:
+            </Typography>
+
+            <Stack spacing={1.2}>
+              <Typography variant="body2">
+                • Guardar operaciones reales en la base y calcular posición por
+                activo.
+              </Typography>
+              <Typography variant="body2">
+                • Generar un reporte PDF con el detalle del portafolio.
+              </Typography>
+              <Typography variant="body2">
+                • Crear alertas de precio (ej. cuando BTC pase cierto valor).
+              </Typography>
+              <Typography variant="body2">
+                • Agregar gráficos de evolución (usando cotizaciones históricas
+                si tenés).
+              </Typography>
+            </Stack>
+          </Paper>
+        </Grid>
+
+        {/* ZONA PARA ÚLTIMOS MOVIMIENTOS / NOTICIAS */}
         <Grid item xs={12}>
           <Paper
             sx={{
@@ -260,12 +371,19 @@ export default function InvestorDashboardPage() {
             }}
           >
             <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-              Próximamente
+              Últimos movimientos y noticias
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Acá podés sumar tus últimos movimientos, alertas personalizadas o
-              un resumen rápido de tu cartera. Por ahora lo dejamos como lugar
-              reservado para la próxima iteración del TP.
+              En futuras iteraciones acá podés mostrar:
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              • Las últimas operaciones que cargó el inversor.
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              • Un feed de noticias relevantes para sus activos.
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              • Resumen de cambios importantes en cotizaciones del día.
             </Typography>
           </Paper>
         </Grid>
