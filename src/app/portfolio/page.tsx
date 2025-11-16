@@ -1,0 +1,442 @@
+"use client";
+
+import * as React from "react";
+import {
+  Box,
+  Paper,
+  Typography,
+  Grid,
+  Stack,
+  Chip,
+  Divider,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Button,
+} from "@mui/material";
+import { useRouter } from "next/navigation";
+import { getCurrentUser, type AuthUser } from "@/services/AuthService";
+
+type PositionRow = {
+  ticker: string;
+  nombre: string;
+  tipo: "CEDEAR" | "Acción" | "Cripto" | "Bono";
+  cantidad: number;
+  precioActualArs: number;
+  valorTotalArs: number;
+  variacionDiaPct: number;
+  variacionTotalPct: number;
+};
+
+const mockPositions: PositionRow[] = [
+  {
+    ticker: "AAPL",
+    nombre: "Apple (CEDEAR)",
+    tipo: "CEDEAR",
+    cantidad: 15,
+    precioActualArs: 52000,
+    valorTotalArs: 780000,
+    variacionDiaPct: 1.2,
+    variacionTotalPct: 18.7,
+  },
+  {
+    ticker: "GGAL",
+    nombre: "Banco Galicia",
+    tipo: "Acción",
+    cantidad: 120,
+    precioActualArs: 1250,
+    valorTotalArs: 150000,
+    variacionDiaPct: -0.8,
+    variacionTotalPct: 5.3,
+  },
+  {
+    ticker: "BTC",
+    nombre: "Bitcoin",
+    tipo: "Cripto",
+    cantidad: 0.035,
+    precioActualArs: 35000000,
+    valorTotalArs: 1225000,
+    variacionDiaPct: 2.4,
+    variacionTotalPct: 32.1,
+  },
+  {
+    ticker: "AL30",
+    nombre: "Bono AL30",
+    tipo: "Bono",
+    cantidad: 300,
+    precioActualArs: 4100,
+    valorTotalArs: 1230000,
+    variacionDiaPct: 0.3,
+    variacionTotalPct: 9.8,
+  },
+];
+
+export default function PortfolioPage() {
+  const router = useRouter();
+  const [user, setUser] = React.useState<AuthUser | null>(null);
+  const [checking, setChecking] = React.useState(true);
+
+  React.useEffect(() => {
+    const u = getCurrentUser();
+    if (!u) {
+      router.replace("/auth/login");
+      return;
+    }
+    setUser(u);
+    setChecking(false);
+  }, [router]);
+
+  if (checking || !user) {
+    return (
+      <Box
+        sx={{
+          minHeight: "calc(100vh - 96px)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Typography variant="body1" color="text.secondary">
+          Cargando tu portafolio...
+        </Typography>
+      </Box>
+    );
+  }
+
+  const totalValor = mockPositions.reduce(
+    (acc, p) => acc + p.valorTotalArs,
+    0
+  );
+
+  const totalCripto = mockPositions
+    .filter((p) => p.tipo === "Cripto")
+    .reduce((acc, p) => acc + p.valorTotalArs, 0);
+
+  const totalRiesgo = mockPositions
+    .filter((p) => p.tipo === "Cripto" || p.tipo === "Acción")
+    .reduce((acc, p) => acc + p.valorTotalArs, 0);
+
+  const exposicionCriptoPct =
+    totalValor > 0 ? (totalCripto / totalValor) * 100 : 0;
+
+  const exposicionRiesgoPct =
+    totalValor > 0 ? (totalRiesgo / totalValor) * 100 : 0;
+
+  const totalActivos = mockPositions.length;
+
+  return (
+    <Box
+      sx={{
+        minHeight: "calc(100vh - 96px)",
+        px: { xs: 2, md: 4 },
+        py: 4,
+      }}
+    >
+      <Grid container spacing={3}>
+        {/* HEADER */}
+        <Grid item xs={12}>
+          <Paper
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              bgcolor: "rgba(15,15,15,0.95)",
+              border: "1px solid rgba(255,255,255,0.08)",
+            }}
+          >
+            <Stack
+              direction={{ xs: "column", md: "row" }}
+              justifyContent="space-between"
+              alignItems={{ xs: "flex-start", md: "center" }}
+              spacing={2}
+            >
+              <Box>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <Typography
+                    variant="h4"
+                    sx={{ fontWeight: 800, mb: 0.5, letterSpacing: 0.4 }}
+                  >
+                    Mi portafolio
+                  </Typography>
+                  <Chip
+                    label={user.rol}
+                    size="small"
+                    color={user.rol === "Admin" ? "secondary" : "primary"}
+                    sx={{ fontWeight: 600 }}
+                  />
+                </Stack>
+                <Typography variant="body2" color="text.secondary">
+                  Resumen de tus posiciones en CEDEARs, acciones, bonos y
+                  criptomonedas (datos de ejemplo).
+                </Typography>
+              </Box>
+
+              <Stack direction="row" spacing={1.5}>
+                <Button
+                  variant="outlined"
+                  color="inherit"
+                  size="small"
+                  sx={{ textTransform: "none" }}
+                >
+                  Exportar a PDF
+                </Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={{ textTransform: "none" }}
+                >
+                  Cargar operación
+                </Button>
+              </Stack>
+            </Stack>
+          </Paper>
+        </Grid>
+
+        {/* CARDS RESUMEN */}
+        <Grid item xs={12} md={4}>
+          <Paper
+            sx={{
+              p: 2.5,
+              borderRadius: 3,
+              bgcolor: "rgba(10,10,10,0.95)",
+              border: "1px solid rgba(0,255,135,0.3)",
+              boxShadow: "0 0 18px rgba(0,255,135,0.12)",
+            }}
+          >
+            <Typography variant="caption" color="text.secondary">
+              Valor total del portafolio
+            </Typography>
+            <Typography
+              variant="h5"
+              sx={{ fontWeight: 800, mt: 0.5 }}
+            >
+              ARS {totalValor.toLocaleString("es-AR")}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              Suma del valor estimado de todas tus posiciones actuales.
+            </Typography>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} md={4}>
+          <Paper
+            sx={{
+              p: 2.5,
+              borderRadius: 3,
+              bgcolor: "rgba(10,10,10,0.95)",
+              border: "1px solid rgba(255,255,255,0.08)",
+            }}
+          >
+            <Typography variant="caption" color="text.secondary">
+              Exposición en activos de riesgo
+            </Typography>
+            <Typography
+              variant="h5"
+              sx={{ fontWeight: 800, mt: 0.5, color: "#39ff14" }}
+            >
+              {exposicionRiesgoPct.toFixed(1)} %
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              Acciones + criptos sobre el total del portafolio.
+            </Typography>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} md={4}>
+          <Paper
+            sx={{
+              p: 2.5,
+              borderRadius: 3,
+              bgcolor: "rgba(10,10,10,0.95)",
+              border: "1px solid rgba(255,255,255,0.08)",
+            }}
+          >
+            <Typography variant="caption" color="text.secondary">
+              Cantidad de activos distintos
+            </Typography>
+            <Typography variant="h5" sx={{ fontWeight: 800, mt: 0.5 }}>
+              {totalActivos}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              Número de instrumentos diferentes que componen tu portafolio.
+            </Typography>
+          </Paper>
+        </Grid>
+
+        {/* DISTRIBUCIONES */}
+        <Grid item xs={12} md={6}>
+          <Paper
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              bgcolor: "rgba(10,10,10,0.95)",
+              border: "1px solid rgba(255,255,255,0.05)",
+            }}
+          >
+            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+              Distribución por tipo de activo
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Ejemplo de cómo podrías mostrar el mix de cartera.
+            </Typography>
+
+            <Stack spacing={1.2}>
+              <Typography variant="body2">
+                • CEDEARs / acciones: ~55% del valor total.
+              </Typography>
+              <Typography variant="body2">
+                • Bonos / renta fija: ~25% del valor total.
+              </Typography>
+              <Typography variant="body2">
+                • Criptomonedas: ~{exposicionCriptoPct.toFixed(1)}% del total.
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                Más adelante esto se puede reemplazar por un gráfico de torta
+                con datos reales desde la base.
+              </Typography>
+            </Stack>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Paper
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              bgcolor: "rgba(10,10,10,0.95)",
+              border: "1px solid rgba(255,255,255,0.05)",
+            }}
+          >
+            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+              Ideas para evolucionar el portafolio
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Algunas funcionalidades futuras para el TP:
+            </Typography>
+
+            <Stack spacing={1.2}>
+              <Typography variant="body2">
+                • Guardar cada operación (compra/venta) y reconstruir la
+                posición histórica.
+              </Typography>
+              <Typography variant="body2">
+                • Calcular rentabilidad total y anualizada de cada activo.
+              </Typography>
+              <Typography variant="body2">
+                • Marcar activos objetivo recomendados por expertos.
+              </Typography>
+              <Typography variant="body2">
+                • Agregar alertas por mail / push cuando un activo salga de un
+                rango de precio.
+              </Typography>
+            </Stack>
+          </Paper>
+        </Grid>
+
+        {/* TABLA DE POSICIONES */}
+        <Grid item xs={12}>
+          <Paper
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              bgcolor: "rgba(10,10,10,0.95)",
+              border: "1px solid rgba(255,255,255,0.05)",
+            }}
+          >
+            <Stack
+              direction={{ xs: "column", md: "row" }}
+              justifyContent="space-between"
+              alignItems={{ xs: "flex-start", md: "center" }}
+              spacing={1.5}
+              sx={{ mb: 2 }}
+            >
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                  Posiciones actuales
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Tabla demo, después podés enlazarla con los datos reales de
+                  la base / API.
+                </Typography>
+              </Box>
+
+              <Button
+                variant="outlined"
+                size="small"
+                sx={{ textTransform: "none" }}
+              >
+                Filtrar / ordenar
+              </Button>
+            </Stack>
+
+            <Divider sx={{ mb: 2 }} />
+
+            <Box sx={{ overflowX: "auto" }}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Ticker</TableCell>
+                    <TableCell>Nombre</TableCell>
+                    <TableCell>Tipo</TableCell>
+                    <TableCell align="right">Cantidad</TableCell>
+                    <TableCell align="right">Precio actual (ARS)</TableCell>
+                    <TableCell align="right">Valor total (ARS)</TableCell>
+                    <TableCell align="right">Var. día</TableCell>
+                    <TableCell align="right">Var. total</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {mockPositions.map((p) => (
+                    <TableRow key={p.ticker}>
+                      <TableCell>{p.ticker}</TableCell>
+                      <TableCell>{p.nombre}</TableCell>
+                      <TableCell>{p.tipo}</TableCell>
+                      <TableCell align="right">{p.cantidad}</TableCell>
+                      <TableCell align="right">
+                        {p.precioActualArs.toLocaleString("es-AR")}
+                      </TableCell>
+                      <TableCell align="right">
+                        {p.valorTotalArs.toLocaleString("es-AR")}
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{
+                          color:
+                            p.variacionDiaPct > 0
+                              ? "#39ff14"
+                              : p.variacionDiaPct < 0
+                              ? "#ff4d4d"
+                              : "inherit",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {p.variacionDiaPct > 0 ? "+" : ""}
+                        {p.variacionDiaPct.toFixed(2)}%
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{
+                          color:
+                            p.variacionTotalPct > 0
+                              ? "#39ff14"
+                              : p.variacionTotalPct < 0
+                              ? "#ff4d4d"
+                              : "inherit",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {p.variacionTotalPct > 0 ? "+" : ""}
+                        {p.variacionTotalPct.toFixed(2)}%
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
