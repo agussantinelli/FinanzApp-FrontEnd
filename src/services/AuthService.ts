@@ -76,3 +76,13 @@ export async function register(
   setAuthSession(response.data);
   return response.data;
 }
+
+export function getHomePathForRole(rol: string | null | undefined): string {
+  const r = rol?.toLowerCase();
+
+  if (r === "admin") return "/admin";
+  if (r === "experto") return "/experto";
+
+  // por defecto, inversor o cualquier otro
+  return "/dashboard";
+}

@@ -16,6 +16,7 @@ import Link from "next/link";
 import {
   getRegisterGeoData,
   register as registerService,
+  getHomePathForRole,
 } from "@/services/AuthService";
 import { RegisterGeoDataDTO } from "@/types/RegisterGeoData";
 import { useRouter } from "next/navigation";
@@ -175,11 +176,14 @@ export default function RegisterPage() {
 
     try {
       setSubmitting(true);
-      await registerService(payload); // AuthService guarda token+user
+      const resp = await registerService(payload); // AuthService guarda token+user
 
       setSuccessSubmit("Cuenta creada correctamente. Redirigiendo…");
+
+      const destino = getHomePathForRole(resp.rol);
+      // pequeño delay opcional para que se vea el mensaje
       setTimeout(() => {
-        router.push("/auth/login");
+        router.push(destino);
       }, 800);
     } catch (err: any) {
       console.error("Error registro:", err);

@@ -11,7 +11,7 @@ import {
   Stack,
 } from "@mui/material";
 import Link from "next/link";
-import { login } from "@/services/AuthService";
+import { login, getHomePathForRole } from "@/services/AuthService";
 import { useRouter } from "next/navigation";
 import { FormStatus } from "@/components/FormStatus";
 
@@ -56,8 +56,9 @@ export default function LoginPage() {
 
     try {
       setLoading(true);
-      await login({ email, password }); // AuthService ya guarda token+user
-      router.push("/dashboard");
+      const resp = await login({ email, password }); // AuthService guarda token+user
+      const destino = getHomePathForRole(resp.rol);
+      router.push(destino);
     } catch (err) {
       console.error("Error login:", err);
       setServerError("Email o contraseña incorrectos.");
