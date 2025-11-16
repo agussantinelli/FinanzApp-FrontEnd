@@ -13,35 +13,36 @@
 </div>
 
 <p align="center">
-<img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript Badge"/>
-<img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel Badge"/>
-<img src="https://img.shields.io/badge/Material%20UI-007FFF?style=for-the-badge&logo=mui&logoColor=white" alt="MUI Badge"/>
+    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript Badge"/>
+    <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel Badge"/>
+    <img src="https://img.shields.io/badge/Material%20UI-007FFF?style=for-the-badge&logo=mui&logoColor=white" alt="MUI Badge"/>
+    <img src="https://img.shields.io/badge/JWT%20Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT Badge"/>
 </p>
 
 <hr>
 
 <h2>🎯 Objetivo</h2>
 
-<p>Ofrecer una visión clara, consolidada y actualizada del portafolio completo (efectivo + inversiones) para inversores argentinos, con conversión correcta según el tipo de cambio que corresponda a cada activo.</p>
+<p>Ofrecer una visión clara, consolidada y actualizada del portafolio completo (<strong>efectivo + inversiones</strong>) para inversores argentinos, con conversión correcta según el tipo de cambio que corresponda a cada activo.</p>
 
 <h2>🧭 Visión General</h2>
 
-<p>FinanzApp es la herramienta diseñada para ser el "panel patrimonial" de referencia para el inversor argentino. Esto implica:</p>
+<p>FinanzApp es la herramienta diseñada para ser el <strong>"panel patrimonial"</strong> de referencia para el inversor argentino. Esto implica:</p>
 <ul>
-    <li>Consulta de tipos de cambio relevantes para Argentina (oficial, MEP, CCL, blue, etc.)</li>
-    <li>Consolidación de cripto, acciones locales, CEDEARs y ONs en una sola interfaz</li>
-    <li>Conversión ARS ↔ USD aplicando el tipo de dólar adecuado por clase de activo</li>
-    <li>Indicadores clave: patrimonio total, distribución por clase de activo y evolución</li>
-    <li>UI moderna, tema oscuro y acentos verde neón para una experiencia clara y agradable</li>
+    <li>Consulta de tipos de cambio relevantes para Argentina (oficial, MEP, CCL, blue, etc.).</li>
+    <li>Consolidación de cripto, acciones locales, CEDEARs y ONs en una sola interfaz.</li>
+    <li>Conversión ARS ↔ USD aplicando el tipo de dólar adecuado por clase de activo.</li>
+    <li>Indicadores clave: patrimonio total, distribución por clase de activo y evolución.</li>
+    <li>UI moderna, tema oscuro y acentos verde neón para una experiencia clara y agradable.</li>
 </ul>
 
 <h2>💼 Problema</h2>
 
 <p>En Argentina, el inversor se enfrenta a:</p>
 <ul>
-    <li>La información financiera fragmentada entre brokers, exchanges y sitios de cotizaciones.</li>
-    <li>La dificultad de aplicar el tipo de cambio correcto para valuar cada activo.</li>
-    <li>La falta de una vista consolidada y en tiempo real del patrimonio total.</li>
+    <li>Información financiera <strong>fragmentada</strong> entre brokers, exchanges y sitios de cotizaciones.</li>
+    <li>Dificultad para aplicar el <strong>tipo de cambio correcto</strong> para valuar cada activo.</li>
+    <li>Falta de una vista <strong>consolidada y en tiempo (casi) real</strong> del patrimonio total.</li>
 </ul>
 
 <h2>🚀 Propuesta de Valor</h2>
@@ -55,15 +56,15 @@
 
 <h2>🧮 Meta</h2>
 
-<p>Que FinanzApp sea el "panel patrimonial" de referencia para el inversor argentino.</p>
+<p>Que FinanzApp sea el <strong>panel patrimonial de referencia</strong> para el inversor argentino.</p>
 
 <h2>🧩 Alcance Inicial (MVP)</h2>
 
 <ul>
-    <li>Alta y gestión de activos: CRYPTO, ACCION_LOCAL, CEDEAR, ON</li>
-    <li>Consulta de cotizaciones por clase de activo</li>
-    <li>Conversión a ARS/USD usando MEP/CCL/Oficial/Blue (configurable)</li>
-    <li>Reportes base: patrimonio total y distribución por clase</li>
+    <li>Alta y gestión de activos: <code>CRYPTO</code>, <code>ACCION_LOCAL</code>, <code>CEDEAR</code>, <code>ON</code>.</li>
+    <li>Consulta de cotizaciones por clase de activo.</li>
+    <li>Conversión a ARS/USD usando MEP/CCL/Oficial/Blue (configurable).</li>
+    <li>Reportes base: patrimonio total y distribución por clase.</li>
 </ul>
 
 <hr>
@@ -85,8 +86,8 @@
  <tbody>
   <tr>
    <td><strong>Framework</strong></td>
-   <td>Next.js 16 (App Router)</td>
-   <td>Alto rendimiento, Server Components y Routing.</td>
+   <td>Next.js (App Router)</td>
+   <td>Routing moderno, Server/Client Components y SSR/SSG.</td>
   </tr>
   <tr>
    <td><strong>Lenguaje</strong></td>
@@ -96,7 +97,7 @@
   <tr>
    <td><strong>UI Library</strong></td>
    <td>Material UI (MUI)</td>
-   <td>Componentes UI robustos.</td>
+   <td>Componentes UI robustos y accesibles.</td>
   </tr>
   <tr>
    <td><strong>Estilo</strong></td>
@@ -111,22 +112,39 @@
  </tbody>
 </table>
 
+<h3>📁 Estructura Principal del Proyecto</h3>
+
+<ul>
+    <li><code>src/app/</code>
+        <ul>
+            <li><code>page.tsx</code>: landing pública.</li>
+            <li><code>auth/login</code>, <code>auth/register</code>: formularios de autenticación.</li>
+            <li><code>dashboard</code>: panel de inversor autenticado.</li>
+            <li><code>admin</code>: dashboard de administrador (métricas globales).</li>
+        </ul>
+    </li>
+    <li><code>src/services/</code>: servicios HTTP (Axios) para consumir la API del backend.</li>
+    <li><code>src/types/</code>: DTOs tipados compartidos entre vistas.</li>
+    <li><code>src/components/</code>: componentes reutilizables (Navbar, cards, <code>FormStatus</code>, etc.).</li>
+</ul>
+
 <h3>🚀 Empezar (Setup Local)</h3>
 
 <p>Este es un proyecto <a href="https://nextjs.org">Next.js</a> inicializado con <code>create-next-app</code>.</p>
 
-<p>Primero, ejecuta el servidor de desarrollo:</p>
+<p>Instalá dependencias y levantá el servidor de desarrollo:</p>
 
-<pre><code>npm run dev
-# or
+<pre><code>npm install
+npm run dev
+# o
+yarn install
 yarn dev
-# or
+# o
+pnpm install
 pnpm dev
-# or
-bun dev
 </code></pre>
 
-<p>Abre <a href="http://localhost:3000">http://localhost:3000</a> en tu navegador para ver el resultado.</p>
+<p>Abrí <a href="http://localhost:3000">http://localhost:3000</a> en tu navegador para ver el resultado.</p>
 
 <h3>⚙️ Variables de Entorno</h3>
 
@@ -136,63 +154,100 @@ bun dev
 NEXT_PUBLIC_API_BASE=https://localhost:7088
 </code></pre>
 
-<p>Todos los <code>fetch</code> del frontend apuntan a <code>NEXT_PUBLIC_API_BASE</code> (incluidos los endpoints protegidos con JWT).</p>
+<p>Todos los <code>fetch</code> / llamadas Axios del frontend apuntan a <code>NEXT_PUBLIC_API_BASE</code> (incluidos los endpoints protegidos con JWT).</p>
 
 <h3>🔐 Autenticación (JWT)</h3>
 
-<p>El backend utiliza <strong>JWT Bearer</strong> para proteger los endpoints de la API. El flujo esperado es:</p>
+<p>El backend utiliza <strong>JWT Bearer</strong> para proteger los endpoints de la API. El flujo actual es:</p>
 <ul>
-    <li>El usuario se autentica (ej. endpoint de <code>/api/auth/login</code> en el backend).</li>
-    <li>El backend devuelve un <strong>token JWT</strong>.</li>
-    <li>El frontend almacena el token de forma segura (ej. memoria, context, storage según la estrategia elegida).</li>
-    <li>En cada request a endpoints protegidos, el frontend envía:
-        <pre><code>Authorization: Bearer &lt;token_jwt&gt;</code></pre>
+    <li>El usuario se registra o inicia sesión contra los endpoints:
+        <ul>
+            <li><code>POST /auth/register</code></li>
+            <li><code>POST /auth/login</code></li>
+            <li><code>GET /auth/me</code> (información del usuario autenticado)</li>
+        </ul>
     </li>
+    <li>El backend devuelve un <strong>token JWT</strong> más datos básicos de la persona (id, nombre, rol, etc.).</li>
+    <li>El frontend guarda:
+        <ul>
+            <li><code>fa_token</code>: token JWT.</li>
+            <li><code>fa_user</code>: datos serializados del usuario autenticado (localStorage).</li>
+        </ul>
+    </li>
+    <li>Las llamadas posteriores usan el cliente configurado en <code>Http.ts</code>, que adjunta:
+        <pre><code>Authorization: Bearer &lt;fa_token&gt;</code></pre>
+        en los endpoints protegidos (por ejemplo, <code>/api/stocks/duals</code>, <code>/api/crypto/top</code>, etc.).
+    </li>
+</ul>
+
+<p>La aplicación distingue actualmente entre los roles <strong>Inversor</strong> y <strong>Admin</strong>. El navbar y el acceso a ciertos paneles se adaptan dinámicamente según el rol del usuario autenticado.</p>
+
+<hr>
+
+<h2>📊 Dashboards</h2>
+
+<h3>👤 Dashboard de Inversor</h3>
+
+<p>Ruta principal: <code>/dashboard</code></p>
+
+<ul>
+    <li>Bienvenida personalizada (nombre + rol).</li>
+    <li>Resumen rápido del portafolio (valor estimado, resultado diario, etc.).</li>
+    <li>Accesos rápidos a secciones clave (activos, reportes, noticias).</li>
+    <li>Datos de cotizaciones de dólar, CEDEARs, acciones y cripto consumidos desde el backend.</li>
+</ul>
+
+<h3>🛠️ Dashboard de Administrador</h3>
+
+<p>Ruta principal: <code>/admin</code></p>
+
+<ul>
+    <li>Cards con métricas globales (hardcodeadas en la primera versión):
+        <ul>
+            <li>Cantidad de usuarios registrados / activos.</li>
+            <li>Número de operaciones registradas.</li>
+            <li>Volumen aproximado operado.</li>
+        </ul>
+    </li>
+    <li>Sección para monitorear el estado general de la plataforma (a futuro: logs, health checks, etc.).</li>
+    <li>Accesible únicamente para usuarios con rol <code>Admin</code> (controlado desde el backend y el frontend).</li>
 </ul>
 
 <hr>
 
-<h2>☁️ Deploy (Vercel)</h2>
-
-<p>La forma más sencilla de desplegar esta aplicación Next.js es usando la <a href="https://vercel.com/new?utm_medium=default-template&amp;filter=next.js&amp;utm_source=create-next-app&amp;utm_campaign=create-next-app-readme">Vercel Platform</a>.</p>
-
-<ol>
-    <li><strong>Conectá el repo a Vercel</strong></li>
-    <li><strong>Seteá las Environment Variables</strong> (ej. <code>NEXT_PUBLIC_API_BASE</code>)</li>
-    <li><strong>Hacé deploy</strong> (Vercel detecta Next.js automáticamente)</li>
-</ol>
-
-<p><strong>Docs útiles:</strong> <a href="https://vercel.com/docs/frameworks/nextjs">Deploy Next.js en Vercel</a></p>
-
-<h2>🔌 Integraciones Planeadas (Datos - Consumidas por el Backend)</h2>
+<h2>🔌 Servicios de Datos (consumidos por el Frontend)</h2>
 
 <p>Aunque el frontend solo consume la API de nuestro backend, las siguientes integraciones definen la fuente de los datos que se mostrarán:</p>
 
 <ul>
-    <li><strong>Cripto:</strong> Binance API / CoinGecko</li>
-    <li><strong>Acciones / CEDEARs / ONs:</strong> Yahoo Finance / BYMA / Rava / MAV (precios en ARS)</li>
-    <li><strong>Tipos de cambio:</strong> DolarAPI / DólarHoy / Ámbito / BCRA (MEP, CCL, blue, oficial, etc.)</li>
+    <li><strong>Cripto:</strong> Binance API / CoinGecko.</li>
+    <li><strong>Acciones / CEDEARs / ONs:</strong> Yahoo Finance / BYMA / Rava / MAV (precios en ARS).</li>
+    <li><strong>Tipos de cambio:</strong> DolarAPI / DólarHoy / Ámbito / BCRA (MEP, CCL, blue, oficial, etc.).</li>
 </ul>
 
-<p>Se implementarán como adaptadores de proveedor para poder cambiar la fuente sin tocar el resto del sistema.</p>
+<p>Se implementan como adaptadores de proveedor en el backend para poder cambiar la fuente sin tocar el resto del sistema.</p>
+
+<hr>
 
 <h2>🗺️ Roadmap</h2>
 
 <ul>
-    <li><strong>MVP:</strong> portafolio manual + cotizaciones + conversión ARS/USD</li>
-    <li><strong>Autenticación y espacios personales</strong></li>
-    <li><strong>Series temporales y reportes de evolución</strong></li>
-    <li><strong>Importación</strong> (CSV/Excel, brokers y exchanges)</li>
-    <li><strong>Alertas de precio y rebalanceo</strong></li>
-    <li><strong>App móvil</strong> (MAUI / React Native)</li>
+    <li><strong>MVP:</strong> portafolio manual + cotizaciones + conversión ARS/USD.</li>
+    <li><strong>Autenticación y espacios personales</strong> (ya implementado el flujo básico JWT).</li>
+    <li><strong>Series temporales y reportes de evolución</strong> (gráficos de patrimonio en el tiempo).</li>
+    <li><strong>Importación</strong> (CSV/Excel, integraciones con brokers y exchanges).</li>
+    <li><strong>Alertas de precio y rebalanceo</strong>.</li>
+    <li><strong>App móvil</strong> (MAUI / React Native).</li>
 </ul>
+
+<hr>
 
 <h2>🤝 Contribuir</h2>
 
 <ol>
-    <li><strong>Fork</strong>, crea una rama con el formato <code>feature/...</code>, y envía un <strong>PR</strong>.</li>
-    <li><strong>Asegurate de correr linters y tests</strong> (cuando estén disponibles).</li>
-    <li><strong>Explicá los cambios con claridad</strong> en la descripción del PR.</li>
+    <li>Hacé <strong>fork</strong>, creá una rama con el formato <code>feature/...</code>, y enviá un <strong>PR</strong>.</li>
+    <li>Asegurate de correr linters y tests (cuando estén disponibles).</li>
+    <li>Explicá los cambios con claridad en la descripción del PR.</li>
 </ol>
 
 <h2>⚖️ Licencia</h2>
@@ -205,4 +260,4 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
 
 <p>Este repo es estrictamente el <strong>Frontend</strong>. Toda la lógica de negocio, agregación de datos de APIs externas y la persistencia de datos reside en el repositorio <a href="https://github.com/agussantinelli/FinanzApp-BackEnd.git">FinanzApp-BackEnd</a>.</p>
 
-<p>A medida que se consolide la API (incluyendo autenticación JWT y rutas protegidas), se agregarán ejemplos de requests y flujos completos de login desde el frontend.</p>
+<p>A medida que se consolida la API (incluyendo autenticación JWT, roles y rutas protegidas), se irán agregando ejemplos de requests, flujos completos de login/registro y secciones avanzadas de reportes dentro del frontend.</p>
