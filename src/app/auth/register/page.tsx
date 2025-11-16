@@ -191,7 +191,7 @@ export default function RegisterPage() {
       setSuccessSubmit("Cuenta creada correctamente. Redirigiendo…");
       // Pequeño delay para que se vea el mensaje de éxito
       setTimeout(() => {
-        router.push("/dashboard");
+        router.push("/auth/login");
       }, 800);
     } catch (err) {
       console.error("Error registro:", err);
