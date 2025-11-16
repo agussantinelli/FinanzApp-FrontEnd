@@ -51,13 +51,16 @@ export default function AdminDashboardPage() {
     );
   }
 
-  // Datos hardcodeados por ahora
+  // Datos demo
   const totUsuarios = 48;
   const usuariosHoy = 9;
   const totOperaciones = 1320;
   const operacionesHoy = 37;
-  const volumenHoyArs = 12500000;
-  const volumenHoyUsd = 21000;
+  const volumenHoyArs = 12_500_000;
+  const volumenHoyUsd = 21_000;
+  const totalRecomendaciones = 86;
+  const recomendacionesHoy = 12;
+  const activosConRecomendaciones = 34;
 
   return (
     <Box
@@ -68,7 +71,7 @@ export default function AdminDashboardPage() {
       }}
     >
       <Grid container spacing={3}>
-        {/* HEADER */}
+        {/* HEADER GRANDE */}
         <Grid item xs={12}>
           <Paper
             sx={{
@@ -100,8 +103,8 @@ export default function AdminDashboardPage() {
                   />
                 </Stack>
                 <Typography variant="body2" color="text.secondary">
-                  Hola {user.nombre}, acá ves un resumen global de usuarios y
-                  operaciones dentro de FinanzApp.
+                  Hola {user.nombre}, acá ves un resumen global de usuarios,
+                  operaciones y recomendaciones dentro de FinanzApp.
                 </Typography>
               </Box>
 
@@ -121,14 +124,41 @@ export default function AdminDashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12}>
+          <Paper
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              bgcolor: "rgba(10,10,10,0.95)",
+              border: "1px solid rgba(0,255,135,0.35)",
+              boxShadow: "0 0 20px rgba(0,255,135,0.20)",
+            }}
+          >
+            <Typography variant="caption" color="text.secondary">
+              Recomendaciones del sistema
+            </Typography>
+            <Typography variant="h3" sx={{ fontWeight: 800, mt: 0.5 }}>
+              {totalRecomendaciones}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ mt: 1, maxWidth: 620 }}
+            >
+              {recomendacionesHoy} recomendaciones generadas hoy y{" "}
+              {activosConRecomendaciones} activos distintos referidos en las
+              recomendaciones activas.
+            </Typography>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
           <Paper
             sx={{
               p: 2.5,
               borderRadius: 3,
               bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(0,255,135,0.3)",
-              boxShadow: "0 0 18px rgba(0,255,135,0.12)",
+              border: "1px solid rgba(255,255,255,0.08)",
             }}
           >
             <Typography variant="caption" color="text.secondary">
@@ -143,7 +173,7 @@ export default function AdminDashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={6}>
           <Paper
             sx={{
               p: 2.5,
@@ -164,7 +194,7 @@ export default function AdminDashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={6}>
           <Paper
             sx={{
               p: 2.5,
@@ -185,6 +215,29 @@ export default function AdminDashboardPage() {
           </Paper>
         </Grid>
 
+        <Grid item xs={12} md={6}>
+          <Paper
+            sx={{
+              p: 2.5,
+              borderRadius: 3,
+              bgcolor: "rgba(10,10,10,0.95)",
+              border: "1px solid rgba(0,255,135,0.25)",
+            }}
+          >
+            <Typography variant="caption" color="text.secondary">
+              Activos con recomendaciones
+            </Typography>
+            <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5 }}>
+              {activosConRecomendaciones}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              Activos distintos que aparecen en las recomendaciones activas del
+              sistema.
+            </Typography>
+          </Paper>
+        </Grid>
+
+        {/* BLOQUE INFERIOR – TAMBIÉN DE A DOS POR FILA */}
         <Grid item xs={12} md={6}>
           <Paper
             sx={{
@@ -211,7 +264,8 @@ export default function AdminDashboardPage() {
                 • 14 usuarios realizaron al menos una operación hoy.
               </Typography>
               <Typography variant="body2">
-                • 5 usuarios no entra hace más de 30 días (podrías mandar mail).
+                • 5 usuarios no entran hace más de 30 días (podrías mandar un
+                mail).
               </Typography>
             </Stack>
           </Paper>
