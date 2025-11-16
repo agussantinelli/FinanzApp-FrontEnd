@@ -1,8 +1,9 @@
 export interface LoginResponseDTO {
   token: string;
+  expiraUtc: string; 
   personaId: number;
   nombre: string;
   apellido: string;
   email: string;
-  rol: string;
+  rol: "Admin" | "Inversor" | string;
 }
