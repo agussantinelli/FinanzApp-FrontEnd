@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import { login } from "@/services/AuthService";
 import { useRouter } from "next/navigation";
+import { FormStatus } from "@/components/FormStatus";
 
 export default function LoginPage() {
   const [email, setEmail] = React.useState("");
@@ -26,11 +27,20 @@ export default function LoginPage() {
     e.preventDefault();
     setError(null);
 
+    // Validaciones simples antes de llamar al back
+    if (!email.trim()) {
+      setError("El email es obligatorio.");
+      return;
+    }
+    if (!password) {
+      setError("La contraseña es obligatoria.");
+      return;
+    }
+
     try {
       setLoading(true);
       const resp = await login({ email, password });
 
-      // Guardar token e info básica (simple por ahora)
       if (typeof window !== "undefined") {
         localStorage.setItem("fa_token", resp.token);
         localStorage.setItem(
@@ -45,7 +55,6 @@ export default function LoginPage() {
         );
       }
 
-      // Redirigimos al dashboard (ajustá si querés otro destino)
       router.push("/dashboard");
     } catch (err) {
       console.error("Error login:", err);
@@ -113,15 +122,7 @@ export default function LoginPage() {
                 autoComplete="current-password"
               />
 
-              {error && (
-                <Typography
-                  variant="body2"
-                  color="error"
-                  sx={{ mt: 0.5, textAlign: "center" }}
-                >
-                  {error}
-                </Typography>
-              )}
+              <FormStatus errorMessage={error} />
 
               <Button
                 type="submit"
