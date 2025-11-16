@@ -30,11 +30,10 @@ export default function DashboardPage() {
       return;
     }
 
-    // Si quisieras redirigir admin a otra página:
-    // if (u.rol === "Admin") {
-    //   router.replace("/admin");
-    //   return;
-    // }
+    if (u.rol !== "Inversor") {
+      router.replace("/access-denied");
+      return;
+    }
 
     setUser(u);
     setChecking(false);

@@ -27,7 +27,7 @@ export default function AdminDashboardPage() {
       return;
     }
     if (u.rol !== "Admin") {
-      router.replace("/admin/access-denied");
+      router.replace("/access-denied");
       return;
     }
     setUser(u);

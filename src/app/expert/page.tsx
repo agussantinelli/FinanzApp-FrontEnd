@@ -28,7 +28,7 @@ export default function ExpertDashboardPage() {
     }
 
     if (u.rol !== "Experto") {
-      router.replace("/expert/access-denied");
+      router.replace("/access-denied");
       return;
     }
 
