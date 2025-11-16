@@ -27,7 +27,6 @@ export default function LoginPage() {
     e.preventDefault();
     setError(null);
 
-    // Validaciones simples antes de llamar al back
     if (!email.trim()) {
       setError("El email es obligatorio.");
       return;
@@ -39,22 +38,7 @@ export default function LoginPage() {
 
     try {
       setLoading(true);
-      const resp = await login({ email, password });
-
-      if (typeof window !== "undefined") {
-        localStorage.setItem("fa_token", resp.token);
-        localStorage.setItem(
-          "fa_user",
-          JSON.stringify({
-            id: resp.personaId,
-            nombre: resp.nombre,
-            apellido: resp.apellido,
-            email: resp.email,
-            rol: resp.rol,
-          })
-        );
-      }
-
+      await login({ email, password });
       router.push("/dashboard");
     } catch (err) {
       console.error("Error login:", err);
