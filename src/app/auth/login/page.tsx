@@ -27,6 +27,7 @@ export default function LoginPage() {
 
   const [fieldErrors, setFieldErrors] = React.useState<LoginErrors>({});
   const [serverError, setServerError] = React.useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = React.useState<string | null>(null);
 
   const router = useRouter();
 
@@ -51,6 +52,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setServerError(null);
+    setSuccessMessage(null);
 
     if (!validate()) return;
 
@@ -58,7 +60,12 @@ export default function LoginPage() {
       setLoading(true);
       const resp = await login({ email, password }); // AuthService guarda token+user
       const destino = getHomePathForRole(resp.rol);
-      router.push(destino);
+
+      setSuccessMessage("Inicio de sesión correcto. Redirigiendo…");
+
+      setTimeout(() => {
+        router.push(destino);
+      }, 800);
     } catch (err) {
       console.error("Error login:", err);
       setServerError("Email o contraseña incorrectos.");
@@ -142,7 +149,10 @@ export default function LoginPage() {
                 helperText={fieldErrors.password}
               />
 
-              <FormStatus errorMessage={serverError} />
+              <FormStatus
+                errorMessage={serverError}
+                successMessage={successMessage}
+              />
 
               <Button
                 type="submit"
