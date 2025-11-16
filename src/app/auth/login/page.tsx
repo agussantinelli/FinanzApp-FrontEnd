@@ -15,34 +15,52 @@ import { login } from "@/services/AuthService";
 import { useRouter } from "next/navigation";
 import { FormStatus } from "@/components/FormStatus";
 
+type LoginErrors = {
+  email?: string;
+  password?: string;
+};
+
 export default function LoginPage() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
+
+  const [fieldErrors, setFieldErrors] = React.useState<LoginErrors>({});
+  const [serverError, setServerError] = React.useState<string | null>(null);
 
   const router = useRouter();
 
+  const validate = (): boolean => {
+    const errors: LoginErrors = {};
+    const emailTrim = email.trim();
+
+    if (!emailTrim) {
+      errors.email = "El email es obligatorio.";
+    } else if (!/^\S+@\S+\.\S+$/.test(emailTrim)) {
+      errors.email = "El email no tiene un formato válido.";
+    }
+
+    if (!password) {
+      errors.password = "La contraseña es obligatoria.";
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
+    setServerError(null);
 
-    if (!email.trim()) {
-      setError("El email es obligatorio.");
-      return;
-    }
-    if (!password) {
-      setError("La contraseña es obligatoria.");
-      return;
-    }
+    if (!validate()) return;
 
     try {
       setLoading(true);
-      await login({ email, password });
+      await login({ email, password }); // AuthService ya guarda token+user
       router.push("/dashboard");
     } catch (err) {
       console.error("Error login:", err);
-      setError("Email o contraseña incorrectos.");
+      setServerError("Email o contraseña incorrectos.");
     } finally {
       setLoading(false);
     }
@@ -92,8 +110,15 @@ export default function LoginPage() {
                 fullWidth
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (fieldErrors.email) {
+                    setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                  }
+                }}
                 autoComplete="email"
+                error={!!fieldErrors.email}
+                helperText={fieldErrors.email}
               />
 
               <TextField
@@ -102,11 +127,21 @@ export default function LoginPage() {
                 fullWidth
                 required
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (fieldErrors.password) {
+                    setFieldErrors((prev) => ({
+                      ...prev,
+                      password: undefined,
+                    }));
+                  }
+                }}
                 autoComplete="current-password"
+                error={!!fieldErrors.password}
+                helperText={fieldErrors.password}
               />
 
-              <FormStatus errorMessage={error} />
+              <FormStatus errorMessage={serverError} />
 
               <Button
                 type="submit"
