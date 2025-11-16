@@ -11,21 +11,54 @@ import {
   Stack,
 } from "@mui/material";
 import Link from "next/link";
+import { login } from "@/services/AuthService";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: llamar a AuthService.login({ email, password })
-    console.log({ email, password });
+    setError(null);
+
+    try {
+      setLoading(true);
+      const resp = await login({ email, password });
+
+      // Guardar token e info básica (simple por ahora)
+      if (typeof window !== "undefined") {
+        localStorage.setItem("fa_token", resp.token);
+        localStorage.setItem(
+          "fa_user",
+          JSON.stringify({
+            id: resp.personaId,
+            nombre: resp.nombre,
+            apellido: resp.apellido,
+            email: resp.email,
+            rol: resp.rol,
+          })
+        );
+      }
+
+      // Redirigimos al dashboard (ajustá si querés otro destino)
+      router.push("/dashboard");
+    } catch (err) {
+      console.error("Error login:", err);
+      setError("Email o contraseña incorrectos.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <Box
       sx={{
-        minHeight: "calc(100vh - 96px)", 
+        minHeight: "calc(100vh - 96px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -80,10 +113,21 @@ export default function LoginPage() {
                 autoComplete="current-password"
               />
 
+              {error && (
+                <Typography
+                  variant="body2"
+                  color="error"
+                  sx={{ mt: 0.5, textAlign: "center" }}
+                >
+                  {error}
+                </Typography>
+              )}
+
               <Button
                 type="submit"
                 variant="contained"
                 fullWidth
+                disabled={loading}
                 sx={{
                   mt: 1,
                   py: 1.2,
@@ -92,7 +136,7 @@ export default function LoginPage() {
                   fontSize: "1rem",
                 }}
               >
-                Entrar
+                {loading ? "Ingresando..." : "Entrar"}
               </Button>
             </Stack>
           </Box>
