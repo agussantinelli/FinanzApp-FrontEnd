@@ -13,8 +13,13 @@ import {
   CircularProgress,
 } from "@mui/material";
 import Link from "next/link";
-import { getRegisterGeoData } from "@/services/AuthService";
+import {
+  getRegisterGeoData,
+  register as registerService,
+} from "@/services/AuthService";
 import { RegisterGeoDataDTO } from "@/types/RegisterGeoData";
+import { useRouter } from "next/navigation";
+import { FormStatus } from "@/components/FormStatus";
 
 export default function RegisterPage() {
   const [nombre, setNombre] = React.useState("");
@@ -35,6 +40,13 @@ export default function RegisterPage() {
   const [loadingGeo, setLoadingGeo] = React.useState(true);
   const [errorGeo, setErrorGeo] = React.useState<string | null>(null);
 
+  const [submitting, setSubmitting] = React.useState(false);
+  const [errorSubmit, setErrorSubmit] = React.useState<string | null>(null);
+  const [successSubmit, setSuccessSubmit] = React.useState<string | null>(null);
+
+  const router = useRouter();
+
+  // Carga inicial de países/provincias/localidades
   React.useEffect(() => {
     let mounted = true;
 
@@ -49,8 +61,8 @@ export default function RegisterPage() {
         const ar = data.paises.find((p) => p.codigoIso2 === "AR");
         const arId = ar ? ar.id.toString() : "";
 
-        setPaisNacId((prev) => (prev || arId));
-        setPaisResidenciaId((prev) => (prev || arId));
+        setPaisNacId((prev) => prev || arId);
+        setPaisResidenciaId((prev) => prev || arId);
       } catch (err) {
         if (!mounted) return;
         setErrorGeo("No se pudieron cargar países/provincias/localidades.");
@@ -86,28 +98,107 @@ export default function RegisterPage() {
     );
   }, [geoData, esResidenciaArgentina, provinciaResidenciaId]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorSubmit(null);
+    setSuccessSubmit(null);
+
+    // Validaciones: TODOS los datos obligatorios
+    if (!nombre.trim()) {
+      setErrorSubmit("El nombre es obligatorio.");
+      return;
+    }
+    if (!apellido.trim()) {
+      setErrorSubmit("El apellido es obligatorio.");
+      return;
+    }
+    if (!email.trim()) {
+      setErrorSubmit("El email es obligatorio.");
+      return;
+    }
+    if (!fechaNac) {
+      setErrorSubmit("La fecha de nacimiento es obligatoria.");
+      return;
+    }
+    if (!password) {
+      setErrorSubmit("La contraseña es obligatoria.");
+      return;
+    }
+    if (!password2) {
+      setErrorSubmit("Debe repetir la contraseña.");
+      return;
+    }
+    if (password !== password2) {
+      setErrorSubmit("Las contraseñas no coinciden.");
+      return;
+    }
+    if (!paisNacId) {
+      setErrorSubmit("La nacionalidad es obligatoria.");
+      return;
+    }
+    if (!paisResidenciaId) {
+      setErrorSubmit("El país de residencia es obligatorio.");
+      return;
+    }
+
+    // Si reside en Argentina, provincia y localidad también obligatorias
+    if (esResidenciaArgentina) {
+      if (!provinciaResidenciaId) {
+        setErrorSubmit("La provincia de residencia es obligatoria.");
+        return;
+      }
+      if (!localidadResidenciaId) {
+        setErrorSubmit("La localidad de residencia es obligatoria.");
+        return;
+      }
+    }
+
+    const nacionalidadId = Number(paisNacId);
+    const paisResidId = Number(paisResidenciaId);
 
     const payload = {
-      nombre,
-      apellido,
-      email,
+      nombre: nombre.trim(),
+      apellido: apellido.trim(),
+      email: email.trim(),
       fechaNacimiento: fechaNac,
       password,
-      password2,
-      nacionalidadId: paisNacId ? Number(paisNacId) : null,
-      paisResidenciaId: paisResidenciaId ? Number(paisResidenciaId) : null,
-      provinciaResidenciaId: provinciaResidenciaId
-        ? Number(provinciaResidenciaId)
-        : null,
-      localidadResidenciaId: localidadResidenciaId
+      nacionalidadId,
+      paisResidenciaId: paisResidId,
+      localidadResidenciaId: esResidenciaArgentina
         ? Number(localidadResidenciaId)
         : null,
+      esResidenteArgentina: esResidenciaArgentina,
     };
 
-    console.log("REGISTER PAYLOAD", payload);
-    // TODO: llamar a AuthService.register(payload)
+    try {
+      setSubmitting(true);
+      const resp = await registerService(payload);
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("fa_token", resp.token);
+        localStorage.setItem(
+          "fa_user",
+          JSON.stringify({
+            id: resp.personaId,
+            nombre: resp.nombre,
+            apellido: resp.apellido,
+            email: resp.email,
+            rol: resp.rol,
+          })
+        );
+      }
+
+      setSuccessSubmit("Cuenta creada correctamente. Redirigiendo…");
+      // Pequeño delay para que se vea el mensaje de éxito
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 800);
+    } catch (err) {
+      console.error("Error registro:", err);
+      setErrorSubmit("No se pudo completar el registro. Revisá los datos e intentá de nuevo.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (loadingGeo) {
@@ -342,10 +433,16 @@ export default function RegisterPage() {
                 autoComplete="new-password"
               />
 
+              <FormStatus
+                successMessage={successSubmit}
+                errorMessage={errorSubmit}
+              />
+
               <Button
                 type="submit"
                 variant="contained"
                 fullWidth
+                disabled={submitting}
                 sx={{
                   mt: 1,
                   py: 1.2,
@@ -354,7 +451,7 @@ export default function RegisterPage() {
                   fontSize: "1rem",
                 }}
               >
-                Crear cuenta
+                {submitting ? "Creando cuenta..." : "Crear cuenta"}
               </Button>
             </Stack>
           </Box>
@@ -362,7 +459,7 @@ export default function RegisterPage() {
           <Box sx={{ textAlign: "center", mt: 1 }}>
             <Typography variant="body2" color="text.secondary">
               ¿Ya tenés una cuenta?{" "}
-              <MuiLink component={Link} href="/login" underline="hover">
+              <MuiLink component={Link} href="/auth/login" underline="hover">
                 Iniciar sesión
               </MuiLink>
             </Typography>
