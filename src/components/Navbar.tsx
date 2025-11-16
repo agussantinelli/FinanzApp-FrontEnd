@@ -28,6 +28,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import {
   getCurrentUser,
   clearAuthSession,
+  getHomePathForRole,
   type AuthUser,
 } from "@/services/AuthService";
 
@@ -68,15 +69,14 @@ export default function Navbar() {
   }, []);
 
   const isLogged = !!user;
-  const isAdmin = user?.rol === "Admin";
 
   const navItems = React.useMemo(() => {
     if (!isLogged) return baseNavItems;
-    if (isAdmin) return [{ label: "Dashboard", href: "/admin" }, ...baseNavItems];
-    return [{ label: "Mi panel", href: "/dashboard" }, ...baseNavItems];
-  }, [isLogged, isAdmin]);
+    // logueado: base + Mi portafolio
+    return [...baseNavItems, { label: "Mi portafolio", href: "/portfolio" }];
+  }, [isLogged]);
 
-  const defaultPanelHref = isAdmin ? "/admin" : "/dashboard";
+  const defaultPanelHref = getHomePathForRole(user?.rol ?? null);
 
   const handleLogout = () => {
     clearAuthSession();
@@ -95,6 +95,15 @@ export default function Navbar() {
 
   const toggle = (v: boolean) => () => setOpen(v);
 
+  const logoHref = isLogged ? defaultPanelHref : "/";
+
+  const roleLabel =
+    user?.rol === "Admin"
+      ? "Admin"
+      : user?.rol === "Inversor"
+      ? "Inversor"
+      : user?.rol ?? "";
+
   return (
     <>
       <AppBar position="sticky" elevation={0}>
@@ -106,10 +115,9 @@ export default function Navbar() {
             bgcolor: "rgba(0,0,0,0.45)",
           }}
         >
-          {/* Logo */}
           <Box
             component={Link}
-            href="/"
+            href={logoHref}
             sx={{
               display: "flex",
               alignItems: "center",
@@ -216,9 +224,9 @@ export default function Navbar() {
                     px: 2,
                   }}
                 >
-                  {user.rol === "Admin" ? "Admin" : "Inversor"} •{" "}
+                  {roleLabel} •{" "}
                   <Box component="span" sx={{ ml: 0.7, fontWeight: 700 }}>
-                    {user.nombre} {user.apellido}
+                    {user!.nombre} {user!.apellido}
                   </Box>
                 </Button>
 
@@ -266,7 +274,6 @@ export default function Navbar() {
             )}
           </Box>
 
-          {/* Mobile toggle */}
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton color="inherit" onClick={toggle(true)} aria-label="menu">
               <MenuIcon />
@@ -275,7 +282,6 @@ export default function Navbar() {
         </Toolbar>
       </AppBar>
 
-      {/* Drawer mobile */}
       <Drawer anchor="right" open={open} onClose={toggle(false)}>
         <Box
           role="presentation"

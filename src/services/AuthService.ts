@@ -2,12 +2,13 @@ import { http } from "./Http";
 import { RegisterGeoDataDTO } from "@/types/RegisterGeoData";
 import { LoginRequest } from "@/types/LoginRequest";
 import { RegisterRequest } from "@/types/RegisterRequest";
-import { LoginResponseDTO } from "@/types/LoginResponse"; 
+import { LoginResponseDTO } from "@/types/LoginResponse";
 
 function notifyAuthChanged() {
   if (typeof window === "undefined") return;
   window.dispatchEvent(new Event("fa-auth-changed"));
 }
+
 export function setAuthSession(resp: LoginResponseDTO) {
   if (typeof window === "undefined") return;
 
@@ -23,7 +24,7 @@ export function setAuthSession(resp: LoginResponseDTO) {
     })
   );
 
-  notifyAuthChanged();          
+  notifyAuthChanged();
 }
 
 export function clearAuthSession() {
@@ -32,7 +33,7 @@ export function clearAuthSession() {
   localStorage.removeItem("fa_token");
   localStorage.removeItem("fa_user");
 
-  notifyAuthChanged();          
+  notifyAuthChanged();
 }
 
 export type AuthUser = {
@@ -40,7 +41,7 @@ export type AuthUser = {
   nombre: string;
   apellido: string;
   email: string;
-  rol: "Admin" | "Inversor" | string;
+  rol: "Admin" | "Inversor" | "Experto" | string;
 };
 
 export function getCurrentUser(): AuthUser | null {
@@ -77,11 +78,12 @@ export async function register(
   return response.data;
 }
 
+// Ruta home según rol
 export function getHomePathForRole(rol: string | null | undefined): string {
   const r = rol?.toLowerCase();
 
   if (r === "admin") return "/admin";
-  if (r === "experto") return "/experto";
+  if (r === "experto") return "/expert";
 
   // por defecto, inversor o cualquier otro
   return "/dashboard";
