@@ -78,7 +78,7 @@ export default function CryptoSection() {
             CriptoMonedas Top 10 por Market Cap
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Precios en USD — fuente: CoinGecko/CoinCap.
+            Precios en USD — fuente: CoinGecko.
           </Typography>
           {updatedAt && (
             <Typography variant="caption" color="text.secondary">
