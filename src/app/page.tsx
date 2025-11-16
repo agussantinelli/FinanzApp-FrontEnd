@@ -11,6 +11,7 @@ import DolarSection from "@/components/sections/DolarSection";
 import CedearsSection from "@/components/sections/CedearsSection";
 import CryptoSection from "@/components/sections/CryptoSection";
 import AccionesARGYSection from "@/components/sections/AccionesARGYSection";
+import MarketHoursCard from "@/components/sections/MarketHoursCard";
 
 export default function HomePage() {
   return (
@@ -64,28 +65,8 @@ export default function HomePage() {
         <CryptoSection />
       </Box>
 
-      <Box sx={{ mt: 8 }}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>
-          Horarios de mercados (hora de Argentina)
-        </Typography>
-        <Typography variant="body2">
-          NYSE (New York Stock Exchange): 11:30 a 18:00 — rueda regular.
-        </Typography>
-        <Typography variant="body2">
-          Nasdaq: 11:30 a 18:00 — rueda regular.
-        </Typography>
-        <Typography variant="body2">
-          BYMA (Bolsa y Mercados Argentinos): 10:30 a 17:00 — acciones, CEDEARs,
-          opciones y otros instrumentos.
-        </Typography>
-        <Typography
-          variant="caption"
-          color="text.secondary"
-          sx={{ display: "block", mt: 1 }}
-        >
-          Nota: los horarios de NYSE y Nasdaq pueden correrse una hora (10:30 a
-          17:00) cuando en EE.UU. rige el horario de verano.
-        </Typography>
+     <Box sx={{ mt: 2 }}>
+      <MarketHoursCard />
       </Box>
     </Container>
   );
