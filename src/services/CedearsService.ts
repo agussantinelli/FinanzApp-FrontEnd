@@ -1,10 +1,10 @@
 import axios from "axios";
 import { DualQuoteDTO } from "@/types/Market";
-import { API } from "./Api";
+import { BASEURL } from "./BaseURL";
 
 
 export async function getCedearDuals(dolar: "CCL" | "MEP" = "CCL") {
-  const url = `${API}/cedears/duals`;
+  const url = `${BASEURL}/api/cedears/duals`;
   const res = await axios.get<DualQuoteDTO[]>(url, { params: { dolar } });
   return res.data;
 }

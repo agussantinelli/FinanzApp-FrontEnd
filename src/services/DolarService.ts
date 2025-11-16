@@ -1,10 +1,10 @@
 import axios from "axios";
 import { DolarDTO } from "@/types/Dolar";
-import { API } from "./Api";
+import { BASEURL } from "./BaseURL";
 
 
 const api = axios.create({
-  baseURL: API,
+  baseURL: BASEURL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -12,7 +12,7 @@ const api = axios.create({
 
 export async function getCotizacionesDolar(): Promise<DolarDTO[]> {
   try {
-    const response = await api.get<DolarDTO[]>("/dolar/cotizaciones", {
+    const response = await api.get<DolarDTO[]>("/api/dolar/cotizaciones", {
       headers: { "Cache-Control": "no-cache" },
     });
 

@@ -201,7 +201,6 @@ export default function RegisterPage() {
 
           <Box component="form" onSubmit={handleSubmit} noValidate>
             <Stack spacing={2.2}>
-              {/* Datos personales */}
               <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
                 Datos personales
               </Typography>
@@ -257,7 +256,6 @@ export default function RegisterPage() {
                 ))}
               </TextField>
 
-              {/* Residencia */}
               <Typography variant="subtitle1" sx={{ fontWeight: 700, mt: 1 }}>
                 Residencia
               </Typography>
@@ -320,7 +318,6 @@ export default function RegisterPage() {
                 </>
               )}
 
-              {/* Seguridad */}
               <Typography variant="subtitle1" sx={{ fontWeight: 700, mt: 1 }}>
                 Seguridad
               </Typography>
