@@ -21,6 +21,19 @@ import { RegisterGeoDataDTO } from "@/types/RegisterGeoData";
 import { useRouter } from "next/navigation";
 import { FormStatus } from "@/components/FormStatus";
 
+type RegisterFieldErrors = {
+  nombre?: string;
+  apellido?: string;
+  email?: string;
+  fechaNac?: string;
+  password?: string;
+  password2?: string;
+  paisNacId?: string;
+  paisResidenciaId?: string;
+  provinciaResidenciaId?: string;
+  localidadResidenciaId?: string;
+};
+
 export default function RegisterPage() {
   const [nombre, setNombre] = React.useState("");
   const [apellido, setApellido] = React.useState("");
@@ -41,7 +54,9 @@ export default function RegisterPage() {
   const [errorGeo, setErrorGeo] = React.useState<string | null>(null);
 
   const [submitting, setSubmitting] = React.useState(false);
-  const [errorSubmit, setErrorSubmit] = React.useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] =
+    React.useState<RegisterFieldErrors>({});
+  const [apiError, setApiError] = React.useState<string | null>(null);
   const [successSubmit, setSuccessSubmit] = React.useState<string | null>(null);
 
   const router = useRouter();
@@ -54,7 +69,6 @@ export default function RegisterPage() {
         setLoadingGeo(true);
         const data = await getRegisterGeoData();
         if (!mounted) return;
-
         setGeoData(data);
 
         const ar = data.paises.find((p) => p.codigoIso2 === "AR");
@@ -97,59 +111,50 @@ export default function RegisterPage() {
     );
   }, [geoData, esResidenciaArgentina, provinciaResidenciaId]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorSubmit(null);
-    setSuccessSubmit(null);
+  const validate = (): boolean => {
+    const errors: RegisterFieldErrors = {};
+    const emailTrim = email.trim();
 
-    // Validaciones
-    if (!nombre.trim()) {
-      setErrorSubmit("El nombre es obligatorio.");
-      return;
+    if (!nombre.trim()) errors.nombre = "El nombre es obligatorio.";
+    if (!apellido.trim()) errors.apellido = "El apellido es obligatorio.";
+
+    if (!emailTrim) {
+      errors.email = "El email es obligatorio.";
+    } else if (!/^\S+@\S+\.\S+$/.test(emailTrim)) {
+      errors.email = "El email no tiene un formato válido.";
     }
-    if (!apellido.trim()) {
-      setErrorSubmit("El apellido es obligatorio.");
-      return;
+
+    if (!fechaNac) errors.fechaNac = "La fecha de nacimiento es obligatoria.";
+
+    if (!password) errors.password = "La contraseña es obligatoria.";
+    if (!password2) errors.password2 = "Debe repetir la contraseña.";
+    if (password && password2 && password !== password2) {
+      errors.password2 = "Las contraseñas no coinciden.";
     }
-    if (!email.trim()) {
-      setErrorSubmit("El email es obligatorio.");
-      return;
-    }
-    if (!fechaNac) {
-      setErrorSubmit("La fecha de nacimiento es obligatoria.");
-      return;
-    }
-    if (!password) {
-      setErrorSubmit("La contraseña es obligatoria.");
-      return;
-    }
-    if (!password2) {
-      setErrorSubmit("Debe repetir la contraseña.");
-      return;
-    }
-    if (password !== password2) {
-      setErrorSubmit("Las contraseñas no coinciden.");
-      return;
-    }
-    if (!paisNacId) {
-      setErrorSubmit("La nacionalidad es obligatoria.");
-      return;
-    }
-    if (!paisResidenciaId) {
-      setErrorSubmit("El país de residencia es obligatorio.");
-      return;
-    }
+
+    if (!paisNacId) errors.paisNacId = "La nacionalidad es obligatoria.";
+    if (!paisResidenciaId)
+      errors.paisResidenciaId = "El país de residencia es obligatorio.";
 
     if (esResidenciaArgentina) {
-      if (!provinciaResidenciaId) {
-        setErrorSubmit("La provincia de residencia es obligatoria.");
-        return;
-      }
-      if (!localidadResidenciaId) {
-        setErrorSubmit("La localidad de residencia es obligatoria.");
-        return;
-      }
+      if (!provinciaResidenciaId)
+        errors.provinciaResidenciaId =
+          "La provincia de residencia es obligatoria.";
+      if (!localidadResidenciaId)
+        errors.localidadResidenciaId =
+          "La localidad de residencia es obligatoria.";
     }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setApiError(null);
+    setSuccessSubmit(null);
+
+    if (!validate()) return;
 
     const nacionalidadId = Number(paisNacId);
     const paisResidId = Number(paisResidenciaId);
@@ -170,17 +175,19 @@ export default function RegisterPage() {
 
     try {
       setSubmitting(true);
-      await registerService(payload);
+      await registerService(payload); // AuthService guarda token+user
 
       setSuccessSubmit("Cuenta creada correctamente. Redirigiendo…");
       setTimeout(() => {
         router.push("/auth/login");
       }, 800);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error registro:", err);
-      setErrorSubmit(
-        "No se pudo completar el registro. Revisá los datos e intentá de nuevo."
-      );
+
+      // Si el back devuelve mensaje tipo "Email ya registrado"
+      const msgFromApi =
+        err?.response?.data ?? "No se pudo completar el registro.";
+      setApiError(msgFromApi);
     } finally {
       setSubmitting(false);
     }
@@ -286,7 +293,14 @@ export default function RegisterPage() {
                 fullWidth
                 required
                 value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
+                onChange={(e) => {
+                  setNombre(e.target.value);
+                  if (fieldErrors.nombre) {
+                    setFieldErrors((prev) => ({ ...prev, nombre: undefined }));
+                  }
+                }}
+                error={!!fieldErrors.nombre}
+                helperText={fieldErrors.nombre}
               />
 
               <TextField
@@ -294,7 +308,17 @@ export default function RegisterPage() {
                 fullWidth
                 required
                 value={apellido}
-                onChange={(e) => setApellido(e.target.value)}
+                onChange={(e) => {
+                  setApellido(e.target.value);
+                  if (fieldErrors.apellido) {
+                    setFieldErrors((prev) => ({
+                      ...prev,
+                      apellido: undefined,
+                    }));
+                  }
+                }}
+                error={!!fieldErrors.apellido}
+                helperText={fieldErrors.apellido}
               />
 
               <TextField
@@ -303,8 +327,15 @@ export default function RegisterPage() {
                 fullWidth
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (fieldErrors.email) {
+                    setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                  }
+                }}
                 autoComplete="email"
+                error={!!fieldErrors.email}
+                helperText={fieldErrors.email}
               />
 
               <TextField
@@ -313,8 +344,18 @@ export default function RegisterPage() {
                 fullWidth
                 required
                 value={fechaNac}
-                onChange={(e) => setFechaNac(e.target.value)}
+                onChange={(e) => {
+                  setFechaNac(e.target.value);
+                  if (fieldErrors.fechaNac) {
+                    setFieldErrors((prev) => ({
+                      ...prev,
+                      fechaNac: undefined,
+                    }));
+                  }
+                }}
                 InputLabelProps={{ shrink: true }}
+                error={!!fieldErrors.fechaNac}
+                helperText={fieldErrors.fechaNac}
               />
 
               <TextField
@@ -323,7 +364,17 @@ export default function RegisterPage() {
                 fullWidth
                 required
                 value={paisNacId}
-                onChange={(e) => setPaisNacId(e.target.value)}
+                onChange={(e) => {
+                  setPaisNacId(e.target.value);
+                  if (fieldErrors.paisNacId) {
+                    setFieldErrors((prev) => ({
+                      ...prev,
+                      paisNacId: undefined,
+                    }));
+                  }
+                }}
+                error={!!fieldErrors.paisNacId}
+                helperText={fieldErrors.paisNacId}
               >
                 {geoData.paises.map((p) => (
                   <MenuItem key={p.id} value={p.id.toString()}>
@@ -347,7 +398,15 @@ export default function RegisterPage() {
                   setPaisResidenciaId(newValue);
                   setProvinciaResidenciaId("");
                   setLocalidadResidenciaId("");
+                  if (fieldErrors.paisResidenciaId) {
+                    setFieldErrors((prev) => ({
+                      ...prev,
+                      paisResidenciaId: undefined,
+                    }));
+                  }
                 }}
+                error={!!fieldErrors.paisResidenciaId}
+                helperText={fieldErrors.paisResidenciaId}
               >
                 {geoData.paises.map((p) => (
                   <MenuItem key={p.id} value={p.id.toString()}>
@@ -367,7 +426,15 @@ export default function RegisterPage() {
                     onChange={(e) => {
                       setProvinciaResidenciaId(e.target.value);
                       setLocalidadResidenciaId("");
+                      if (fieldErrors.provinciaResidenciaId) {
+                        setFieldErrors((prev) => ({
+                          ...prev,
+                          provinciaResidenciaId: undefined,
+                        }));
+                      }
                     }}
+                    error={!!fieldErrors.provinciaResidenciaId}
+                    helperText={fieldErrors.provinciaResidenciaId}
                   >
                     {provinciasParaCombo.map((pr) => (
                       <MenuItem key={pr.id} value={pr.id.toString()}>
@@ -382,8 +449,18 @@ export default function RegisterPage() {
                     fullWidth
                     required
                     value={localidadResidenciaId}
-                    onChange={(e) => setLocalidadResidenciaId(e.target.value)}
+                    onChange={(e) => {
+                      setLocalidadResidenciaId(e.target.value);
+                      if (fieldErrors.localidadResidenciaId) {
+                        setFieldErrors((prev) => ({
+                          ...prev,
+                          localidadResidenciaId: undefined,
+                        }));
+                      }
+                    }}
                     disabled={!provinciaResidenciaId}
+                    error={!!fieldErrors.localidadResidenciaId}
+                    helperText={fieldErrors.localidadResidenciaId}
                   >
                     {localidadesParaCombo.map((loc) => (
                       <MenuItem key={loc.id} value={loc.id.toString()}>
@@ -404,8 +481,18 @@ export default function RegisterPage() {
                 fullWidth
                 required
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (fieldErrors.password) {
+                    setFieldErrors((prev) => ({
+                      ...prev,
+                      password: undefined,
+                    }));
+                  }
+                }}
                 autoComplete="new-password"
+                error={!!fieldErrors.password}
+                helperText={fieldErrors.password}
               />
 
               <TextField
@@ -414,13 +501,23 @@ export default function RegisterPage() {
                 fullWidth
                 required
                 value={password2}
-                onChange={(e) => setPassword2(e.target.value)}
+                onChange={(e) => {
+                  setPassword2(e.target.value);
+                  if (fieldErrors.password2) {
+                    setFieldErrors((prev) => ({
+                      ...prev,
+                      password2: undefined,
+                    }));
+                  }
+                }}
                 autoComplete="new-password"
+                error={!!fieldErrors.password2}
+                helperText={fieldErrors.password2}
               />
 
               <FormStatus
                 successMessage={successSubmit}
-                errorMessage={errorSubmit}
+                errorMessage={apiError}
               />
 
               <Button
