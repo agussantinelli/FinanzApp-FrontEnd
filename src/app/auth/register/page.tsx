@@ -8,7 +8,6 @@ import {
   Typography,
   Button,
   Stack,
-  Grid,
   FormControlLabel,
   Switch,
   MenuItem,
@@ -27,7 +26,8 @@ export default function RegisterPage() {
 
   const [paisNac, setPaisNac] = React.useState<string>("AR");
   const [paisResidencia, setPaisResidencia] = React.useState<string>("AR");
-  const [localidadResidencia, setLocalidadResidencia] = React.useState<string>("");
+  const [localidadResidencia, setLocalidadResidencia] =
+    React.useState<string>("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,7 +60,7 @@ export default function RegisterPage() {
         elevation={6}
         sx={{
           width: "100%",
-          maxWidth: 760,
+          maxWidth: 520,
           p: 4,
           borderRadius: 3,
           bgcolor: "rgba(15, 15, 15, 0.95)",
@@ -83,6 +83,7 @@ export default function RegisterPage() {
 
           <Box component="form" onSubmit={handleSubmit} noValidate>
             <Stack spacing={3}>
+              {/* Datos personales */}
               <Box>
                 <Typography
                   variant="subtitle1"
@@ -90,62 +91,52 @@ export default function RegisterPage() {
                 >
                   Datos personales
                 </Typography>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      label="Nombre"
-                      fullWidth
-                      required
-                      value={nombre}
-                      onChange={(e) => setNombre(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      label="Apellido"
-                      fullWidth
-                      required
-                      value={apellido}
-                      onChange={(e) => setApellido(e.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      label="Email"
-                      type="email"
-                      fullWidth
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      autoComplete="email"
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      label="Fecha de nacimiento"
-                      type="date"
-                      fullWidth
-                      required
-                      value={fechaNac}
-                      onChange={(e) => setFechaNac(e.target.value)}
-                      InputLabelProps={{ shrink: true }}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      select
-                      label="Nacionalidad"
-                      fullWidth
-                      required
-                      value={paisNac}
-                      onChange={(e) => setPaisNac(e.target.value)}
-                    >
-                      <MenuItem value="AR">Argentina</MenuItem>
-                      <MenuItem value="US">Estados Unidos</MenuItem>
-                      <MenuItem value="BR">Brasil</MenuItem>
-                    </TextField>
-                  </Grid>
-                </Grid>
+                <Stack spacing={1.5}>
+                  <TextField
+                    label="Nombre"
+                    fullWidth
+                    required
+                    value={nombre}
+                    onChange={(e) => setNombre(e.target.value)}
+                  />
+                  <TextField
+                    label="Apellido"
+                    fullWidth
+                    required
+                    value={apellido}
+                    onChange={(e) => setApellido(e.target.value)}
+                  />
+                  <TextField
+                    label="Email"
+                    type="email"
+                    fullWidth
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="email"
+                  />
+                  <TextField
+                    label="Fecha de nacimiento"
+                    type="date"
+                    fullWidth
+                    required
+                    value={fechaNac}
+                    onChange={(e) => setFechaNac(e.target.value)}
+                    InputLabelProps={{ shrink: true }}
+                  />
+                  <TextField
+                    select
+                    label="Nacionalidad"
+                    fullWidth
+                    required
+                    value={paisNac}
+                    onChange={(e) => setPaisNac(e.target.value)}
+                  >
+                    <MenuItem value="AR">Argentina</MenuItem>
+                    <MenuItem value="US">Estados Unidos</MenuItem>
+                    <MenuItem value="BR">Brasil</MenuItem>
+                  </TextField>
+                </Stack>
               </Box>
 
               <Box>
@@ -166,38 +157,32 @@ export default function RegisterPage() {
                   label="Soy residente en Argentina"
                 />
 
-                <Grid container spacing={2} sx={{ mt: 1 }}>
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      select
-                      label="País de residencia"
-                      fullWidth
-                      disabled={residenteAr}
-                      value={paisResidencia}
-                      onChange={(e) => setPaisResidencia(e.target.value)}
-                    >
-                      <MenuItem value="AR">Argentina</MenuItem>
-                      <MenuItem value="US">Estados Unidos</MenuItem>
-                      <MenuItem value="BR">Brasil</MenuItem>
-                      {/* TODO: lista real de países desde backend */}
-                    </TextField>
-                  </Grid>
+                <Stack spacing={1.5} sx={{ mt: 1 }}>
+                  <TextField
+                    select
+                    label="País de residencia"
+                    fullWidth
+                    disabled={residenteAr}
+                    value={paisResidencia}
+                    onChange={(e) => setPaisResidencia(e.target.value)}
+                  >
+                    <MenuItem value="AR">Argentina</MenuItem>
+                    <MenuItem value="US">Estados Unidos</MenuItem>
+                    <MenuItem value="BR">Brasil</MenuItem>
+                  </TextField>
 
                   {residenteAr && (
-                    <Grid item xs={12} md={6}>
-                      <TextField
-                        label="Localidad de residencia"
-                        fullWidth
-                        value={localidadResidencia}
-                        onChange={(e) =>
-                          setLocalidadResidencia(e.target.value)
-                        }
-                        placeholder="Ej: Rosario, CABA, Córdoba..."
-                        // TODO: reemplazar por combo de localidades según provincia
-                      />
-                    </Grid>
+                    <TextField
+                      label="Localidad de residencia"
+                      fullWidth
+                      value={localidadResidencia}
+                      onChange={(e) =>
+                        setLocalidadResidencia(e.target.value)
+                      }
+                      placeholder="Ej: Rosario, CABA, Córdoba..."
+                    />
                   )}
-                </Grid>
+                </Stack>
               </Box>
 
               {/* Contraseña */}
@@ -208,30 +193,26 @@ export default function RegisterPage() {
                 >
                   Seguridad
                 </Typography>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      label="Contraseña"
-                      type="password"
-                      fullWidth
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      autoComplete="new-password"
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      label="Repetir contraseña"
-                      type="password"
-                      fullWidth
-                      required
-                      value={password2}
-                      onChange={(e) => setPassword2(e.target.value)}
-                      autoComplete="new-password"
-                    />
-                  </Grid>
-                </Grid>
+                <Stack spacing={1.5}>
+                  <TextField
+                    label="Contraseña"
+                    type="password"
+                    fullWidth
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="new-password"
+                  />
+                  <TextField
+                    label="Repetir contraseña"
+                    type="password"
+                    fullWidth
+                    required
+                    value={password2}
+                    onChange={(e) => setPassword2(e.target.value)}
+                    autoComplete="new-password"
+                  />
+                </Stack>
               </Box>
 
               <Button
