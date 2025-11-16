@@ -1,6 +1,6 @@
+import { API } from "./Api";
 import axios from "axios";
 import { DualQuoteDTO } from "@/types/Market";
-import { API } from "./Api";
 
 export async function getStockDuals(pairs: { localBA: string; usa: string }[], dolar: "CCL" | "MEP" = "CCL") {
   const url = `${API}/stocks/duals`;
