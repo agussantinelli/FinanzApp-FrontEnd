@@ -13,7 +13,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import Link from "next/link";
-import { getRegisterGeoData } from "@/services/RegisterService";
+import { getRegisterGeoData } from "@/services/AuthService";
 import { RegisterGeoDataDTO } from "@/types/RegisterGeoData";
 
 export default function RegisterPage() {
