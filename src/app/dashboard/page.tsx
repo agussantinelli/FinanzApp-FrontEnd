@@ -15,7 +15,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   getCurrentUser,
-  clearAuthSession,
   type AuthUser,
 } from "@/services/AuthService";
 
@@ -31,7 +30,7 @@ export default function DashboardPage() {
       return;
     }
 
-    // Si quisieras separar admin:
+    // Si quisieras redirigir admin a otra página:
     // if (u.rol === "Admin") {
     //   router.replace("/admin");
     //   return;
@@ -40,11 +39,6 @@ export default function DashboardPage() {
     setUser(u);
     setChecking(false);
   }, [router]);
-
-  const handleLogout = () => {
-    clearAuthSession();
-    router.push("/auth/login");
-  };
 
   if (checking || !user) {
     return (
@@ -72,7 +66,6 @@ export default function DashboardPage() {
       }}
     >
       <Grid container spacing={3}>
-        {/* HEADER / BIENVENIDA */}
         <Grid item xs={12}>
           <Paper
             sx={{
@@ -120,20 +113,11 @@ export default function DashboardPage() {
                 >
                   Ver perfil
                 </Button>
-                <Button
-                  color="error"
-                  size="small"
-                  onClick={handleLogout}
-                  sx={{ textTransform: "none" }}
-                >
-                  Cerrar sesión
-                </Button>
               </Stack>
             </Stack>
           </Paper>
         </Grid>
 
-        {/* RESUMEN RÁPIDO (ESTADÍSTICAS FAKE POR AHORA) */}
         <Grid item xs={12} md={3}>
           <Paper
             sx={{
@@ -226,7 +210,6 @@ export default function DashboardPage() {
           </Paper>
         </Grid>
 
-        {/* ATALHOS / SECCIONES CLAVE */}
         <Grid item xs={12} md={6}>
           <Paper
             sx={{
@@ -324,7 +307,6 @@ export default function DashboardPage() {
           </Paper>
         </Grid>
 
-        {/* BLOQUE “PRÓXIMOS PASOS / TP” */}
         <Grid item xs={12} md={6}>
           <Paper
             sx={{
@@ -353,14 +335,12 @@ export default function DashboardPage() {
                 • Crear alertas de precio (ej. cuando BTC pase cierto valor).
               </Typography>
               <Typography variant="body2">
-                • Agregar gráficos de evolución (usando cotizaciones históricas
-                si tenés).
+                • Agregar gráficos de evolución con cotizaciones históricas.
               </Typography>
             </Stack>
           </Paper>
         </Grid>
 
-        {/* ZONA PARA ÚLTIMOS MOVIMIENTOS / NOTICIAS */}
         <Grid item xs={12}>
           <Paper
             sx={{

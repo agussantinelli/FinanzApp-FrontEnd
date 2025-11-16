@@ -17,6 +17,14 @@ import Divider from "@mui/material/Divider";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+
 import {
   getCurrentUser,
   clearAuthSession,
@@ -33,37 +41,56 @@ const baseNavItems = [
 export default function Navbar() {
   const [open, setOpen] = React.useState(false);
   const [user, setUser] = React.useState<AuthUser | null>(null);
+  const [userMenuAnchor, setUserMenuAnchor] =
+    React.useState<null | HTMLElement>(null);
+
   const router = useRouter();
 
   React.useEffect(() => {
-    const u = getCurrentUser();
-    setUser(u);
+    const loadUser = () => {
+      const u = getCurrentUser();
+      setUser(u);
+    };
+
+    loadUser();
+
+    const handler = () => loadUser();
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("fa-auth-changed", handler);
+    }
+
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("fa-auth-changed", handler);
+      }
+    };
   }, []);
 
   const isLogged = !!user;
   const isAdmin = user?.rol === "Admin";
 
-  // Nav items según rol
   const navItems = React.useMemo(() => {
     if (!isLogged) return baseNavItems;
-
-    if (isAdmin) {
-      return [
-        { label: "Dashboard", href: "/admin" },
-        ...baseNavItems,
-      ];
-    }
-
-    // Inversor
-    return [
-      { label: "Mi panel", href: "/dashboard" },
-      ...baseNavItems,
-    ];
+    if (isAdmin) return [{ label: "Dashboard", href: "/admin" }, ...baseNavItems];
+    return [{ label: "Mi panel", href: "/dashboard" }, ...baseNavItems];
   }, [isLogged, isAdmin]);
+
+  const defaultPanelHref = isAdmin ? "/admin" : "/dashboard";
 
   const handleLogout = () => {
     clearAuthSession();
+    setUser(null); // por si acaso
+    setUserMenuAnchor(null);
     router.push("/auth/login");
+  };
+
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setUserMenuAnchor(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setUserMenuAnchor(null);
   };
 
   const toggle = (v: boolean) => () => setOpen(v);
@@ -79,7 +106,7 @@ export default function Navbar() {
             bgcolor: "rgba(0,0,0,0.45)",
           }}
         >
-          {/* LOGO / BRAND */}
+          {/* Logo */}
           <Box
             component={Link}
             href="/"
@@ -115,7 +142,7 @@ export default function Navbar() {
 
           <Box sx={{ flexGrow: 1 }} />
 
-          {/* DESKTOP NAV */}
+          {/* Desktop nav */}
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
@@ -177,43 +204,78 @@ export default function Navbar() {
                 </Button>
               </>
             ) : (
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                  {user.rol === "Admin" ? "Admin" : "Inversor"} •{" "}
-                  <strong>
-                    {user.nombre} {user.apellido}
-                  </strong>
-                </Typography>
+              <>
                 <Button
                   color="inherit"
-                  size="small"
-                  onClick={handleLogout}
+                  onClick={handleOpenUserMenu}
+                  endIcon={<ArrowDropDownIcon />}
                   sx={{
                     textTransform: "none",
                     fontWeight: 600,
-                    fontSize: "0.85rem",
+                    fontSize: "0.95rem",
+                    px: 2,
                   }}
                 >
-                  Cerrar sesión
+                  {user.rol === "Admin" ? "Admin" : "Inversor"} •{" "}
+                  <Box component="span" sx={{ ml: 0.7, fontWeight: 700 }}>
+                    {user.nombre} {user.apellido}
+                  </Box>
                 </Button>
-              </Box>
+
+                <Menu
+                  anchorEl={userMenuAnchor}
+                  open={Boolean(userMenuAnchor)}
+                  onClose={handleCloseUserMenu}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                  transformOrigin={{ vertical: "top", horizontal: "right" }}
+                >
+                  <MenuItem
+                    onClick={() => {
+                      handleCloseUserMenu();
+                      router.push("/perfil");
+                    }}
+                  >
+                    <ListItemIcon>
+                      <AccountCircleIcon fontSize="small" />
+                    </ListItemIcon>
+                    Perfil
+                  </MenuItem>
+
+                  <MenuItem
+                    onClick={() => {
+                      handleCloseUserMenu();
+                      router.push(defaultPanelHref);
+                    }}
+                  >
+                    <ListItemIcon>
+                      <DashboardIcon fontSize="small" />
+                    </ListItemIcon>
+                    Ir al panel
+                  </MenuItem>
+
+                  <Divider />
+
+                  <MenuItem onClick={handleLogout}>
+                    <ListItemIcon>
+                      <LogoutIcon fontSize="small" />
+                    </ListItemIcon>
+                    Cerrar sesión
+                  </MenuItem>
+                </Menu>
+              </>
             )}
           </Box>
 
-          {/* MOBILE NAV TOGGLE */}
+          {/* Mobile toggle */}
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              color="inherit"
-              onClick={toggle(true)}
-              aria-label="menu"
-            >
+            <IconButton color="inherit" onClick={toggle(true)} aria-label="menu">
               <MenuIcon />
             </IconButton>
           </Box>
         </Toolbar>
       </AppBar>
 
-      {/* DRAWER MOBILE */}
+      {/* Drawer mobile */}
       <Drawer anchor="right" open={open} onClose={toggle(false)}>
         <Box
           role="presentation"
@@ -276,7 +338,11 @@ export default function Navbar() {
           ) : (
             <List>
               <ListItem disablePadding>
-                <ListItemButton onClick={handleLogout}>
+                <ListItemButton
+                  onClick={() => {
+                    handleLogout();
+                  }}
+                >
                   <ListItemText primary="Cerrar sesión" />
                 </ListItemButton>
               </ListItem>

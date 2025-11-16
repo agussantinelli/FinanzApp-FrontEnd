@@ -4,6 +4,10 @@ import { LoginRequest } from "@/types/LoginRequest";
 import { RegisterRequest } from "@/types/RegisterRequest";
 import { LoginResponseDTO } from "@/types/LoginResponse"; 
 
+function notifyAuthChanged() {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new Event("fa-auth-changed"));
+}
 export function setAuthSession(resp: LoginResponseDTO) {
   if (typeof window === "undefined") return;
 
@@ -18,6 +22,8 @@ export function setAuthSession(resp: LoginResponseDTO) {
       rol: resp.rol,
     })
   );
+
+  notifyAuthChanged();          
 }
 
 export function clearAuthSession() {
@@ -25,6 +31,8 @@ export function clearAuthSession() {
 
   localStorage.removeItem("fa_token");
   localStorage.removeItem("fa_user");
+
+  notifyAuthChanged();          
 }
 
 export type AuthUser = {
