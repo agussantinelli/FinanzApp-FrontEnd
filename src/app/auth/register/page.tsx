@@ -123,7 +123,7 @@ export default function RegisterPage() {
         <Stack alignItems="center" spacing={2}>
           <CircularProgress />
           <Typography variant="body2" color="text.secondary">
-            Cargando datos de países y localidades...
+            Cargando...
           </Typography>
         </Stack>
       </Box>
