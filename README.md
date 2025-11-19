@@ -19,6 +19,12 @@
     <img src="https://img.shields.io/badge/JWT%20Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT Badge"/>
 </p>
 
+<p align="center">
+    <a href="https://drive.google.com/drive/folders/1b5H8fDgOKmrxfY4RXfi4oYA3CvXy4ot6?usp=drive_link" target="_blank">
+        📂 Carpeta de documentación del Proyecto (Google Drive)
+    </a>
+</p>
+
 <hr>
 
 <h2>🎯 Objetivo</h2>
