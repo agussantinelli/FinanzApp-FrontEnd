@@ -152,7 +152,7 @@ export default function CedearsSection() {
 
       <Stack spacing={3}>
         {rows.map((row, idx) => (
-          <Grid key={idx} container spacing={3}>
+          <Grid key={idx} container spacing={3} justifyContent="center">
             {row.map(d => (
               <Grid item xs={12} md={4} key={d.localSymbol} component="div">
                 {UnifiedCard(d)}

@@ -36,8 +36,8 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    text-align: left;
+    justify-content: center;
+    text-align: center;
     background-color: rgba(0, 255, 0, 0.05) !important;
     border: 1px solid rgba(57, 255, 20, 0.25) !important;
     border-radius: 36px !important;

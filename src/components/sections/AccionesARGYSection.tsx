@@ -179,7 +179,7 @@ export default function AccionesARSection() {
       </Typography>
       <Stack spacing={3}>
         {rowsEnergetico.map((row, idx) => (
-          <Grid container spacing={3} key={`en-${idx}`}>
+          <Grid container spacing={3} key={`en-${idx}`} justifyContent="center">
             {row.map(d => (
               <Grid item xs={12} md={4} key={d.localSymbol} component="div">
                 {UnifiedCard(d)}
@@ -196,7 +196,7 @@ export default function AccionesARSection() {
       </Typography>
       <Stack spacing={3}>
         {rowsBancario.map((row, idx) => (
-          <Grid container spacing={3} key={`ban-${idx}`}>
+          <Grid container spacing={3} key={`ban-${idx}`} justifyContent="center">
             {row.map(d => (
               <Grid item xs={12} md={4} key={d.localSymbol} component="div">
                 {UnifiedCard(d)}
@@ -213,7 +213,7 @@ export default function AccionesARSection() {
       </Typography>
       <Stack spacing={3}>
         {rowsExtra.map((row, idx) => (
-          <Grid container spacing={3} key={`ex-${idx}`}>
+          <Grid container spacing={3} key={`ex-${idx}`} justifyContent="center">
             {row.map(d => (
               <Grid item xs={12} md={4} key={d.localSymbol} component="div">
                 {UnifiedCard(d)}
@@ -222,6 +222,6 @@ export default function AccionesARSection() {
           </Grid>
         ))}
       </Stack>
-    </Paper>
+    </Paper >
   );
 }

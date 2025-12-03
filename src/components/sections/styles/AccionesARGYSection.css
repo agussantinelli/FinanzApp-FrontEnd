@@ -38,12 +38,21 @@
     border-color: rgba(57, 255, 20, 0.15) !important;
 }
 
+.section-subtitle {
+    color: #39ff14 !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    margin-bottom: 16px !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
 .acciones-card {
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    text-align: left;
+    justify-content: center;
+    text-align: center;
     background-color: rgba(0, 255, 0, 0.05) !important;
     border: 1px solid rgba(57, 255, 20, 0.25) !important;
     border-radius: 36px !important;
