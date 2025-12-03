@@ -134,6 +134,22 @@ export default function DolarSection() {
                     <Typography variant="body2" className="card-text">
                       Venta: <strong>{formatARS(c?.venta)}</strong>
                     </Typography>
+                    {c?.variacion !== undefined && c?.variacion !== null && (
+                      <Typography variant="caption" className="card-text" sx={{ display: 'block', mt: 1 }}>
+                        Variación:
+                        <span style={{ color: c.variacion >= 0 ? "green" : "red", marginLeft: "4px", fontWeight: "bold" }}>
+                          {c.variacion > 0 ? "+" : ""}{c.variacion}%
+                        </span>
+                      </Typography>
+                    )}
+                    {c?.variacion !== undefined && c?.variacion !== null && (
+                      <Typography variant="caption" className="card-text" sx={{ display: 'block', mt: 1 }}>
+                        Variación:
+                        <span style={{ color: c.variacion >= 0 ? "green" : "red", marginLeft: "4px", fontWeight: "bold" }}>
+                          {c.variacion > 0 ? "+" : ""}{c.variacion}%
+                        </span>
+                      </Typography>
+                    )}
                   </CardContent>
                 </Card>
               </Grid>
