@@ -6,7 +6,7 @@ import { getCotizacionesDolar } from "@/services/DolarService";
 import { DualQuoteDTO } from "@/types/Market";
 import {
   Paper, Stack, Typography, Button, Grid, Card, CardContent,
-  CircularProgress, Divider
+  CircularProgress, Divider, Box
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
@@ -64,7 +64,7 @@ export default function CedearsSection() {
   }, [fetchData]);
 
   const symbolsWanted = useMemo(
-    () => new Set(["AAPL.BA","AMZN.BA","NVDA.BA","MSFT.BA","GOOGL.BA","META.BA","TSLA.BA","BRKB.BA","KO.BA"]),
+    () => new Set(["AAPL.BA", "AMZN.BA", "NVDA.BA", "MSFT.BA", "GOOGL.BA", "META.BA", "TSLA.BA", "BRKB.BA", "KO.BA"]),
     []
   );
 
@@ -88,7 +88,7 @@ export default function CedearsSection() {
     const company = COMPANY[d.localSymbol?.toUpperCase() || ""] ?? d.usSymbol;
     return (
       <Card
-        sx={(t)=>({
+        sx={(t) => ({
           bgcolor: t.custom.cardBg,
           border: `1px solid ${t.custom.borderColor}`,
           borderRadius: 3,
@@ -106,7 +106,7 @@ export default function CedearsSection() {
             {isCedearLocal ? `Precio local = CEDEAR · Ratio ${d.cedearRatio}:1` : "Precio local = Acción BYMA (no CEDEAR)"}
           </Typography>
 
-          <Typography sx={(t)=>({ color: t.palette.primary.main, fontWeight: 700 })}>
+          <Typography sx={(t) => ({ color: t.palette.primary.main, fontWeight: 700 })}>
             {d.localSymbol} ↔ {d.usSymbol}
           </Typography>
 
@@ -126,16 +126,17 @@ export default function CedearsSection() {
   };
 
   return (
-    <Paper sx={(t)=>({
+    <Paper sx={(t) => ({
       p: { xs: 2.5, md: 3 },
       bgcolor: t.custom.paperBg,
       border: `1px solid ${t.custom.borderColor}59`,
       borderRadius: 3,
+      backdropFilter: "blur(3px)",
     })}>
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
         alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
-        <div>
-          <Typography variant="h5" sx={(t)=>({ fontWeight: 800, color: t.palette.primary.main })}>
+        <Box>
+          <Typography variant="h5" sx={(t) => ({ fontWeight: 800, color: t.palette.primary.main })}>
             CEDEARs ↔ Acción USA
           </Typography>
           {updatedAt && (
@@ -143,20 +144,20 @@ export default function CedearsSection() {
               Última actualización: {updatedAt.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" })}
             </Typography>
           )}
-        </div>
+        </Box>
         <Button
           onClick={fetchData}
           variant="outlined"
           color="primary"
           startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
           disabled={loading}
-          sx={(t)=>({ borderColor: t.palette.primary.main, color: t.palette.primary.main, "&:hover": { borderColor: t.palette.primary.main } })}
+          sx={(t) => ({ borderColor: t.palette.primary.main, color: t.palette.primary.main, "&:hover": { borderColor: t.palette.primary.main } })}
         >
           {loading ? "Actualizando..." : "Actualizar"}
         </Button>
       </Stack>
 
-      <Divider sx={(t)=>({ my: 2.5, borderColor: t.custom.divider })} />
+      <Divider sx={(t) => ({ my: 2.5, borderColor: t.custom.divider })} />
 
       {withDerived.length === 0 && !loading && (
         <Typography color="text.secondary">No se encontraron cotizaciones.</Typography>

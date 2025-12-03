@@ -6,7 +6,7 @@ import { getCotizacionesDolar } from "@/services/DolarService";
 import { DualQuoteDTO } from "@/types/Market";
 import {
   Paper, Stack, Alert, Typography, Button, Card, CardContent,
-  CircularProgress, Divider, Grid
+  CircularProgress, Divider, Grid, Box
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
@@ -29,12 +29,12 @@ function isCCL(nombreRaw: string) {
 type PairReq = { localBA: string; usa: string; name: string; cedearRatio?: number | null };
 
 const ENERGETICO: PairReq[] = [
-  { localBA: "YPFD.BA", usa: "YPF",  name: "YPF" },
-  { localBA: "PAMP.BA", usa: "PAM",  name: "Pampa Energía" },
+  { localBA: "YPFD.BA", usa: "YPF", name: "YPF" },
+  { localBA: "PAMP.BA", usa: "PAM", name: "Pampa Energía" },
   { localBA: "VIST.BA", usa: "VIST", name: "Vista Energy" },
 ];
 const BANCARIO: PairReq[] = [
-  { localBA: "BMA.BA",  usa: "BMA",  name: "Banco Macro" },
+  { localBA: "BMA.BA", usa: "BMA", name: "Banco Macro" },
   { localBA: "GGAL.BA", usa: "GGAL", name: "Banco Galicia" },
   { localBA: "SUPV.BA", usa: "SUPV", name: "Banco Supervielle" },
 ];
@@ -99,12 +99,12 @@ export default function AccionesARSection() {
   }
 
   const energetico = useMemo(() => pick(ENERGETICO), [bySymbol, cclRate]);
-  const bancario   = useMemo(() => pick(BANCARIO),   [bySymbol, cclRate]);
-  const extra      = useMemo(() => pick(EXTRA),      [bySymbol, cclRate]);
+  const bancario = useMemo(() => pick(BANCARIO), [bySymbol, cclRate]);
+  const extra = useMemo(() => pick(EXTRA), [bySymbol, cclRate]);
 
   const rowsEnergetico = useMemo(() => chunk(energetico, 3), [energetico]);
-  const rowsBancario   = useMemo(() => chunk(bancario, 3),   [bancario]);
-  const rowsExtra      = useMemo(() => chunk(extra, 3),      [extra]);
+  const rowsBancario = useMemo(() => chunk(bancario, 3), [bancario]);
+  const rowsExtra = useMemo(() => chunk(extra, 3), [extra]);
 
   const UnifiedCard = (d: DualQuoteDTO & { name?: string }) => {
     const isCedearLocal = d.cedearRatio != null;
@@ -128,7 +128,7 @@ export default function AccionesARSection() {
             {isCedearLocal ? `Precio local = CEDEAR · Ratio ${d.cedearRatio}:1` : "Precio local = Acción BYMA (no CEDEAR)"}
           </Typography>
 
-          <Typography sx={(t)=>({ color: t.palette.primary.main, fontWeight: 700 })}>
+          <Typography sx={(t) => ({ color: t.palette.primary.main, fontWeight: 700 })}>
             {d.localSymbol} ↔ {d.usSymbol}
           </Typography>
 
@@ -148,17 +148,18 @@ export default function AccionesARSection() {
   };
 
   return (
-    <Paper sx={(t)=>({
+    <Paper sx={(t) => ({
       p: { xs: 2.5, md: 3 },
       bgcolor: t.custom.paperBg,
       border: `1px solid ${t.custom.borderColor}59`,
       borderRadius: 3,
+      backdropFilter: "blur(3px)",
     })}>
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
         alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
-        <div>
+        <Box>
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-          <Typography variant="h5" sx={(t)=>({ fontWeight: 800, color: t.palette.primary.main })}>
+          <Typography variant="h5" sx={(t) => ({ fontWeight: 800, color: t.palette.primary.main })}>
             Empresas Argentinas ↔ ADR / CEDEARs
           </Typography>
           {updatedAt && (
@@ -166,22 +167,22 @@ export default function AccionesARSection() {
               Última actualización: {updatedAt.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" })}
             </Typography>
           )}
-        </div>
+        </Box>
         <Button
           onClick={fetchData}
           variant="outlined"
           color="primary"
           startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
           disabled={loading}
-          sx={(t)=>({ borderColor: t.palette.primary.main, color: t.palette.primary.main, "&:hover": { borderColor: t.palette.primary.main } })}
+          sx={(t) => ({ borderColor: t.palette.primary.main, color: t.palette.primary.main, "&:hover": { borderColor: t.palette.primary.main } })}
         >
           {loading ? "Actualizando..." : "Actualizar"}
         </Button>
       </Stack>
 
-      <Divider sx={(t)=>({ my: 2.5, borderColor: t.custom.divider })} />
+      <Divider sx={(t) => ({ my: 2.5, borderColor: t.custom.divider })} />
 
-      <Typography variant="subtitle1" sx={(t)=>({ fontWeight: 700, mb: 1, color: t.palette.primary.main })}>
+      <Typography variant="subtitle1" sx={(t) => ({ fontWeight: 700, mb: 1, color: t.palette.primary.main })}>
         Sector Energético
       </Typography>
       <Stack spacing={3}>
@@ -196,9 +197,9 @@ export default function AccionesARSection() {
         ))}
       </Stack>
 
-      <Divider sx={(t)=>({ my: 2.5, borderColor: t.custom.dividerSoft })} />
+      <Divider sx={(t) => ({ my: 2.5, borderColor: t.custom.dividerSoft })} />
 
-      <Typography variant="subtitle1" sx={(t)=>({ fontWeight: 700, mb: 1, color: t.palette.primary.main })}>
+      <Typography variant="subtitle1" sx={(t) => ({ fontWeight: 700, mb: 1, color: t.palette.primary.main })}>
         Sector Bancario
       </Typography>
       <Stack spacing={3}>
@@ -213,9 +214,9 @@ export default function AccionesARSection() {
         ))}
       </Stack>
 
-      <Divider sx={(t)=>({ my: 2.5, borderColor: t.custom.dividerSoft })} />
+      <Divider sx={(t) => ({ my: 2.5, borderColor: t.custom.dividerSoft })} />
 
-      <Typography variant="subtitle1" sx={(t)=>({ fontWeight: 700, mb: 1, color: t.palette.primary.main })}>
+      <Typography variant="subtitle1" sx={(t) => ({ fontWeight: 700, mb: 1, color: t.palette.primary.main })}>
         Otros
       </Typography>
       <Stack spacing={3}>

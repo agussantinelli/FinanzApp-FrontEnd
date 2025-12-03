@@ -37,7 +37,7 @@ export default function CryptoSection() {
 
   const CryptoCard = (c: CryptoTopDTO) => (
     <Card
-      sx={(t)=>({
+      sx={(t) => ({
         bgcolor: t.custom.cardBg,
         border: `1px solid ${t.custom.borderColor}`,
         borderRadius: 3,
@@ -51,7 +51,7 @@ export default function CryptoSection() {
       })}
     >
       <CardContent sx={{ flexGrow: 1, minHeight: 110 }}>
-        <Typography variant="h6" sx={(t)=>({ color: t.palette.primary.main, fontWeight: 700 })} noWrap title={`${c.name} (${c.symbol})`}>
+        <Typography variant="h6" sx={(t) => ({ color: t.palette.primary.main, fontWeight: 700 })} noWrap title={`${c.name} (${c.symbol})`}>
           {c.name} ({c.symbol})
         </Typography>
         <Typography>
@@ -65,16 +65,17 @@ export default function CryptoSection() {
   );
 
   return (
-    <Paper sx={(t)=>({
+    <Paper sx={(t) => ({
       p: { xs: 2.5, md: 3 },
       bgcolor: t.custom.paperBg,
       border: `1px solid ${t.custom.borderColor}59`,
       borderRadius: 3,
+      backdropFilter: "blur(3px)",
     })}>
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
         alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
         <Box>
-          <Typography variant="h5" sx={(t)=>({ fontWeight: 800, color: t.palette.primary.main })}>
+          <Typography variant="h5" sx={(t) => ({ fontWeight: 800, color: t.palette.primary.main })}>
             CriptoMonedas Top 10 por Market Cap
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -93,13 +94,13 @@ export default function CryptoSection() {
           color="primary"
           startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
           disabled={loading}
-          sx={(t)=>({ borderColor: t.palette.primary.main, color: t.palette.primary.main, "&:hover": { borderColor: t.palette.primary.main } })}
+          sx={(t) => ({ borderColor: t.palette.primary.main, color: t.palette.primary.main, "&:hover": { borderColor: t.palette.primary.main } })}
         >
           {loading ? "Actualizando..." : "Actualizar"}
         </Button>
       </Stack>
 
-      <Divider sx={(t)=>({ my: 2.5, borderColor: t.custom.divider })} />
+      <Divider sx={(t) => ({ my: 2.5, borderColor: t.custom.divider })} />
 
       <Stack spacing={{ xs: 2, md: 3 }}>
         <Grid container spacing={3} alignItems="stretch">
