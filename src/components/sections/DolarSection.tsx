@@ -10,6 +10,7 @@ import {
 import RefreshIcon from "@mui/icons-material/Refresh";
 import Link from "next/link";
 import BarChartIcon from "@mui/icons-material/BarChart";
+import "./styles/DolarSection.css";
 
 function formatARS(n?: number) {
   if (typeof n !== "number" || Number.isNaN(n)) return "—";
@@ -71,21 +72,15 @@ export default function DolarSection() {
     return out;
   }, [data]);
 
-  const firstRow  = useMemo(() => uniqueData.slice(0, 4), [uniqueData]);
-  const secondRow = useMemo(() => uniqueData.slice(4),     [uniqueData]);
+  const firstRow = useMemo(() => uniqueData.slice(0, 4), [uniqueData]);
+  const secondRow = useMemo(() => uniqueData.slice(4), [uniqueData]);
 
   return (
-    <Paper sx={(t)=>({
-      p: { xs: 2.5, md: 3 },
-      bgcolor: t.custom.paperBg,
-      border: `1px solid ${t.custom.borderColor}59`,
-      borderRadius: 3,
-      backdropFilter: "blur(3px)",
-    })}>
+    <Paper className="section-paper">
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
         alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
         <Box>
-          <Typography variant="h5" sx={(t)=>({ fontWeight: 800, color: t.palette.primary.main })}>
+          <Typography variant="h5" className="header-title">
             Cotizaciones del dólar
           </Typography>
           {updatedAt && (
@@ -102,7 +97,7 @@ export default function DolarSection() {
             variant="contained"
             color="primary"
             startIcon={<BarChartIcon />}
-            sx={(t)=>({ bgcolor: t.palette.primary.main, color: "#000", "&:hover": { bgcolor: t.palette.primary.main } })}
+            className="chart-button"
           >
             Ver gráfico
           </Button>
@@ -113,14 +108,14 @@ export default function DolarSection() {
             color="primary"
             startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
             disabled={loading}
-            sx={(t)=>({ borderColor: t.palette.primary.main, color: t.palette.primary.main, "&:hover": { borderColor: t.palette.primary.main } })}
+            className="refresh-button"
           >
             {loading ? "Actualizando..." : "Actualizar"}
           </Button>
         </Stack>
       </Stack>
 
-      <Divider sx={(t)=>({ my: 2.5, borderColor: t.custom.divider })} />
+      <Divider className="section-divider" />
 
       <Stack spacing={{ xs: 2, md: 3 }}>
         <Grid container spacing={3} justifyContent="center">
@@ -128,25 +123,15 @@ export default function DolarSection() {
             const label = normalizeName(c?.nombre) || "—";
             return (
               <Grid item xs={12} sm={6} md={3} key={`row1-${i}`} component="div">
-                <Card
-                  sx={(t)=>({
-                    bgcolor: t.custom.cardBg,
-                    border: `1px solid ${t.custom.borderColor}`,
-                    borderRadius: 3,
-                    textAlign: "center",
-                    boxShadow: t.custom.shadow,
-                    transition: "all 0.3s ease",
-                    "&:hover": { transform: "translateY(-5px)", boxShadow: t.custom.shadowHover },
-                  })}
-                >
+                <Card className="dolar-card">
                   <CardContent>
-                    <Typography variant="h6" sx={(t)=>({ color: t.palette.primary.main, fontWeight: 700, mb: 0.5 })}>
+                    <Typography variant="h6" className="card-title">
                       {label}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: "#fff" }}>
+                    <Typography variant="body2" className="card-text">
                       Compra: <strong>{formatARS(c?.compra)}</strong>
                     </Typography>
-                    <Typography variant="body2" sx={{ color: "#fff" }}>
+                    <Typography variant="body2" className="card-text">
                       Venta: <strong>{formatARS(c?.venta)}</strong>
                     </Typography>
                   </CardContent>
@@ -162,25 +147,15 @@ export default function DolarSection() {
               const label = normalizeName(c?.nombre) || "—";
               return (
                 <Grid item xs={12} sm={6} md={3} key={`row2-${i}`} component="div">
-                  <Card
-                    sx={(t)=>({
-                      bgcolor: t.custom.cardBg,
-                      border: `1px solid ${t.custom.borderColor}`,
-                      borderRadius: 3,
-                      textAlign: "center",
-                      boxShadow: t.custom.shadow,
-                      transition: "all 0.3s ease",
-                      "&:hover": { transform: "translateY(-5px)", boxShadow: t.custom.shadowHover },
-                    })}
-                  >
+                  <Card className="dolar-card">
                     <CardContent>
-                      <Typography variant="h6" sx={(t)=>({ color: t.palette.primary.main, fontWeight: 700, mb: 0.5 })}>
+                      <Typography variant="h6" className="card-title">
                         {label}
                       </Typography>
-                      <Typography variant="body2" sx={{ color: "#fff" }}>
+                      <Typography variant="body2" className="card-text">
                         Compra: <strong>{formatARS(c?.compra)}</strong>
                       </Typography>
-                      <Typography variant="body2" sx={{ color: "#fff" }}>
+                      <Typography variant="body2" className="card-text">
                         Venta: <strong>{formatARS(c?.venta)}</strong>
                       </Typography>
                     </CardContent>

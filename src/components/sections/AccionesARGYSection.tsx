@@ -9,18 +9,8 @@ import {
   CircularProgress, Divider, Grid, Box
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import "./styles/AccionesARGYSection.css";
 
-function formatARS(n: number) {
-  return n.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 2 });
-}
-function formatUSD(n: number) {
-  return n.toLocaleString("es-AR", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
-}
-function chunk<T>(arr: T[], size: number): T[][] {
-  const out: T[][] = [];
-  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
-  return out;
-}
 function isCCL(nombreRaw: string) {
   const n = (nombreRaw || "").toLowerCase();
   return n.includes("contado") || n.includes("liqui") || n.includes("liquid") || n.includes("ccl");
@@ -43,6 +33,23 @@ const EXTRA: PairReq[] = [
   { localBA: "CEPU.BA", usa: "CEPU", name: "Central Puerto" },
   { localBA: "MELI.BA", usa: "MELI", name: "Mercado Libre", cedearRatio: 2 },
 ];
+
+function chunk<T>(array: T[], size: number): T[][] {
+  const result: T[][] = [];
+  for (let i = 0; i < array.length; i += size) {
+    result.push(array.slice(i, i + size));
+  }
+  return result;
+}
+
+function formatARS(val: number) {
+  return val.toLocaleString("es-AR", { style: "currency", currency: "ARS" });
+}
+
+function formatUSD(val: number | null | undefined) {
+  if (val === undefined || val === null || isNaN(val)) return "N/A";
+  return val.toLocaleString("en-US", { style: "currency", currency: "USD" });
+}
 
 export default function AccionesARSection() {
   const ALL_PAIRS = useMemo(() => [...ENERGETICO, ...BANCARIO, ...EXTRA], []);
@@ -109,37 +116,28 @@ export default function AccionesARSection() {
   const UnifiedCard = (d: DualQuoteDTO & { name?: string }) => {
     const isCedearLocal = d.cedearRatio != null;
     return (
-      <Card
-        sx={(t) => ({
-          bgcolor: t.custom.cardBg,
-          border: `1px solid ${t.custom.borderColor}`,
-          borderRadius: 3,
-          boxShadow: t.custom.shadow,
-          transition: "all .3s",
-          "&:hover": { transform: "translateY(-5px)", boxShadow: t.custom.shadowHover }
-        })}
-      >
+      <Card className="acciones-card">
         <CardContent>
-          <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.25 }}>
+          <Typography variant="h6" className="card-title">
             {d.name ?? d.usSymbol}
           </Typography>
 
-          <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 0.75 }}>
+          <Typography variant="caption" className="card-subtitle">
             {isCedearLocal ? `Precio local = CEDEAR · Ratio ${d.cedearRatio}:1` : "Precio local = Acción BYMA (no CEDEAR)"}
           </Typography>
 
-          <Typography sx={(t) => ({ color: t.palette.primary.main, fontWeight: 700 })}>
+          <Typography className="card-symbol">
             {d.localSymbol} ↔ {d.usSymbol}
           </Typography>
 
-          <Typography sx={{ mt: 1 }}>
+          <Typography className="card-text">
             Local (ARS): <strong>{formatARS(d.localPriceARS)}</strong>
           </Typography>
           <Typography>
             USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong>
           </Typography>
 
-          <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 1 }}>
+          <Typography variant="caption" color="text.secondary" className="card-rate">
             Tasa (CCL): {d.usedDollarRate.toLocaleString("es-AR")}
           </Typography>
         </CardContent>
@@ -148,18 +146,12 @@ export default function AccionesARSection() {
   };
 
   return (
-    <Paper sx={(t) => ({
-      p: { xs: 2.5, md: 3 },
-      bgcolor: t.custom.paperBg,
-      border: `1px solid ${t.custom.borderColor}59`,
-      borderRadius: 3,
-      backdropFilter: "blur(3px)",
-    })}>
+    <Paper className="section-paper">
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
         alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
         <Box>
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-          <Typography variant="h5" sx={(t) => ({ fontWeight: 800, color: t.palette.primary.main })}>
+          <Typography variant="h5" className="header-title">
             Empresas Argentinas ↔ ADR / CEDEARs
           </Typography>
           {updatedAt && (
@@ -174,22 +166,22 @@ export default function AccionesARSection() {
           color="primary"
           startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
           disabled={loading}
-          sx={(t) => ({ borderColor: t.palette.primary.main, color: t.palette.primary.main, "&:hover": { borderColor: t.palette.primary.main } })}
+          className="refresh-button"
         >
           {loading ? "Actualizando..." : "Actualizar"}
         </Button>
       </Stack>
 
-      <Divider sx={(t) => ({ my: 2.5, borderColor: t.custom.divider })} />
+      <Divider className="section-divider" />
 
-      <Typography variant="subtitle1" sx={(t) => ({ fontWeight: 700, mb: 1, color: t.palette.primary.main })}>
+      <Typography variant="subtitle1" className="section-subtitle">
         Sector Energético
       </Typography>
       <Stack spacing={3}>
         {rowsEnergetico.map((row, idx) => (
           <Grid container spacing={3} key={`en-${idx}`}>
             {row.map(d => (
-              <Grid item xs={12} md={4} key={d.localSymbol}>
+              <Grid item xs={12} md={4} key={d.localSymbol} component="div">
                 {UnifiedCard(d)}
               </Grid>
             ))}
@@ -197,16 +189,16 @@ export default function AccionesARSection() {
         ))}
       </Stack>
 
-      <Divider sx={(t) => ({ my: 2.5, borderColor: t.custom.dividerSoft })} />
+      <Divider className="section-divider-soft" />
 
-      <Typography variant="subtitle1" sx={(t) => ({ fontWeight: 700, mb: 1, color: t.palette.primary.main })}>
+      <Typography variant="subtitle1" className="section-subtitle">
         Sector Bancario
       </Typography>
       <Stack spacing={3}>
         {rowsBancario.map((row, idx) => (
           <Grid container spacing={3} key={`ban-${idx}`}>
             {row.map(d => (
-              <Grid item xs={12} md={4} key={d.localSymbol}>
+              <Grid item xs={12} md={4} key={d.localSymbol} component="div">
                 {UnifiedCard(d)}
               </Grid>
             ))}
@@ -214,16 +206,16 @@ export default function AccionesARSection() {
         ))}
       </Stack>
 
-      <Divider sx={(t) => ({ my: 2.5, borderColor: t.custom.dividerSoft })} />
+      <Divider className="section-divider-soft" />
 
-      <Typography variant="subtitle1" sx={(t) => ({ fontWeight: 700, mb: 1, color: t.palette.primary.main })}>
+      <Typography variant="subtitle1" className="section-subtitle">
         Otros
       </Typography>
       <Stack spacing={3}>
         {rowsExtra.map((row, idx) => (
           <Grid container spacing={3} key={`ex-${idx}`}>
             {row.map(d => (
-              <Grid item xs={12} md={4} key={d.localSymbol}>
+              <Grid item xs={12} md={4} key={d.localSymbol} component="div">
                 {UnifiedCard(d)}
               </Grid>
             ))}

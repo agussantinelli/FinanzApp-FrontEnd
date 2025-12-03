@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getTopCryptos } from "@/services/CryptoService";
 import { CryptoTopDTO } from "@/types/Crypto";
 import {
@@ -8,8 +8,10 @@ import {
   CircularProgress, Divider, Box
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import "./styles/CryptoSection.css";
 
-function formatUSD(n: number) {
+function formatUSD(n?: number) {
+  if (typeof n !== "number" || Number.isNaN(n)) return "—";
   return n.toLocaleString("es-AR", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 }
 
@@ -20,7 +22,7 @@ export default function CryptoSection() {
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const res = await getTopCryptos(10);
+    const res = await getTopCryptos();
     setData(res);
     setUpdatedAt(new Date());
     setLoading(false);
@@ -32,50 +34,12 @@ export default function CryptoSection() {
     return () => clearInterval(id);
   }, [fetchData]);
 
-  const firstRow = useMemo(() => data.slice(0, 5), [data]);
-  const secondRow = useMemo(() => data.slice(5, 10), [data]);
-
-  const CryptoCard = (c: CryptoTopDTO) => (
-    <Card
-      sx={(t) => ({
-        bgcolor: t.custom.cardBg,
-        border: `1px solid ${t.custom.borderColor}`,
-        borderRadius: 3,
-        boxShadow: t.custom.shadow,
-        transition: "all .3s",
-        "&:hover": { transform: "translateY(-5px)", boxShadow: t.custom.shadowHover },
-        height: "100%",
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-      })}
-    >
-      <CardContent sx={{ flexGrow: 1, minHeight: 110 }}>
-        <Typography variant="h6" sx={(t) => ({ color: t.palette.primary.main, fontWeight: 700 })} noWrap title={`${c.name} (${c.symbol})`}>
-          {c.name} ({c.symbol})
-        </Typography>
-        <Typography>
-          Precio: <strong>{formatUSD(c.priceUsd)}</strong>
-        </Typography>
-        <Typography variant="caption" color="text.secondary">
-          Rank #{c.rank} — {c.source}
-        </Typography>
-      </CardContent>
-    </Card>
-  );
-
   return (
-    <Paper sx={(t) => ({
-      p: { xs: 2.5, md: 3 },
-      bgcolor: t.custom.paperBg,
-      border: `1px solid ${t.custom.borderColor}59`,
-      borderRadius: 3,
-      backdropFilter: "blur(3px)",
-    })}>
+    <Paper className="section-paper">
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
         alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
         <Box>
-          <Typography variant="h5" sx={(t) => ({ fontWeight: 800, color: t.palette.primary.main })}>
+          <Typography variant="h5" className="header-title">
             CriptoMonedas Top 10 por Market Cap
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -87,39 +51,66 @@ export default function CryptoSection() {
             </Typography>
           )}
         </Box>
-
         <Button
           onClick={fetchData}
           variant="outlined"
           color="primary"
           startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
           disabled={loading}
-          sx={(t) => ({ borderColor: t.palette.primary.main, color: t.palette.primary.main, "&:hover": { borderColor: t.palette.primary.main } })}
+          className="refresh-button"
         >
-          {loading ? "Actualizando..." : "Actualizar"}
+          {loading ? "Actualizando..." : "ACTUALIZAR"}
         </Button>
       </Stack>
 
-      <Divider sx={(t) => ({ my: 2.5, borderColor: t.custom.divider })} />
+      <Divider className="section-divider" />
 
       <Stack spacing={{ xs: 2, md: 3 }}>
-        <Grid container spacing={3} alignItems="stretch">
-          {firstRow.map((c) => (
-            <Grid item xs={12} sm={6} md={3} key={`row1-${c.symbol}`} sx={{ display: "flex" }}>
-              {CryptoCard(c)}
+        <Grid container spacing={3} justifyContent="center">
+          {data.slice(0, 5).map((c) => (
+            <Grid item xs={12} sm={6} md={3} key={c.symbol} component="div">
+              <Card className="crypto-card">
+                <CardContent>
+                  <Typography variant="h6" className="card-title">
+                    {c.name} ({c.symbol})
+                  </Typography>
+                  <Typography variant="body2" className="card-text">
+                    Precio: <strong>{formatUSD(c.priceUsd)}</strong>
+                  </Typography>
+                  <Typography variant="caption" sx={{ display: "block", mt: 1, color: (c.changePct24h ?? 0) >= 0 ? "#39ff14" : "#ff1744" }}>
+                    24h: {(c.changePct24h ?? 0) > 0 ? "+" : ""}{c.changePct24h}%
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Rank #{c.rank}
+                  </Typography>
+                </CardContent>
+              </Card>
             </Grid>
           ))}
         </Grid>
 
-        {secondRow.length > 0 && (
-          <Grid container spacing={3} alignItems="stretch">
-            {secondRow.map((c) => (
-              <Grid item xs={12} sm={6} md={3} key={`row2-${c.symbol}`} sx={{ display: "flex" }}>
-                {CryptoCard(c)}
-              </Grid>
-            ))}
-          </Grid>
-        )}
+        <Grid container spacing={3} justifyContent="center">
+          {data.slice(5, 10).map((c) => (
+            <Grid item xs={12} sm={6} md={3} key={c.symbol} component="div">
+              <Card className="crypto-card">
+                <CardContent>
+                  <Typography variant="h6" className="card-title">
+                    {c.name} ({c.symbol})
+                  </Typography>
+                  <Typography variant="body2" className="card-text">
+                    Precio: <strong>{formatUSD(c.priceUsd)}</strong>
+                  </Typography>
+                  <Typography variant="caption" sx={{ display: "block", mt: 1, color: (c.changePct24h ?? 0) >= 0 ? "#39ff14" : "#ff1744" }}>
+                    24h: {(c.changePct24h ?? 0) > 0 ? "+" : ""}{c.changePct24h}%
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Rank #{c.rank}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       </Stack>
     </Paper>
   );

@@ -1,0 +1,72 @@
+.section-paper {
+    padding: 20px;
+    background-color: rgba(0, 255, 0, 0.03);
+    border: 1px solid rgba(57, 255, 20, 0.35);
+    border-radius: 36px;
+    backdrop-filter: blur(3px);
+}
+
+@media (min-width: 900px) {
+    .section-paper {
+        padding: 24px;
+    }
+}
+
+.header-title {
+    font-weight: 800 !important;
+    color: #39ff14 !important;
+}
+
+.chart-button {
+    background-color: #39ff14 !important;
+    color: #000 !important;
+}
+
+.chart-button:hover {
+    background-color: #39ff14 !important;
+}
+
+.refresh-button {
+    border-color: #39ff14 !important;
+    color: #39ff14 !important;
+}
+
+.refresh-button:hover {
+    border-color: #39ff14 !important;
+}
+
+.section-divider {
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
+    border-color: rgba(57, 255, 20, 0.25) !important;
+}
+
+.dolar-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    background-color: rgba(0, 255, 0, 0.05) !important;
+    border: 1px solid rgba(57, 255, 20, 0.25) !important;
+    border-radius: 36px !important;
+    overflow: hidden;
+    backdrop-filter: blur(3px);
+    box-shadow: 0 0 12px rgba(57, 255, 20, 0.25) !important;
+    transition: all 0.25s ease !important;
+}
+
+.dolar-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 18px rgba(57, 255, 20, 0.5) !important;
+}
+
+.card-title {
+    color: #39ff14 !important;
+    font-weight: 700 !important;
+    margin-bottom: 4px !important;
+}
+
+.card-text {
+    color: #fff !important;
+}
