@@ -17,4 +17,8 @@ export interface DualQuoteDTO {
   localPriceUSD: number;
   usPriceARS: number;
   theoreticalCedearARS?: number;
+  localChange?: number;
+  localChangePct?: number;
+  usChange?: number;
+  usChangePct?: number;
 }

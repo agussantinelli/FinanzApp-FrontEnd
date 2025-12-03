@@ -105,9 +105,19 @@ export default function CedearsSection() {
 
           <Typography className="card-text">
             CEDEAR (ARS): <strong>{formatARS(d.localPriceARS)}</strong>
+            {d.localChangePct !== undefined && d.localChangePct !== null && (
+              <span style={{ color: d.localChangePct >= 0 ? "green" : "red", marginLeft: "8px", fontSize: "0.9em" }}>
+                {d.localChangePct > 0 ? "+" : ""}{d.localChangePct}%
+              </span>
+            )}
           </Typography>
           <Typography>
             Acción USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong>
+            {d.usChangePct !== undefined && d.usChangePct !== null && (
+              <span style={{ color: d.usChangePct >= 0 ? "green" : "red", marginLeft: "8px", fontSize: "0.9em" }}>
+                {d.usChangePct > 0 ? "+" : ""}{d.usChangePct}%
+              </span>
+            )}
           </Typography>
 
           <Typography variant="caption" color="text.secondary" className="card-rate">
