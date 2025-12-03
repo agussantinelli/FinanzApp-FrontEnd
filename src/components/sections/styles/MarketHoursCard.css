@@ -3,7 +3,7 @@
     border: 1px solid rgba(57, 255, 20, 0.25) !important;
     border-radius: 36px !important;
     box-shadow: 0 0 12px rgba(57, 255, 20, 0.25) !important;
-    max-width: 420px;
+    max-width: 500px;
     margin-left: auto !important;
     margin-right: auto !important;
     margin-top: 24px !important;
@@ -18,11 +18,13 @@
 
 .card-content {
     padding: 20px !important;
+    text-align: center !important;
 }
 
 .header-box {
     display: flex;
     align-items: center;
+    justify-content: center !important;
     margin-bottom: 12px !important;
 }
 
@@ -44,4 +46,5 @@
     display: block !important;
     margin-top: 12px !important;
     color: #9ca3af !important;
+    text-align: center !important;
 }

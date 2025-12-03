@@ -21,7 +21,7 @@ export default function MarketHoursCard() {
         <Typography variant="body2" className="body-text">
           <strong>Nasdaq</strong>: 11:30 a 18:00 — rueda regular.
         </Typography>
-        <Typography variant="body2">
+        <Typography variant="body2" className="body-text">
           <strong>BYMA</strong> (Bolsa y Mercados Argentinos): 10:30 a 17:00 — acciones, CEDEARs y otros instrumentos.
         </Typography>
 

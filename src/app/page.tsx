@@ -65,8 +65,8 @@ export default function HomePage() {
         <CryptoSection />
       </Box>
 
-     <Box sx={{ mt: 2 }}>
-      <MarketHoursCard />
+      <Box sx={{ mt: 3, display: "flex", justifyContent: "center" }}>
+        <MarketHoursCard />
       </Box>
     </Container>
   );
