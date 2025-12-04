@@ -8,13 +8,21 @@ import {
     CircularProgress, Divider, Box
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import "./styles/CedearsSection.css"; // Reusing styles as requested
+import "./styles/IndexesSection.css";
 
 function formatUSD(n?: number) {
     if (typeof n !== "number" || Number.isNaN(n)) return "—";
-    // For large integers (like Riesgo Pais), don't show decimals
     const digits = n > 1000 && Number.isInteger(n) ? 0 : 2;
     return n.toLocaleString("es-AR", { style: "currency", currency: "USD", maximumFractionDigits: digits });
+}
+
+// Helper to find index by symbol or name
+function findIndex(data: DualQuoteDTO[], queries: string[]) {
+    return data.find(d => {
+        const s = (d.usSymbol || "").toUpperCase();
+        const n = (d.dollarRateName || "").toUpperCase();
+        return queries.some(q => s.includes(q) || n.includes(q));
+    });
 }
 
 export default function IndexesSection() {
@@ -29,7 +37,7 @@ export default function IndexesSection() {
             setData(indices);
             setUpdatedAt(new Date());
         } catch (e) {
-            console.error("❌ Error en IndicesSection:", e);
+            console.error("❌ Error en IndexesSection:", e);
         } finally {
             setLoading(false);
         }
@@ -41,26 +49,46 @@ export default function IndexesSection() {
         return () => clearInterval(id);
     }, [fetchData]);
 
-    const { international, local } = useMemo(() => {
-        if (!data || data.length === 0) return { international: [], local: [] };
+    const { row1, row2, national } = useMemo(() => {
+        if (!data || data.length === 0) return { row1: [], row2: [], national: [] };
 
-        const international = data.slice(0, 6);
-        const local = data.slice(6);
-        return { international, local };
+        // International Row 1: SPY, NASDAQ, Dow Jones
+        const spy = findIndex(data, ["SPY"]);
+        const nasdaq = findIndex(data, ["NASDAQ", "NDX", "IXIC", "QQQ"]);
+        const dow = findIndex(data, ["DOW", "DJI", "DIA"]);
+
+        // International Row 2: XLP, Emergentes, EWZ
+        const xlp = findIndex(data, ["XLP"]);
+        const emergentes = findIndex(data, ["EMERGENTES", "EEM"]);
+        const ewz = findIndex(data, ["EWZ"]);
+
+        // National: Riesgo Pais, Merval
+        const riesgo = findIndex(data, ["RIESGO", "PAIS"]);
+        const merval = findIndex(data, ["MERVAL", "MERV"]);
+
+        return {
+            row1: [spy, nasdaq, dow].filter(Boolean) as DualQuoteDTO[],
+            row2: [xlp, emergentes, ewz].filter(Boolean) as DualQuoteDTO[],
+            national: [riesgo, merval].filter(Boolean) as DualQuoteDTO[],
+        };
     }, [data]);
 
     const IndexCard = (d: DualQuoteDTO) => {
-        const isRiesgoPais = d.dollarRateName === "Riesgo País";
-        const title = d.dollarRateName || d.localSymbol || d.usSymbol;
+        const isRiesgoPais = (d.dollarRateName || "").includes("Riesgo");
+        // Use specific names if available, otherwise fallback
+        let title = d.dollarRateName || d.usSymbol;
+        if (d.usSymbol === "SPY") title = "S&P 500 (SPY)";
+        if (d.usSymbol?.includes("QQQ") || d.usSymbol?.includes("NDX")) title = "NASDAQ 100";
+        if (d.usSymbol?.includes("DIA") || d.usSymbol?.includes("DJI")) title = "Dow Jones";
 
         return (
-            <Card className="cedear-card" sx={isRiesgoPais ? { border: "1px solid #ff9800" } : {}}>
+            <Card className="index-card" sx={isRiesgoPais ? { border: "1px solid #ff9800 !important" } : {}}>
                 <CardContent>
                     <Typography variant="h6" className="card-title">
                         {title}
                     </Typography>
 
-                    <Typography className="card-text" sx={{ mt: 2 }}>
+                    <Typography className="card-text">
                         Valor: <strong>{formatUSD(d.usPriceUSD)}</strong>
                         {d.usChangePct !== undefined && d.usChangePct !== null && (
                             <span style={{ color: d.usChangePct >= 0 ? "green" : "red", marginLeft: "8px", fontSize: "0.9em" }}>
@@ -108,30 +136,43 @@ export default function IndexesSection() {
                 <Typography color="text.secondary">No se encontraron índices.</Typography>
             )}
 
-            {/* International Indices */}
-            {international.length > 0 && (
+            {/* International */}
+            {(row1.length > 0 || row2.length > 0) && (
                 <>
-                    <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: "bold", color: "text.secondary" }}>
+                    <Typography variant="subtitle1" className="section-subtitle">
                         Internacionales
                     </Typography>
-                    <Grid container spacing={3} justifyContent="center" sx={{ mb: 4 }}>
-                        {international.map((d, idx) => (
-                            <Grid item xs={12} sm={6} md={4} key={d.usSymbol || idx} component="div">
-                                {IndexCard(d)}
+                    <Stack spacing={3}>
+                        {row1.length > 0 && (
+                            <Grid container spacing={3} justifyContent="center">
+                                {row1.map((d, idx) => (
+                                    <Grid item xs={12} sm={6} md={4} key={d.usSymbol || idx} component="div">
+                                        {IndexCard(d)}
+                                    </Grid>
+                                ))}
                             </Grid>
-                        ))}
-                    </Grid>
+                        )}
+                        {row2.length > 0 && (
+                            <Grid container spacing={3} justifyContent="center">
+                                {row2.map((d, idx) => (
+                                    <Grid item xs={12} sm={6} md={4} key={d.usSymbol || idx} component="div">
+                                        {IndexCard(d)}
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        )}
+                    </Stack>
                 </>
             )}
 
-            {/* Local Indices */}
-            {local.length > 0 && (
+            {national.length > 0 && (
                 <>
-                    <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: "bold", color: "text.secondary" }}>
-                        Locales
+                    <Divider className="section-divider-soft" />
+                    <Typography variant="subtitle1" className="section-subtitle">
+                        Nacionales
                     </Typography>
                     <Grid container spacing={3} justifyContent="center">
-                        {local.map((d, idx) => (
+                        {national.map((d, idx) => (
                             <Grid item xs={12} sm={6} md={4} key={d.usSymbol || idx} component="div">
                                 {IndexCard(d)}
                             </Grid>
