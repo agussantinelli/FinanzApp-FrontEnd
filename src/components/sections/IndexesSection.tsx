@@ -125,7 +125,7 @@ export default function IndexesSection() {
                     </Typography>
 
                     <Typography className="card-text">
-                        En Pesos: <strong>{formatARS(d.usPriceARS)}</strong>
+                        CEDEAR (ARS): <strong>{formatARS(d.usPriceARS)}</strong>
                         {d.usChangePct !== undefined && d.usChangePct !== null && (
                             <span style={{ color: d.usChangePct >= 0 ? "green" : "red", marginLeft: "8px", fontSize: "0.9em" }}>
                                 {d.usChangePct > 0 ? "+" : ""}{d.usChangePct}%
@@ -134,7 +134,7 @@ export default function IndexesSection() {
                     </Typography>
 
                     <Typography className="card-text">
-                        En USD/Pts: <strong>{formatUSD(d.usPriceUSD)}</strong>
+                        Indice USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong>
                         {d.usChangePct !== undefined && d.usChangePct !== null && (
                             <span style={{ color: d.usChangePct >= 0 ? "green" : "red", marginLeft: "8px", fontSize: "0.9em" }}>
                                 {d.usChangePct > 0 ? "+" : ""}{d.usChangePct}%
