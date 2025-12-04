@@ -10,7 +10,6 @@ import { DualQuoteDTO } from "@/types/Market";
 import { getIndices } from "@/services/StocksService";
 import "./styles/IndexesSection.css";
 
-// --- UTILIDADES ---
 function formatARS(val?: number) {
     if (val === undefined || val === null || isNaN(val)) return "—";
     return val.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 });
@@ -25,12 +24,12 @@ function formatUSD(val?: number) {
 function findIndex(data: DualQuoteDTO[], queries: string[]) {
     return data.find(d => {
         const s = (d.usSymbol || "").toUpperCase();
+        const l = (d.localSymbol || "").toUpperCase();
         const n = (d.dollarRateName || "").toUpperCase();
-        return queries.some(q => s.includes(q) || n.includes(q));
+        return queries.some(q => s.includes(q) || l.includes(q) || n.includes(q));
     });
 }
 
-// --- COMPONENTE PRINCIPAL ---
 export default function IndexesSection() {
     const [data, setData] = useState<DualQuoteDTO[]>([]);
     const [loading, setLoading] = useState(false);
@@ -79,11 +78,15 @@ export default function IndexesSection() {
     const IndexCard = (d: DualQuoteDTO) => {
         const isRiesgo = d.localSymbol === "RIESGO" || d.dollarRateName === "Puntos";
 
-        let title = d.dollarRateName || d.usSymbol;
+        let title = d.usSymbol;
         if (d.usSymbol?.includes("GSPC") || d.usSymbol?.includes("SPY")) title = "S&P 500";
         if (d.usSymbol?.includes("IXIC") || d.usSymbol?.includes("NDX")) title = "NASDAQ 100";
         if (d.usSymbol?.includes("DIA")) title = "Dow Jones";
+        if (d.usSymbol?.includes("XLP")) title = "Consumo (XLP)";
+        if (d.usSymbol?.includes("EEM")) title = "Emergentes (EEM)";
+        if (d.usSymbol?.includes("EWZ")) title = "Brasil (EWZ)";
         if (d.localSymbol === "RIESGO") title = "Riesgo País";
+        if (d.localSymbol === "MERVAL" || d.localSymbol === "MERV") title = "Merval";
 
         if (isRiesgo) {
             return (
@@ -91,6 +94,9 @@ export default function IndexesSection() {
                     <CardContent sx={{ textAlign: 'center', padding: '24px !important' }}>
                         <Typography variant="h6" className="card-title" sx={{ mb: 1 }}>
                             {title}
+                        </Typography>
+                        <Typography variant="caption" className="card-subtitle" sx={{ mb: 2, display: 'block' }}>
+                            Índice Nacional
                         </Typography>
                         <Typography variant="h3" className="risk-value">
                             {Math.round(d.usPriceUSD)}
@@ -111,7 +117,7 @@ export default function IndexesSection() {
                     </Typography>
 
                     <Typography variant="caption" className="card-subtitle">
-                        {d.dollarRateName === 'ARS' ? 'Índice Local' : 'Índice Internacional'}
+                        {d.dollarRateName === 'ARS' ? 'Índice Nacional' : 'Índice Internacional'}
                     </Typography>
 
                     <Typography className="card-symbol">
