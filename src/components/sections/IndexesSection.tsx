@@ -92,16 +92,16 @@ export default function IndexesSection() {
             return (
                 <Card className="acciones-card risk-card">
                     <CardContent sx={{ textAlign: 'center', padding: '24px !important' }}>
-                        <Typography variant="h6" className="card-title" sx={{ mb: 1 }}>
+                        <Typography variant="h6" className="card-title-risk" sx={{ mb: 1 }}>
                             {title}
                         </Typography>
-                        <Typography variant="caption" className="card-subtitle" sx={{ mb: 2, display: 'block' }}>
+                        <Typography variant="caption" className="card-subtitle-risk" sx={{ mb: 2, display: 'block' }}>
                             Índice Nacional
                         </Typography>
                         <Typography variant="h3" className="risk-value">
                             {Math.round(d.usPriceUSD)}
                         </Typography>
-                        <Typography variant="caption" color="text.secondary">
+                        <Typography variant="caption" className="card-subtitle-risk" color="text.secondary">
                             Puntos Básicos (pbs)
                         </Typography>
                     </CardContent>
