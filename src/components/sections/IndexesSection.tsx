@@ -101,7 +101,7 @@ export default function IndexesSection() {
                         <Typography variant="h3" className="risk-value">
                             {Math.round(d.usPriceUSD)}
                         </Typography>
-                        <Typography variant="caption" className="card-subtitle-risk" color="text.secondary">
+                        <Typography variant="caption" className="card-subtitle-risk">
                             Puntos Básicos (pbs)
                         </Typography>
                     </CardContent>
