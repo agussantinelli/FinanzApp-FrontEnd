@@ -9,6 +9,7 @@ import Link from "next/link";
 
 import DolarSection from "@/components/sections/DolarSection";
 import CedearsSection from "@/components/sections/CedearsSection";
+import IndicesSection from "@/components/sections/IndicesSection";
 import CryptoSection from "@/components/sections/CryptoSection";
 import AccionesARGYSection from "@/components/sections/AccionesARGYSection";
 import MarketHoursCard from "@/components/sections/MarketHoursCard";
@@ -60,6 +61,9 @@ export default function HomePage() {
       </Box>
       <Box sx={{ mt: 6 }}>
         <CedearsSection />
+      </Box>
+      <Box sx={{ mt: 6 }}>
+        <IndicesSection />
       </Box>
       <Box sx={{ mt: 6 }}>
         <CryptoSection />

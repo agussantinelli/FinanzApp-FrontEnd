@@ -12,3 +12,8 @@ export async function getStockDuals(
   );
   return res.data;
 }
+
+export async function getIndices(): Promise<DualQuoteDTO[]> {
+  const res = await http.get<DualQuoteDTO[]>("/api/stocks/indices");
+  return res.data;
+}
