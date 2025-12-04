@@ -17,7 +17,7 @@ function formatUSD(n?: number) {
     return n.toLocaleString("es-AR", { style: "currency", currency: "USD", maximumFractionDigits: digits });
 }
 
-export default function IndicesSection() {
+export default function IndexesSection() {
     const [data, setData] = useState<DualQuoteDTO[]>([]);
     const [loading, setLoading] = useState(false);
     const [updatedAt, setUpdatedAt] = useState<Date | null>(null);
@@ -41,12 +41,9 @@ export default function IndicesSection() {
         return () => clearInterval(id);
     }, [fetchData]);
 
-    // Split data into International (first 6) and Local (rest)
-    // Assuming backend sends them in order or we just take first 6 as international
     const { international, local } = useMemo(() => {
         if (!data || data.length === 0) return { international: [], local: [] };
 
-        // As per requirement: "separando indices internacionales (los 6 primeros) y locales (merval y riesgo pais)"
         const international = data.slice(0, 6);
         const local = data.slice(6);
         return { international, local };
