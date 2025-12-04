@@ -9,7 +9,7 @@ import Link from "next/link";
 
 import DolarSection from "@/components/sections/DolarSection";
 import CedearsSection from "@/components/sections/CedearsSection";
-import IndicesSection from "@/components/sections/IndexesSection";
+import IndexesSection from "@/components/sections/IndexesSection";
 import CryptoSection from "@/components/sections/CryptoSection";
 import AccionesARGYSection from "@/components/sections/AccionesARGYSection";
 import MarketHoursCard from "@/components/sections/MarketHoursCard";
