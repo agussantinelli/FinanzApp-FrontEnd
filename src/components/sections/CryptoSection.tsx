@@ -66,13 +66,17 @@ export default function CryptoSection() {
       <Divider className="section-divider" />
 
       <Stack spacing={{ xs: 2, md: 3 }}>
+        {/* Row 1: 4 items */}
         <Grid container spacing={3} justifyContent="center">
-          {data.slice(0, 5).map((c) => (
-            <Grid item xs={12} sm={6} md={3} key={c.symbol} component="div">
+          {data.slice(0, 4).map((c) => (
+            <Grid item xs={12} md={3} key={c.symbol} component="div">
               <Card className="crypto-card">
                 <CardContent>
                   <Typography variant="h6" className="card-title">
-                    {c.name} ({c.symbol})
+                    {c.name}
+                  </Typography>
+                  <Typography variant="caption" className="card-subtitle" sx={{ display: "block", mb: 1 }}>
+                    {c.symbol}
                   </Typography>
                   <Typography variant="body2" className="card-text">
                     Precio: <strong>{formatUSD(c.priceUsd)}</strong>
@@ -89,13 +93,44 @@ export default function CryptoSection() {
           ))}
         </Grid>
 
+        {/* Row 2: 4 items */}
         <Grid container spacing={3} justifyContent="center">
-          {data.slice(5, 10).map((c) => (
-            <Grid item xs={12} sm={6} md={3} key={c.symbol} component="div">
+          {data.slice(4, 8).map((c) => (
+            <Grid item xs={12} md={3} key={c.symbol} component="div">
               <Card className="crypto-card">
                 <CardContent>
                   <Typography variant="h6" className="card-title">
-                    {c.name} ({c.symbol})
+                    {c.name}
+                  </Typography>
+                  <Typography variant="caption" className="card-subtitle" sx={{ display: "block", mb: 1 }}>
+                    {c.symbol}
+                  </Typography>
+                  <Typography variant="body2" className="card-text">
+                    Precio: <strong>{formatUSD(c.priceUsd)}</strong>
+                  </Typography>
+                  <Typography variant="caption" sx={{ display: "block", mt: 1, color: (c.changePct24h ?? 0) >= 0 ? "#39ff14" : "#ff1744" }}>
+                    24h: {(c.changePct24h ?? 0) > 0 ? "+" : ""}{c.changePct24h}%
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Rank #{c.rank}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+
+        {/* Row 3: 2 items */}
+        <Grid container spacing={3} justifyContent="center">
+          {data.slice(8, 10).map((c) => (
+            <Grid item xs={12} md={3} key={c.symbol} component="div">
+              <Card className="crypto-card">
+                <CardContent>
+                  <Typography variant="h6" className="card-title">
+                    {c.name}
+                  </Typography>
+                  <Typography variant="caption" className="card-subtitle" sx={{ display: "block", mb: 1 }}>
+                    {c.symbol}
                   </Typography>
                   <Typography variant="body2" className="card-text">
                     Precio: <strong>{formatUSD(c.priceUsd)}</strong>
