@@ -53,7 +53,7 @@ export default function IndexesSection() {
         if (!data || data.length === 0) return { row1: [], row2: [], national: [] };
 
         // International Row 1: SPY, NASDAQ, Dow Jones
-        const spy = findIndex(data, ["SPY"]);
+        const spy = findIndex(data, ["SPY", "GSPC"]);
         const nasdaq = findIndex(data, ["NASDAQ", "NDX", "IXIC", "QQQ"]);
         const dow = findIndex(data, ["DOW", "DJI", "DIA"]);
 
