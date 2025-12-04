@@ -1,16 +1,16 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { getIndices } from "@/services/StocksService";
-import { DualQuoteDTO } from "@/types/Market";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Paper, Stack, Typography, Button, Grid, Card, CardContent,
     CircularProgress, Divider, Box
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
-// Reutilizamos estilos o definimos los propios que imitan a AccionesAR
+import { DualQuoteDTO } from "@/types/Market";
+import { getIndices } from "@/services/StocksService";
 import "./styles/IndexesSection.css";
 
+// --- UTILIDADES ---
 function formatARS(val?: number) {
     if (val === undefined || val === null || isNaN(val)) return "—";
     return val.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 });
@@ -18,7 +18,6 @@ function formatARS(val?: number) {
 
 function formatUSD(val?: number) {
     if (val === undefined || val === null || isNaN(val)) return "—";
-    // Si es mayor a 1000 (como índices), quitamos decimales para limpieza visual
     const digits = val > 1000 ? 0 : 2;
     return val.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: digits });
 }
@@ -31,6 +30,7 @@ function findIndex(data: DualQuoteDTO[], queries: string[]) {
     });
 }
 
+// --- COMPONENTE PRINCIPAL ---
 export default function IndexesSection() {
     const [data, setData] = useState<DualQuoteDTO[]>([]);
     const [loading, setLoading] = useState(false);
@@ -77,17 +77,14 @@ export default function IndexesSection() {
     }, [data]);
 
     const IndexCard = (d: DualQuoteDTO) => {
-        // Detectar si es Riesgo País para mostrar diseño único
         const isRiesgo = d.localSymbol === "RIESGO" || d.dollarRateName === "Puntos";
 
-        // Títulos Amigables
         let title = d.dollarRateName || d.usSymbol;
         if (d.usSymbol?.includes("GSPC") || d.usSymbol?.includes("SPY")) title = "S&P 500";
         if (d.usSymbol?.includes("IXIC") || d.usSymbol?.includes("NDX")) title = "NASDAQ 100";
         if (d.usSymbol?.includes("DIA")) title = "Dow Jones";
         if (d.localSymbol === "RIESGO") title = "Riesgo País";
 
-        // --- DISEÑO ESPECIAL: RIESGO PAÍS (Único Valor) ---
         if (isRiesgo) {
             return (
                 <Card className="acciones-card risk-card">
@@ -95,7 +92,7 @@ export default function IndexesSection() {
                         <Typography variant="h6" className="card-title" sx={{ mb: 1 }}>
                             {title}
                         </Typography>
-                        <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#ff9800' }}>
+                        <Typography variant="h3" className="risk-value">
                             {Math.round(d.usPriceUSD)}
                         </Typography>
                         <Typography variant="caption" color="text.secondary">
