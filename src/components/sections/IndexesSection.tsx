@@ -16,7 +16,6 @@ function formatUSD(n?: number) {
     return n.toLocaleString("es-AR", { style: "currency", currency: "USD", maximumFractionDigits: digits });
 }
 
-// Helper to find index by symbol or name
 function findIndex(data: DualQuoteDTO[], queries: string[]) {
     return data.find(d => {
         const s = (d.usSymbol || "").toUpperCase();
@@ -52,17 +51,14 @@ export default function IndexesSection() {
     const { row1, row2, national } = useMemo(() => {
         if (!data || data.length === 0) return { row1: [], row2: [], national: [] };
 
-        // International Row 1: SPY, NASDAQ, Dow Jones
         const spy = findIndex(data, ["SPY", "GSPC"]);
         const nasdaq = findIndex(data, ["NASDAQ", "NDX", "IXIC", "QQQ"]);
         const dow = findIndex(data, ["DOW", "DJI", "DIA"]);
 
-        // International Row 2: XLP, Emergentes, EWZ
         const xlp = findIndex(data, ["XLP"]);
         const emergentes = findIndex(data, ["EMERGENTES", "EEM"]);
         const ewz = findIndex(data, ["EWZ"]);
 
-        // National: Riesgo Pais, Merval
         const riesgo = findIndex(data, ["RIESGO", "PAIS"]);
         const merval = findIndex(data, ["MERVAL", "MERV"]);
 
@@ -75,7 +71,6 @@ export default function IndexesSection() {
 
     const IndexCard = (d: DualQuoteDTO) => {
         const isRiesgoPais = (d.dollarRateName || "").includes("Riesgo");
-        // Use specific names if available, otherwise fallback
         let title = d.dollarRateName || d.usSymbol;
         if (d.usSymbol === "SPY") title = "S&P 500 (SPY)";
         if (d.usSymbol?.includes("QQQ") || d.usSymbol?.includes("NDX")) title = "NASDAQ 100";
@@ -110,7 +105,7 @@ export default function IndexesSection() {
                 alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
                 <Box>
                     <Typography variant="h5" className="header-title">
-                        Índices de Mercado
+                        Índices
                     </Typography>
                     {updatedAt && (
                         <Typography variant="caption" color="text.secondary">
@@ -136,7 +131,6 @@ export default function IndexesSection() {
                 <Typography color="text.secondary">No se encontraron índices.</Typography>
             )}
 
-            {/* International */}
             {(row1.length > 0 || row2.length > 0) && (
                 <>
                     <Typography variant="subtitle1" className="section-subtitle">
