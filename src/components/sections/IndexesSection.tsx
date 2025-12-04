@@ -86,7 +86,7 @@ export default function IndexesSection() {
         if (d.usSymbol?.includes("EEM")) title = "Emergentes (EEM)";
         if (d.usSymbol?.includes("EWZ")) title = "Brasil (EWZ)";
         if (d.localSymbol === "RIESGO") title = "Riesgo País";
-        if (d.localSymbol === "MERVAL" || d.localSymbol === "MERV") title = "Merval";
+        if (d.localSymbol === "MERVAL" || d.localSymbol === "MERV" || d.localSymbol === "^MERV" || d.usSymbol === "^MERV") title = "Merval";
 
         if (isRiesgo) {
             return (
@@ -109,6 +109,10 @@ export default function IndexesSection() {
             );
         }
 
+        const isLocalIndex = d.dollarRateName === 'ARS';
+        const labelArs = isLocalIndex ? "Valor (ARS)" : "CEDEAR (ARS)";
+        const labelUsd = isLocalIndex ? "Valor (USD)" : "Indice USA (USD)";
+
         return (
             <Card className="acciones-card">
                 <CardContent>
@@ -117,7 +121,7 @@ export default function IndexesSection() {
                     </Typography>
 
                     <Typography variant="caption" className="card-subtitle">
-                        {d.dollarRateName === 'ARS' ? 'Índice Nacional' : 'Índice Internacional'}
+                        {isLocalIndex ? 'Índice Nacional' : 'Índice Internacional'}
                     </Typography>
 
                     <Typography className="card-symbol">
@@ -125,7 +129,7 @@ export default function IndexesSection() {
                     </Typography>
 
                     <Typography className="card-text">
-                        CEDEAR (ARS): <strong>{formatARS(d.usPriceARS)}</strong>
+                        {labelArs}: <strong>{formatARS(d.usPriceARS)}</strong>
                         {d.usChangePct !== undefined && d.usChangePct !== null && (
                             <span style={{ color: d.usChangePct >= 0 ? "green" : "red", marginLeft: "8px", fontSize: "0.9em" }}>
                                 {d.usChangePct > 0 ? "+" : ""}{d.usChangePct}%
@@ -134,7 +138,7 @@ export default function IndexesSection() {
                     </Typography>
 
                     <Typography className="card-text">
-                        Indice USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong>
+                        {labelUsd}: <strong>{formatUSD(d.usPriceUSD)}</strong>
                         {d.usChangePct !== undefined && d.usChangePct !== null && (
                             <span style={{ color: d.usChangePct >= 0 ? "green" : "red", marginLeft: "8px", fontSize: "0.9em" }}>
                                 {d.usChangePct > 0 ? "+" : ""}{d.usChangePct}%
