@@ -6,4 +6,7 @@ export interface ActivoDTO {
     moneda: string;
     esLocal: boolean;
     descripcion: string;
+    precioActual?: number;
+    variacion24h?: number;
+    ultimaActualizacion?: string;
 }
