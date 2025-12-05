@@ -5,27 +5,27 @@ import Link from "next/link";
 import {
   Box,
   Card,
-  CardActions,
   CardContent,
   Chip,
   Stack,
   Typography,
   Button,
-  Grid,
   Select,
   MenuItem,
   FormControl,
   InputLabel,
   Pagination,
   CircularProgress,
+  Grid,
+  Divider,
 } from "@mui/material";
 import { ActivoDTO } from "@/types/Activo";
 import { TipoActivoDTO } from "@/types/TipoActivo";
-import { getActivos } from "@/services/ActivosService";
-import { getTiposActivo } from "@/services/TipoActivosService";
+import { getActivosNoMoneda, getActivosByTipoId } from "@/services/ActivosService";
+import { getTiposActivoNoMoneda } from "@/services/TipoActivosService";
 
 export default function Activos() {
-  const [selectedType, setSelectedType] = useState("Todos");
+  const [selectedType, setSelectedType] = useState<string | number>("Todos");
   const [activos, setActivos] = useState<ActivoDTO[]>([]);
   const [tipos, setTipos] = useState<TipoActivoDTO[]>([]);
   const [loading, setLoading] = useState(false);
@@ -37,7 +37,7 @@ export default function Activos() {
   useEffect(() => {
     const loadTipos = async () => {
       try {
-        const data = await getTiposActivo();
+        const data = await getTiposActivoNoMoneda();
         setTipos(data);
       } catch (error) {
         console.error("Error fetching types:", error);
@@ -50,10 +50,15 @@ export default function Activos() {
     fetchActivos(selectedType);
   }, [selectedType]);
 
-  const fetchActivos = async (tipo: string) => {
+  const fetchActivos = async (tipo: string | number) => {
     setLoading(true);
     try {
-      const data = await getActivos(tipo);
+      let data: ActivoDTO[];
+      if (tipo === "Todos") {
+        data = await getActivosNoMoneda();
+      } else {
+        data = await getActivosByTipoId(Number(tipo));
+      }
       setActivos(data);
       setPage(1); // Reset to first page on filter change
     } catch (error) {
@@ -81,7 +86,7 @@ export default function Activos() {
     <main style={{ padding: 24 }}>
       <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 4 }}>
         <Box>
-          <Typography variant="h4" gutterBottom>
+          <Typography variant="h4" gutterBottom fontWeight="bold">
             Mercado
           </Typography>
           <Typography variant="body1" color="text.secondary">
@@ -89,18 +94,18 @@ export default function Activos() {
           </Typography>
         </Box>
 
-        <FormControl sx={{ minWidth: 200 }}>
-          <InputLabel id="asset-type-label">Tipo de Activo</InputLabel>
+        <FormControl sx={{ minWidth: 220 }} size="small">
+          <InputLabel id="asset-type-label">Filtrar por Tipo</InputLabel>
           <Select
             labelId="asset-type-label"
             id="asset-type-select"
             value={selectedType}
-            label="Tipo de Activo"
+            label="Filtrar por Tipo"
             onChange={handleTypeChange}
           >
             <MenuItem value="Todos">Todos</MenuItem>
             {tipos.map((type) => (
-              <MenuItem key={type.id} value={type.nombre}>
+              <MenuItem key={type.id} value={type.id}>
                 {type.nombre}
               </MenuItem>
             ))}
@@ -109,7 +114,7 @@ export default function Activos() {
       </Stack>
 
       {loading ? (
-        <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
+        <Box sx={{ display: "flex", justifyContent: "center", p: 8 }}>
           <CircularProgress />
         </Box>
       ) : (
@@ -121,20 +126,23 @@ export default function Activos() {
           </Stack>
 
           {activos.length > 0 && (
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
               <Pagination
                 count={totalPages}
                 page={page}
                 onChange={handlePageChange}
                 color="primary"
+                size="large"
               />
             </Box>
           )}
 
           {activos.length === 0 && (
-            <Typography variant="body1" sx={{ textAlign: "center", mt: 4 }}>
-              No se encontraron activos para esta categoría.
-            </Typography>
+            <Box sx={{ textAlign: "center", mt: 8, p: 4, bgcolor: "background.paper", borderRadius: 2 }}>
+              <Typography variant="h6" color="text.secondary">
+                No se encontraron activos para esta categoría.
+              </Typography>
+            </Box>
           )}
         </>
       )}
@@ -145,52 +153,92 @@ export default function Activos() {
 function AssetCard({ activo }: { activo: ActivoDTO }) {
   return (
     <Card
+      elevation={0}
       sx={{
         width: "100%",
         borderRadius: "12px",
         border: "1px solid",
         borderColor: "divider",
-        transition: "transform 0.2s, box-shadow 0.2s",
+        transition: "all 0.2s ease-in-out",
         "&:hover": {
+          borderColor: "primary.main",
           transform: "translateY(-2px)",
-          boxShadow: 4,
+          boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
         },
       }}
     >
       <CardContent sx={{ p: 2, "&:last-child": { pb: 2 } }}>
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          justifyContent="space-between"
-          alignItems="center"
-          spacing={2}
-        >
-          <Box sx={{ flexGrow: 1, textAlign: { xs: "center", sm: "left" } }}>
-            <Typography variant="h6" component="div" fontWeight="bold">
-              {activo.symbol}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {activo.nombre}
-            </Typography>
-          </Box>
+        <Grid container alignItems="center" spacing={2}>
+          {/* Symbol and Name */}
+          <Grid item xs={12} sm={4} md={5}>
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <Box
+                sx={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: "50%",
+                  bgcolor: "primary.light",
+                  color: "primary.main",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: "bold",
+                  fontSize: "1.2rem",
+                  opacity: 0.2
+                }}
+              >
+                {activo.symbol.substring(0, 1)}
+              </Box>
+              <Box>
+                <Typography variant="h6" component="div" fontWeight="bold" sx={{ lineHeight: 1.2 }}>
+                  {activo.symbol}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" noWrap>
+                  {activo.nombre}
+                </Typography>
+              </Box>
+            </Stack>
+          </Grid>
 
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Chip label={activo.tipo} size="small" />
-            <Chip
-              label={activo.moneda}
-              size="small"
-              color={activo.moneda === "USD" ? "success" : "default"}
-              variant="outlined"
-            />
+          {/* Tags / Metadata */}
+          <Grid item xs={12} sm={5} md={4}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Chip
+                label={activo.tipo}
+                size="small"
+                sx={{ bgcolor: "action.hover", fontWeight: 500 }}
+              />
+              <Chip
+                label={activo.moneda}
+                size="small"
+                variant="outlined"
+                color={activo.moneda === "USD" ? "success" : "default"}
+              />
+              {activo.esLocal && (
+                <Chip label="ARG" size="small" color="info" variant="outlined" sx={{ height: 24 }} />
+              )}
+            </Stack>
+          </Grid>
+
+          {/* Action Button */}
+          <Grid item xs={12} sm={3} md={3} sx={{ textAlign: { xs: "left", sm: "right" } }}>
             <Button
               component={Link}
               href={`/activos/${activo.id}`}
-              variant="outlined"
+              variant="contained"
+              disableElevation
               size="small"
+              sx={{
+                borderRadius: "8px",
+                textTransform: "none",
+                fontWeight: 600,
+                px: 3
+              }}
             >
               Ver Detalles
             </Button>
-          </Stack>
-        </Stack>
+          </Grid>
+        </Grid>
       </CardContent>
     </Card>
   );
