@@ -31,6 +31,27 @@ import { getActivosNoMoneda, getActivosByTipoId } from "@/services/ActivosServic
 import { getTiposActivoNoMoneda } from "@/services/TipoActivosService";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
+const getAvatarColor = (tipo: string) => {
+  switch (tipo?.toLowerCase()) {
+    case 'accion':
+    case 'acciones':
+      return "#2196f3"; // Blue
+    case 'cedear':
+    case 'cedears':
+      return "#9c27b0"; // Purple
+    case 'bono':
+    case 'bonos':
+      return "#4caf50"; // Green
+    case 'obligacion negociable':
+    case 'on':
+      return "#ff9800"; // Orange
+    case 'fci':
+      return "#00bcd4"; // Cyan
+    default:
+      return "#757575"; // Grey
+  }
+};
+
 export default function Activos() {
   const [selectedType, setSelectedType] = useState<string | number>("Todos");
   const [activos, setActivos] = useState<ActivoDTO[]>([]);
@@ -132,7 +153,6 @@ export default function Activos() {
                 <TableHead sx={{ bgcolor: "background.default" }}>
                   <TableRow>
                     <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Activo</TableCell>
-                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Tipo</TableCell>
                     <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Moneda</TableCell>
                     <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Origen</TableCell>
                     <TableCell align="right" sx={{ fontWeight: "bold", color: "text.secondary" }}>Acciones</TableCell>
@@ -152,8 +172,8 @@ export default function Activos() {
                         <Stack direction="row" alignItems="center" spacing={2}>
                           <Avatar
                             sx={{
-                              bgcolor: "primary.light",
-                              color: "primary.main",
+                              bgcolor: getAvatarColor(activo.tipo),
+                              color: "#fff",
                               fontWeight: "bold",
                               width: 40,
                               height: 40,
@@ -171,17 +191,6 @@ export default function Activos() {
                             </Typography>
                           </Box>
                         </Stack>
-                      </TableCell>
-                      <TableCell>
-                        <Chip
-                          label={activo.tipo}
-                          size="small"
-                          sx={{
-                            borderRadius: "6px",
-                            fontWeight: 500,
-                            bgcolor: "rgba(0, 0, 0, 0.04)"
-                          }}
-                        />
                       </TableCell>
                       <TableCell>
                         <Chip
