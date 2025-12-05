@@ -66,7 +66,6 @@ export default function CryptoSection() {
       <Divider className="section-divider" />
 
       <Stack spacing={{ xs: 2, md: 3 }}>
-        {/* Row 1: 4 items */}
         <Grid container spacing={3} justifyContent="center">
           {data.slice(0, 4).map((c) => (
             <Grid item xs={12} md={3} key={c.symbol} component="div">
@@ -93,7 +92,6 @@ export default function CryptoSection() {
           ))}
         </Grid>
 
-        {/* Row 2: 4 items */}
         <Grid container spacing={3} justifyContent="center">
           {data.slice(4, 8).map((c) => (
             <Grid item xs={12} md={3} key={c.symbol} component="div">
@@ -120,7 +118,6 @@ export default function CryptoSection() {
           ))}
         </Grid>
 
-        {/* Row 3: 2 items */}
         <Grid container spacing={3} justifyContent="center">
           {data.slice(8, 10).map((c) => (
             <Grid item xs={12} md={3} key={c.symbol} component="div">

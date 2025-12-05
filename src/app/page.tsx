@@ -34,7 +34,7 @@ export default function HomePage() {
         >
           <Button
             component={Link}
-            href="/movimientos"
+            href="/auth/login"
             variant="contained"
             color="primary"
             size="large"
@@ -43,12 +43,12 @@ export default function HomePage() {
           </Button>
           <Button
             component={Link}
-            href="/reportes"
+            href="/activos"
             variant="outlined"
             color="primary"
             size="large"
           >
-            Ver reportes
+            Activos Disponibles
           </Button>
         </Stack>
       </Box>
