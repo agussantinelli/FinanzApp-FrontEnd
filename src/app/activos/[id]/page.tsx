@@ -14,11 +14,38 @@ import {
     Typography,
     CircularProgress,
     Paper,
+    Grid,
+    Avatar,
+    IconButton,
 } from "@mui/material";
-import Grid from "@mui/material/Grid";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { ActivoDTO } from "@/types/Activo";
-import { getActivos } from "@/services/ActivosService";
+import { getActivosNoMoneda } from "@/services/ActivosService";
+
+// Helper for brand colors (duplicated from main page for self-containment)
+const getAvatarColor = (tipo: string) => {
+    switch (tipo?.toLowerCase()) {
+        case 'accion':
+        case 'acciones':
+            return "#2196f3"; // Blue
+        case 'cedear':
+        case 'cedears':
+            return "#9c27b0"; // Purple
+        case 'bono':
+        case 'bonos':
+            return "#4caf50"; // Green
+        case 'obligacion negociable':
+        case 'on':
+            return "#ff9800"; // Orange
+        case 'fci':
+            return "#00bcd4"; // Cyan
+        default:
+            return "#757575"; // Grey
+    }
+};
 
 export default function ActivoDetalle() {
     const params = useParams();
@@ -29,16 +56,10 @@ export default function ActivoDetalle() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Note: Ideally we would have a getActivoById endpoint. 
-        // For now, we fetch all (or filter by type if known) and find the one.
-        // Optimization: If the previous page state could be passed, that would be better.
-        // Or if the backend supports /api/activos/{id}.
-        // Assuming for now we re-fetch or the user might land here directly.
         const loadActivo = async () => {
             try {
-                // Fetching all for now as we don't have a specific ID endpoint in the prompt description
-                // If the list is huge, this is inefficient, but fits the current constraints.
-                const allActivos = await getActivos("Todos");
+                // Fetching all to find one (temporary solution as per previous code)
+                const allActivos = await getActivosNoMoneda();
                 const found = allActivos.find((a) => a.id === id);
                 setActivo(found || null);
             } catch (error) {
@@ -55,91 +76,221 @@ export default function ActivoDetalle() {
 
     if (loading) {
         return (
-            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "50vh" }}>
-                <CircularProgress />
+            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "60vh" }}>
+                <CircularProgress size={60} thickness={4} />
             </Box>
         );
     }
 
     if (!activo) {
         return (
-            <Container sx={{ mt: 4 }}>
-                <Typography variant="h5" align="center">Activo no encontrado</Typography>
-                <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-                    <Button variant="outlined" onClick={() => router.back()}>Volver</Button>
-                </Box>
+            <Container maxWidth="md" sx={{ mt: 8, textAlign: "center" }}>
+                <Typography variant="h4" gutterBottom fontWeight="bold" color="text.secondary">
+                    Activo no encontrado
+                </Typography>
+                <Button
+                    variant="contained"
+                    onClick={() => router.back()}
+                    sx={{ mt: 2, borderRadius: 2, textTransform: "none" }}
+                >
+                    Volver al Mercado
+                </Button>
             </Container>
         );
     }
 
+    const brandColor = getAvatarColor(activo.tipo);
+
     return (
-        <Container maxWidth="md" sx={{ py: 4 }}>
-            <Button
-                startIcon={<ArrowBackIcon />}
-                onClick={() => router.back()}
-                sx={{ mb: 2 }}
+        <Box sx={{ minHeight: "100vh", bgcolor: "background.default", pb: 8 }}>
+            {/* Hero Section */}
+            <Box
+                sx={{
+                    bgcolor: "background.paper",
+                    pt: 6,
+                    pb: 8,
+                    borderRadius: "0 0 40px 40px",
+                    boxShadow: "0 4px 20px rgba(0,0,0,0.02)",
+                    position: "relative",
+                    overflow: "hidden"
+                }}
             >
-                Volver al Mercado
-            </Button>
+                {/* Decorative generic background blob */}
+                <Box
+                    sx={{
+                        position: "absolute",
+                        top: -100,
+                        right: -100,
+                        width: 400,
+                        height: 400,
+                        borderRadius: "50%",
+                        bgcolor: brandColor,
+                        opacity: 0.05,
+                        zIndex: 0
+                    }}
+                />
 
-            <Paper elevation={0} sx={{ p: 4, borderRadius: 4, border: "1px solid", borderColor: "divider" }}>
-                <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" alignItems="flex-start" spacing={2} sx={{ mb: 3 }}>
-                    <Box>
-                        <Typography variant="h3" component="h1" fontWeight="bold">
-                            {activo.symbol}
-                        </Typography>
-                        <Typography variant="h5" color="text.secondary">
-                            {activo.nombre}
-                        </Typography>
-                    </Box>
-                    <Stack direction="column" alignItems="flex-end" spacing={1}>
-                        <Chip label={activo.tipo} color="primary" variant="filled" />
-                        <Chip label={activo.moneda} variant="outlined" />
+                <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
+                    <Button
+                        startIcon={<ArrowBackIcon />}
+                        onClick={() => router.back()}
+                        sx={{ mb: 4, color: "text.secondary", textTransform: "none" }}
+                    >
+                        Volver
+                    </Button>
+
+                    <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", md: "center" }} spacing={4}>
+                        <Stack direction="row" spacing={3} alignItems="center">
+                            <Avatar
+                                sx={{
+                                    width: 80,
+                                    height: 80,
+                                    bgcolor: brandColor,
+                                    fontSize: "2rem",
+                                    fontWeight: "bold",
+                                    boxShadow: `0 8px 24px ${brandColor}40`
+                                }}
+                            >
+                                {activo.symbol.substring(0, 1)}
+                            </Avatar>
+                            <Box>
+                                <Typography variant="h3" fontWeight={800} sx={{ letterSpacing: "-1px" }}>
+                                    {activo.symbol}
+                                </Typography>
+                                <Typography variant="h6" color="text.secondary" fontWeight={500}>
+                                    {activo.nombre}
+                                </Typography>
+                            </Box>
+                        </Stack>
+
+                        <Stack direction="row" spacing={2} alignItems="center">
+                            <Chip
+                                label={activo.tipo}
+                                sx={{
+                                    bgcolor: `${brandColor}20`,
+                                    color: brandColor,
+                                    fontWeight: 700,
+                                    height: 32,
+                                    borderRadius: "8px"
+                                }}
+                            />
+                            {activo.esLocal && (
+                                <Chip
+                                    label="ARG"
+                                    variant="outlined"
+                                    color="info"
+                                    sx={{ fontWeight: 600, height: 32, borderRadius: "8px" }}
+                                />
+                            )}
+                        </Stack>
                     </Stack>
-                </Stack>
+                </Container>
+            </Box>
 
-                <Divider sx={{ my: 3 }} />
-
+            {/* Content Section */}
+            <Container maxWidth="lg" sx={{ mt: -4 }}>
                 <Grid container spacing={4}>
+                    {/* Left Column: Details */}
                     <Grid item xs={12} md={8}>
-                        <Typography variant="h6" gutterBottom>
-                            Descripción
-                        </Typography>
-                        <Typography variant="body1" paragraph color="text.secondary" sx={{ lineHeight: 1.8 }}>
-                            {activo.descripcion}
-                        </Typography>
+                        <Paper
+                            elevation={0}
+                            sx={{
+                                p: 4,
+                                borderRadius: "24px",
+                                border: "1px solid",
+                                borderColor: "divider",
+                                mb: 4
+                            }}
+                        >
+                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+                                <InfoOutlinedIcon color="action" />
+                                <Typography variant="h6" fontWeight="bold">
+                                    Sobre este activo
+                                </Typography>
+                            </Stack>
+                            <Typography variant="body1" color="text.secondary" paragraph sx={{ lineHeight: 1.8, fontSize: "1.05rem" }}>
+                                {activo.descripcion}
+                            </Typography>
+
+                            <Divider sx={{ my: 3 }} />
+
+                            <Grid container spacing={3}>
+                                <Grid item xs={6} sm={4}>
+                                    <Typography variant="caption" color="text.secondary" fontWeight="bold">MONEDA</Typography>
+                                    <Typography variant="h6">{activo.moneda}</Typography>
+                                </Grid>
+                                <Grid item xs={6} sm={4}>
+                                    <Typography variant="caption" color="text.secondary" fontWeight="bold">ORIGEN</Typography>
+                                    <Typography variant="h6">{activo.esLocal ? "Local" : "Internacional"}</Typography>
+                                </Grid>
+                                <Grid item xs={6} sm={4}>
+                                    <Typography variant="caption" color="text.secondary" fontWeight="bold">ID SISTEMA</Typography>
+                                    <Typography variant="h6">#{activo.id}</Typography>
+                                </Grid>
+                            </Grid>
+                        </Paper>
+
                     </Grid>
 
+                    {/* Right Column: Actions */}
                     <Grid item xs={12} md={4}>
-                        <Card variant="outlined" sx={{ borderRadius: 2 }}>
-                            <CardContent>
-                                <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                                    Detalles Adicionales
-                                </Typography>
-                                <Stack spacing={2} sx={{ mt: 2 }}>
-                                    <Box>
-                                        <Typography variant="caption" display="block" color="text.secondary">
-                                            Mercado
-                                        </Typography>
-                                        <Typography variant="body2">
-                                            {activo.esLocal ? "Local (Argentina)" : "Internacional"}
-                                        </Typography>
-                                    </Box>
-                                    <Box>
-                                        <Typography variant="caption" display="block" color="text.secondary">
-                                            ID de Sistema
-                                        </Typography>
-                                        <Typography variant="body2">
-                                            #{activo.id}
-                                        </Typography>
-                                    </Box>
-                                    {/* Add more fields here if available in DTO */}
-                                </Stack>
-                            </CardContent>
-                        </Card>
+                        <Paper
+                            elevation={0}
+                            sx={{
+                                p: 3,
+                                borderRadius: "24px",
+                                border: "1px solid",
+                                borderColor: "divider",
+                                position: "sticky",
+                                top: 24
+                            }}
+                        >
+                            <Typography variant="h6" fontWeight="bold" gutterBottom>
+                                Operar
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                                Gestiona tus inversiones en {activo.symbol}.
+                            </Typography>
+
+                            <Stack spacing={2}>
+                                <Button
+                                    variant="contained"
+                                    size="large"
+                                    startIcon={<TrendingUpIcon />}
+                                    sx={{
+                                        bgcolor: "success.main",
+                                        "&:hover": { bgcolor: "success.dark" },
+                                        borderRadius: "12px",
+                                        py: 1.5,
+                                        fontWeight: "bold",
+                                        textTransform: "none",
+                                        fontSize: "1rem"
+                                    }}
+                                >
+                                    Comprar {activo.symbol}
+                                </Button>
+                                <Button
+                                    variant="outlined"
+                                    size="large"
+                                    startIcon={<AttachMoneyIcon />}
+                                    sx={{
+                                        color: "text.primary",
+                                        borderColor: "divider",
+                                        borderRadius: "12px",
+                                        py: 1.5,
+                                        fontWeight: "bold",
+                                        textTransform: "none",
+                                        fontSize: "1rem",
+                                        "&:hover": { borderColor: "text.primary", bgcolor: "rgba(0,0,0,0.02)" }
+                                    }}
+                                >
+                                    Vender
+                                </Button>
+                            </Stack>
+                        </Paper>
                     </Grid>
                 </Grid>
-            </Paper>
-        </Container>
+            </Container>
+        </Box>
     );
 }

@@ -35,20 +35,20 @@ const getAvatarColor = (tipo: string) => {
   switch (tipo?.toLowerCase()) {
     case 'accion':
     case 'acciones':
-      return "#2196f3"; // Blue
+      return "#2196f3";
     case 'cedear':
     case 'cedears':
-      return "#9c27b0"; // Purple
+      return "#9c27b0";
     case 'bono':
     case 'bonos':
-      return "#4caf50"; // Green
+      return "#4caf50";
     case 'obligacion negociable':
     case 'on':
-      return "#ff9800"; // Orange
+      return "#ff9800";
     case 'fci':
-      return "#00bcd4"; // Cyan
+      return "#00bcd4";
     default:
-      return "#757575"; // Grey
+      return "#757575";
   }
 };
 
