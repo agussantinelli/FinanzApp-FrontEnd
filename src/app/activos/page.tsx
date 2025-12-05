@@ -153,6 +153,8 @@ export default function Activos() {
                 <TableHead sx={{ bgcolor: "background.default" }}>
                   <TableRow>
                     <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Activo</TableCell>
+                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Precio</TableCell>
+                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>24h %</TableCell>
                     <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Moneda</TableCell>
                     <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Origen</TableCell>
                     <TableCell align="right" sx={{ fontWeight: "bold", color: "text.secondary" }}>Acciones</TableCell>
@@ -191,6 +193,31 @@ export default function Activos() {
                             </Typography>
                           </Box>
                         </Stack>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body2" fontWeight={600}>
+                          {(activo.precioActual !== null && activo.precioActual !== undefined)
+                            ? new Intl.NumberFormat('en-US', { style: 'currency', currency: activo.moneda }).format(activo.precioActual)
+                            : '-'
+                          }
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        {(activo.variacion24h !== null && activo.variacion24h !== undefined) ? (
+                          <Chip
+                            label={`${activo.variacion24h >= 0 ? '+' : ''}${activo.variacion24h.toFixed(2)}%`}
+                            size="small"
+                            sx={{
+                              bgcolor: activo.variacion24h >= 0 ? 'success.lighter' : 'error.lighter',
+                              color: activo.variacion24h >= 0 ? 'success.main' : 'error.main',
+                              fontWeight: 700,
+                              borderRadius: "6px",
+                              height: 24,
+                            }}
+                          />
+                        ) : (
+                          <Typography variant="body2" color="text.secondary">-</Typography>
+                        )}
                       </TableCell>
                       <TableCell>
                         <Chip

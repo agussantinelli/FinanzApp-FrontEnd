@@ -163,26 +163,61 @@ export default function ActivoDetalle() {
                             </Box>
                         </Stack>
 
-                        <Stack direction="row" spacing={2} alignItems="center">
+                        <Box>
+                            <Stack direction="row" alignItems="baseline" spacing={2} justifyContent="flex-end">
+                                <Typography variant="h3" fontWeight={800} sx={{ letterSpacing: "-1px" }}>
+                                    {(activo.precioActual !== null && activo.precioActual !== undefined)
+                                        ? new Intl.NumberFormat('en-US', { style: 'currency', currency: activo.moneda }).format(activo.precioActual)
+                                        : '$ --'
+                                    }
+                                </Typography>
+                                {(activo.variacion24h !== null && activo.variacion24h !== undefined) && (
+                                    <Chip
+                                        label={`${activo.variacion24h >= 0 ? '+' : ''}${activo.variacion24h.toFixed(2)}%`}
+                                        size="medium"
+                                        sx={{
+                                            bgcolor: activo.variacion24h >= 0 ? 'success.light' : 'error.light',
+                                            color: 'white',
+                                            fontWeight: 700,
+                                            height: 32,
+                                            borderRadius: "8px"
+                                        }}
+                                    />
+                                )}
+                            </Stack>
+                            <Typography variant="body2" color="text.secondary" align="right" sx={{ mt: 1 }}>
+                                {activo.ultimaActualizacion
+                                    ? `Actualizado: ${new Date(activo.ultimaActualizacion).toLocaleString()}`
+                                    : 'Actualización pendiente'
+                                }
+                            </Typography>
+                        </Box>
+                    </Stack>
+
+                    <Stack direction="row" spacing={1} sx={{ mt: 3, ml: { md: 13 } }}>
+                        <Chip
+                            label={activo.tipo}
+                            sx={{
+                                bgcolor: `${brandColor}20`,
+                                color: brandColor,
+                                fontWeight: 700,
+                                height: 28,
+                                borderRadius: "6px"
+                            }}
+                        />
+                        <Chip
+                            label={activo.moneda}
+                            variant="outlined"
+                            sx={{ fontWeight: 600, height: 28, borderRadius: "6px" }}
+                        />
+                        {activo.esLocal && (
                             <Chip
-                                label={activo.tipo}
-                                sx={{
-                                    bgcolor: `${brandColor}20`,
-                                    color: brandColor,
-                                    fontWeight: 700,
-                                    height: 32,
-                                    borderRadius: "8px"
-                                }}
+                                label="ARG"
+                                variant="outlined"
+                                color="info"
+                                sx={{ fontWeight: 600, height: 28, borderRadius: "6px" }}
                             />
-                            {activo.esLocal && (
-                                <Chip
-                                    label="ARG"
-                                    variant="outlined"
-                                    color="info"
-                                    sx={{ fontWeight: 600, height: 32, borderRadius: "8px" }}
-                                />
-                            )}
-                        </Stack>
+                        )}
                     </Stack>
                 </Container>
             </Box>
@@ -191,7 +226,7 @@ export default function ActivoDetalle() {
             <Container maxWidth="lg" sx={{ mt: -4 }}>
                 <Grid container spacing={4}>
                     {/* Left Column: Details */}
-                    <Grid item xs={12} md={8}>
+                    <Grid xs={12} md={8}>
                         <Paper
                             elevation={0}
                             sx={{
@@ -215,15 +250,15 @@ export default function ActivoDetalle() {
                             <Divider sx={{ my: 3 }} />
 
                             <Grid container spacing={3}>
-                                <Grid item xs={6} sm={4}>
+                                <Grid xs={6} sm={4}>
                                     <Typography variant="caption" color="text.secondary" fontWeight="bold">MONEDA</Typography>
                                     <Typography variant="h6">{activo.moneda}</Typography>
                                 </Grid>
-                                <Grid item xs={6} sm={4}>
+                                <Grid xs={6} sm={4}>
                                     <Typography variant="caption" color="text.secondary" fontWeight="bold">ORIGEN</Typography>
                                     <Typography variant="h6">{activo.esLocal ? "Local" : "Internacional"}</Typography>
                                 </Grid>
-                                <Grid item xs={6} sm={4}>
+                                <Grid xs={6} sm={4}>
                                     <Typography variant="caption" color="text.secondary" fontWeight="bold">ID SISTEMA</Typography>
                                     <Typography variant="h6">#{activo.id}</Typography>
                                 </Grid>
@@ -233,7 +268,7 @@ export default function ActivoDetalle() {
                     </Grid>
 
                     {/* Right Column: Actions */}
-                    <Grid item xs={12} md={4}>
+                    <Grid xs={12} md={4}>
                         <Paper
                             elevation={0}
                             sx={{
