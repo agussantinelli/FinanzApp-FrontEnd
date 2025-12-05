@@ -11,3 +11,13 @@ export async function getActivoById(id: number): Promise<ActivoDTO> {
     const res = await http.get<ActivoDTO>(`/api/activos/${id}`);
     return res.data;
 }
+
+export async function getActivosByTipoId(id: number): Promise<ActivoDTO[]> {
+    const res = await http.get<ActivoDTO[]>(`/api/activos/tipo/${id}`);
+    return res.data;
+}
+
+export async function getActivosNoMoneda(): Promise<ActivoDTO[]> {
+    const res = await http.get<ActivoDTO[]>("/api/activos/no-moneda");
+    return res.data;
+}
