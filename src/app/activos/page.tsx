@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Box,
@@ -11,190 +12,221 @@ import {
   Stack,
   Typography,
   Button,
+  Grid,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Pagination,
+  Collapse,
+  IconButton,
+  CircularProgress,
 } from "@mui/material";
-import Grid from "@mui/material/Grid";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { styled } from "@mui/material/styles";
+import { ActivoDTO } from "@/types/Activo";
+import { TipoActivoDTO } from "@/types/TipoActivo";
+import { getActivos } from "@/services/ActivosService";
+import { getTiposActivo } from "@/services/TipoActivosService";
 
-import PaymentsIcon from "@mui/icons-material/Payments";
-import TimelineIcon from "@mui/icons-material/Timeline";
-import ShowChartIcon from "@mui/icons-material/ShowChart";
-import PublicIcon from "@mui/icons-material/Public";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-
-type AssetCard = {
-  key: string;
-  title: string;
-  subtitle: string;
-  icon: React.ReactNode;
-  tcInfo: string;
-  what: string;
-  pros: string[];
-  cons: string[];
-  href: string;
-};
-
-const CARDS: AssetCard[] = [
-  {
-    key: "efectivo",
-    title: "Efectivo (ARS / USD)",
-    subtitle: "Caja y cuentas a la vista",
-    icon: <PaymentsIcon fontSize="large" />,
-    tcInfo:
-      "Valuación directa: ARS al valor nominal, USD al tipo de cambio elegido (Oficial/MEP/CCL/Blue según configuración).",
-    what:
-      "Saldo disponible en pesos y dólares (cuenta bancaria, billeteras, broker). Sirve de base para el patrimonio y movimientos rápidos.",
-    pros: ["Liquidez inmediata.", "Sin riesgo de precio inmediato.", "Base para compras/ventas."],
-    cons: [
-      "ARS pierde poder adquisitivo por inflación.",
-      "USD requiere criterio de conversión para consolidar.",
-    ],
-    href: "/activos/efectivo",
-  },
-  {
-    key: "crypto",
-    title: "Cripto",
-    subtitle: "Activos digitales (BTC, ETH, etc.)",
-    icon: <TimelineIcon fontSize="large" />,
-    tcInfo: "Cotización en USD (exchange/API). Conversión a ARS con CCL/MEP (configurable).",
-    what:
-      "Criptomonedas y tokens listados en exchanges. Alta volatilidad y mercados 24/7.",
-    pros: ["Liquidez alta en pares principales.", "Diversificación.", "Mercado 24/7."],
-    cons: [
-      "Volatilidad elevada.",
-      "Riesgo de custodia/contra-parte.",
-      "Marco regulatorio cambiante.",
-    ],
-    href: "/activos/crypto",
-  },
-  {
-    key: "acciones-ar",
-    title: "Acciones Argentinas",
-    subtitle: "Renta variable local (BYMA)",
-    icon: <ShowChartIcon fontSize="large" />,
-    tcInfo: "Precio en ARS (rueda local). Para consolidar en USD podés usar MEP/CCL.",
-    what:
-      "Participaciones de empresas listadas en Argentina. Expuestas a riesgo país y regulatorio local.",
-    pros: ["Acceso directo local.", "Posibles dividendos.", "Estrategias con MEP/CCL."],
-    cons: ["Riesgo macro alto.", "Liquidez dispar.", "Regulaciones (parking/cupos)."],
-    href: "/activos/acciones-ar",
-  },
-  {
-    key: "cedears",
-    title: "CEDEARs",
-    subtitle: "Acciones del exterior en ARS",
-    icon: <PublicIcon fontSize="large" />,
-    tcInfo:
-      "Precio en ARS reflejando subyacente USD * ratio CEDEAR y tipo de cambio implícito (CCL).",
-    what:
-      "Certificados de acciones/ETFs del exterior que cotizan en ARS. Exposición global desde el mercado local.",
-    pros: [
-      "Diversificación internacional.",
-      "Cobertura parcial vía CCL implícito.",
-      "Amplia oferta.",
-    ],
-    cons: ["Ratios y spreads confunden.", "Liquidez variable.", "Riesgo de la estructura del programa."],
-    href: "/activos/cedears",
-  },
-  {
-    key: "on",
-    title: "Obligaciones Negociables (ONs)",
-    subtitle: "Bonos corporativos",
-    icon: <AssignmentIcon fontSize="large" />,
-    tcInfo:
-      "Valuación por paridad/precio sucio. Conversión a ARS/USD según especie y consolidación.",
-    what:
-      "Deuda de empresas. Pagan cupones y capital al vencimiento; riesgo/retorno dependen del emisor.",
-    pros: [
-      "Ingresos más predecibles.",
-      "Riesgo corporativo (menos soberano).",
-      "Variedad de monedas/plazos.",
-    ],
-    cons: ["Riesgo de crédito.", "Liquidez heterogénea.", "Sensibles a tasas/riesgo país."],
-    href: "/activos/ons",
-  },
-];
+const ExpandMore = styled((props: { expand: boolean; onClick: () => void; children: React.ReactNode }) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+  marginLeft: "auto",
+  transition: theme.transitions.create("transform", {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
 
 export default function Activos() {
+  const [selectedType, setSelectedType] = useState("Todos");
+  const [activos, setActivos] = useState<ActivoDTO[]>([]);
+  const [tipos, setTipos] = useState<TipoActivoDTO[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  // Pagination state
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 15;
+
+  useEffect(() => {
+    const loadTipos = async () => {
+      try {
+        const data = await getTiposActivo();
+        setTipos(data);
+      } catch (error) {
+        console.error("Error fetching types:", error);
+      }
+    };
+    loadTipos();
+  }, []);
+
+  useEffect(() => {
+    fetchActivos(selectedType);
+  }, [selectedType]);
+
+  const fetchActivos = async (tipo: string) => {
+    setLoading(true);
+    try {
+      const data = await getActivos(tipo);
+      setActivos(data);
+      setPage(1); // Reset to first page on filter change
+    } catch (error) {
+      console.error("Error fetching activos:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleTypeChange = (event: any) => {
+    setSelectedType(event.target.value);
+  };
+
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
+  // Pagination logic
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentActivos = activos.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(activos.length / itemsPerPage);
+
   return (
     <main style={{ padding: 24 }}>
-      <Typography variant="h4" gutterBottom>
-        Tipos de Activos
-      </Typography>
-      <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-        Vista general del portafolio: definiciones, valuación y conversión ARS ↔ USD por clase de activo.
-      </Typography>
+      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 4 }}>
+        <Box>
+          <Typography variant="h4" gutterBottom>
+            Mercado
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            Explora el catálogo completo de activos financieros.
+          </Typography>
+        </Box>
 
-      <Stack spacing={3}>
-        {CARDS.map((c) => (
-          <Card
-            key={c.key}
-            sx={{
-              minHeight: 320,
-              borderRadius: "16px",
-              overflow: "hidden",
-              border: "1px solid",
-              borderColor: "divider",
-              backdropFilter: "blur(4px)",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
+        <FormControl sx={{ minWidth: 200 }}>
+          <InputLabel id="asset-type-label">Tipo de Activo</InputLabel>
+          <Select
+            labelId="asset-type-label"
+            id="asset-type-select"
+            value={selectedType}
+            label="Tipo de Activo"
+            onChange={handleTypeChange}
           >
-            <CardContent>
-              <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
-                {c.icon}
-                <Box>
-                  <Typography variant="h6">{c.title}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {c.subtitle}
-                  </Typography>
-                </Box>
-              </Stack>
-
-              <Box sx={{ my: 1 }}>
-                <Chip label={c.tcInfo} variant="outlined" size="small" sx={{ maxWidth: "100%" }} />
-              </Box>
-
-              <Typography variant="body2" sx={{ mt: 2, mb: 1.5 }}>
-                {c.what}
-              </Typography>
-
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                    Ventajas
-                  </Typography>
-                  <Stack component="ul" sx={{ pl: 2, m: 0 }} spacing={0.5}>
-                    {c.pros.map((p, i) => (
-                      <Typography key={i} component="li" variant="body2">
-                        {p}
-                      </Typography>
-                    ))}
-                  </Stack>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                    Desventajas
-                  </Typography>
-                  <Stack component="ul" sx={{ pl: 2, m: 0 }} spacing={0.5}>
-                    {c.cons.map((p, i) => (
-                      <Typography key={i} component="li" variant="body2">
-                        {p}
-                      </Typography>
-                    ))}
-                  </Stack>
-                </Grid>
-              </Grid>
-            </CardContent>
-
-            <Divider />
-            <CardActions sx={{ justifyContent: "flex-end", p: 2 }}>
-              <Button component={Link} href={c.href} variant="contained" size="small">
-                Ver sección
-              </Button>
-            </CardActions>
-          </Card>
-        ))}
+            <MenuItem value="Todos">Todos</MenuItem>
+            {tipos.map((type) => (
+              <MenuItem key={type.id} value={type.nombre}>
+                {type.nombre}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Stack>
+
+      {loading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <>
+          <Grid container spacing={3}>
+            {currentActivos.map((activo) => (
+              <AssetCard key={activo.id} activo={activo} />
+            ))}
+          </Grid>
+
+          {activos.length > 0 && (
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+              <Pagination
+                count={totalPages}
+                page={page}
+                onChange={handlePageChange}
+                color="primary"
+              />
+            </Box>
+          )}
+
+          {activos.length === 0 && (
+            <Typography variant="body1" sx={{ textAlign: "center", mt: 4 }}>
+              No se encontraron activos para esta categoría.
+            </Typography>
+          )}
+        </>
+      )}
     </main>
+  );
+}
+
+function AssetCard({ activo }: { activo: ActivoDTO }) {
+  const [expanded, setExpanded] = useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
+  return (
+    <Grid item xs={12} sm={6} md={4}>
+      <Card
+        sx={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          borderRadius: "16px",
+          border: "1px solid",
+          borderColor: "divider",
+        }}
+      >
+        <CardContent sx={{ flexGrow: 1 }}>
+          <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+            <Box>
+              <Typography variant="h6" component="div">
+                {activo.symbol}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                {activo.nombre}
+              </Typography>
+            </Box>
+            <Chip
+              label={activo.moneda}
+              size="small"
+              color={activo.moneda === "USD" ? "success" : "default"}
+              variant="outlined"
+            />
+          </Stack>
+
+          <Box sx={{ mt: 1 }}>
+            <Chip label={activo.tipo} size="small" sx={{ mr: 1 }} />
+            {activo.esLocal ? (
+              <Chip label="Local" size="small" color="info" variant="outlined" />
+            ) : (
+              <Chip label="Exterior" size="small" color="warning" variant="outlined" />
+            )}
+          </Box>
+        </CardContent>
+
+        <CardActions disableSpacing>
+          <Button size="small" component={Link} href={`/activos/${activo.id}`}>
+            Ver Detalles
+          </Button>
+          <ExpandMore
+            expand={expanded}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="show more"
+          >
+            <ExpandMoreIcon />
+          </ExpandMore>
+        </CardActions>
+
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent>
+            <Typography paragraph variant="body2">
+              {activo.descripcion || "Sin descripción disponible."}
+            </Typography>
+          </CardContent>
+        </Collapse>
+      </Card>
+    </Grid>
   );
 }
