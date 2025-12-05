@@ -1,13 +1,13 @@
-<h1>💹 FinanzApp - Frontend</h1>
+<h1 align="center">💹 FinanzApp - Frontend</h1>
 
 <div align="center">
-    <a href="https://github.com/agussantinelli/FinanzApp-FrontEnd.git" target="_blank" style="text-decoration: none;">
+    <a href="https://github.com/agussantinelli/FinanzApp-FrontEnd.git" target="_blank">
         <img src="https://img.shields.io/badge/🚀%20Repo%20Frontend%20(Estás%20Aquí)-Next.js-20232A?style=for-the-badge&logo=next.js&logoColor=white" alt="Frontend Repo Badge"/>
     </a>
-    <a href="https://github.com/agussantinelli/FinanzApp-BackEnd.git" target="_blank" style="text-decoration: none;">
+    <a href="https://github.com/agussantinelli/FinanzApp-BackEnd.git" target="_blank">
         <img src="https://img.shields.io/badge/⚙️%20Repo%20Backend-ASP.NET%20Core-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt="Backend Repo Badge"/>
     </a>
-    <a href="https://github.com/agussantinelli" target="_blank" style="text-decoration: none;">
+    <a href="https://github.com/agussantinelli" target="_blank">
         <img src="https://img.shields.io/badge/👤%20Contacto-agussantinelli-000000?style=for-the-badge&logo=github&logoColor=white" alt="Contact Badge"/>
     </a>
 </div>
@@ -79,40 +79,40 @@
 <h3>⚙️ Stack Tecnológico</h3>
 
 <table>
- <thead>
-  <tr>
-   <th>Componente</th>
-   <th>Tecnología</th>
-   <th>Notas</th>
-  </tr>
- </thead>
- <tbody>
-  <tr>
-   <td><strong>Framework</strong></td>
-   <td>Next.js (App Router)</td>
-   <td>Routing moderno, Server/Client Components y SSR/SSG.</td>
-  </tr>
-  <tr>
-   <td><strong>Lenguaje</strong></td>
-   <td>TypeScript</td>
-   <td>Tipado estricto para escalabilidad.</td>
-  </tr>
-  <tr>
-   <td><strong>UI Library</strong></td>
-   <td>Material UI (MUI)</td>
-   <td>Componentes UI robustos y accesibles.</td>
-  </tr>
-  <tr>
-   <td><strong>Estilo</strong></td>
-   <td>Tema Oscuro + Verde Flúor (<code>#39ff14</code>)</td>
-   <td>Estética moderna y legible.</td>
-  </tr>
-  <tr>
-   <td><strong>Fondo</strong></td>
-   <td>Efecto de partículas neón</td>
-   <td>Ligero y compatible con SSR.</td>
-  </tr>
- </tbody>
+    <thead>
+        <tr>
+            <th>Componente</th>
+            <th>Tecnología</th>
+            <th>Notas</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Framework</strong></td>
+            <td>Next.js (App Router)</td>
+            <td>Routing moderno, Server/Client Components y SSR/SSG.</td>
+        </tr>
+        <tr>
+            <td><strong>Lenguaje</strong></td>
+            <td>TypeScript</td>
+            <td>Tipado estricto para escalabilidad.</td>
+        </tr>
+        <tr>
+            <td><strong>UI Library</strong></td>
+            <td>Material UI (MUI)</td>
+            <td>Componentes UI robustos y accesibles.</td>
+        </tr>
+        <tr>
+            <td><strong>Estilo</strong></td>
+            <td>Tema Oscuro + Verde Flúor (<code>#39ff14</code>)</td>
+            <td>Estética moderna y legible.</td>
+        </tr>
+        <tr>
+            <td><strong>Fondo</strong></td>
+            <td>Efecto de partículas neón</td>
+            <td>Ligero y compatible con SSR.</td>
+        </tr>
+    </tbody>
 </table>
 
 <h3>📁 Estructura Principal del Proyecto</h3>
@@ -165,7 +165,7 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
 <h3>🔐 Autenticación (JWT)</h3>
 
 <p>El backend utiliza <strong>JWT Bearer</strong> para proteger los endpoints de la API. El flujo actual es:</p>
-<ul>
+<ol>
     <li>El usuario se registra o inicia sesión contra los endpoints:
         <ul>
             <li><code>POST /auth/register</code></li>
@@ -184,7 +184,7 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
         <pre><code>Authorization: Bearer &lt;fa_token&gt;</code></pre>
         en los endpoints protegidos (por ejemplo, <code>/api/stocks/duals</code>, <code>/api/crypto/top</code>, etc.).
     </li>
-</ul>
+</ol>
 
 <p>La aplicación distingue actualmente entre los roles <strong>Inversor</strong> y <strong>Admin</strong>. El navbar y el acceso a ciertos paneles se adaptan dinámicamente según el rol del usuario autenticado.</p>
 
