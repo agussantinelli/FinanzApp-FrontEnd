@@ -168,7 +168,7 @@ function AssetCard({ activo }: { activo: ActivoDTO }) {
       }}
     >
       <CardContent sx={{ p: 2, "&:last-child": { pb: 2 } }}>
-        <Grid container alignItems="center" spacing={2}>
+        <Grid container alignItems="center" spacing={2} sx={{ width: "100%" }}>
           {/* Symbol and Name */}
           <Grid item xs={12} sm={4} md={5}>
             <Stack direction="row" alignItems="center" spacing={2}>
@@ -221,22 +221,24 @@ function AssetCard({ activo }: { activo: ActivoDTO }) {
           </Grid>
 
           {/* Action Button */}
-          <Grid item xs={12} sm={3} md={3} sx={{ textAlign: { xs: "left", sm: "right" } }}>
-            <Button
-              component={Link}
-              href={`/activos/${activo.id}`}
-              variant="contained"
-              disableElevation
-              size="small"
-              sx={{
-                borderRadius: "8px",
-                textTransform: "none",
-                fontWeight: 600,
-                px: 3
-              }}
-            >
-              Ver Detalles
-            </Button>
+          <Grid item xs={12} sm={3} md={3} sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+              <Button
+                component={Link}
+                href={`/activos/${activo.id}`}
+                variant="contained"
+                disableElevation
+                size="small"
+                sx={{
+                  borderRadius: "8px",
+                  textTransform: "none",
+                  fontWeight: 600,
+                  px: 3
+                }}
+              >
+                Ver Detalles
+              </Button>
+            </Box>
           </Grid>
         </Grid>
       </CardContent>
