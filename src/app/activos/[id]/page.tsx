@@ -258,10 +258,6 @@ export default function ActivoDetalle() {
                                     <Typography variant="caption" color="text.secondary" fontWeight="bold">ORIGEN</Typography>
                                     <Typography variant="h6">{activo.esLocal ? "Local" : "Internacional"}</Typography>
                                 </Grid>
-                                <Grid xs={6} sm={4}>
-                                    <Typography variant="caption" color="text.secondary" fontWeight="bold">ID SISTEMA</Typography>
-                                    <Typography variant="h6">#{activo.id}</Typography>
-                                </Grid>
                             </Grid>
                         </Paper>
 
