@@ -4,9 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Box,
-  Card,
-  CardContent,
-  Chip,
   Stack,
   Typography,
   Button,
@@ -16,13 +13,23 @@ import {
   InputLabel,
   Pagination,
   CircularProgress,
-  Grid,
-  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Chip,
+  Avatar,
+  IconButton,
+  Card,
 } from "@mui/material";
 import { ActivoDTO } from "@/types/Activo";
 import { TipoActivoDTO } from "@/types/TipoActivo";
 import { getActivosNoMoneda, getActivosByTipoId } from "@/services/ActivosService";
 import { getTiposActivoNoMoneda } from "@/services/TipoActivosService";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 export default function Activos() {
   const [selectedType, setSelectedType] = useState<string | number>("Todos");
@@ -119,11 +126,113 @@ export default function Activos() {
         </Box>
       ) : (
         <>
-          <Stack spacing={2}>
-            {currentActivos.map((activo) => (
-              <AssetCard key={activo.id} activo={activo} />
-            ))}
-          </Stack>
+          {currentActivos.length > 0 ? (
+            <TableContainer component={Paper} elevation={0} sx={{ border: "1px solid", borderColor: "divider", borderRadius: "12px", overflow: "hidden" }}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead sx={{ bgcolor: "background.default" }}>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Activo</TableCell>
+                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Tipo</TableCell>
+                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Moneda</TableCell>
+                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Origen</TableCell>
+                    <TableCell align="right" sx={{ fontWeight: "bold", color: "text.secondary" }}>Acciones</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {currentActivos.map((activo) => (
+                    <TableRow
+                      key={activo.id}
+                      sx={{
+                        '&:last-child td, &:last-child th': { border: 0 },
+                        '&:hover': { bgcolor: "action.hover" },
+                        transition: "background-color 0.2s"
+                      }}
+                    >
+                      <TableCell component="th" scope="row">
+                        <Stack direction="row" alignItems="center" spacing={2}>
+                          <Avatar
+                            sx={{
+                              bgcolor: "primary.light",
+                              color: "primary.main",
+                              fontWeight: "bold",
+                              width: 40,
+                              height: 40,
+                              fontSize: "0.9rem"
+                            }}
+                          >
+                            {activo.symbol.substring(0, 1)}
+                          </Avatar>
+                          <Box>
+                            <Typography variant="subtitle2" fontWeight="bold">
+                              {activo.symbol}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              {activo.nombre}
+                            </Typography>
+                          </Box>
+                        </Stack>
+                      </TableCell>
+                      <TableCell>
+                        <Chip
+                          label={activo.tipo}
+                          size="small"
+                          sx={{
+                            borderRadius: "6px",
+                            fontWeight: 500,
+                            bgcolor: "rgba(0, 0, 0, 0.04)"
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Chip
+                          label={activo.moneda}
+                          size="small"
+                          variant="outlined"
+                          color={activo.moneda === "USD" ? "success" : "default"}
+                          sx={{ borderRadius: "6px", fontWeight: 600 }}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        {activo.esLocal ? (
+                          <Chip label="ARG" size="small" color="info" variant="outlined" sx={{ height: 24, borderRadius: "6px" }} />
+                        ) : (
+                          <Typography variant="caption" color="text.secondary">-</Typography>
+                        )}
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button
+                          component={Link}
+                          href={`/activos/${activo.id}`}
+                          variant="outlined"
+                          size="small"
+                          sx={{
+                            textTransform: "none",
+                            fontWeight: 600,
+                            borderRadius: "8px",
+                            borderColor: "divider",
+                            color: "text.primary",
+                            '&:hover': {
+                              borderColor: "primary.main",
+                              color: "primary.main",
+                              bgcolor: "primary.lighter"
+                            }
+                          }}
+                        >
+                          Ver Detalles
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <Box sx={{ textAlign: "center", mt: 8, p: 4, bgcolor: "background.paper", borderRadius: 2 }}>
+              <Typography variant="h6" color="text.secondary">
+                No se encontraron activos para esta categoría.
+              </Typography>
+            </Box>
+          )}
 
           {activos.length > 0 && (
             <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
@@ -136,112 +245,8 @@ export default function Activos() {
               />
             </Box>
           )}
-
-          {activos.length === 0 && (
-            <Box sx={{ textAlign: "center", mt: 8, p: 4, bgcolor: "background.paper", borderRadius: 2 }}>
-              <Typography variant="h6" color="text.secondary">
-                No se encontraron activos para esta categoría.
-              </Typography>
-            </Box>
-          )}
         </>
       )}
     </main>
-  );
-}
-
-function AssetCard({ activo }: { activo: ActivoDTO }) {
-  return (
-    <Card
-      elevation={0}
-      sx={{
-        width: "100%",
-        borderRadius: "12px",
-        border: "1px solid",
-        borderColor: "divider",
-        transition: "all 0.2s ease-in-out",
-        "&:hover": {
-          borderColor: "primary.main",
-          transform: "translateY(-2px)",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-        },
-      }}
-    >
-      <CardContent sx={{ p: 2, "&:last-child": { pb: 2 } }}>
-        <Grid container alignItems="center" spacing={2} sx={{ width: "100%" }}>
-          {/* Symbol and Name */}
-          <Grid item xs={12} sm={4} md={5}>
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <Box
-                sx={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: "50%",
-                  bgcolor: "primary.light",
-                  color: "primary.main",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontWeight: "bold",
-                  fontSize: "1.2rem",
-                  opacity: 0.2
-                }}
-              >
-                {activo.symbol.substring(0, 1)}
-              </Box>
-              <Box>
-                <Typography variant="h6" component="div" fontWeight="bold" sx={{ lineHeight: 1.2 }}>
-                  {activo.symbol}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" noWrap>
-                  {activo.nombre}
-                </Typography>
-              </Box>
-            </Stack>
-          </Grid>
-
-          {/* Tags / Metadata */}
-          <Grid item xs={12} sm={5} md={4}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Chip
-                label={activo.tipo}
-                size="small"
-                sx={{ bgcolor: "action.hover", fontWeight: 500 }}
-              />
-              <Chip
-                label={activo.moneda}
-                size="small"
-                variant="outlined"
-                color={activo.moneda === "USD" ? "success" : "default"}
-              />
-              {activo.esLocal && (
-                <Chip label="ARG" size="small" color="info" variant="outlined" sx={{ height: 24 }} />
-              )}
-            </Stack>
-          </Grid>
-
-          {/* Action Button */}
-          <Grid item xs={12} sm={3} md={3} sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-              <Button
-                component={Link}
-                href={`/activos/${activo.id}`}
-                variant="contained"
-                disableElevation
-                size="small"
-                sx={{
-                  borderRadius: "8px",
-                  textTransform: "none",
-                  fontWeight: 600,
-                  px: 3
-                }}
-              >
-                Ver Detalles
-              </Button>
-            </Box>
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
   );
 }
