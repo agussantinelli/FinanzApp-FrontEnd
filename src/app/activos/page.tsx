@@ -8,7 +8,6 @@ import {
   CardActions,
   CardContent,
   Chip,
-  Divider,
   Stack,
   Typography,
   Button,
@@ -18,27 +17,12 @@ import {
   FormControl,
   InputLabel,
   Pagination,
-  Collapse,
-  IconButton,
   CircularProgress,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { styled } from "@mui/material/styles";
 import { ActivoDTO } from "@/types/Activo";
 import { TipoActivoDTO } from "@/types/TipoActivo";
 import { getActivos } from "@/services/ActivosService";
 import { getTiposActivo } from "@/services/TipoActivosService";
-
-const ExpandMore = styled((props: { expand: boolean; onClick: () => void; children: React.ReactNode }) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-  marginLeft: "auto",
-  transition: theme.transitions.create("transform", {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
 
 export default function Activos() {
   const [selectedType, setSelectedType] = useState("Todos");
@@ -48,7 +32,7 @@ export default function Activos() {
 
   // Pagination state
   const [page, setPage] = useState(1);
-  const itemsPerPage = 15;
+  const itemsPerPage = 12;
 
   useEffect(() => {
     const loadTipos = async () => {
@@ -130,11 +114,11 @@ export default function Activos() {
         </Box>
       ) : (
         <>
-          <Grid container spacing={3}>
+          <Stack spacing={2}>
             {currentActivos.map((activo) => (
               <AssetCard key={activo.id} activo={activo} />
             ))}
-          </Grid>
+          </Stack>
 
           {activos.length > 0 && (
             <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
@@ -159,74 +143,55 @@ export default function Activos() {
 }
 
 function AssetCard({ activo }: { activo: ActivoDTO }) {
-  const [expanded, setExpanded] = useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-
   return (
-    <Grid item xs={12} sm={6} md={4}>
-      <Card
-        sx={{
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          borderRadius: "16px",
-          border: "1px solid",
-          borderColor: "divider",
-        }}
-      >
-        <CardContent sx={{ flexGrow: 1 }}>
-          <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-            <Box>
-              <Typography variant="h6" component="div">
-                {activo.symbol}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" gutterBottom>
-                {activo.nombre}
-              </Typography>
-            </Box>
+    <Card
+      sx={{
+        width: "100%",
+        borderRadius: "12px",
+        border: "1px solid",
+        borderColor: "divider",
+        transition: "transform 0.2s, box-shadow 0.2s",
+        "&:hover": {
+          transform: "translateY(-2px)",
+          boxShadow: 4,
+        },
+      }}
+    >
+      <CardContent sx={{ p: 2, "&:last-child": { pb: 2 } }}>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          justifyContent="space-between"
+          alignItems="center"
+          spacing={2}
+        >
+          <Box sx={{ flexGrow: 1, textAlign: { xs: "center", sm: "left" } }}>
+            <Typography variant="h6" component="div" fontWeight="bold">
+              {activo.symbol}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {activo.nombre}
+            </Typography>
+          </Box>
+
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Chip label={activo.tipo} size="small" />
             <Chip
               label={activo.moneda}
               size="small"
               color={activo.moneda === "USD" ? "success" : "default"}
               variant="outlined"
             />
+            <Button
+              component={Link}
+              href={`/activos/${activo.id}`}
+              variant="outlined"
+              size="small"
+            >
+              Ver Detalles
+            </Button>
           </Stack>
-
-          <Box sx={{ mt: 1 }}>
-            <Chip label={activo.tipo} size="small" sx={{ mr: 1 }} />
-            {activo.esLocal ? (
-              <Chip label="Local" size="small" color="info" variant="outlined" />
-            ) : (
-              <Chip label="Exterior" size="small" color="warning" variant="outlined" />
-            )}
-          </Box>
-        </CardContent>
-
-        <CardActions disableSpacing>
-          <Button size="small" component={Link} href={`/activos/${activo.id}`}>
-            Ver Detalles
-          </Button>
-          <ExpandMore
-            expand={expanded}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show more"
-          >
-            <ExpandMoreIcon />
-          </ExpandMore>
-        </CardActions>
-
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent>
-            <Typography paragraph variant="body2">
-              {activo.descripcion || "Sin descripción disponible."}
-            </Typography>
-          </CardContent>
-        </Collapse>
-      </Card>
-    </Grid>
+        </Stack>
+      </CardContent>
+    </Card>
   );
 }
