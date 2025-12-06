@@ -1,7 +1,7 @@
 export interface LoginResponseDTO {
   token: string;
-  expiraUtc: string; 
-  personaId: number;
+  expiraUtc: string;
+  personaId: string; // UUID
   nombre: string;
   apellido: string;
   email: string;

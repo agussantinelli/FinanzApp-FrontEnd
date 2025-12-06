@@ -1,7 +1,7 @@
 export interface CreateOperacionDTO {
-    personaId: number;
-    activoId: number;
-    tipo: string; // Enum: Compra, Venta, etc.
+    personaId: string; // UUID
+    activoId: string; // UUID
+    tipo: number; // Enum: 0 = Compra, 1 = Venta
     cantidad: number;
     precioUnitario: number;
     monedaOperacion: string;
@@ -10,7 +10,7 @@ export interface CreateOperacionDTO {
 }
 
 export interface OperacionResponseDTO {
-    id: number;
+    id: string; // UUID
     activoSymbol: string;
     activoNombre: string;
     tipo: string;

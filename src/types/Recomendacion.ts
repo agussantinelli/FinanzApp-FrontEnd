@@ -1,15 +1,15 @@
 export interface RecomendacionDTO {
-    id: number;
+    id: string; // UUID
     titulo: string;
     descripcion: string;
-    fotoUrl?: string;
-    autorId: number;
+    fotoUrl?: string; // string? in C#
+    autorId: string; // UUID
     autorNombreCompleto: string;
-    activoIds: number[];
+    activoIds: string[]; // UUID[]
 }
 
 export interface RecomendacionResumenDTO {
-    id: number;
+    id: string; // UUID
     titulo: string;
     fuente: string;
     fecha: string;
