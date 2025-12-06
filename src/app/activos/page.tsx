@@ -25,14 +25,17 @@ import {
   Card,
   TableSortLabel,
   Avatar,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
 import { ActivoDTO } from "@/types/Activo";
 import { TipoActivoDTO } from "@/types/TipoActivo";
-import { getActivosNoMoneda, getActivosByTipoId } from "@/services/ActivosService";
+import { getActivosNoMoneda, getActivosByTipoId, searchActivos } from "@/services/ActivosService";
 import { getTiposActivoNoMoneda } from "@/services/TipoActivosService";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import SearchIcon from '@mui/icons-material/Search';
 import NeonLoader from "@/components/ui/NeonLoader";
 
 const getAvatarColor = (tipo: string) => {
@@ -61,6 +64,7 @@ export default function Activos() {
   const [activos, setActivos] = useState<ActivoDTO[]>([]);
   const [tipos, setTipos] = useState<TipoActivoDTO[]>([]);
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [orderBy, setOrderBy] = useState<string>("variacion");
   const [orderDesc, setOrderDesc] = useState<boolean>(true);
@@ -82,18 +86,28 @@ export default function Activos() {
   }, []);
 
   useEffect(() => {
-    fetchActivos(selectedType);
-  }, [selectedType]);
+    const delayDebounceFn = setTimeout(() => {
+      fetchActivos();
+    }, 500);
 
-  const fetchActivos = async (tipo: string | number = selectedType) => {
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm, selectedType]);
+
+  const fetchActivos = async () => {
     setLoading(true);
     try {
       let data: ActivoDTO[];
-      if (tipo === "Todos") {
-        data = await getActivosNoMoneda();
+
+      if (searchTerm.length >= 2) {
+        data = await searchActivos(searchTerm);
       } else {
-        data = await getActivosByTipoId(Number(tipo));
+        if (selectedType === "Todos") {
+          data = await getActivosNoMoneda();
+        } else {
+          data = await getActivosByTipoId(Number(selectedType));
+        }
       }
+
       setActivos(data);
     } catch (error) {
       console.error("Error fetching activos:", error);
@@ -103,7 +117,7 @@ export default function Activos() {
   };
 
   const handleRefresh = () => {
-    fetchActivos(selectedType);
+    fetchActivos();
   };
 
   const handleRequestSort = (property: string) => {
@@ -155,37 +169,67 @@ export default function Activos() {
 
   return (
     <main style={{ padding: 24 }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 4 }}>
-        <Box>
-          <Typography variant="h4" gutterBottom fontWeight="bold">
-            Mercado
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Explora el catálogo completo de activos financieros.
-          </Typography>
-        </Box>
+      {/* Premium Header */}
+      <Box sx={{ mb: 5, pb: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
+        <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" alignItems={{ xs: 'flex-start', md: 'center' }} spacing={3}>
+          <Box>
+            <Typography
+              variant="h3"
+              gutterBottom
+              fontWeight={800}
+              sx={{
+                background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                mb: 1
+              }}
+            >
+              Mercado Financiero
+            </Typography>
+            <Typography variant="h6" color="text.secondary" fontWeight={400}>
+              Explora, analiza y descubre oportunidades de inversión en tiempo real.
+            </Typography>
+          </Box>
 
-        <Stack direction="row" spacing={2} alignItems="center">
-          <Button
-            variant="outlined"
-            startIcon={<RefreshIcon />}
-            onClick={handleRefresh}
-            disabled={loading}
-            sx={{
-              borderColor: 'divider',
-              color: 'text.secondary',
-              textTransform: 'none',
-              fontWeight: 600,
-              '&:hover': {
-                borderColor: 'primary.main',
-                color: 'primary.main',
-                bgcolor: 'background.paper'
-              }
-            }}
-          >
-            Actualizar
-          </Button>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <TextField
+              variant="outlined"
+              size="small"
+              placeholder="Buscar activo (ej: YPF, Bitcoin)..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon color="action" />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                minWidth: 300,
+                bgcolor: 'background.paper',
+                '& fieldset': { borderRadius: '12px' }
+              }}
+            />
+            <Button
+              variant="contained"
+              onClick={handleRefresh}
+              disabled={loading}
+              sx={{
+                minWidth: 'auto',
+                p: 1.5,
+                borderRadius: '12px',
+                background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .3)',
+              }}
+            >
+              <RefreshIcon />
+            </Button>
+          </Stack>
+        </Stack>
 
+        {/* Filters Row */}
+        <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
           <FormControl sx={{ minWidth: 220 }} size="small">
             <InputLabel id="asset-type-label">Filtrar por Tipo</InputLabel>
             <Select
@@ -194,6 +238,7 @@ export default function Activos() {
               value={selectedType}
               label="Filtrar por Tipo"
               onChange={handleTypeChange}
+              disabled={searchTerm.length >= 2}
             >
               <MenuItem value="Todos">Todos</MenuItem>
               {tipos.map((type) => (
@@ -203,8 +248,8 @@ export default function Activos() {
               ))}
             </Select>
           </FormControl>
-        </Stack>
-      </Stack>
+        </Box>
+      </Box>
 
       {loading ? (
         <NeonLoader message="Actualizando mercado..." />
