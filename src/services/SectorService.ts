@@ -1,10 +1,12 @@
-```typescript
 import { http } from "./Http";
-import { SectorDTO } from "@/types/Sector";
+import { TipoActivoDTO } from "@/types/TipoActivo";
 
-// Endpoint to fetch all sectors
-export async function getSectores(): Promise<SectorDTO[]> {
-    const res = await http.get<SectorDTO[]>("/api/sectores");
+export async function getTiposActivo(): Promise<TipoActivoDTO[]> {
+    const res = await http.get<TipoActivoDTO[]>("/api/tipos-activo");
     return res.data;
 }
-```
+
+export async function getTiposActivoNoMoneda(): Promise<TipoActivoDTO[]> {
+    const res = await http.get<TipoActivoDTO[]>("/api/tipos-activo/no-moneda");
+    return res.data;
+}
