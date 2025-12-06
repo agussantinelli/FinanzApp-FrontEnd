@@ -28,10 +28,11 @@ import {
 } from "@mui/material";
 import { ActivoDTO } from "@/types/Activo";
 import { TipoActivoDTO } from "@/types/TipoActivo";
-import { getActivosNoMoneda, getActivosByTipoId, getRankingActivos } from "@/services/ActivosService";
+import { getActivosNoMoneda, getActivosByTipoId } from "@/services/ActivosService";
 import { getTiposActivoNoMoneda } from "@/services/TipoActivosService";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import NeonLoader from "@/components/ui/NeonLoader";
 
 const getAvatarColor = (tipo: string) => {
@@ -61,7 +62,6 @@ export default function Activos() {
   const [tipos, setTipos] = useState<TipoActivoDTO[]>([]);
   const [loading, setLoading] = useState(false);
 
-
   const [orderBy, setOrderBy] = useState<string>("variacion");
   const [orderDesc, setOrderDesc] = useState<boolean>(true);
 
@@ -82,17 +82,18 @@ export default function Activos() {
   }, []);
 
   useEffect(() => {
-    fetchActivos();
-  }, [selectedType, orderBy, orderDesc]);
+    fetchActivos(selectedType);
+  }, [selectedType]);
 
-  const fetchActivos = async () => {
+  const fetchActivos = async (tipo: string | number = selectedType) => {
     setLoading(true);
     try {
       let data: ActivoDTO[];
-      const tipoIdParam = selectedType === "Todos" ? undefined : Number(selectedType);
-
-      data = await getRankingActivos(orderBy, orderDesc, tipoIdParam);
-
+      if (tipo === "Todos") {
+        data = await getActivosNoMoneda();
+      } else {
+        data = await getActivosByTipoId(Number(tipo));
+      }
       setActivos(data);
     } catch (error) {
       console.error("Error fetching activos:", error);
@@ -102,7 +103,7 @@ export default function Activos() {
   };
 
   const handleRefresh = () => {
-    fetchActivos();
+    fetchActivos(selectedType);
   };
 
   const handleRequestSort = (property: string) => {
@@ -119,11 +120,38 @@ export default function Activos() {
     setPage(value);
   };
 
-  // Pagination logic
+  // Client-side sorting logic
+  const sortedActivos = [...activos].sort((a, b) => {
+    let valueA: any = a[orderBy as keyof ActivoDTO];
+    let valueB: any = b[orderBy as keyof ActivoDTO];
+
+    // Handle special cases
+    if (orderBy === "variacion") {
+      valueA = a.variacion24h;
+      valueB = b.variacion24h;
+    } else if (orderBy === "precio") {
+      valueA = a.precioActual;
+      valueB = b.precioActual;
+    }
+
+    // Handle nulls: always put nulls at the end
+    if (valueA === null || valueA === undefined) return 1;
+    if (valueB === null || valueB === undefined) return -1;
+
+    if (valueB < valueA) {
+      return orderDesc ? -1 : 1;
+    }
+    if (valueB > valueA) {
+      return orderDesc ? 1 : -1;
+    }
+    return 0;
+  });
+
+  // Pagination logic on sorted data
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentActivos = activos.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(activos.length / itemsPerPage);
+  const currentActivos = sortedActivos.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(sortedActivos.length / itemsPerPage);
 
   return (
     <main style={{ padding: 24 }}>
@@ -192,6 +220,7 @@ export default function Activos() {
                         active={orderBy === "symbol"}
                         direction={orderBy === "symbol" && orderDesc ? "desc" : "asc"}
                         onClick={() => handleRequestSort("symbol")}
+                        IconComponent={orderBy !== "symbol" ? UnfoldMoreIcon : undefined}
                       >
                         Activo
                       </TableSortLabel>
@@ -201,6 +230,7 @@ export default function Activos() {
                         active={orderBy === "precio"}
                         direction={orderBy === "precio" && orderDesc ? "desc" : "asc"}
                         onClick={() => handleRequestSort("precio")}
+                        IconComponent={orderBy !== "precio" ? UnfoldMoreIcon : undefined}
                       >
                         Precio
                       </TableSortLabel>
@@ -210,6 +240,7 @@ export default function Activos() {
                         active={orderBy === "variacion"}
                         direction={orderBy === "variacion" && orderDesc ? "desc" : "asc"}
                         onClick={() => handleRequestSort("variacion")}
+                        IconComponent={orderBy !== "variacion" ? UnfoldMoreIcon : undefined}
                       >
                         24h %
                       </TableSortLabel>
