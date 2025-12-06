@@ -184,9 +184,7 @@ export default function Activos() {
         }
 
       } else {
-        // --- Fallback to Backend Filtering (Cache Miss) ---
 
-        // Explicit filtering via new endpoints if Filters are active
         if (selectedType !== "Todos" || selectedSector !== "Todos") {
           if (selectedType !== "Todos" && selectedSector !== "Todos") {
             data = await getActivosByTipoAndSector(Number(selectedType), selectedSector);
@@ -196,22 +194,17 @@ export default function Activos() {
             data = await getActivosByTipoId(Number(selectedType));
           }
         } else {
-          // Default global ranking (populates full cache)
-          // Note: Rank endpoint currently supports typeId but not sectorId for initial filtering
           const backendCriterio = criterioMap[orderBy] || "marketCap";
           const tipoId = selectedType !== "Todos" ? Number(selectedType) : undefined;
           data = await getRankingActivos(backendCriterio, orderDesc, tipoId);
         }
       }
 
-      // --- Universal Sorting (Client-Side) ---
-      // We sort here to ensure consistency whether data came from cache or filtered backend endpoint
       const criterio = criterioMap[orderBy] || "marketCap";
       data.sort((a, b) => {
         let valA: any = a[criterio as keyof ActivoDTO] ?? 0;
         let valB: any = b[criterio as keyof ActivoDTO] ?? 0;
 
-        // Handle special mappings or just rely on property names matching
         if (criterio === "nombre") { valA = a.symbol; valB = b.symbol; } // Mapping symbol
 
         if (valB < valA) return orderDesc ? -1 : 1;
@@ -277,15 +270,25 @@ export default function Activos() {
               gutterBottom
               fontWeight={800}
               sx={{
-                background: 'linear-gradient(45deg, #33a139ff 30%, #b3ffd0ff 90%)',
+                background: 'linear-gradient(135deg, #0dff21ff 0%, #7aff85ff 50%, #bcffc2ff 100%)',
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
-                mb: 1
+                mb: 1,
+                letterSpacing: "-0.02em"
               }}
             >
               Mercado Financiero
             </Typography>
-            <Typography variant="h6" color="text.secondary" fontWeight={400}>
+            <Typography
+              variant="h6"
+              fontWeight={500}
+              sx={{
+                background: 'linear-gradient(90deg, #ffffffff 0%, #beffc3ff 100%)',
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                opacity: 0.9
+              }}
+            >
               Explora, analiza y descubre oportunidades de inversión en tiempo real.
             </Typography>
           </Box>
