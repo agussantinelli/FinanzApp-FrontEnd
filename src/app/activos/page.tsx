@@ -32,7 +32,7 @@ import {
 } from "@mui/material";
 import { ActivoDTO } from "@/types/Activo";
 import { TipoActivoDTO } from "@/types/TipoActivo";
-import { getActivosNoMoneda, getActivosByTipoId, searchActivos } from "@/services/ActivosService";
+import { getActivosNoMoneda, getActivosByTipoId, searchActivos, getRankingActivos } from "@/services/ActivosService";
 import { getTiposActivoNoMoneda } from "@/services/TipoActivosService";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -74,7 +74,7 @@ export default function Activos() {
   const [suggestions, setSuggestions] = useState<ActivoDTO[]>([]);
   const [isSearching, setIsSearching] = useState(false);
 
-  const [orderBy, setOrderBy] = useState<string>("variacion");
+  const [orderBy, setOrderBy] = useState<string>("marketCap");
   const [orderDesc, setOrderDesc] = useState<boolean>(true);
 
   const [page, setPage] = useState(1);
@@ -140,17 +140,25 @@ export default function Activos() {
     if (searchTerm === "") {
       fetchActivos();
     }
-  }, [selectedType]);
+  }, [selectedType, orderBy, orderDesc]);
 
   const fetchActivos = async () => {
     setLoading(true);
     try {
       let data: ActivoDTO[];
-      if (selectedType === "Todos") {
-        data = await getActivosNoMoneda();
-      } else {
-        data = await getActivosByTipoId(Number(selectedType));
-      }
+      // Backend Ranking API: criterio (precio, variacion, nombre), desc (bool), tipoId (int)
+      // Mapping orderBy "symbol" to "nombre" for backend if needed, or backend accepts "nombre"
+      const criterioMap: Record<string, string> = {
+        "symbol": "nombre",
+        "precio": "precio",
+        "variacion": "variacion",
+        "marketCap": "marketCap"
+      };
+
+      const criterio = criterioMap[orderBy] || "variacion";
+      const tipoId = selectedType !== "Todos" ? Number(selectedType) : undefined;
+
+      data = await getRankingActivos(criterio, orderDesc, tipoId);
       setActivos(data);
     } catch (error) {
       console.error(error);
@@ -181,34 +189,11 @@ export default function Activos() {
     setPage(value);
   };
 
-  const sortedActivos = [...activos].sort((a, b) => {
-    let valueA: any = a[orderBy as keyof ActivoDTO];
-    let valueB: any = b[orderBy as keyof ActivoDTO];
-
-    if (orderBy === "variacion") {
-      valueA = a.variacion24h;
-      valueB = b.variacion24h;
-    } else if (orderBy === "precio") {
-      valueA = a.precioActual;
-      valueB = b.precioActual;
-    }
-
-    if (valueA === null || valueA === undefined) return 1;
-    if (valueB === null || valueB === undefined) return -1;
-
-    if (valueB < valueA) {
-      return orderDesc ? -1 : 1;
-    }
-    if (valueB > valueA) {
-      return orderDesc ? 1 : -1;
-    }
-    return 0;
-  });
-
+  // Client-side pagination on server-sorted data
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentActivos = sortedActivos.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(sortedActivos.length / itemsPerPage);
+  const currentActivos = activos.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(activos.length / itemsPerPage);
 
   return (
     <main style={{ padding: 24 }}>
@@ -376,6 +361,17 @@ export default function Activos() {
                         24h %
                       </TableSortLabel>
                     </TableCell>
+                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Sector</TableCell>
+                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>
+                      <TableSortLabel
+                        active={orderBy === "marketCap"}
+                        direction={orderBy === "marketCap" && orderDesc ? "desc" : "asc"}
+                        onClick={() => handleRequestSort("marketCap")}
+                        IconComponent={orderBy !== "marketCap" ? UnfoldMoreIcon : undefined}
+                      >
+                        Market Cap
+                      </TableSortLabel>
+                    </TableCell>
                     <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Moneda</TableCell>
                     <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Origen</TableCell>
                     <TableCell align="right" sx={{ fontWeight: "bold", color: "text.secondary" }}>Acciones</TableCell>
@@ -439,6 +435,16 @@ export default function Activos() {
                         ) : (
                           <Typography variant="body2" color="text.secondary">-</Typography>
                         )}
+                      </TableCell>
+                      <TableCell>
+                        <Chip label={activo.sector || "-"} size="small" variant="outlined" sx={{ borderRadius: "6px" }} />
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body2">
+                          {activo.marketCap
+                            ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: "compact", maximumFractionDigits: 1 }).format(activo.marketCap)
+                            : "-"}
+                        </Typography>
                       </TableCell>
                       <TableCell>
                         <Chip

@@ -226,7 +226,7 @@ export default function ActivoDetalle() {
             <Container maxWidth="lg" sx={{ mt: -4 }}>
                 <Grid container spacing={4}>
                     {/* Left Column: Details */}
-                    <Grid xs={12} md={8}>
+                    <Grid item xs={12} md={8}>
                         <Paper
                             elevation={0}
                             sx={{
@@ -250,19 +250,19 @@ export default function ActivoDetalle() {
                             <Divider sx={{ my: 3 }} />
 
                             <Grid container spacing={3}>
-                                <Grid xs={6} sm={4}>
+                                <Grid item xs={6} sm={4}>
                                     <Typography variant="caption" color="text.secondary" fontWeight="bold">MONEDA</Typography>
                                     <Typography variant="h6">{activo.moneda}</Typography>
                                 </Grid>
-                                <Grid xs={6} sm={4}>
+                                <Grid item xs={6} sm={4}>
                                     <Typography variant="caption" color="text.secondary" fontWeight="bold">ORIGEN</Typography>
                                     <Typography variant="h6">{activo.esLocal ? "Local" : "Internacional"}</Typography>
                                 </Grid>
-                                <Grid xs={6} sm={4}>
+                                <Grid item xs={6} sm={4}>
                                     <Typography variant="caption" color="text.secondary" fontWeight="bold">SECTOR</Typography>
                                     <Typography variant="h6">{activo.sector || "-"}</Typography>
                                 </Grid>
-                                <Grid xs={6} sm={4}>
+                                <Grid item xs={6} sm={4}>
                                     <Typography variant="caption" color="text.secondary" fontWeight="bold">MARKET CAP</Typography>
                                     <Typography variant="h6">
                                         {activo.marketCap
@@ -276,7 +276,7 @@ export default function ActivoDetalle() {
                     </Grid>
 
                     {/* Right Column: Actions */}
-                    <Grid xs={12} md={4}>
+                    <Grid item xs={12} md={4}>
                         <Paper
                             elevation={0}
                             sx={{
