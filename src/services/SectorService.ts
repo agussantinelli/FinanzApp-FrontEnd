@@ -6,7 +6,3 @@ export async function getSectores(): Promise<SectorDTO[]> {
     return res.data;
 }
 
-export async function getSectoresNoMoneda(): Promise<SectorDTO[]> {
-    const res = await http.get<SectorDTO[]>("/api/sectores/no-moneda");
-    return res.data;
-}

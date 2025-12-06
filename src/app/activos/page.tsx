@@ -32,8 +32,17 @@ import {
 } from "@mui/material";
 import { ActivoDTO } from "@/types/Activo";
 import { TipoActivoDTO } from "@/types/TipoActivo";
-import { getActivosNoMoneda, getActivosByTipoId, searchActivos, getRankingActivos } from "@/services/ActivosService";
+import { SectorDTO } from "@/types/Sector";
+import {
+  getActivosNoMoneda,
+  getActivosByTipoId,
+  searchActivos,
+  getRankingActivos,
+  getActivosBySector,
+  getActivosByTipoAndSector
+} from "@/services/ActivosService";
 import { getTiposActivoNoMoneda } from "@/services/TipoActivosService";
+import { getSectores } from "@/services/SectorService";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
@@ -67,8 +76,10 @@ const getAvatarColor = (tipo: string) => {
 export default function Activos() {
   const router = useRouter();
   const [selectedType, setSelectedType] = useState<string | number>("Todos");
+  const [selectedSector, setSelectedSector] = useState<string>("Todos");
   const [activos, setActivos] = useState<ActivoDTO[]>([]);
   const [tipos, setTipos] = useState<TipoActivoDTO[]>([]);
+  const [sectores, setSectores] = useState<SectorDTO[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<ActivoDTO[]>([]);
@@ -81,15 +92,19 @@ export default function Activos() {
   const itemsPerPage = 12;
 
   useEffect(() => {
-    const loadTipos = async () => {
+    const loadTiposAndSectores = async () => {
       try {
-        const data = await getTiposActivoNoMoneda();
-        setTipos(data);
+        const [tiposData, sectoresData] = await Promise.all([
+          getTiposActivoNoMoneda(),
+          getSectores()
+        ]);
+        setTipos(tiposData);
+        setSectores(sectoresData);
       } catch (error) {
-        console.error("Error fetching types:", error);
+        console.error("Error fetching types/sectors:", error);
       }
     };
-    loadTipos();
+    loadTiposAndSectores();
   }, []);
 
   useEffect(() => {
@@ -140,7 +155,7 @@ export default function Activos() {
     if (searchTerm === "") {
       fetchActivos();
     }
-  }, [selectedType, orderBy, orderDesc]);
+  }, [selectedType, selectedSector, orderBy, orderDesc]);
 
   const fetchActivos = async () => {
     setLoading(true);
@@ -155,10 +170,38 @@ export default function Activos() {
         "marketCap": "marketCap"
       };
 
-      const criterio = criterioMap[orderBy] || "variacion";
-      const tipoId = selectedType !== "Todos" ? Number(selectedType) : undefined;
+      // Explicit filtering via new endpoints if Filters are active
+      if (selectedType !== "Todos" || selectedSector !== "Todos") {
+        if (selectedType !== "Todos" && selectedSector !== "Todos") {
+          data = await getActivosByTipoAndSector(Number(selectedType), selectedSector);
+        } else if (selectedSector !== "Todos") {
+          data = await getActivosBySector(selectedSector);
+        } else {
+          data = await getActivosByTipoId(Number(selectedType));
+        }
 
-      data = await getRankingActivos(criterio, orderDesc, tipoId);
+        // Apply client-side sorting for filtered results (since filtering endpoints don't support sorting yet)
+        const criterio = criterioMap[orderBy] || "marketCap";
+        data.sort((a, b) => {
+          let valA: any = a[criterio as keyof ActivoDTO] ?? 0;
+          let valB: any = b[criterio as keyof ActivoDTO] ?? 0;
+
+          // Handle special mappings or just rely on property names matching
+          if (criterio === "nombre") { valA = a.symbol; valB = b.symbol; } // Mapping symbol
+
+          if (valB < valA) return orderDesc ? -1 : 1;
+          if (valB > valA) return orderDesc ? 1 : -1;
+          return 0;
+        });
+
+      } else {
+        // Default global ranking
+        const criterio = criterioMap[orderBy] || "marketCap";
+        // Note: Rank endpoint currently supports typeId but not sectorId for initial filtering
+        const tipoId = selectedType !== "Todos" ? Number(selectedType) : undefined;
+        data = await getRankingActivos(criterio, orderDesc, tipoId);
+      }
+
       setActivos(data);
     } catch (error) {
       console.error(error);
@@ -183,6 +226,12 @@ export default function Activos() {
 
   const handleTypeChange = (event: any) => {
     setSelectedType(event.target.value);
+    setPage(1);
+  };
+
+  const handleSectorChange = (event: any) => {
+    setSelectedSector(event.target.value);
+    setPage(1);
   };
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -301,7 +350,26 @@ export default function Activos() {
               <RefreshIcon />
             </Button>
 
-            <FormControl sx={{ minWidth: 220 }} size="small">
+            <FormControl sx={{ minWidth: 200 }} size="small">
+              <InputLabel id="sector-select-label">Filtrar por Sector</InputLabel>
+              <Select
+                labelId="sector-select-label"
+                id="sector-select"
+                value={selectedSector}
+                label="Filtrar por Sector"
+                onChange={handleSectorChange}
+                sx={{ borderRadius: "12px" }}
+              >
+                <MenuItem value="Todos">Todos</MenuItem>
+                {sectores.map((sector) => (
+                  <MenuItem key={sector.id} value={sector.id}>
+                    {sector.nombre}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl sx={{ minWidth: 200 }} size="small">
               <InputLabel id="asset-type-label">Filtrar por Tipo</InputLabel>
               <Select
                 labelId="asset-type-label"
