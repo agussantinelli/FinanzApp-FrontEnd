@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Box,
   Stack,
@@ -61,6 +62,7 @@ const getAvatarColor = (tipo: string) => {
 };
 
 export default function Activos() {
+  const router = useRouter(); // Initialize router
   const [selectedType, setSelectedType] = useState<string | number>("Todos");
   const [activos, setActivos] = useState<ActivoDTO[]>([]);
   const [tipos, setTipos] = useState<TipoActivoDTO[]>([]);
@@ -253,8 +255,8 @@ export default function Activos() {
               }}
               onChange={(event, newValue) => {
                 if (newValue && typeof newValue !== 'string') {
-                  setSearchTerm(newValue.symbol);
-                  executeSearch(newValue.symbol); // Optional: Trigger search on selection
+                  // Navigate to asset detail page
+                  router.push(`/activos/${newValue.id}`);
                 }
               }}
               onKeyDown={(e) => {
