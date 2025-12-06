@@ -21,13 +21,14 @@ import {
   TableRow,
   Paper,
   Chip,
-  Avatar,
   IconButton,
   Card,
+  TableSortLabel,
+  Avatar,
 } from "@mui/material";
 import { ActivoDTO } from "@/types/Activo";
 import { TipoActivoDTO } from "@/types/TipoActivo";
-import { getActivosNoMoneda, getActivosByTipoId } from "@/services/ActivosService";
+import { getActivosNoMoneda, getActivosByTipoId, getRankingActivos } from "@/services/ActivosService";
 import { getTiposActivoNoMoneda } from "@/services/TipoActivosService";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -60,6 +61,10 @@ export default function Activos() {
   const [tipos, setTipos] = useState<TipoActivoDTO[]>([]);
   const [loading, setLoading] = useState(false);
 
+
+  const [orderBy, setOrderBy] = useState<string>("variacion");
+  const [orderDesc, setOrderDesc] = useState<boolean>(true);
+
   // Pagination state
   const [page, setPage] = useState(1);
   const itemsPerPage = 12;
@@ -77,20 +82,18 @@ export default function Activos() {
   }, []);
 
   useEffect(() => {
-    fetchActivos(selectedType);
-  }, [selectedType]);
+    fetchActivos();
+  }, [selectedType, orderBy, orderDesc]);
 
-  const fetchActivos = async (tipo: string | number) => {
+  const fetchActivos = async () => {
     setLoading(true);
     try {
       let data: ActivoDTO[];
-      if (tipo === "Todos") {
-        data = await getActivosNoMoneda();
-      } else {
-        data = await getActivosByTipoId(Number(tipo));
-      }
+      const tipoIdParam = selectedType === "Todos" ? undefined : Number(selectedType);
+
+      data = await getRankingActivos(orderBy, orderDesc, tipoIdParam);
+
       setActivos(data);
-      setPage(1); // Reset to first page on filter change
     } catch (error) {
       console.error("Error fetching activos:", error);
     } finally {
@@ -99,7 +102,13 @@ export default function Activos() {
   };
 
   const handleRefresh = () => {
-    fetchActivos(selectedType);
+    fetchActivos();
+  };
+
+  const handleRequestSort = (property: string) => {
+    const isDesc = orderBy === property && orderDesc;
+    setOrderDesc(!isDesc);
+    setOrderBy(property);
   };
 
   const handleTypeChange = (event: any) => {
@@ -178,9 +187,33 @@ export default function Activos() {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead sx={{ bgcolor: "background.default" }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Activo</TableCell>
-                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Precio</TableCell>
-                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>24h %</TableCell>
+                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>
+                      <TableSortLabel
+                        active={orderBy === "symbol"}
+                        direction={orderBy === "symbol" && orderDesc ? "desc" : "asc"}
+                        onClick={() => handleRequestSort("symbol")}
+                      >
+                        Activo
+                      </TableSortLabel>
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>
+                      <TableSortLabel
+                        active={orderBy === "precio"}
+                        direction={orderBy === "precio" && orderDesc ? "desc" : "asc"}
+                        onClick={() => handleRequestSort("precio")}
+                      >
+                        Precio
+                      </TableSortLabel>
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>
+                      <TableSortLabel
+                        active={orderBy === "variacion"}
+                        direction={orderBy === "variacion" && orderDesc ? "desc" : "asc"}
+                        onClick={() => handleRequestSort("variacion")}
+                      >
+                        24h %
+                      </TableSortLabel>
+                    </TableCell>
                     <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Moneda</TableCell>
                     <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Origen</TableCell>
                     <TableCell align="right" sx={{ fontWeight: "bold", color: "text.secondary" }}>Acciones</TableCell>
