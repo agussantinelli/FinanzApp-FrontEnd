@@ -39,7 +39,8 @@ import {
   searchActivos,
   getRankingActivos,
   getActivosBySector,
-  getActivosByTipoAndSector
+  getActivosByTipoAndSector,
+  getAllActivosFromCache
 } from "@/services/ActivosService";
 import { getTiposActivoNoMoneda } from "@/services/TipoActivosService";
 import { getSectores } from "@/services/SectorService";
@@ -145,7 +146,82 @@ export default function Activos() {
       }
       setActivos(data);
     } catch (error) {
-      console.error("Error executing search:", error);
+      fetchActivos();
+    }
+  };
+
+  const fetchActivos = async () => {
+    setLoading(true);
+    try {
+      let data: ActivoDTO[] = [];
+      const cache = getAllActivosFromCache();
+
+      const criterioMap: Record<string, string> = {
+        "symbol": "nombre",
+        "precio": "precio",
+        "variacion": "variacion",
+        "marketCap": "marketCap"
+      };
+
+      if (cache) {
+        // --- Client-Side Filtering from Cache ---
+        data = [...cache];
+
+        // Filter by Type
+        if (selectedType !== "Todos") {
+          const tObj = tipos.find(t => t.id === Number(selectedType));
+          if (tObj) {
+            data = data.filter(a => a.tipo === tObj.nombre);
+          }
+        }
+
+        // Filter by Sector
+        if (selectedSector !== "Todos") {
+          const sObj = sectores.find(s => s.id === selectedSector);
+          if (sObj) {
+            data = data.filter(a => a.sector === sObj.nombre);
+          }
+        }
+
+      } else {
+        // --- Fallback to Backend Filtering (Cache Miss) ---
+
+        // Explicit filtering via new endpoints if Filters are active
+        if (selectedType !== "Todos" || selectedSector !== "Todos") {
+          if (selectedType !== "Todos" && selectedSector !== "Todos") {
+            data = await getActivosByTipoAndSector(Number(selectedType), selectedSector);
+          } else if (selectedSector !== "Todos") {
+            data = await getActivosBySector(selectedSector);
+          } else {
+            data = await getActivosByTipoId(Number(selectedType));
+          }
+        } else {
+          // Default global ranking (populates full cache)
+          // Note: Rank endpoint currently supports typeId but not sectorId for initial filtering
+          const backendCriterio = criterioMap[orderBy] || "marketCap";
+          const tipoId = selectedType !== "Todos" ? Number(selectedType) : undefined;
+          data = await getRankingActivos(backendCriterio, orderDesc, tipoId);
+        }
+      }
+
+      // --- Universal Sorting (Client-Side) ---
+      // We sort here to ensure consistency whether data came from cache or filtered backend endpoint
+      const criterio = criterioMap[orderBy] || "marketCap";
+      data.sort((a, b) => {
+        let valA: any = a[criterio as keyof ActivoDTO] ?? 0;
+        let valB: any = b[criterio as keyof ActivoDTO] ?? 0;
+
+        // Handle special mappings or just rely on property names matching
+        if (criterio === "nombre") { valA = a.symbol; valB = b.symbol; } // Mapping symbol
+
+        if (valB < valA) return orderDesc ? -1 : 1;
+        if (valB > valA) return orderDesc ? 1 : -1;
+        return 0;
+      });
+
+      setActivos(data);
+    } catch (error) {
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -156,59 +232,6 @@ export default function Activos() {
       fetchActivos();
     }
   }, [selectedType, selectedSector, orderBy, orderDesc]);
-
-  const fetchActivos = async () => {
-    setLoading(true);
-    try {
-      let data: ActivoDTO[];
-      // Backend Ranking API: criterio (precio, variacion, nombre), desc (bool), tipoId (int)
-      // Mapping orderBy "symbol" to "nombre" for backend if needed, or backend accepts "nombre"
-      const criterioMap: Record<string, string> = {
-        "symbol": "nombre",
-        "precio": "precio",
-        "variacion": "variacion",
-        "marketCap": "marketCap"
-      };
-
-      // Explicit filtering via new endpoints if Filters are active
-      if (selectedType !== "Todos" || selectedSector !== "Todos") {
-        if (selectedType !== "Todos" && selectedSector !== "Todos") {
-          data = await getActivosByTipoAndSector(Number(selectedType), selectedSector);
-        } else if (selectedSector !== "Todos") {
-          data = await getActivosBySector(selectedSector);
-        } else {
-          data = await getActivosByTipoId(Number(selectedType));
-        }
-
-        // Apply client-side sorting for filtered results (since filtering endpoints don't support sorting yet)
-        const criterio = criterioMap[orderBy] || "marketCap";
-        data.sort((a, b) => {
-          let valA: any = a[criterio as keyof ActivoDTO] ?? 0;
-          let valB: any = b[criterio as keyof ActivoDTO] ?? 0;
-
-          // Handle special mappings or just rely on property names matching
-          if (criterio === "nombre") { valA = a.symbol; valB = b.symbol; } // Mapping symbol
-
-          if (valB < valA) return orderDesc ? -1 : 1;
-          if (valB > valA) return orderDesc ? 1 : -1;
-          return 0;
-        });
-
-      } else {
-        // Default global ranking
-        const criterio = criterioMap[orderBy] || "marketCap";
-        // Note: Rank endpoint currently supports typeId but not sectorId for initial filtering
-        const tipoId = selectedType !== "Todos" ? Number(selectedType) : undefined;
-        data = await getRankingActivos(criterio, orderDesc, tipoId);
-      }
-
-      setActivos(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleRefresh = () => {
     if (searchTerm.length > 0) {

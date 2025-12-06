@@ -3,19 +3,27 @@ import { ActivoDTO } from "@/types/Activo";
 
 // In-memory cache
 const assetsCache = new Map<string, ActivoDTO>();
+let isFullCache = false;
 
 export function getActivoFromCache(id: string): ActivoDTO | undefined {
     return assetsCache.get(id);
 }
 
-function cacheActivos(activos: ActivoDTO[]) {
+export function getAllActivosFromCache(): ActivoDTO[] | null {
+    if (!isFullCache) return null;
+    return Array.from(assetsCache.values());
+}
+
+function cacheActivos(activos: ActivoDTO[], fullList: boolean = false) {
     activos.forEach(a => assetsCache.set(a.id, a));
+    if (fullList) isFullCache = true;
 }
 
 export async function getActivos(tipo?: string): Promise<ActivoDTO[]> {
     const params = tipo && tipo !== "Todos" ? { tipo } : {};
     const res = await http.get<ActivoDTO[]>("/api/activos", { params });
-    cacheActivos(res.data);
+    // If no type filter, we assume it's the full list
+    cacheActivos(res.data, !tipo || tipo === "Todos");
     return res.data;
 }
 
@@ -32,7 +40,7 @@ export async function getActivosByTipoId(id: number): Promise<ActivoDTO[]> {
 
 export async function getActivosNoMoneda(): Promise<ActivoDTO[]> {
     const res = await http.get<ActivoDTO[]>("/api/activos/no-moneda");
-    cacheActivos(res.data);
+    cacheActivos(res.data, true);
     return res.data;
 }
 
@@ -41,7 +49,9 @@ export async function getRankingActivos(criterio: string = "variacion", desc: bo
     if (tipoId) params.tipoId = tipoId;
 
     const res = await http.get<ActivoDTO[]>("/api/activos/ranking", { params });
-    cacheActivos(res.data);
+    // Ranking returns all items sorted, so it's a full list if not filtered by type (though backend supports typeId)
+    // If tipoId is undefined, it is full list.
+    cacheActivos(res.data, !tipoId);
     return res.data;
 }
 
