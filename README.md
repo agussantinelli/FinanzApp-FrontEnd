@@ -1,11 +1,11 @@
-<h1 align="center">🛠️ FinanzApp - Backend</h1>
+<h1 align="center">💹 FinanzApp - Frontend</h1>
 
 <div align="center">
     <a href="https://github.com/agussantinelli/FinanzApp-FrontEnd.git" target="_blank">
-        <img src="https://img.shields.io/badge/🚀%20Repo%20Frontend-Next.js-20232A?style=for-the-badge&logo=next.js&logoColor=white" alt="Frontend Repo Badge"/>
+        <img src="https://img.shields.io/badge/🚀%20Repo%20Frontend%20(Estás%20Aquí)-Next.js-20232A?style=for-the-badge&logo=next.js&logoColor=white" alt="Frontend Repo Badge"/>
     </a>
     <a href="https://github.com/agussantinelli/FinanzApp-BackEnd.git" target="_blank">
-        <img src="https://img.shields.io/badge/⚙️%20Repo%20Backend%20(Estás%20Aquí)-ASP.NET%20Core-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt="Backend Repo Badge"/>
+        <img src="https://img.shields.io/badge/⚙️%20Repo%20Backend-ASP.NET%20Core-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt="Backend Repo Badge"/>
     </a>
     <a href="https://github.com/agussantinelli" target="_blank">
         <img src="https://img.shields.io/badge/👤%20Contacto-agussantinelli-000000?style=for-the-badge&logo=github&logoColor=white" alt="Contact Badge"/>
@@ -13,10 +13,9 @@
 </div>
 
 <p align="center">
-    <img src="https://img.shields.io/badge/.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt=".NET Badge"/>
-    <img src="https://img.shields.io/badge/ASP.NET%20Core-512BD4?style=for-the-badge&logo=asp.net&logoColor=white" alt="ASP.NET Core Badge"/>
-    <img src="https://img.shields.io/badge/SQL%20Server-CC2927?style=for-the-badge&logo=microsoftsqlserver&logoColor=white" alt="SQL Server Badge"/>
-    <img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" alt="Swagger Badge"/>
+    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript Badge"/>
+    <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel Badge"/>
+    <img src="https://img.shields.io/badge/Material%20UI-007FFF?style=for-the-badge&logo=mui&logoColor=white" alt="MUI Badge"/>
     <img src="https://img.shields.io/badge/JWT%20Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT Badge"/>
     <a href="https://drive.google.com/drive/folders/1b5H8fDgOKmrxfY4RXfi4oYA3CvXy4ot6?usp=drive_link" target="_blank">
         <img src="https://img.shields.io/badge/📂%20Documentación%20Proyecto-4285F4?style=for-the-badge&logo=googledrive&logoColor=white" alt="Carpeta TPI Drive Badge"/>
@@ -25,19 +24,59 @@
 
 <hr>
 
-<h2>🎯 Objetivo y Rol</h2>
+<h2>🎯 Objetivo</h2>
 
-<p>Este repositorio contiene la <strong>API REST</strong> de alto rendimiento construida en <strong>ASP.NET Core</strong> que actúa como el <em>motor de datos, lógica de negocio y persistencia</em> para toda la aplicación FinanzApp.</p>
+<p>Ofrecer una visión clara, consolidada y actualizada del portafolio completo (<strong>efectivo + inversiones</strong>) para inversores argentinos, con conversión correcta según el tipo de cambio que corresponda a cada activo.</p>
 
-<p>Su rol principal es:</p>
+<h2>🧭 Visión General</h2>
+
+<p>FinanzApp es la herramienta diseñada para ser el <strong>"panel patrimonial"</strong> de referencia para el inversor argentino. Esto implica:</p>
 <ul>
-    <li><strong>Agregación de Datos:</strong> Consumir, normalizar y cachear datos de múltiples APIs financieras externas (<strong>CoinGecko</strong> para cripto, <strong>DolarAPI</strong> para tipos de cambio en ARS, <strong>Yahoo Finance</strong> para acciones y CEDEARs).</li>
-    <li><strong>Lógica de Conversión:</strong> Aplicar la lógica compleja para la valuación y conversión de activos usando los tipos de cambio argentinos (MEP, CCL, Oficial, Blue).</li>
-    <li><strong>Persistencia:</strong> Gestionar los portafolios de usuarios, históricos y cotizaciones en una base de datos relacional. Actualmente se utiliza <strong>SQL Server</strong>.</li>
-    <li><strong>Seguridad:</strong> Implementar la autenticación y autorización (JWT, espacios personales, roles de usuario).</li>
+    <li>Consulta de tipos de cambio relevantes para Argentina (oficial, MEP, CCL, blue, etc.).</li>
+    <li>Consolidación de cripto, acciones locales, CEDEARs y ONs en una sola interfaz.</li>
+    <li>Conversión ARS ↔ USD aplicando el tipo de dólar adecuado por clase de activo.</li>
+    <li>Indicadores clave: patrimonio total, distribución por clase de activo y evolución.</li>
+    <li>UI moderna, tema oscuro y acentos verde neón para una experiencia clara y agradable.</li>
 </ul>
 
-<h2>⚙️ Stack Tecnológico</h2>
+<h2>💼 Problema</h2>
+
+<p>En Argentina, el inversor se enfrenta a:</p>
+<ul>
+    <li>Información financiera <strong>fragmentada</strong> entre brokers, exchanges y sitios de cotizaciones.</li>
+    <li>Dificultad para aplicar el <strong>tipo de cambio correcto</strong> para valuar cada activo.</li>
+    <li>Falta de una vista <strong>consolidada y en tiempo (casi) real</strong> del patrimonio total.</li>
+</ul>
+
+<h2>🚀 Propuesta de Valor</h2>
+
+<ul>
+    <li>Unificar datos y cotizaciones en un único lugar.</li>
+    <li>Normalizar conversiones entre ARS y USD según clase de activo.</li>
+    <li>Centralizar el seguimiento del portafolio con métricas simples y relevantes.</li>
+    <li>Automatizar actualizaciones mediante adaptadores de datos (gestionados por el Backend).</li>
+</ul>
+
+<h2>🧮 Meta</h2>
+
+<p>Que FinanzApp sea el <strong>panel patrimonial de referencia</strong> para el inversor argentino.</p>
+
+<h2>🧩 Alcance Inicial (MVP)</h2>
+
+<ul>
+    <li>Alta y gestión de activos: <code>CRYPTO</code>, <code>ACCION_LOCAL</code>, <code>CEDEAR</code>, <code>ON</code>.</li>
+    <li>Consulta de cotizaciones por clase de activo.</li>
+    <li>Conversión a ARS/USD usando MEP/CCL/Oficial/Blue (configurable).</li>
+    <li>Reportes base: patrimonio total y distribución por clase.</li>
+</ul>
+
+<hr>
+
+<h2>🌐 Frontend (este repositorio)</h2>
+
+<p>Este repositorio contiene la <strong>interfaz de usuario (UI)</strong> y la lógica de presentación, construida para ser una aplicación web de alto rendimiento y completamente responsiva.</p>
+
+<h3>⚙️ Stack Tecnológico</h3>
 
 <table>
     <thead>
@@ -50,644 +89,270 @@
     <tbody>
         <tr>
             <td><strong>Framework</strong></td>
-            <td>ASP.NET Core (mínimo .NET 8)</td>
-            <td>Alto rendimiento para APIs REST, usando Minimal APIs.</td>
+            <td>Next.js (App Router)</td>
+            <td>Routing moderno, Server/Client Components y SSR/SSG.</td>
         </tr>
         <tr>
             <td><strong>Lenguaje</strong></td>
-            <td>C#</td>
-            <td>Foco en una arquitectura limpia, extensible y mantenible.</td>
+            <td>TypeScript</td>
+            <td>Tipado estricto para escalabilidad.</td>
         </tr>
         <tr>
-            <td><strong>Base de Datos</strong></td>
-            <td>SQL Server</td>
-            <td>Base de datos relacional robusta, enfoque Code First.</td>
+            <td><strong>UI Library</strong></td>
+            <td>Material UI (MUI)</td>
+            <td>Componentes UI robustos y accesibles.</td>
         </tr>
         <tr>
-            <td><strong>ORM</strong></td>
-            <td>Entity Framework Core</td>
-            <td>Contexto principal: <code>DBFinanzasContext</code> (proyecto <code>Data</code>).</td>
+            <td><strong>Estilo</strong></td>
+            <td>Tema Oscuro + Verde Flúor (<code>#39ff14</code>)</td>
+            <td>Estética moderna y legible.</td>
         </tr>
         <tr>
-            <td><strong>Documentación</strong></td>
-            <td>Swagger / OpenAPI</td>
-            <td>Exploración y prueba de endpoints desde <code>/swagger</code>.</td>
+            <td><strong>Fondo</strong></td>
+            <td>Efecto de partículas neón</td>
+            <td>Ligero y compatible con SSR.</td>
         </tr>
     </tbody>
 </table>
 
-<h2>🏗️ Arquitectura de la Solución</h2>
+<h3>📁 Estructura Principal del Proyecto</h3>
 
 <ul>
-    <li><strong>Domain</strong> (Capa de Dominio)
+    <li><code>src/app/</code>
         <ul>
-            <li>Entidades principales:
-                <ul>
-                    <li><code>Persona</code>: Usuario del sistema (Admin, Inversor, Experto) con datos personales, residencia y rol.</li>
-                    <li><code>Activo</code>: Instrumento financiero (acción, bono, CEDEAR, cripto, índice, ON, moneda, etc.).</li>
-                    <li><code>Operacion</code>: Registro de compra/venta de un activo por parte de una persona.</li>
-                    <li><code>Cotizacion</code>: Precio de un activo en un momento determinado, con moneda y fuente.</li>
-                    <li><code>CedearRatio</code>: Relación entre un CEDEAR y su activo subyacente en USA.</li>
-                    <li><code>TipoActivo</code>: Catálogo de tipos (Acciones, Bonos, CEDEARs, Cripto, ON, Índices, Moneda, etc.).</li>
-                    <li><code>Pais</code>, <code>Provincia</code>, <code>Localidad</code>: Modelo geográfico para residencia y nacionalidad.</li>
-                    <li><code>Recomendacion</code>: Informe de inversión creado por un experto con título, justificación, riesgo y horizonte.</li>
-                    <li><code>RecomendacionDetalle</code>: Detalle de cada activo incluido en una recomendación (precio al recomendar, objetivo, stop loss, acción sugerida).</li>
-                </ul>
-            </li>
-            <li>Enums:
-                <ul>
-                    <li><code>RolPersona</code>: Define el rol del usuario (Admin, Inversor, Experto).</li>
-                    <li><code>TipoOperacion</code>: Tipo de operación (Compra, Venta).</li>
-                    <li><code>HorizonteInversion</code>: Horizonte temporal de la inversión:
-                        <ul>
-                            <li><code>Intradia</code> (1)</li>
-                            <li><code>CortoPlazo</code> (2)</li>
-                            <li><code>MedianoPlazo</code> (3)</li>
-                            <li><code>LargoPlazo</code> (4)</li>
-                        </ul>
-                    </li>
-                    <li><code>NivelRiesgo</code>: Perfil de riesgo:
-                        <ul>
-                            <li><code>Conservador</code> (1)</li>
-                            <li><code>Moderado</code> (2)</li>
-                            <li><code>Agresivo</code> (3)</li>
-                            <li><code>Especulativo</code> (4)</li>
-                        </ul>
-                    </li>
-                    <li><code>TipoRecomendacion</code>: Intensidad de la recomendación:
-                        <ul>
-                            <li><code>CompraFuerte</code> (1)</li>
-                            <li><code>Comprar</code> (2)</li>
-                            <li><code>Mantener</code> (3)</li>
-                            <li><code>Vender</code> (4)</li>
-                            <li><code>VentaFuerte</code> (5)</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
+            <li><code>page.tsx</code>: landing pública.</li>
+            <li><code>auth/login</code>, <code>auth/register</code>: formularios de autenticación.</li>
+            <li><code>dashboard</code>: panel de inversor autenticado.</li>
+            <li><code>admin</code>: dashboard de administrador (métricas globales).</li>
+            <li><code>expert</code>: panel de experto (maqueta inicial para recomendaciones).</li>
+            <li><code>portafolio</code>: vista consolidada del portafolio del inversor.</li>
+            <li><code>access-denied</code>: pantalla genérica de acceso denegado.</li>
         </ul>
     </li>
-    <li><strong>Data</strong> (Acceso a Datos)
-        <ul>
-            <li><code>DBFinanzasContext</code>:
-                <ul>
-                    <li><code>DbSet&lt;Persona&gt; Personas</code></li>
-                    <li><code>DbSet&lt;Activo&gt; Activos</code></li>
-                    <li><code>DbSet&lt;Operacion&gt; Operaciones</code></li>
-                    <li><code>DbSet&lt;Cotizacion&gt; Cotizaciones</code></li>
-                    <li><code>DbSet&lt;CedearRatio&gt; CedearRatios</code></li>
-                    <li><code>DbSet&lt;TipoActivo&gt; TiposActivos</code></li>
-                    <li><code>DbSet&lt;Pais&gt; Paises</code></li>
-                    <li><code>DbSet&lt;Provincia&gt; Provincias</code></li>
-                    <li><code>DbSet&lt;Localidad&gt; Localidades</code></li>
-                    <li><code>DbSet&lt;Recomendacion&gt; Recomendaciones</code></li>
-                    <li><code>DbSet&lt;RecomendacionDetalle&gt; RecomendacionDetalles</code></li>
-                </ul>
-            </li>
-            <li>Configuración Fluent API:
-                <ul>
-                    <li>Índices únicos (<code>Email</code> en <code>Persona</code>, <code>Symbol</code> en <code>Activo</code>, códigos ISO en <code>Pais</code>, etc.).</li>
-                    <li>Tipos de datos específicos (<code>decimal(18,4)</code>, <code>decimal(18,2)</code>, <code>datetime2</code>, <code>char(3)</code>, <code>tinyint</code>, <code>bit</code>...).</li>
-                    <li>Relaciones y claves foráneas con reglas de borrado (<code>Restrict</code>, <code>Cascade</code>).</li>
-                    <li>Relaciones uno a uno para <code>CedearRatio</code> (CEDEAR &lt;-&gt; Activo USA).</li>
-                    <li>Relaciones uno a muchos para <code>Recomendacion</code> &rarr; <code>RecomendacionDetalle</code>.</li>
-                </ul>
-            </li>
-            <li><code>DbSeeder</code>: Carga inicial de:
-                <ul>
-                    <li>Países (RestCountries) y provincias/localidades de Argentina (Georef AR).</li>
-                    <li>Tipos de activo, activos base y ratios CEDEAR.</li>
-                    <li>Usuarios demo (Admin, Inversor, Experto).</li>
-                </ul>
-            </li>
-        </ul>
-    </li>
-    <li><strong>Services</strong> (Capa de Servicios / Lógica de Negocio)
-        <ul>
-            <li><code>PersonaService</code>, <code>GeoService</code>, <code>CedearsService</code>, <code>CryptoService</code>, <code>StocksService</code>, <code>DolarService</code>, <code>RecomendacionesService</code>, etc.</li>
-            <li>Encapsulan reglas de negocio, orquestación entre repositorios y clientes externos.</li>
-        </ul>
-    </li>
-    <li><strong>ApiClient</strong> (Integraciones Externas)
-        <ul>
-            <li><code>CoinGeckoClient</code>: Precios y top de criptomonedas.</li>
-            <li><code>DolarApiClient</code>: Tipos de cambio ARS (Oficial, Blue, MEP, CCL, etc.).</li>
-            <li><code>YahooFinanceClient</code>: Precios de acciones, índices y CEDEARs.</li>
-        </ul>
-    </li>
-    <li><strong>WebAPI</strong> (Capa de Presentación / Endpoints)
-        <ul>
-            <li>Punto de entrada de la app (<code>Program.cs</code>).</li>
-            <li>Endpoints agrupados por módulo con Minimal APIs (Auth, Dólar, Cripto, Stocks, Cedears, Activos, Operaciones, Recomendaciones, etc.).</li>
-            <li><code>JwtTokenService</code> y configuración de autenticación/autorización.</li>
-        </ul>
-    </li>
+    <li><code>src/services/</code>: servicios HTTP (Axios) para consumir la API del backend.</li>
+    <li><code>src/types/</code>: DTOs tipados compartidos entre vistas.</li>
+    <li><code>src/components/</code>: componentes reutilizables (Navbar, cards, <code>FormStatus</code>, etc.).</li>
 </ul>
 
-<hr>
+<h3>🚀 Empezar (Setup Local)</h3>
 
-<h2>📦 Schemas principales (Swagger)</h2>
+<p>Este es un proyecto <a href="https://nextjs.org">Next.js</a> inicializado con <code>create-next-app</code>.</p>
 
-<p>En la documentación OpenAPI (<code>/swagger/v1/swagger.json</code>) se exponen los modelos más relevantes:</p>
+<p>Instalá dependencias y levantá el servidor de desarrollo:</p>
 
-<ul>
-    <li><strong>Persona</strong>:
-        <ul>
-            <li>Identidad básica (Nombre, Apellido, Email, FechaNacimiento).</li>
-            <li>Datos de residencia (<code>NacionalidadId</code>, <code>PaisResidenciaId</code>, <code>LocalidadResidenciaId</code>).</li>
-            <li>Seguridad (<code>PasswordHash</code>, <code>Rol</code>, <code>Estado</code>, <code>FechaAlta</code>).</li>
-        </ul>
-    </li>
-    <li><strong>Activo</strong>:
-        <ul>
-            <li><code>Id</code>, <code>Symbol</code>, <code>Nombre</code>, <code>Descripcion</code>, <code>MonedaBase</code>, <code>EsLocal</code>, <code>TipoActivoId</code>.</li>
-        </ul>
-    </li>
-    <li><strong>TipoActivo</strong>:
-        <ul>
-            <li><code>Id</code>, <code>Nombre</code>, <code>Descripcion</code>.</li>
-        </ul>
-    </li>
-    <li><strong>Operacion</strong>:
-        <ul>
-            <li><code>Id</code>, <code>PersonaId</code>, <code>ActivoId</code>, <code>Tipo</code> (<code>TipoOperacion</code>), <code>Cantidad</code>, <code>PrecioUnitario</code>, <code>MonedaOperacion</code>, <code>Comision</code>, <code>FechaOperacion</code>.</li>
-        </ul>
-    </li>
-    <li><strong>Cotizacion</strong>:
-        <ul>
-            <li><code>Id</code>, <code>ActivoId</code>, <code>Precio</code>, <code>Moneda</code>, <code>TimestampUtc</code>, <code>Source</code>.</li>
-        </ul>
-    </li>
-    <li><strong>CedearRatio</strong>:
-        <ul>
-            <li><code>Id</code>, <code>CedearId</code>, <code>UsAssetId</code>, <code>Ratio</code>.</li>
-        </ul>
-    </li>
-    <li><strong>Recomendacion</strong>:
-        <ul>
-            <li><code>Id</code>, <code>PersonaId</code> (autor experto), <code>Titulo</code>, <code>JustificacionLogica</code>, <code>Fuente</code>, <code>FechaInforme</code>, <code>Riesgo</code> (<code>NivelRiesgo</code>), <code>Horizonte</code> (<code>HorizonteInversion</code>).</li>
-        </ul>
-    </li>
-    <li><strong>RecomendacionDetalle</strong>:
-        <ul>
-            <li><code>Id</code>, <code>RecomendacionId</code>, <code>ActivoId</code>, <code>PrecioAlRecomendar</code>, <code>PrecioObjetivo</code>, <code>StopLoss</code>, <code>Accion</code> (<code>TipoRecomendacion</code>).</li>
-        </ul>
-    </li>
-    <li><strong>DTOs de integración</strong> (ejemplos):
-        <ul>
-            <li><code>DolarDTO</code>: Tipo de dólar, valor compra/venta, variación.</li>
-            <li><code>CryptoDTO</code>/<code>CryptoDetailDTO</code>: Símbolo, nombre, precios, variaciones.</li>
-            <li><code>DualQuoteDTO</code> / <code>PairDTO</code>: Pares de activos para cálculos ARS/USD.</li>
-        </ul>
-    </li>
-</ul>
+<pre><code>npm install
+npm run dev
+# o
+yarn install
+yarn dev
+# o
+pnpm install
+pnpm dev
+</code></pre>
 
-<hr>
+<p>Abrí <a href="http://localhost:3000">http://localhost:3000</a> en tu navegador para ver el resultado.</p>
 
-<h2>🌐 Conexión con el Frontend</h2>
+<h3>⚙️ Variables de Entorno</h3>
 
-<p>Esta API es la fuente de datos para el <a href="https://github.com/agussantinelli/FinanzApp-FrontEnd.git">FinanzApp-FrontEnd</a>.</p>
-<ul>
-    <li><strong>Endpoint Base (desarrollo):</strong> <code>https://localhost:7088</code> (o puerto configurado en <code>launchSettings.json</code>).</li>
-    <li><strong>CORS:</strong> Configurado para aceptar peticiones desde <code>http://localhost:3000</code> (Next.js) durante desarrollo.</li>
-    <li><strong>Swagger:</strong> <code>https://localhost:7209/swagger</code> (o equivalente según configuración).</li>
-</ul>
+<p>Crea un archivo <code>.env.local</code> en la raíz del proyecto para configurar la conexión al <a href="https://github.com/agussantinelli/FinanzApp-BackEnd.git">Backend</a>:</p>
 
-<hr>
+<pre><code># Base de la API (cambiar por prod al desplegar)
+NEXT_PUBLIC_API_BASE=https://localhost:7088
+</code></pre>
 
-<h2>📚 Catálogo de Endpoints</h2>
+<p>Todos los <code>fetch</code> / llamadas Axios del frontend apuntan a <code>NEXT_PUBLIC_API_BASE</code> (incluidos los endpoints protegidos con JWT).</p>
 
-<p>A continuación se detalla la lista de endpoints disponibles en la API, organizada por módulo funcional.</p>
+<h3>🔐 Autenticación (JWT)</h3>
 
-<!-- AUTENTICACIÓN -->
-<h3>🔐 Autenticación</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Método</th>
-            <th>Endpoint</th>
-            <th>Descripción</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>POST</code></td>
-            <td><code>/api/auth/login</code></td>
-            <td>Inicia sesión y genera un token JWT.</td>
-        </tr>
-        <tr>
-            <td><code>POST</code></td>
-            <td><code>/api/auth/register</code></td>
-            <td>Registra un nuevo usuario inversor en el sistema.</td>
-        </tr>
-    </tbody>
-</table>
-
-<!-- DÓLAR -->
-<h3>💵 Dólar y Divisas</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Método</th>
-            <th>Endpoint</th>
-            <th>Descripción</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/dolar/cotizaciones</code></td>
-            <td>Obtiene las cotizaciones de los distintos tipos de dólar (Blue, MEP, CCL, Oficial, etc.).</td>
-        </tr>
-    </tbody>
-</table>
-
-<!-- CRIPTO -->
-<h3>₿ Criptomonedas</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Método</th>
-            <th>Endpoint</th>
-            <th>Descripción</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/crypto/top</code></td>
-            <td>Obtiene el Top 10 de criptomonedas filtrado (por ejemplo, por capitalización de mercado).</td>
-        </tr>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/crypto/{symbol}</code></td>
-            <td>Obtiene precio individual e información básica de una criptomoneda específica.</td>
-        </tr>
-    </tbody>
-</table>
-
-<!-- ACCIONES -->
-<h3>📈 Acciones (Stocks)</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Método</th>
-            <th>Endpoint</th>
-            <th>Descripción</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/stocks/indices</code></td>
-            <td>Obtiene los principales índices bursátiles para el tablero de mercado.</td>
-        </tr>
-        <tr>
-            <td><code>POST</code></td>
-            <td><code>/api/stocks/duals</code></td>
-            <td>Obtiene cotizaciones duales (ARS/USD) para un conjunto de pares de acciones, usando el dólar indicado.</td>
-        </tr>
-    </tbody>
-</table>
-
-<!-- CEDEARS -->
-<h3>📄 Cedears</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Método</th>
-            <th>Endpoint</th>
-            <th>Descripción</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/cedears/duals</code></td>
-            <td>Calcula información combinada para pares acción local / acción USA (duals).</td>
-        </tr>
-    </tbody>
-</table>
-
-<!-- GEOGRAFÍA -->
-<h3>🗺️ Geografía</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Método</th>
-            <th>Endpoint</th>
-            <th>Descripción</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/geo/register-data</code></td>
-            <td>Devuelve datos geográficos (países, provincias, localidades) para el formulario de registro.</td>
-        </tr>
-    </tbody>
-</table>
-
-<!-- GESTIÓN DE ACTIVOS -->
-<h3>🧾 Gestión de Activos</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Método</th>
-            <th>Endpoint</th>
-            <th>Descripción</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/activos/{id}</code></td>
-            <td>Obtiene el detalle completo de un activo específico buscado por su ID numérico.</td>
-        </tr>
-        <tr>
-            <td><code>POST</code></td>
-            <td><code>/api/activos</code></td>
-            <td>Registra un nuevo instrumento financiero en la base de datos.</td>
-        </tr>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/activos</code></td>
-            <td>Recupera el listado completo de activos, ordenados por defecto.</td>
-        </tr>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/activos/tipo/{tipoId}</code></td>
-            <td>Devuelve una lista de activos filtrada por su categoría (por ejemplo, solo Criptos).</td>
-        </tr>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/activos/no-moneda</code></td>
-            <td>Obtiene el universo de activos invertibles, excluyendo las monedas FIAT.</td>
-        </tr>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/activos/ranking</code></td>
-            <td>Obtiene activos ordenados dinámicamente por criterios de mercado (precio, variación) o alfabéticos.</td>
-        </tr>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/activos/buscar/{texto}</code></td>
-            <td>Busca activos por coincidencia parcial en símbolo o nombre.</td>
-        </tr>
-    </tbody>
-</table>
-
-<!-- OPERACIONES -->
-<h3>📊 Operaciones</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Método</th>
-            <th>Endpoint</th>
-            <th>Descripción</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>POST</code></td>
-            <td><code>/api/operaciones</code></td>
-            <td>Registra una nueva operación de compra o venta de activos.</td>
-        </tr>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/operaciones</code></td>
-            <td>Obtiene el historial completo de operaciones del sistema.</td>
-        </tr>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/operaciones/persona/{personaId}</code></td>
-            <td>Obtiene las operaciones realizadas por un usuario específico.</td>
-        </tr>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/operaciones/activo/{activoId}</code></td>
-            <td>Obtiene todas las operaciones asociadas a un activo específico.</td>
-        </tr>
-    </tbody>
-</table>
-
-<!-- RECOMENDACIONES -->
-<h3>🧠 Recomendaciones</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Método</th>
-            <th>Endpoint</th>
-            <th>Descripción</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/recomendaciones</code></td>
-            <td>Obtiene la lista completa de recomendaciones/informes.</td>
-        </tr>
-        <tr>
-            <td><code>POST</code></td>
-            <td><code>/api/recomendaciones</code></td>
-            <td>Crea un nuevo informe de recomendación con sus detalles.</td>
-        </tr>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/recomendaciones/{id}</code></td>
-            <td>Obtiene el detalle completo de una recomendación, incluyendo sus activos.</td>
-        </tr>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/recomendaciones/activo/{activoId}</code></td>
-            <td>Trae recomendaciones que incluyan el activo especificado.</td>
-        </tr>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/recomendaciones/tipo-activo/{tipoId}</code></td>
-            <td>Trae recomendaciones que contengan activos de cierto tipo.</td>
-        </tr>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/recomendaciones/recientes/{cantidad}</code></td>
-            <td>Obtiene las últimas recomendaciones publicadas.</td>
-        </tr>
-    </tbody>
-</table>
-
-<!-- TIPOS DE ACTIVO -->
-<h3>📑 Tipos de Activo</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Método</th>
-            <th>Endpoint</th>
-            <th>Descripción</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/tipos-activo</code></td>
-            <td>Obtiene la lista de tipos de activo disponibles ordenados por ID.</td>
-        </tr>
-        <tr>
-            <td><code>GET</code></td>
-            <td><code>/api/tipos-activo/no-moneda</code></td>
-            <td>Obtiene todos los tipos de activo excepto <code>Moneda</code>.</td>
-        </tr>
-    </tbody>
-</table>
-
-<hr>
-
-<h2>🔐 Seguridad (JWT &amp; Hashing)</h2>
-
-<p>La API utiliza <strong>JWT Bearer</strong> para proteger los endpoints.</p>
-
-<h3>🔑 Hash de Contraseñas</h3>
-<ul>
-    <li>Las contraseñas se almacenan hasheadas usando <strong>BCrypt</strong>.</li>
-    <li>Nunca se guarda texto plano.</li>
-</ul>
-
-<h3>🔏 Roles y Políticas</h3>
-<ul>
-    <li><strong>UserLogged</strong>: Requiere autenticación (JWT válido).</li>
-    <li><strong>AdminOnly</strong>: Solo rol <code>Admin</code>.</li>
-    <li><strong>InversorOnly</strong>: Solo rol <code>Inversor</code> (dashboard personal).</li>
-    <li><strong>ExpertoOnly</strong>: Solo rol <code>Experto</code> (gestión de recomendaciones).</li>
-</ul>
-
-<hr>
-
-<h2>👥 Usuarios Demo</h2>
-
-<p>El <code>DbSeeder</code> crea estos usuarios si no existen:</p>
-
-<table>
-    <thead>
-        <tr>
-            <th>Rol</th>
-            <th>Email</th>
-            <th>Password</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><strong>Admin</strong></td>
-            <td><code>admin@gmail.com</code></td>
-            <td><code>admin</code></td>
-        </tr>
-        <tr>
-            <td><strong>Inversor</strong></td>
-            <td><code>agus@gmail.com</code></td>
-            <td><code>agus</code></td>
-        </tr>
-        <tr>
-            <td><strong>Experto</strong></td>
-            <td><code>experto@gmail.com</code></td>
-            <td><code>experto</code></td>
-        </tr>
-    </tbody>
-</table>
-
-<hr>
-
-<h2>🚀 Setup Local</h2>
-
-<h3>1. Requisitos</h3>
-<ul>
-    <li><a href="https://dotnet.microsoft.com/download" target="_blank">.NET SDK 8</a></li>
-    <li>SQL Server (Express o LocalDB)</li>
-</ul>
-
-<h3>2. Configuración (<code>appsettings.json</code>)</h3>
-
-<p><strong>Opción SQL Server Express:</strong></p>
-<pre><code>"ConnectionStrings": {
-  "FinanzAppDb": "Server=.\\SQLEXPRESS;Database=FinanzAppDb;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;Connect Timeout=60;"
-}</code></pre>
-
-<p><strong>Opción LocalDB:</strong></p>
-<pre><code>"ConnectionStrings": {
-  "FinanzAppDb": "Server=(localdb)\\MSSQLLocalDB;Database=FinanzAppDb;Trusted_Connection=True;TrustServerCertificate=True;"
-}</code></pre>
-
-<h3>3. Base de Datos (Migraciones)</h3>
-
-<p>Desde la terminal en la carpeta de la solución:</p>
-<pre><code># Proyecto de inicio: WebAPI, Proyecto de datos: Data
-dotnet ef database update --project Data --startup-project WebAPI</code></pre>
-<p><em>O usando la consola de Package Manager: <code>Update-Database</code></em></p>
-
-<h3>4. Ejecución</h3>
-
-<pre><code>cd WebAPI
-dotnet run</code></pre>
-
-<p>Accedé a Swagger en: <code>https://localhost:7209/swagger</code></p>
-
-<hr>
-
-<h2>🔌 Integraciones (APIs Externas)</h2>
-
-<table>
-    <thead>
-        <tr>
-            <th>API</th>
-            <th>Uso</th>
-            <th>Notas</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><strong>CoinGecko</strong></td>
-            <td>Criptomonedas</td>
-            <td>Fuente unificada de precios y top global.</td>
-        </tr>
-        <tr>
-            <td><strong>DolarAPI</strong></td>
-            <td>Tipos de Cambio</td>
-            <td>Cotizaciones ARS (Oficial, Blue, MEP, CCL, etc.).</td>
-        </tr>
-        <tr>
-            <td><strong>Yahoo Finance</strong></td>
-            <td>Stocks / CEDEARs</td>
-            <td>Precios de acciones, índices y ratios CEDEAR.</td>
-        </tr>
-        <tr>
-            <td><strong>RestCountries</strong></td>
-            <td>Países</td>
-            <td>Seed inicial de países.</td>
-        </tr>
-        <tr>
-            <td><strong>Georef AR</strong></td>
-            <td>Provincias / Localidades</td>
-            <td>Seed inicial para la geografía de Argentina.</td>
-        </tr>
-    </tbody>
-</table>
-
-<hr>
-
-<h2>📌 Estado del Proyecto</h2>
-
-<ul>
-    <li>✅ <strong>Implementado:</strong> Arquitectura base, Auth JWT, Seeders, conexión a APIs externas, catálogos, ABM de usuarios, gestión de activos, operaciones básicas y sistema de recomendaciones.</li>
-    <li>🚧 <strong>En Progreso:</strong> Persistencia de operaciones complejas, reportes (PDF/Excel), armado avanzado de portafolios, métricas de performance y módulo de recomendaciones inteligentes.</li>
-</ul>
-
-<hr>
-
-<h2>🤝 Contribuir</h2>
-
+<p>El backend utiliza <strong>JWT Bearer</strong> para proteger los endpoints de la API. El flujo actual es:</p>
 <ol>
-    <li>Hacé un <strong>Fork</strong> del repositorio.</li>
-    <li>Creá una rama <code>feature/...</code> para tu cambio.</li>
-    <li>Enviá un <strong>Pull Request</strong> con una descripción clara de la mejora o fix.</li>
+    <li>El usuario se registra o inicia sesión contra los endpoints:
+        <ul>
+            <li><code>POST /auth/register</code></li>
+            <li><code>POST /auth/login</code></li>
+            <li><code>GET /auth/me</code> (información del usuario autenticado)</li>
+        </ul>
+    </li>
+    <li>El backend devuelve un <strong>token JWT</strong> más datos básicos de la persona (id, nombre, rol, etc.).</li>
+    <li>El frontend guarda:
+        <ul>
+            <li><code>fa_token</code>: token JWT.</li>
+            <li><code>fa_user</code>: datos serializados del usuario autenticado (localStorage).</li>
+        </ul>
+    </li>
+    <li>Las llamadas posteriores usan el cliente configurado en <code>Http.ts</code>, que adjunta:
+        <pre><code>Authorization: Bearer &lt;fa_token&gt;</code></pre>
+        en los endpoints protegidos (por ejemplo, <code>/api/stocks/duals</code>, <code>/api/crypto/top</code>, etc.).
+    </li>
 </ol>
+
+<p>La aplicación distingue actualmente entre los roles <strong>Inversor</strong> y <strong>Admin</strong>. El navbar y el acceso a ciertos paneles se adaptan dinámicamente según el rol del usuario autenticado.</p>
+
+<hr>
+
+<h2>📊 Dashboards</h2>
+
+<h3>👤 Dashboard de Inversor</h3>
+
+<p>Ruta principal: <code>/dashboard</code></p>
+
+<ul>
+    <li>Bienvenida personalizada (nombre + rol).</li>
+    <li>Resumen rápido del portafolio (valor estimado, resultado diario, etc.).</li>
+    <li>Accesos rápidos a secciones clave (activos, reportes, noticias).</li>
+    <li>Datos de cotizaciones de dólar, CEDEARs, acciones y cripto consumidos desde el backend.</li>
+</ul>
+
+<h3>📂 Portafolio</h3>
+
+<p>Ruta principal: <code>/portafolio</code></p>
+
+<ul>
+    <li>Vista pensada como <strong>“panel patrimonial”</strong> del inversor.</li>
+    <li>Cards de resumen (valor total, exposición a activos de riesgo, cantidad de instrumentos).</li>
+    <li>Distribución básica por tipo de activo (CEDEAR, acción local, bono, cripto).</li>
+    <li>Tabla demo de posiciones con:
+        <ul>
+            <li>Ticker, nombre, tipo.</li>
+            <li>Cantidad, precio actual, valor total estimado.</li>
+            <li>Variación diaria y variación total en %.</li>
+        </ul>
+    </li>
+    <li>Actualmente los datos están <strong>hardcodeados</strong> a modo de maqueta para el TPI.</li>
+</ul>
+
+<h3>🛠️ Dashboard de Administrador</h3>
+
+<p>Ruta principal: <code>/admin</code></p>
+
+<ul>
+    <li>Cards con métricas globales (hardcodeadas en la primera versión):
+        <ul>
+            <li>Cantidad de usuarios registrados / activos.</li>
+            <li>Número de operaciones registradas.</li>
+            <li>Volumen aproximado operado.</li>
+        </ul>
+    </li>
+    <li>Sección para monitorear el estado general de la plataforma (a futuro: logs, health checks, etc.).</li>
+    <li>Accesible únicamente para usuarios con rol <code>Admin</code> (controlado desde el backend y el frontend).</li>
+</ul>
+
+<h3>🧠 Dashboard de Experto (maqueta)</h3>
+
+<p>Ruta principal: <code>/expert</code></p>
+
+<ul>
+    <li>Pantalla pensada para usuarios con rol <strong>Experto</strong> (rol preconfigurado desde el backend).</li>
+    <li>Resumen de:
+        <ul>
+            <li>Cantidad de recomendaciones emitidas.</li>
+            <li>Activos distintos cubiertos por el experto.</li>
+            <li>Performance promedio de las recomendaciones.</li>
+        </ul>
+    </li>
+    <li>Lista demo de recomendaciones recientes con:
+        <ul>
+            <li>Ticker, tipo de activo, precio de entrada, target y stop loss.</li>
+            <li>Horizonte temporal y estado (activa/cerrada).</li>
+        </ul>
+    </li>
+    <li>Actualmente la carga de recomendaciones es solo conceptual (sin alta real todavía).</li>
+</ul>
+
+<hr>
+
+<h2>👥 Roles y flujos de navegación</h2>
+
+<p>El frontend respeta la información de rol provista por el JWT:</p>
+
+<ul>
+    <li><strong>Inversor</strong>
+        <ul>
+            <li>Inicio post-login: <code>/dashboard</code>.</li>
+            <li>Acceso a: <code>/dashboard</code>, <code>/portafolio</code>, módulos de activos, noticias y reportes.</li>
+            <li>Navbar:
+                <ul>
+                    <li>El logo / nombre de la app redirige al <strong>panel principal</strong> si el usuario está logueado.</li>
+                    <li>Opción <strong>“Mi portafolio”</strong> disponible desde navegación.</li>
+                    <li>Opción “Mi panel” centralizada dentro del menú de usuario.</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li><strong>Admin</strong>
+        <ul>
+            <li>Inicio post-login: <code>/admin</code>.</li>
+            <li>Puede seguir usando el <code>/dashboard</code> de inversor a modo de vista personal.</li>
+            <li>Navbar muestra claramente el rol <code>Admin</code> y enlaces hacia el panel de administración.</li>
+        </ul>
+    </li>
+    <li><strong>Experto</strong> (rol preconfigurado)
+        <ul>
+            <li>Inicio post-login: <code>/expert</code> (definido por helper <code>getHomePathForRole</code> en el frontend).</li>
+            <li>En el futuro, podrá:
+                <ul>
+                    <li>Cargar recomendaciones para diferentes activos.</li>
+                    <li>Visualizar la performance de sus ideas de inversión.</li>
+                    <li>Ver estadísticas de impacto sobre los inversores que siguen sus señales.</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<p>Cuando un usuario intenta acceder a una ruta que no le corresponde, se lo redirige a una pantalla de <strong>access denied</strong> (<code>/access-denied</code>), donde se le informa que no tiene permisos para esa sección.</p>
+
+<hr>
+
+<h2>📌 Estado actual de implementación (Frontend)</h2>
+
+<ul>
+    <li><strong>Implementado</strong>
+        <ul>
+            <li>Autenticación JWT (login / register) integrada con el backend.</li>
+            <li>Gestión de sesión en frontend:
+                <ul>
+                    <li>Almacenamiento de <code>fa_token</code> + <code>fa_user</code> en <code>localStorage</code>.</li>
+                    <li>Notificación global vía evento <code>fa-auth-changed</code> para actualizar Navbar, etc.</li>
+                </ul>
+            </li>
+            <li>Navbar responsivo:
+                <ul>
+                    <li>Navegación pública y privada.</li>
+                    <li>Menú de usuario con acceso a perfil, panel y logout.</li>
+                </ul>
+            </li>
+            <li>Dashboards:
+                <ul>
+                    <li><code>/dashboard</code> (inversor) – maqueta completa con cards y atajos.</li>
+                    <li><code>/admin</code> – maqueta de métricas globales para rol Admin.</li>
+                    <li><code>/expert</code> – maqueta inicial de panel de experto.</li>
+                </ul>
+            </li>
+            <li><code>/portafolio</code> – vista de portafolio consolidado con datos demo.</li>
+            <li>Enrutamiento de roles con helper <code>getHomePathForRole</code>.</li>
+        </ul>
+    </li>
+    <li><strong>En progreso / futuro</strong>
+        <ul>
+            <li>Persistencia real de operaciones y posiciones en la base de datos.</li>
+            <li>Cálculo de patrimonio y P&amp;L a partir de series temporales.</li>
+            <li>Alta y gestión real de recomendaciones del rol Experto.</li>
+            <li>Reportes exportables (PDF/Excel) desde el frontend.</li>
+        </ul>
+    </li>
+</ul>
+
+<hr>
 
 <h2>⚖️ Licencia</h2>
 
 <p>MIT – ver archivo <code>LICENSE</code>.</p>
+
+<hr>
+
+<h3>📝 Notas sobre la Arquitectura</h3>
+
+<p>Este repo es estrictamente el <strong>Frontend</strong>. Toda la lógica de negocio, agregación de datos de APIs externas y la persistencia de datos reside en el repositorio <a href="https://github.com/agussantinelli/FinanzApp-BackEnd.git">FinanzApp-BackEnd</a>.</p>
+
+<p>A medida que se consolida la API (incluyendo autenticación JWT, roles y rutas protegidas), se irán agregando ejemplos de requests, flujos completos de login/registro y secciones avanzadas de reportes dentro del frontend.</p>
