@@ -44,7 +44,7 @@ const getAvatarColor = (tipo: string) => {
   switch (tipo?.toLowerCase()) {
     case 'accion':
     case 'acciones':
-      return "#2196f3";
+      return "#0400ffff";
     case 'cedear':
     case 'cedears':
       return "#a73bffff";
@@ -55,7 +55,7 @@ const getAvatarColor = (tipo: string) => {
     case 'on':
       return "#ff9800";
     case 'fci':
-      return "#00bcd4";
+      return "#63deeeff";
     case 'cripto':
     case 'crypto':
       return "#f14ae4ff";
@@ -257,7 +257,7 @@ export default function Activos() {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  placeholder="Buscar activo (Enter para buscar)..."
+                  placeholder="Buscar activo..."
                   variant="outlined"
                   size="small"
                   InputProps={{
