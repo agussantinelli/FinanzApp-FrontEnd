@@ -30,6 +30,8 @@ import { TipoActivoDTO } from "@/types/TipoActivo";
 import { getActivosNoMoneda, getActivosByTipoId } from "@/services/ActivosService";
 import { getTiposActivoNoMoneda } from "@/services/TipoActivosService";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import NeonLoader from "@/components/ui/NeonLoader";
 
 const getAvatarColor = (tipo: string) => {
   switch (tipo?.toLowerCase()) {
@@ -96,6 +98,10 @@ export default function Activos() {
     }
   };
 
+  const handleRefresh = () => {
+    fetchActivos(selectedType);
+  };
+
   const handleTypeChange = (event: any) => {
     setSelectedType(event.target.value);
   };
@@ -122,29 +128,49 @@ export default function Activos() {
           </Typography>
         </Box>
 
-        <FormControl sx={{ minWidth: 220 }} size="small">
-          <InputLabel id="asset-type-label">Filtrar por Tipo</InputLabel>
-          <Select
-            labelId="asset-type-label"
-            id="asset-type-select"
-            value={selectedType}
-            label="Filtrar por Tipo"
-            onChange={handleTypeChange}
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Button
+            variant="outlined"
+            startIcon={<RefreshIcon />}
+            onClick={handleRefresh}
+            disabled={loading}
+            sx={{
+              borderColor: 'divider',
+              color: 'text.secondary',
+              textTransform: 'none',
+              fontWeight: 600,
+              '&:hover': {
+                borderColor: 'primary.main',
+                color: 'primary.main',
+                bgcolor: 'background.paper'
+              }
+            }}
           >
-            <MenuItem value="Todos">Todos</MenuItem>
-            {tipos.map((type) => (
-              <MenuItem key={type.id} value={type.id}>
-                {type.nombre}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+            Actualizar
+          </Button>
+
+          <FormControl sx={{ minWidth: 220 }} size="small">
+            <InputLabel id="asset-type-label">Filtrar por Tipo</InputLabel>
+            <Select
+              labelId="asset-type-label"
+              id="asset-type-select"
+              value={selectedType}
+              label="Filtrar por Tipo"
+              onChange={handleTypeChange}
+            >
+              <MenuItem value="Todos">Todos</MenuItem>
+              {tipos.map((type) => (
+                <MenuItem key={type.id} value={type.id}>
+                  {type.nombre}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Stack>
       </Stack>
 
       {loading ? (
-        <Box sx={{ display: "flex", justifyContent: "center", p: 8 }}>
-          <CircularProgress />
-        </Box>
+        <NeonLoader message="Actualizando mercado..." />
       ) : (
         <>
           {currentActivos.length > 0 ? (
