@@ -581,10 +581,30 @@ export default function Activos() {
               </Table>
             </TableContainer>
           ) : (
-            <Box sx={{ textAlign: "center", mt: 8, p: 4, bgcolor: "background.paper", borderRadius: 2 }}>
-              <Typography variant="h6" color="text.secondary">
-                No se encontraron activos para esta categoría.
+            <Box sx={{ textAlign: "center", mt: 8, p: 6, bgcolor: "background.paper", borderRadius: "16px", border: "1px dashed", borderColor: "divider" }}>
+              <SearchIcon sx={{ fontSize: 60, color: "text.disabled", mb: 2, opacity: 0.5 }} />
+              <Typography variant="h6" gutterBottom>
+                No se encontraron activos
               </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 400, mx: "auto", mb: 3 }}>
+                No hay resultados para
+                {searchTerm ? <strong> "{searchTerm}" </strong> : ""}
+                {selectedType !== "Todos" ? ` del tipo "${tipos.find(t => t.id === Number(selectedType))?.nombre || selectedType}"` : ""}
+                {selectedSector !== "Todos" ? ` en el sector "${sectores.find(s => s.id === selectedSector)?.nombre || selectedSector}"` : ""}
+                . Intenta ajustar tus filtros.
+              </Typography>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  setSearchTerm("");
+                  setSelectedType("Todos");
+                  setSelectedSector("Todos");
+                  setPage(1);
+                }}
+                sx={{ borderRadius: "8px", textTransform: "none" }}
+              >
+                Limpiar Filtros
+              </Button>
             </Box>
           )}
 

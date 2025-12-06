@@ -22,7 +22,6 @@ function cacheActivos(activos: ActivoDTO[], fullList: boolean = false) {
 export async function getActivos(tipo?: string): Promise<ActivoDTO[]> {
     const params = tipo && tipo !== "Todos" ? { tipo } : {};
     const res = await http.get<ActivoDTO[]>("/api/activos", { params });
-    // If no type filter, we assume it's the full list
     cacheActivos(res.data, !tipo || tipo === "Todos");
     return res.data;
 }
@@ -49,8 +48,6 @@ export async function getRankingActivos(criterio: string = "variacion", desc: bo
     if (tipoId) params.tipoId = tipoId;
 
     const res = await http.get<ActivoDTO[]>("/api/activos/ranking", { params });
-    // Ranking returns all items sorted, so it's a full list if not filtered by type (though backend supports typeId)
-    // If tipoId is undefined, it is full list.
     cacheActivos(res.data, !tipoId);
     return res.data;
 }
