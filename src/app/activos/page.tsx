@@ -62,7 +62,7 @@ const getAvatarColor = (tipo: string) => {
 };
 
 export default function Activos() {
-  const router = useRouter(); // Initialize router
+  const router = useRouter();
   const [selectedType, setSelectedType] = useState<string | number>("Todos");
   const [activos, setActivos] = useState<ActivoDTO[]>([]);
   const [tipos, setTipos] = useState<TipoActivoDTO[]>([]);
@@ -74,7 +74,6 @@ export default function Activos() {
   const [orderBy, setOrderBy] = useState<string>("variacion");
   const [orderDesc, setOrderDesc] = useState<boolean>(true);
 
-  // Pagination state
   const [page, setPage] = useState(1);
   const itemsPerPage = 12;
 
@@ -90,7 +89,6 @@ export default function Activos() {
     loadTipos();
   }, []);
 
-  // Debounce for fetching suggestions only
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       if (searchTerm.length >= 2) {
@@ -106,7 +104,7 @@ export default function Activos() {
   const fetchSuggestions = async () => {
     try {
       const data = await searchActivos(searchTerm);
-      setSuggestions(data.slice(0, 10)); // Limit to 10 suggestions
+      setSuggestions(data.slice(0, 10));
     } catch (error) {
       console.error("Error fetching suggestions:", error);
     }
@@ -121,7 +119,6 @@ export default function Activos() {
       if (term.length >= 1) {
         data = await searchActivos(term);
       } else {
-        // If empty, revert to type filter
         if (selectedType === "Todos") {
           data = await getActivosNoMoneda();
         } else {
@@ -136,9 +133,7 @@ export default function Activos() {
     }
   };
 
-  // Initial load
   useEffect(() => {
-    // Only fetch initial data if we are NOT searching
     if (searchTerm === "") {
       fetchActivos();
     }
@@ -183,12 +178,10 @@ export default function Activos() {
     setPage(value);
   };
 
-  // Client-side sorting logic
   const sortedActivos = [...activos].sort((a, b) => {
     let valueA: any = a[orderBy as keyof ActivoDTO];
     let valueB: any = b[orderBy as keyof ActivoDTO];
 
-    // Handle special cases
     if (orderBy === "variacion") {
       valueA = a.variacion24h;
       valueB = b.variacion24h;
@@ -197,7 +190,6 @@ export default function Activos() {
       valueB = b.precioActual;
     }
 
-    // Handle nulls: always put nulls at the end
     if (valueA === null || valueA === undefined) return 1;
     if (valueB === null || valueB === undefined) return -1;
 
@@ -210,7 +202,6 @@ export default function Activos() {
     return 0;
   });
 
-  // Pagination logic on sorted data
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentActivos = sortedActivos.slice(startIndex, endIndex);
@@ -220,7 +211,6 @@ export default function Activos() {
     <main style={{ padding: 24 }}>
       <Box sx={{ mb: 5, pb: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
         <Stack spacing={3}>
-          {/* Section 1: Title and Subtitle */}
           <Box>
             <Typography
               variant="h3"
@@ -240,22 +230,18 @@ export default function Activos() {
             </Typography>
           </Box>
 
-          {/* Section 2: Controls Row (Search + Refresh + Filter) */}
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="center" width="100%">
 
-            {/* Search Bar with Autocomplete */}
             <Autocomplete
               freeSolo
               options={suggestions}
               getOptionLabel={(option) => typeof option === 'string' ? option : `${option.symbol} - ${option.nombre}`}
-              filterOptions={(x) => x} // Disable client-side filtering since we do it server-side
-              inputValue={searchTerm}
+              filterOptions={(x) => x}
               onInputChange={(event, newInputValue) => {
                 setSearchTerm(newInputValue);
               }}
               onChange={(event, newValue) => {
                 if (newValue && typeof newValue !== 'string') {
-                  // Navigate to asset detail page
                   router.push(`/activos/${newValue.id}`);
                 }
               }}
@@ -290,7 +276,6 @@ export default function Activos() {
                 />
               )}
               renderOption={(props, option) => {
-                // Extract key from props to avoid React warning, pass the rest
                 const { key, ...otherProps } = props;
                 return (
                   <li key={key} {...otherProps}>
@@ -321,8 +306,8 @@ export default function Activos() {
                 minWidth: 'auto',
                 p: 1.5,
                 borderRadius: '12px',
-                background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-                boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .3)',
+                background: 'linear-gradient(45deg, #0dff21ff 30%, #21CBF3 90%)',
+                boxShadow: '0 3px 5px 2px rgba(4, 63, 33, 0.3)',
               }}
             >
               <RefreshIcon />
