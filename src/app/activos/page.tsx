@@ -202,10 +202,24 @@ export default function Activos() {
 
       const criterio = criterioMap[orderBy] || "marketCap";
       data.sort((a, b) => {
-        let valA: any = a[criterio as keyof ActivoDTO] ?? 0;
-        let valB: any = b[criterio as keyof ActivoDTO] ?? 0;
+        let valA: any = 0;
+        let valB: any = 0;
 
-        if (criterio === "nombre") { valA = a.symbol; valB = b.symbol; } // Mapping symbol
+        // Explicit Property Mapping
+        if (criterio === "precio") {
+          valA = a.precioActual ?? 0;
+          valB = b.precioActual ?? 0;
+        } else if (criterio === "variacion") {
+          valA = a.variacion24h ?? 0;
+          valB = b.variacion24h ?? 0;
+        } else if (criterio === "marketCap") {
+          valA = a.marketCap ?? 0;
+          valB = b.marketCap ?? 0;
+        } else {
+          // Default generic fallback (usually by symbol/name)
+          valA = a.symbol;
+          valB = b.symbol;
+        }
 
         if (valB < valA) return orderDesc ? -1 : 1;
         if (valB > valA) return orderDesc ? 1 : -1;
