@@ -27,6 +27,7 @@ import {
   Avatar,
   TextField,
   InputAdornment,
+  Autocomplete,
 } from "@mui/material";
 import { ActivoDTO } from "@/types/Activo";
 import { TipoActivoDTO } from "@/types/TipoActivo";
@@ -65,6 +66,8 @@ export default function Activos() {
   const [tipos, setTipos] = useState<TipoActivoDTO[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState<ActivoDTO[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
 
   const [orderBy, setOrderBy] = useState<string>("variacion");
   const [orderDesc, setOrderDesc] = useState<boolean>(true);
@@ -85,39 +88,83 @@ export default function Activos() {
     loadTipos();
   }, []);
 
+  // Debounce for fetching suggestions only
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      fetchActivos();
-    }, 500);
+      if (searchTerm.length >= 2) {
+        fetchSuggestions();
+      } else {
+        setSuggestions([]);
+      }
+    }, 300);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchTerm, selectedType]);
+  }, [searchTerm]);
 
-  const fetchActivos = async () => {
+  const fetchSuggestions = async () => {
+    try {
+      const data = await searchActivos(searchTerm);
+      setSuggestions(data.slice(0, 10)); // Limit to 10 suggestions
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+    }
+  };
+
+  const executeSearch = async (termToSearch: string = searchTerm) => {
     setLoading(true);
     try {
       let data: ActivoDTO[];
+      const term = termToSearch.trim();
 
-      if (searchTerm.length >= 2) {
-        data = await searchActivos(searchTerm);
+      if (term.length >= 1) {
+        data = await searchActivos(term);
       } else {
+        // If empty, revert to type filter
         if (selectedType === "Todos") {
           data = await getActivosNoMoneda();
         } else {
           data = await getActivosByTipoId(Number(selectedType));
         }
       }
-
       setActivos(data);
     } catch (error) {
-      console.error("Error fetching activos:", error);
+      console.error("Error executing search:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Initial load
+  useEffect(() => {
+    // Only fetch initial data if we are NOT searching
+    if (searchTerm === "") {
+      fetchActivos();
+    }
+  }, [selectedType]);
+
+  const fetchActivos = async () => {
+    setLoading(true);
+    try {
+      let data: ActivoDTO[];
+      if (selectedType === "Todos") {
+        data = await getActivosNoMoneda();
+      } else {
+        data = await getActivosByTipoId(Number(selectedType));
+      }
+      setActivos(data);
+    } catch (error) {
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
   const handleRefresh = () => {
-    fetchActivos();
+    if (searchTerm.length > 0) {
+      executeSearch();
+    } else {
+      fetchActivos();
+    }
   };
 
   const handleRequestSort = (property: string) => {
@@ -171,6 +218,7 @@ export default function Activos() {
     <main style={{ padding: 24 }}>
       <Box sx={{ mb: 5, pb: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
         <Stack spacing={3}>
+          {/* Section 1: Title and Subtitle */}
           <Box>
             <Typography
               variant="h3"
@@ -190,26 +238,79 @@ export default function Activos() {
             </Typography>
           </Box>
 
-          <Stack direction="row" spacing={2} alignItems="center">
-            <TextField
-              variant="outlined"
-              size="small"
-              placeholder="Buscar activo (ej: YPF, Bitcoin)..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon color="action" />
-                  </InputAdornment>
-                ),
+          {/* Section 2: Controls Row (Search + Refresh + Filter) */}
+          <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="center" width="100%">
+
+            {/* Search Bar with Autocomplete */}
+            <Autocomplete
+              freeSolo
+              options={suggestions}
+              getOptionLabel={(option) => typeof option === 'string' ? option : `${option.symbol} - ${option.nombre}`}
+              filterOptions={(x) => x} // Disable client-side filtering since we do it server-side
+              inputValue={searchTerm}
+              onInputChange={(event, newInputValue) => {
+                setSearchTerm(newInputValue);
               }}
-              sx={{
-                minWidth: 350,
-                bgcolor: 'background.paper',
-                '& fieldset': { borderRadius: '12px' }
+              onChange={(event, newValue) => {
+                if (newValue && typeof newValue !== 'string') {
+                  setSearchTerm(newValue.symbol);
+                  executeSearch(newValue.symbol); // Optional: Trigger search on selection
+                }
               }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  executeSearch();
+                }
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Buscar activo (Enter para buscar)..."
+                  variant="outlined"
+                  size="small"
+                  InputProps={{
+                    ...params.InputProps,
+                    startAdornment: (
+                      <>
+                        <InputAdornment position="start">
+                          <SearchIcon color="action" />
+                        </InputAdornment>
+                        {params.InputProps.startAdornment}
+                      </>
+                    ),
+                  }}
+                  sx={{
+                    minWidth: 350,
+                    bgcolor: 'background.paper',
+                    '& fieldset': { borderRadius: '12px' }
+                  }}
+                />
+              )}
+              renderOption={(props, option) => {
+                // Extract key from props to avoid React warning, pass the rest
+                const { key, ...otherProps } = props;
+                return (
+                  <li key={key} {...otherProps}>
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <Avatar sx={{ width: 24, height: 24, fontSize: '0.7rem', bgcolor: getAvatarColor(typeof option === 'string' ? '' : option.tipo) }}>
+                        {typeof option === 'string' ? '?' : option.symbol[0]}
+                      </Avatar>
+                      <Box>
+                        <Typography variant="body2" fontWeight="bold">
+                          {typeof option === 'string' ? option : option.symbol}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          {typeof option === 'string' ? '' : option.nombre}
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </li>
+                );
+              }}
+              sx={{ flexGrow: 1 }}
             />
+
             <Button
               variant="contained"
               onClick={handleRefresh}
@@ -224,9 +325,7 @@ export default function Activos() {
             >
               <RefreshIcon />
             </Button>
-          </Stack>
 
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <FormControl sx={{ minWidth: 220 }} size="small">
               <InputLabel id="asset-type-label">Filtrar por Tipo</InputLabel>
               <Select
@@ -235,7 +334,6 @@ export default function Activos() {
                 value={selectedType}
                 label="Filtrar por Tipo"
                 onChange={handleTypeChange}
-                disabled={searchTerm.length >= 2}
               >
                 <MenuItem value="Todos">Todos</MenuItem>
                 {tipos.map((type) => (
@@ -245,7 +343,7 @@ export default function Activos() {
                 ))}
               </Select>
             </FormControl>
-          </Box>
+          </Stack>
         </Stack>
       </Box>
 
