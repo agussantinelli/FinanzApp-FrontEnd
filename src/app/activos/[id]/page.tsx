@@ -50,7 +50,7 @@ const getAvatarColor = (tipo: string) => {
 export default function ActivoDetalle() {
     const params = useParams();
     const router = useRouter();
-    const id = Number(params.id);
+    const id = params.id as string;
 
     const [activo, setActivo] = useState<ActivoDTO | null>(null);
     const [loading, setLoading] = useState(true);
