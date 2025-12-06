@@ -23,7 +23,7 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { ActivoDTO } from "@/types/Activo";
-import { getActivosNoMoneda } from "@/services/ActivosService";
+import { getActivoById, getActivoFromCache } from "@/services/ActivosService";
 
 // Helper for brand colors (duplicated from main page for self-containment)
 const getAvatarColor = (tipo: string) => {
@@ -58,10 +58,17 @@ export default function ActivoDetalle() {
     useEffect(() => {
         const loadActivo = async () => {
             try {
-                // Fetching all to find one (temporary solution as per previous code)
-                const allActivos = await getActivosNoMoneda();
-                const found = allActivos.find((a) => a.id === id);
-                setActivo(found || null);
+                // Try to get from cache first
+                const cached = getActivoFromCache(id);
+                if (cached) {
+                    setActivo(cached);
+                    setLoading(false);
+                    return;
+                }
+
+                // If not in cache, fetch from backend (by ID, not all)
+                const data = await getActivoById(id);
+                setActivo(data);
             } catch (error) {
                 console.error("Error loading asset details:", error);
             } finally {
