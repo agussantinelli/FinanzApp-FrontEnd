@@ -258,6 +258,18 @@ export default function ActivoDetalle() {
                                     <Typography variant="caption" color="text.secondary" fontWeight="bold">ORIGEN</Typography>
                                     <Typography variant="h6">{activo.esLocal ? "Local" : "Internacional"}</Typography>
                                 </Grid>
+                                <Grid xs={6} sm={4}>
+                                    <Typography variant="caption" color="text.secondary" fontWeight="bold">SECTOR</Typography>
+                                    <Typography variant="h6">{activo.sector || "-"}</Typography>
+                                </Grid>
+                                <Grid xs={6} sm={4}>
+                                    <Typography variant="caption" color="text.secondary" fontWeight="bold">MARKET CAP</Typography>
+                                    <Typography variant="h6">
+                                        {activo.marketCap
+                                            ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: "compact", maximumFractionDigits: 1 }).format(activo.marketCap)
+                                            : "-"}
+                                    </Typography>
+                                </Grid>
                             </Grid>
                         </Paper>
 
