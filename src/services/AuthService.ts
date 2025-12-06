@@ -65,7 +65,7 @@ export async function getRegisterGeoData(): Promise<RegisterGeoDataDTO> {
 }
 
 export async function login(data: LoginRequest): Promise<LoginResponseDTO> {
-  const response = await http.post<LoginResponseDTO>("/auth/login", data);
+  const response = await http.post<LoginResponseDTO>("/api/auth/login", data);
   setAuthSession(response.data);
   return response.data;
 }
@@ -73,7 +73,7 @@ export async function login(data: LoginRequest): Promise<LoginResponseDTO> {
 export async function register(
   data: RegisterRequest
 ): Promise<LoginResponseDTO> {
-  const response = await http.post<LoginResponseDTO>("/auth/register", data);
+  const response = await http.post<LoginResponseDTO>("/api/auth/register", data);
   setAuthSession(response.data);
   return response.data;
 }
