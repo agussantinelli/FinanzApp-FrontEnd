@@ -47,7 +47,7 @@ const getAvatarColor = (tipo: string) => {
       return "#2196f3";
     case 'cedear':
     case 'cedears':
-      return "#9c27b0";
+      return "#a73bffff";
     case 'bono':
     case 'bonos':
       return "#4caf50";
@@ -56,6 +56,9 @@ const getAvatarColor = (tipo: string) => {
       return "#ff9800";
     case 'fci':
       return "#00bcd4";
+    case 'cripto':
+    case 'crypto':
+      return "#f14ae4ff";
     default:
       return "#757575";
   }
