@@ -34,3 +34,13 @@ export async function searchActivos(texto: string): Promise<ActivoDTO[]> {
     const res = await http.get<ActivoDTO[]>(`/api/activos/buscar/${texto}`);
     return res.data;
 }
+
+export async function getActivosBySector(sectorId: string): Promise<ActivoDTO[]> {
+    const res = await http.get<ActivoDTO[]>(`/filtrar/sector/${sectorId}`);
+    return res.data;
+}
+
+export async function getActivosByTipoAndSector(tipoId: number, sectorId: string): Promise<ActivoDTO[]> {
+    const res = await http.get<ActivoDTO[]>(`/filtrar/tipo/${tipoId}/sector/${sectorId}`);
+    return res.data;
+}
