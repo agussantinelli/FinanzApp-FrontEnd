@@ -37,7 +37,7 @@ export function clearAuthSession() {
 }
 
 export type AuthUser = {
-  id: number;
+  id: string; // UUID
   nombre: string;
   apellido: string;
   email: string;

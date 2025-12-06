@@ -7,7 +7,7 @@ export async function getActivos(tipo?: string): Promise<ActivoDTO[]> {
     return res.data;
 }
 
-export async function getActivoById(id: number): Promise<ActivoDTO> {
+export async function getActivoById(id: string): Promise<ActivoDTO> {
     const res = await http.get<ActivoDTO>(`/api/activos/${id}`);
     return res.data;
 }

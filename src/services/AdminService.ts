@@ -1,4 +1,3 @@
-import http from "./Http";
 import { OperacionResponseDTO } from "@/types/Operacion";
 import { AuthUser } from "./AuthService";
 
@@ -13,7 +12,7 @@ export interface DashboardStats {
 }
 
 export interface UserDTO {
-    id: number;
+    id: string; // UUID
     nombre: string;
     email: string;
     rol: string;
@@ -34,7 +33,7 @@ const MOCK_STATS: DashboardStats = {
 
 // Mock users
 const MOCK_USERS: UserDTO[] = Array.from({ length: 50 }).map((_, i) => ({
-    id: i + 1,
+    id: `u-${i + 1}-uuid-mock`, // UUID mock string
     nombre: `Usuario ${i + 1}`,
     email: `usuario${i + 1}@example.com`,
     rol: i % 10 === 0 ? "Admin" : "Inversor",
@@ -58,7 +57,7 @@ export const getAllOperations = async (): Promise<OperacionResponseDTO[]> => {
     // For now, return empty or mock if needed. Let's return empty to simulate "no data yet" or mock some if needed.
     // Let's mock a few for display.
     const mockOps: OperacionResponseDTO[] = Array.from({ length: 20 }).map((_, i) => ({
-        id: i + 1000,
+        id: `op-${i + 1000}-uuid-mock`, // UUID mock string
         activoSymbol: ["AAPL", "BTC", "YPF", "TSLA"][i % 4],
         activoNombre: ["Apple", "Bitcoin", "YPF", "Tesla"][i % 4],
         tipo: i % 2 === 0 ? "Compra" : "Venta",
