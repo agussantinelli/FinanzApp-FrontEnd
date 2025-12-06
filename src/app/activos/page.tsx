@@ -169,16 +169,15 @@ export default function Activos() {
 
   return (
     <main style={{ padding: 24 }}>
-      {/* Premium Header */}
       <Box sx={{ mb: 5, pb: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
-        <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" alignItems={{ xs: 'flex-start', md: 'center' }} spacing={3}>
+        <Stack spacing={3}>
           <Box>
             <Typography
               variant="h3"
               gutterBottom
               fontWeight={800}
               sx={{
-                background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                background: 'linear-gradient(45deg, #33a139ff 30%, #b3ffd0ff 90%)',
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 mb: 1
@@ -206,7 +205,7 @@ export default function Activos() {
                 ),
               }}
               sx={{
-                minWidth: 300,
+                minWidth: 350,
                 bgcolor: 'background.paper',
                 '& fieldset': { borderRadius: '12px' }
               }}
@@ -226,29 +225,28 @@ export default function Activos() {
               <RefreshIcon />
             </Button>
           </Stack>
-        </Stack>
 
-        {/* Filters Row */}
-        <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
-          <FormControl sx={{ minWidth: 220 }} size="small">
-            <InputLabel id="asset-type-label">Filtrar por Tipo</InputLabel>
-            <Select
-              labelId="asset-type-label"
-              id="asset-type-select"
-              value={selectedType}
-              label="Filtrar por Tipo"
-              onChange={handleTypeChange}
-              disabled={searchTerm.length >= 2}
-            >
-              <MenuItem value="Todos">Todos</MenuItem>
-              {tipos.map((type) => (
-                <MenuItem key={type.id} value={type.id}>
-                  {type.nombre}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <FormControl sx={{ minWidth: 220 }} size="small">
+              <InputLabel id="asset-type-label">Filtrar por Tipo</InputLabel>
+              <Select
+                labelId="asset-type-label"
+                id="asset-type-select"
+                value={selectedType}
+                label="Filtrar por Tipo"
+                onChange={handleTypeChange}
+                disabled={searchTerm.length >= 2}
+              >
+                <MenuItem value="Todos">Todos</MenuItem>
+                {tipos.map((type) => (
+                  <MenuItem key={type.id} value={type.id}>
+                    {type.nombre}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+        </Stack>
       </Box>
 
       {loading ? (
