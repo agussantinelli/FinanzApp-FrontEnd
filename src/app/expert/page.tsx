@@ -17,8 +17,6 @@ import { getCurrentUser, type AuthUser } from "@/services/AuthService";
 
 import styles from "./styles/Expert.module.css";
 
-// ... (imports)
-
 export default function ExpertDashboardPage() {
   const router = useRouter();
   const [user, setUser] = React.useState<AuthUser | null>(null);
@@ -64,7 +62,6 @@ export default function ExpertDashboardPage() {
   return (
     <Box className={styles.container}>
       <Grid container spacing={3}>
-        {/* HEADER FULL WIDTH */}
         <Grid item xs={12}>
           <Paper className={styles.headerPaper}>
             <Stack
@@ -107,7 +104,6 @@ export default function ExpertDashboardPage() {
           </Paper>
         </Grid>
 
-        {/* CARD GRANDE: RESUMEN DE RECOMENDACIONES */}
         <Grid item xs={12}>
           <Paper className={styles.summaryCard}>
             <Typography variant="caption" color="text.secondary">
@@ -172,7 +168,6 @@ export default function ExpertDashboardPage() {
           </Paper>
         </Grid>
 
-        {/* FILA DE 2 CARDS: INVERSORES & LISTAS */}
         <Grid item xs={12} md={6}>
           <Paper className={styles.infoCard}>
             <Typography variant="caption" color="text.secondary">
@@ -209,7 +204,6 @@ export default function ExpertDashboardPage() {
           </Paper>
         </Grid>
 
-        {/* FILA DE 2 CARDS: PERFORMANCE & HORIZONTE */}
         <Grid item xs={12} md={6}>
           <Paper className={styles.highlightInfoCard}>
             <Typography variant="caption" color="text.secondary">
@@ -246,7 +240,6 @@ export default function ExpertDashboardPage() {
           </Paper>
         </Grid>
 
-        {/* CARD GRANDE ABAJO: ROADMAP DEL EXPERTO */}
         <Grid item xs={12}>
           <Paper className={styles.roadmapPaper}>
             <Typography variant="h6" className={styles.sectionTitle}>

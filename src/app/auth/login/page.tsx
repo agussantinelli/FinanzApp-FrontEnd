@@ -22,11 +22,8 @@ type LoginErrors = {
 
 import styles from "./styles/Login.module.css";
 
-// ... (imports)
-
 export default function LoginPage() {
   const [email, setEmail] = React.useState("");
-  // ... (state) ...
   const [password, setPassword] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
@@ -37,7 +34,7 @@ export default function LoginPage() {
   const router = useRouter();
 
   const validate = (): boolean => {
-    // ... (logic)
+
     const errors: LoginErrors = {};
     const emailTrim = email.trim();
 

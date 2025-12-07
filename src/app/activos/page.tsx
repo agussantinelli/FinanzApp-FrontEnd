@@ -93,7 +93,7 @@ export default function Activos() {
   const [page, setPage] = useState(1);
   const itemsPerPage = 12;
 
-  // ... (useEffects and handlers remain the same) ...
+
 
   useEffect(() => {
     const loadTiposAndSectores = async () => {

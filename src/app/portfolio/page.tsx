@@ -75,7 +75,6 @@ const mockPositions: PositionRow[] = [
 
 import styles from "./styles/Portfolio.module.css";
 
-// ... (imports)
 
 export default function PortfolioPage() {
   const router = useRouter();

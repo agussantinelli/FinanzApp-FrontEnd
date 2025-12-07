@@ -50,7 +50,7 @@ interface TabPanelProps {
 }
 
 import styles from "./styles/Admin.module.css";
-// ... (imports)
+
 
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;

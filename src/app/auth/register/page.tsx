@@ -65,7 +65,6 @@ export default function RegisterPage() {
 
   const router = useRouter();
 
-  // ... (useEffects)
   React.useEffect(() => {
     let mounted = true;
 
@@ -185,14 +184,12 @@ export default function RegisterPage() {
       setSuccessSubmit("Cuenta creada correctamente. Redirigiendo…");
 
       const destino = getHomePathForRole(resp.rol);
-      // pequeño delay opcional para que se vea el mensaje
       setTimeout(() => {
         router.push(destino);
       }, 800);
     } catch (err: any) {
       console.error("Error registro:", err);
 
-      // Si el back devuelve mensaje tipo "Email ya registrado"
       const msgFromApi =
         err?.response?.data ?? "No se pudo completar el registro.";
       setApiError(msgFromApi);
