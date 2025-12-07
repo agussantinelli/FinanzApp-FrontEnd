@@ -49,6 +49,9 @@ interface TabPanelProps {
   value: number;
 }
 
+import styles from "./styles/Admin.module.css";
+// ... (imports)
+
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
@@ -127,24 +130,24 @@ export default function AdminDashboardPage() {
 
   if (checking || !user) {
     return (
-      <Box sx={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <Box className={styles.loadingContainer}>
         <CircularProgress color="secondary" />
       </Box>
     );
   }
 
   return (
-    <Box sx={{ minHeight: "calc(100vh - 96px)", px: { xs: 2, md: 4 }, py: 4 }}>
+    <Box className={styles.container}>
 
       {/* Header */}
-      <Paper sx={{ p: 3, mb: 4, borderRadius: 3, bgcolor: "rgba(15,15,15,0.95)", border: "1px solid rgba(255,255,255,0.08)" }}>
+      <Paper className={styles.headerPaper}>
         <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems="center" spacing={2}>
           <Box>
             <Stack direction="row" spacing={1} alignItems="center">
-              <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: 0.5 }}>
+              <Typography variant="h4" className={styles.headerTitle}>
                 Panel Administrador
               </Typography>
-              <Chip label="Admin" size="small" color="secondary" sx={{ fontWeight: 700 }} />
+              <Chip label="Admin" size="small" color="secondary" className={styles.adminChip} />
             </Stack>
             <Typography variant="body2" color="text.secondary" mt={0.5}>
               Bienvenido, {user.nombre}. Gestiona usuarios, activos y monitorea operaciones.
@@ -157,7 +160,7 @@ export default function AdminDashboardPage() {
       </Paper>
 
       {/* Tabs */}
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box className={styles.tabBox}>
         <Tabs value={tabValue} onChange={handleChange} aria-label="admin tabs" textColor="secondary" indicatorColor="secondary">
           <Tab icon={<DashboardIcon />} iconPosition="start" label="Resumen" />
           <Tab icon={<PersonIcon />} iconPosition="start" label="Usuarios" />
@@ -174,52 +177,52 @@ export default function AdminDashboardPage() {
           <Grid container spacing={3}>
             {/* KPI Cards */}
             <Grid item xs={12} sm={6} md={3}>
-              <Paper sx={{ p: 3, borderRadius: 3, bgcolor: "#1e1e1e", height: '100%' }}>
+              <Paper className={styles.kpiPaper}>
                 <Typography variant="caption" color="text.secondary">Total Usuarios</Typography>
-                <Typography variant="h4" fontWeight={800} mt={1}>{stats.totalUsuarios}</Typography>
-                <Typography variant="body2" color="success.main" sx={{ display: 'flex', alignItems: 'center', mt: 1, fontWeight: 600 }}>
+                <Typography variant="h4" className={styles.kpiValue}>{stats.totalUsuarios}</Typography>
+                <Typography variant="body2" color="success.main" className={styles.kpiChange}>
                   +{stats.usuariosHoy} hoy
                 </Typography>
               </Paper>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <Paper sx={{ p: 3, borderRadius: 3, bgcolor: "#1e1e1e", height: '100%' }}>
+              <Paper className={styles.kpiPaper}>
                 <Typography variant="caption" color="text.secondary">Operaciones Totales</Typography>
-                <Typography variant="h4" fontWeight={800} mt={1}>{stats.totalOperaciones}</Typography>
-                <Typography variant="body2" color="success.main" sx={{ display: 'flex', alignItems: 'center', mt: 1, fontWeight: 600 }}>
+                <Typography variant="h4" className={styles.kpiValue}>{stats.totalOperaciones}</Typography>
+                <Typography variant="body2" color="success.main" className={styles.kpiChange}>
                   +{stats.operacionesHoy} hoy
                 </Typography>
               </Paper>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <Paper sx={{ p: 3, borderRadius: 3, bgcolor: "#1e1e1e", height: '100%' }}>
+              <Paper className={styles.kpiPaper}>
                 <Typography variant="caption" color="text.secondary">Volumen (ARS)</Typography>
-                <Typography variant="h5" fontWeight={800} mt={1}>${stats.volumenHoyArs.toLocaleString()}</Typography>
+                <Typography variant="h5" className={styles.kpiValue}>${stats.volumenHoyArs.toLocaleString()}</Typography>
                 <Typography variant="body2" color="text.secondary" mt={1}>Hoy</Typography>
               </Paper>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
-              <Paper sx={{ p: 3, borderRadius: 3, bgcolor: "#1e1e1e", height: '100%' }}>
+              <Paper className={styles.kpiPaper}>
                 <Typography variant="caption" color="text.secondary">Total Activos</Typography>
-                <Typography variant="h4" fontWeight={800} mt={1}>{stats.totalActivos}</Typography>
+                <Typography variant="h4" className={styles.kpiValue}>{stats.totalActivos}</Typography>
                 <Typography variant="body2" color="text.secondary" mt={1}>En sistema</Typography>
               </Paper>
             </Grid>
 
             {/* Recent Activity Placeholders */}
             <Grid item xs={12} md={6}>
-              <Paper sx={{ p: 3, borderRadius: 3, bgcolor: "#1e1e1e" }}>
-                <Typography variant="h6" fontWeight={700} mb={2}>Distribución de Usuarios</Typography>
-                <Divider sx={{ mb: 2 }} />
+              <Paper className={styles.sectionPaper}>
+                <Typography variant="h6" className={styles.sectionTitle}>Distribución de Usuarios</Typography>
+                <Divider className={styles.divider} />
                 <Typography color="text.secondary" variant="body2">
                   Gráfico de distribución por rol o fecha de registro (Próximamente chart.js)
                 </Typography>
               </Paper>
             </Grid>
             <Grid item xs={12} md={6}>
-              <Paper sx={{ p: 3, borderRadius: 3, bgcolor: "#1e1e1e" }}>
-                <Typography variant="h6" fontWeight={700} mb={2}>Últimos Registros</Typography>
-                <Divider sx={{ mb: 2 }} />
+              <Paper className={styles.sectionPaper}>
+                <Typography variant="h6" className={styles.sectionTitle}>Últimos Registros</Typography>
+                <Divider className={styles.divider} />
                 <Stack spacing={1}>
                   {users.slice(0, 5).map(u => (
                     <Typography key={u.id} variant="body2">• {u.nombre} ({u.email}) se unió recientemente.</Typography>
@@ -235,9 +238,9 @@ export default function AdminDashboardPage() {
 
       {/* USUARIOS TAB */}
       <CustomTabPanel value={tabValue} index={1}>
-        <TableContainer component={Paper} sx={{ borderRadius: 3, overflow: 'hidden' }}>
+        <TableContainer component={Paper} className={styles.tableContainer}>
           <Table>
-            <TableHead sx={{ bgcolor: 'background.paper' }}>
+            <TableHead className={styles.tableHead}>
               <TableRow>
                 <TableCell>ID</TableCell>
                 <TableCell>Usuario</TableCell>
@@ -275,9 +278,9 @@ export default function AdminDashboardPage() {
 
       {/* OPERACIONES TAB */}
       <CustomTabPanel value={tabValue} index={2}>
-        <TableContainer component={Paper} sx={{ borderRadius: 3, overflow: 'hidden' }}>
+        <TableContainer component={Paper} className={styles.tableContainer}>
           <Table>
-            <TableHead sx={{ bgcolor: 'background.paper' }}>
+            <TableHead className={styles.tableHead}>
               <TableRow>
                 <TableCell>ID Op</TableCell>
                 <TableCell>Usuario</TableCell>
@@ -300,7 +303,7 @@ export default function AdminDashboardPage() {
                       size="small"
                       color={row.tipo === 'Compra' ? 'success' : 'error'}
                       variant="soft"
-                      sx={{ fontWeight: 700 }}
+                      className={styles.chip}
                     />
                   </TableCell>
                   <TableCell>
@@ -325,9 +328,9 @@ export default function AdminDashboardPage() {
         <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
           <Button variant="contained" color="primary">Agregar Nuevo Activo</Button>
         </Box>
-        <TableContainer component={Paper} sx={{ borderRadius: 3, overflow: 'hidden' }}>
+        <TableContainer component={Paper} className={styles.tableContainer}>
           <Table>
-            <TableHead sx={{ bgcolor: 'background.paper' }}>
+            <TableHead className={styles.tableHead}>
               <TableRow>
                 <TableCell>Símbolo</TableCell>
                 <TableCell>Nombre</TableCell>
@@ -340,7 +343,7 @@ export default function AdminDashboardPage() {
               {activos.map((row) => (
                 <TableRow key={row.id} hover>
                   <TableCell>
-                    <Chip label={row.symbol} size="small" sx={{ fontWeight: 700, borderRadius: 1 }} />
+                    <Chip label={row.symbol} size="small" className={styles.chipSymbol} />
                   </TableCell>
                   <TableCell>{row.nombre}</TableCell>
                   <TableCell>{row.tipo}</TableCell>

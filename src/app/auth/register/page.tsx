@@ -35,6 +35,10 @@ type RegisterFieldErrors = {
   localidadResidenciaId?: string;
 };
 
+import styles from "./styles/Register.module.css";
+
+// ... (imports)
+
 export default function RegisterPage() {
   const [nombre, setNombre] = React.useState("");
   const [apellido, setApellido] = React.useState("");
@@ -62,6 +66,7 @@ export default function RegisterPage() {
 
   const router = useRouter();
 
+  // ... (useEffects)
   React.useEffect(() => {
     let mounted = true;
 
@@ -199,14 +204,7 @@ export default function RegisterPage() {
 
   if (loadingGeo) {
     return (
-      <Box
-        sx={{
-          minHeight: "calc(100vh - 96px)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      <Box className={styles.loadingContainer}>
         <Stack alignItems="center" spacing={2}>
           <CircularProgress />
           <Typography variant="body2" color="text.secondary">
@@ -219,26 +217,9 @@ export default function RegisterPage() {
 
   if (errorGeo || !geoData) {
     return (
-      <Box
-        sx={{
-          minHeight: "calc(100vh - 96px)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          px: 2,
-        }}
-      >
-        <Paper
-          sx={{
-            p: 3,
-            maxWidth: 480,
-            width: "100%",
-            borderRadius: 3,
-            bgcolor: "rgba(15,15,15,0.95)",
-            border: "1px solid rgba(255,255,255,0.08)",
-          }}
-        >
-          <Typography variant="h6" sx={{ mb: 1.5, fontWeight: 700 }}>
+      <Box className={styles.container}>
+        <Paper className={styles.errorCard}>
+          <Typography variant="h6" className={styles.errorTitle}>
             Error al cargar datos
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -251,44 +232,21 @@ export default function RegisterPage() {
   }
 
   return (
-    <Box
-      sx={{
-        minHeight: "calc(100vh - 96px)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        px: 2,
-        py: 4,
-      }}
-    >
-      <Paper
-        elevation={6}
-        sx={{
-          width: "100%",
-          maxWidth: 520,
-          p: 4,
-          borderRadius: 3,
-          bgcolor: "rgba(15, 15, 15, 0.95)",
-          border: "1px solid rgba(255,255,255,0.06)",
-          backdropFilter: "blur(10px)",
-        }}
-      >
+    <Box className={styles.container}>
+      <Paper elevation={6} className={styles.card}>
         <Stack spacing={3}>
           <Box>
-            <Typography
-              variant="h4"
-              sx={{ fontWeight: 800, mb: 0.5, letterSpacing: 0.4 }}
-            >
+            <Typography variant="h4" className={styles.title}>
               Crear cuenta
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" className={styles.subtitle}>
               Registrate en FinanzApp para empezar a gestionar tu portafolio.
             </Typography>
           </Box>
 
           <Box component="form" onSubmit={handleSubmit} noValidate>
-            <Stack spacing={2.2}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+            <div className={styles.formStack}>
+              <Typography variant="subtitle1" className={styles.sectionTitle}>
                 Datos personales
               </Typography>
 
@@ -387,7 +345,7 @@ export default function RegisterPage() {
                 ))}
               </TextField>
 
-              <Typography variant="subtitle1" sx={{ fontWeight: 700, mt: 1 }}>
+              <Typography variant="subtitle1" className={styles.sectionTitle}>
                 Residencia
               </Typography>
 
@@ -475,7 +433,7 @@ export default function RegisterPage() {
                 </>
               )}
 
-              <Typography variant="subtitle1" sx={{ fontWeight: 700, mt: 1 }}>
+              <Typography variant="subtitle1" className={styles.sectionTitle}>
                 Seguridad
               </Typography>
 
@@ -529,20 +487,14 @@ export default function RegisterPage() {
                 variant="contained"
                 fullWidth
                 disabled={submitting}
-                sx={{
-                  mt: 1,
-                  py: 1.2,
-                  fontWeight: 700,
-                  textTransform: "none",
-                  fontSize: "1rem",
-                }}
+                className={styles.submitButton}
               >
                 {submitting ? "Creando cuenta..." : "Crear cuenta"}
               </Button>
-            </Stack>
+            </div>
           </Box>
 
-          <Box sx={{ textAlign: "center", mt: 1 }}>
+          <Box className={styles.footer}>
             <Typography variant="body2" color="text.secondary">
               ¿Ya tenés una cuenta?{" "}
               <MuiLink component={Link} href="/auth/login" underline="hover">

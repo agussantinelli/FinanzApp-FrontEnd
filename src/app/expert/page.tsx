@@ -15,6 +15,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getCurrentUser, type AuthUser } from "@/services/AuthService";
 
+import styles from "./styles/Expert.module.css";
+
+// ... (imports)
+
 export default function ExpertDashboardPage() {
   const router = useRouter();
   const [user, setUser] = React.useState<AuthUser | null>(null);
@@ -38,14 +42,7 @@ export default function ExpertDashboardPage() {
 
   if (checking || !user) {
     return (
-      <Box
-        sx={{
-          minHeight: "calc(100vh - 96px)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      <Box className={styles.loadingContainer}>
         <Typography variant="body1" color="text.secondary">
           Cargando panel de experto...
         </Typography>
@@ -65,24 +62,11 @@ export default function ExpertDashboardPage() {
   const horizontePromedio = 45; // días
 
   return (
-    <Box
-      sx={{
-        minHeight: "calc(100vh - 96px)",
-        px: { xs: 2, md: 4 },
-        py: 4,
-      }}
-    >
+    <Box className={styles.container}>
       <Grid container spacing={3}>
         {/* HEADER FULL WIDTH */}
         <Grid item xs={12}>
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              bgcolor: "rgba(15,15,15,0.95)",
-              border: "1px solid rgba(255,255,255,0.08)",
-            }}
-          >
+          <Paper className={styles.headerPaper}>
             <Stack
               direction={{ xs: "column", md: "row" }}
               justifyContent="space-between"
@@ -91,17 +75,14 @@ export default function ExpertDashboardPage() {
             >
               <Box>
                 <Stack direction="row" spacing={1} alignItems="center">
-                  <Typography
-                    variant="h4"
-                    sx={{ fontWeight: 800, mb: 0.5, letterSpacing: 0.4 }}
-                  >
+                  <Typography variant="h4" className={styles.headerTitle}>
                     Panel experto
                   </Typography>
                   <Chip
                     label="Experto"
                     size="small"
                     color="secondary"
-                    sx={{ fontWeight: 600 }}
+                    className={styles.expertChip}
                   />
                 </Stack>
                 <Typography variant="body2" color="text.secondary">
@@ -117,7 +98,7 @@ export default function ExpertDashboardPage() {
                   variant="outlined"
                   color="inherit"
                   size="small"
-                  sx={{ textTransform: "none" }}
+                  className={styles.actionButton}
                 >
                   Ver mi portafolio
                 </Button>
@@ -128,15 +109,7 @@ export default function ExpertDashboardPage() {
 
         {/* CARD GRANDE: RESUMEN DE RECOMENDACIONES */}
         <Grid item xs={12}>
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(0,255,135,0.3)",
-              boxShadow: "0 0 18px rgba(0,255,135,0.12)",
-            }}
-          >
+          <Paper className={styles.summaryCard}>
             <Typography variant="caption" color="text.secondary">
               Resumen de recomendaciones del sistema
             </Typography>
@@ -148,7 +121,7 @@ export default function ExpertDashboardPage() {
               sx={{ mt: 1.5 }}
             >
               <Box>
-                <Typography variant="h4" sx={{ fontWeight: 800 }}>
+                <Typography variant="h4" className={styles.bigNumber}>
                   {totalRecomendaciones}
                 </Typography>
                 <Typography
@@ -168,11 +141,11 @@ export default function ExpertDashboardPage() {
                 <Box>
                   <Typography
                     variant="subtitle2"
-                    sx={{ fontWeight: 700, mb: 0.2 }}
+                    className={styles.subtitleBold}
                   >
                     Hoy
                   </Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                  <Typography variant="h6" className={styles.bigNumber}>
                     {recomendacionesHoy}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -183,11 +156,11 @@ export default function ExpertDashboardPage() {
                 <Box>
                   <Typography
                     variant="subtitle2"
-                    sx={{ fontWeight: 700, mb: 0.2 }}
+                    className={styles.subtitleBold}
                   >
                     Activos cubiertos
                   </Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                  <Typography variant="h6" className={styles.bigNumber}>
                     {activosEnRecomendaciones}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -201,18 +174,11 @@ export default function ExpertDashboardPage() {
 
         {/* FILA DE 2 CARDS: INVERSORES & LISTAS */}
         <Grid item xs={12} md={6}>
-          <Paper
-            sx={{
-              p: 2.5,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(255,255,255,0.08)",
-            }}
-          >
+          <Paper className={styles.infoCard}>
             <Typography variant="caption" color="text.secondary">
               Alcance entre inversores
             </Typography>
-            <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5 }}>
+            <Typography variant="h4" className={`${styles.bigNumber} ${styles.marginTop}`} sx={{ mt: 0.5 }}>
               {inversoresSiguiendo}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
@@ -226,18 +192,11 @@ export default function ExpertDashboardPage() {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Paper
-            sx={{
-              p: 2.5,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(255,255,255,0.08)",
-            }}
-          >
+          <Paper className={styles.infoCard}>
             <Typography variant="caption" color="text.secondary">
               Listas y carteras modelo
             </Typography>
-            <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5 }}>
+            <Typography variant="h4" className={`${styles.bigNumber} ${styles.marginTop}`} sx={{ mt: 0.5 }}>
               {listasSeguimiento}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
@@ -252,21 +211,14 @@ export default function ExpertDashboardPage() {
 
         {/* FILA DE 2 CARDS: PERFORMANCE & HORIZONTE */}
         <Grid item xs={12} md={6}>
-          <Paper
-            sx={{
-              p: 2.5,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(0,255,135,0.3)",
-              boxShadow: "0 0 18px rgba(0,255,135,0.12)",
-            }}
-          >
+          <Paper className={styles.highlightInfoCard}>
             <Typography variant="caption" color="text.secondary">
               Desempeño estimado
             </Typography>
             <Typography
               variant="h4"
-              sx={{ fontWeight: 800, mt: 0.5, color: "#39ff14" }}
+              className={`${styles.bigNumber} ${styles.neonGreenText}`}
+              sx={{ mt: 0.5 }}
             >
               {tasaAcierto}%
             </Typography>
@@ -278,18 +230,11 @@ export default function ExpertDashboardPage() {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Paper
-            sx={{
-              p: 2.5,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(255,255,255,0.08)",
-            }}
-          >
+          <Paper className={styles.infoCard}>
             <Typography variant="caption" color="text.secondary">
               Horizonte de inversión
             </Typography>
-            <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5 }}>
+            <Typography variant="h4" className={`${styles.bigNumber} ${styles.marginTop}`} sx={{ mt: 0.5 }}>
               {horizontePromedio} días
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
@@ -303,15 +248,8 @@ export default function ExpertDashboardPage() {
 
         {/* CARD GRANDE ABAJO: ROADMAP DEL EXPERTO */}
         <Grid item xs={12}>
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(255,255,255,0.05)",
-            }}
-          >
-            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+          <Paper className={styles.roadmapPaper}>
+            <Typography variant="h6" className={styles.sectionTitle}>
               Próximos pasos para el módulo de experto
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>

@@ -1,0 +1,96 @@
+.container {
+    min-height: calc(100vh - 96px);
+    padding-top: 32px;
+    padding-bottom: 32px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+@media (min-width: 900px) {
+    .container {
+        padding-left: 32px;
+        padding-right: 32px;
+    }
+}
+
+.loadingContainer {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.headerPaper {
+    padding: 24px;
+    margin-bottom: 32px;
+    border-radius: 24px !important;
+    background-color: rgba(15, 15, 15, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.headerTitle {
+    font-weight: 800 !important;
+    letter-spacing: 0.5px !important;
+}
+
+.adminChip {
+    font-weight: 700 !important;
+}
+
+.tabBox {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    /* divider color */
+}
+
+.kpiPaper {
+    padding: 24px;
+    border-radius: 24px !important;
+    background-color: #1e1e1e;
+    height: 100%;
+}
+
+.kpiValue {
+    font-weight: 800 !important;
+    margin-top: 8px !important;
+}
+
+.kpiChange {
+    display: flex;
+    align-items: center;
+    margin-top: 8px !important;
+    font-weight: 600 !important;
+}
+
+.sectionPaper {
+    padding: 24px;
+    border-radius: 24px !important;
+    background-color: #1e1e1e;
+}
+
+.sectionTitle {
+    font-weight: 700 !important;
+    margin-bottom: 16px !important;
+}
+
+.divider {
+    margin-bottom: 16px !important;
+}
+
+.tableContainer {
+    border-radius: 24px !important;
+    overflow: hidden !important;
+}
+
+.tableHead {
+    background-color: rgba(255, 255, 255, 0.05);
+    /* background.paper typically lighter */
+}
+
+.chip {
+    font-weight: 700 !important;
+}
+
+.chipSymbol {
+    font-weight: 700 !important;
+    border-radius: 4px !important;
+}

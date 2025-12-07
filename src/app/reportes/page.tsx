@@ -1,15 +1,16 @@
 import { Typography, Box } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import DolarBarChart from "@/components/charts/DolarBarChart";
+import styles from "./styles/Reportes.module.css";
 
 export default function Reportes() {
   return (
-    <main style={{ padding: 24 }}>
-      <Box sx={{ maxWidth: 1200, mx: "auto" }}>
-        <Typography variant="h4" gutterBottom>
+    <main className={styles.container}>
+      <Box className={styles.maxWidthContainer}>
+        <Typography variant="h4" gutterBottom className={styles.headerTitle}>
           Reportes
         </Typography>
-        <Typography variant="body2" color="text.secondary" paragraph>
+        <Typography variant="body2" className={styles.description} paragraph>
           Vista temporal con datos actuales del backend. Próximamente más métricas y series históricas.
         </Typography>
 
@@ -20,25 +21,12 @@ export default function Reportes() {
 
           {/* Slot para un segundo card: por ejemplo, un resumen de patrimonio */}
           <Grid item xs={12} md={4}>
-            <Box
-              sx={{
-                height: 460,
-                borderRadius: 2,
-                border: "1px solid",
-                borderColor: "divider",
-                p: 2.5,
-                display: "flex",
-                flexDirection: "column",
-                gap: 1.2,
-                background:
-                  "linear-gradient(180deg, rgba(57,255,20,0.06) 0%, rgba(57,255,20,0.02) 100%)",
-              }}
-            >
+            <Box className={styles.gradientCard}>
               <Typography variant="h6">Resumen rápido</Typography>
               <Typography variant="body2" color="text.secondary">
                 Próximamente: Patrimonio total, distribución por clase y alertas.
               </Typography>
-              <Box sx={{ flexGrow: 1, display: "grid", placeItems: "center", opacity: 0.7 }}>
+              <Box className={styles.widgetPlaceholder}>
                 <Typography variant="caption">Widget en construcción</Typography>
               </Box>
             </Box>

@@ -18,6 +18,10 @@ import {
   type AuthUser,
 } from "@/services/AuthService";
 
+import styles from "./styles/Dashboard.module.css";
+
+// ... (imports)
+
 export default function DashboardPage() {
   const router = useRouter();
   const [user, setUser] = React.useState<AuthUser | null>(null);
@@ -41,14 +45,7 @@ export default function DashboardPage() {
 
   if (checking || !user) {
     return (
-      <Box
-        sx={{
-          minHeight: "calc(100vh - 96px)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      <Box className={styles.loadingContainer}>
         <Typography variant="body1" color="text.secondary">
           Cargando tu panel de inversor...
         </Typography>
@@ -57,23 +54,10 @@ export default function DashboardPage() {
   }
 
   return (
-    <Box
-      sx={{
-        minHeight: "calc(100vh - 96px)",
-        px: { xs: 2, md: 4 },
-        py: 4,
-      }}
-    >
+    <Box className={styles.container}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              bgcolor: "rgba(15,15,15,0.95)",
-              border: "1px solid rgba(255,255,255,0.08)",
-            }}
-          >
+          <Paper className={styles.headerPaper}>
             <Stack
               direction={{ xs: "column", md: "row" }}
               justifyContent="space-between"
@@ -82,17 +66,14 @@ export default function DashboardPage() {
             >
               <Box>
                 <Stack direction="row" spacing={1} alignItems="center">
-                  <Typography
-                    variant="h4"
-                    sx={{ fontWeight: 800, mb: 0.5, letterSpacing: 0.4 }}
-                  >
+                  <Typography variant="h4" className={styles.headerTitle}>
                     Hola, {user.nombre} 👋
                   </Typography>
                   <Chip
                     label={user.rol === "Admin" ? "Admin" : "Inversor"}
                     size="small"
                     color={user.rol === "Admin" ? "secondary" : "primary"}
-                    sx={{ fontWeight: 600 }}
+                    className={styles.roleChip}
                   />
                 </Stack>
                 <Typography variant="body2" color="text.secondary">
@@ -108,7 +89,7 @@ export default function DashboardPage() {
                   variant="outlined"
                   color="inherit"
                   size="small"
-                  sx={{ textTransform: "none" }}
+                  className={styles.actionButton}
                 >
                   Ver perfil
                 </Button>
@@ -118,19 +99,11 @@ export default function DashboardPage() {
         </Grid>
 
         <Grid item xs={12} md={3}>
-          <Paper
-            sx={{
-              p: 2.5,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(0,255,135,0.3)",
-              boxShadow: "0 0 18px rgba(0,255,135,0.12)",
-            }}
-          >
+          <Paper className={`${styles.card} ${styles.highlightCard}`}>
             <Typography variant="caption" color="text.secondary">
               Valor estimado del portafolio
             </Typography>
-            <Typography variant="h5" sx={{ fontWeight: 800, mt: 0.5 }}>
+            <Typography variant="h5" className={styles.cardValue}>
               $ 0
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
@@ -141,20 +114,13 @@ export default function DashboardPage() {
         </Grid>
 
         <Grid item xs={12} md={3}>
-          <Paper
-            sx={{
-              p: 2.5,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(255,255,255,0.08)",
-            }}
-          >
+          <Paper className={styles.card}>
             <Typography variant="caption" color="text.secondary">
               Resultado diario (P&L)
             </Typography>
             <Typography
               variant="h5"
-              sx={{ fontWeight: 800, mt: 0.5, color: "#39ff14" }}
+              className={`${styles.cardValue} ${styles.neonGreenText}`}
             >
               + 0,00 %
             </Typography>
@@ -166,18 +132,11 @@ export default function DashboardPage() {
         </Grid>
 
         <Grid item xs={12} md={3}>
-          <Paper
-            sx={{
-              p: 2.5,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(255,255,255,0.08)",
-            }}
-          >
+          <Paper className={styles.card}>
             <Typography variant="caption" color="text.secondary">
               Cantidad de activos
             </Typography>
-            <Typography variant="h5" sx={{ fontWeight: 800, mt: 0.5 }}>
+            <Typography variant="h5" className={styles.cardValue}>
               0
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
@@ -188,18 +147,11 @@ export default function DashboardPage() {
         </Grid>
 
         <Grid item xs={12} md={3}>
-          <Paper
-            sx={{
-              p: 2.5,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(255,255,255,0.08)",
-            }}
-          >
+          <Paper className={styles.card}>
             <Typography variant="caption" color="text.secondary">
               Exposición en cripto
             </Typography>
-            <Typography variant="h5" sx={{ fontWeight: 800, mt: 0.5 }}>
+            <Typography variant="h5" className={styles.cardValue}>
               0 %
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
@@ -210,15 +162,8 @@ export default function DashboardPage() {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(255,255,255,0.08)",
-            }}
-          >
-            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+          <Paper className={styles.sectionPaper}>
+            <Typography variant="h6" className={styles.sectionTitle}>
               Atajos rápidos
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
@@ -233,7 +178,7 @@ export default function DashboardPage() {
                 alignItems="center"
               >
                 <Box>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                  <Typography variant="subtitle2" className={styles.subtitle}>
                     Cotizaciones de dólar
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -245,13 +190,13 @@ export default function DashboardPage() {
                   href="/dolar"
                   size="small"
                   variant="outlined"
-                  sx={{ textTransform: "none" }}
+                  className={styles.actionButton}
                 >
                   Ver
                 </Button>
               </Stack>
 
-              <Divider flexItem sx={{ my: 1 }} />
+              <Divider flexItem className={styles.divider} />
 
               <Stack
                 direction="row"
@@ -259,7 +204,7 @@ export default function DashboardPage() {
                 alignItems="center"
               >
                 <Box>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                  <Typography variant="subtitle2" className={styles.subtitle}>
                     CEDEARs & acciones
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -271,13 +216,13 @@ export default function DashboardPage() {
                   href="/cedears"
                   size="small"
                   variant="outlined"
-                  sx={{ textTransform: "none" }}
+                  className={styles.actionButton}
                 >
                   Ver
                 </Button>
               </Stack>
 
-              <Divider flexItem sx={{ my: 1 }} />
+              <Divider flexItem className={styles.divider} />
 
               <Stack
                 direction="row"
@@ -285,7 +230,7 @@ export default function DashboardPage() {
                 alignItems="center"
               >
                 <Box>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                  <Typography variant="subtitle2" className={styles.subtitle}>
                     Criptomonedas
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -297,7 +242,7 @@ export default function DashboardPage() {
                   href="/crypto"
                   size="small"
                   variant="outlined"
-                  sx={{ textTransform: "none" }}
+                  className={styles.actionButton}
                 >
                   Ver
                 </Button>
@@ -307,15 +252,8 @@ export default function DashboardPage() {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(255,255,255,0.05)",
-            }}
-          >
-            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+          <Paper className={styles.sectionPaper}>
+            <Typography variant="h6" className={styles.sectionTitle}>
               Próximos pasos en FinanzApp
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
@@ -341,15 +279,8 @@ export default function DashboardPage() {
         </Grid>
 
         <Grid item xs={12}>
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(255,255,255,0.05)",
-            }}
-          >
-            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+          <Paper className={styles.sectionPaper}>
+            <Typography variant="h6" className={styles.sectionTitle}>
               Últimos movimientos y noticias
             </Typography>
             <Typography variant="body2" color="text.secondary">

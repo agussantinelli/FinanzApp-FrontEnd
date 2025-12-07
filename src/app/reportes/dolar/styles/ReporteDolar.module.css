@@ -1,0 +1,19 @@
+.container {
+    padding: 24px;
+}
+
+.maxWidthContainer {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.headerTitle {
+    margin-bottom: 0.35em !important;
+}
+
+.description {
+    color: rgba(255, 255, 255, 0.7);
+    /* text.secondary */
+    margin-bottom: 16px !important;
+}

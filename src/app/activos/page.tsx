@@ -74,8 +74,13 @@ const getAvatarColor = (tipo: string) => {
   }
 };
 
+import styles from "./styles/Activos.module.css";
+
+// ... (previous imports and functions remain the same)
+
 export default function Activos() {
   const router = useRouter();
+  // ... state declarations ...
   const [selectedType, setSelectedType] = useState<string | number>("Todos");
   const [selectedSector, setSelectedSector] = useState<string>("Todos");
   const [activos, setActivos] = useState<ActivoDTO[]>([]);
@@ -84,13 +89,14 @@ export default function Activos() {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<ActivoDTO[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
 
   const [orderBy, setOrderBy] = useState<string>("marketCap");
   const [orderDesc, setOrderDesc] = useState<boolean>(true);
 
   const [page, setPage] = useState(1);
   const itemsPerPage = 12;
+
+  // ... (useEffects and handlers remain the same) ...
 
   useEffect(() => {
     const loadTiposAndSectores = async () => {
@@ -167,7 +173,6 @@ export default function Activos() {
         // --- Client-Side Filtering from Cache ---
         data = [...cache];
 
-        // Filter by Type
         if (selectedType !== "Todos") {
           const tObj = tipos.find(t => t.id === Number(selectedType));
           if (tObj) {
@@ -175,7 +180,6 @@ export default function Activos() {
           }
         }
 
-        // Filter by Sector
         if (selectedSector !== "Todos") {
           const sObj = sectores.find(s => s.id === selectedSector);
           if (sObj) {
@@ -184,7 +188,6 @@ export default function Activos() {
         }
 
       } else {
-
         if (selectedType !== "Todos" || selectedSector !== "Todos") {
           if (selectedType !== "Todos" && selectedSector !== "Todos") {
             data = await getActivosByTipoAndSector(Number(selectedType), selectedSector);
@@ -205,7 +208,6 @@ export default function Activos() {
         let valA: any = 0;
         let valB: any = 0;
 
-        // Explicit Property Mapping
         if (criterio === "precio") {
           valA = a.precioActual ?? 0;
           valB = b.precioActual ?? 0;
@@ -216,7 +218,6 @@ export default function Activos() {
           valA = a.marketCap ?? 0;
           valB = b.marketCap ?? 0;
         } else {
-          // Default generic fallback (usually by symbol/name)
           valA = a.symbol;
           valB = b.symbol;
         }
@@ -268,46 +269,25 @@ export default function Activos() {
     setPage(value);
   };
 
-  // Client-side pagination on server-sorted data
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentActivos = activos.slice(startIndex, endIndex);
   const totalPages = Math.ceil(activos.length / itemsPerPage);
 
   return (
-    <main style={{ padding: 24 }}>
-      <Box sx={{ mb: 5, pb: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
+    <main className={styles.main}>
+      <Box className={styles.headerContainer}>
         <Stack spacing={3}>
           <Box>
-            <Typography
-              variant="h3"
-              gutterBottom
-              fontWeight={800}
-              sx={{
-                background: 'linear-gradient(135deg, #0dff21ff 0%, #7aff85ff 50%, #bcffc2ff 100%)',
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                mb: 1,
-                letterSpacing: "-0.02em"
-              }}
-            >
+            <Typography variant="h3" gutterBottom className={styles.title}>
               Mercado Financiero
             </Typography>
-            <Typography
-              variant="h6"
-              fontWeight={500}
-              sx={{
-                background: 'linear-gradient(90deg, #ffffffff 0%, #beffc3ff 100%)',
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                opacity: 0.9
-              }}
-            >
+            <Typography variant="h6" className={styles.subtitle}>
               Explora, analiza y descubre oportunidades de inversión en tiempo real.
             </Typography>
           </Box>
 
-          <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="center" width="100%">
+          <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="center" className={styles.controlsStack}>
 
             <Autocomplete
               freeSolo
@@ -334,6 +314,7 @@ export default function Activos() {
                   placeholder="Buscar activo..."
                   variant="outlined"
                   size="small"
+                  className={styles.searchInput}
                   InputProps={{
                     ...params.InputProps,
                     startAdornment: (
@@ -344,11 +325,6 @@ export default function Activos() {
                         {params.InputProps.startAdornment}
                       </>
                     ),
-                  }}
-                  sx={{
-                    minWidth: 350,
-                    bgcolor: 'background.paper',
-                    '& fieldset': { borderRadius: '12px' }
                   }}
                 />
               )}
@@ -372,25 +348,19 @@ export default function Activos() {
                   </li>
                 );
               }}
-              sx={{ flexGrow: 1 }}
+              sx={{ flexGrow: 1, width: "100%" }}
             />
 
             <Button
               variant="contained"
               onClick={handleRefresh}
               disabled={loading}
-              sx={{
-                minWidth: 'auto',
-                p: 1.5,
-                borderRadius: '12px',
-                background: 'linear-gradient(45deg, #0dff21ff 30%, #21CBF3 90%)',
-                boxShadow: '0 3px 5px 2px rgba(4, 63, 33, 0.3)',
-              }}
+              className={styles.refreshButton}
             >
               <RefreshIcon />
             </Button>
 
-            <FormControl sx={{ minWidth: 200 }} size="small">
+            <FormControl size="small" className={styles.filterControl}>
               <InputLabel id="sector-select-label">Filtrar por Sector</InputLabel>
               <Select
                 labelId="sector-select-label"
@@ -398,7 +368,7 @@ export default function Activos() {
                 value={selectedSector}
                 label="Filtrar por Sector"
                 onChange={handleSectorChange}
-                sx={{ borderRadius: "12px" }}
+                className={styles.filterSelect}
               >
                 <MenuItem value="Todos">Todos</MenuItem>
                 {sectores.map((sector) => (
@@ -409,7 +379,7 @@ export default function Activos() {
               </Select>
             </FormControl>
 
-            <FormControl sx={{ minWidth: 200 }} size="small">
+            <FormControl size="small" className={styles.filterControl}>
               <InputLabel id="asset-type-label">Filtrar por Tipo</InputLabel>
               <Select
                 labelId="asset-type-label"
@@ -417,6 +387,7 @@ export default function Activos() {
                 value={selectedType}
                 label="Filtrar por Tipo"
                 onChange={handleTypeChange}
+                className={styles.filterSelect}
               >
                 <MenuItem value="Todos">Todos</MenuItem>
                 {tipos.map((type) => (
@@ -435,11 +406,11 @@ export default function Activos() {
       ) : (
         <>
           {currentActivos.length > 0 ? (
-            <TableContainer component={Paper} elevation={0} sx={{ border: "1px solid", borderColor: "divider", borderRadius: "12px", overflow: "hidden" }}>
+            <TableContainer component={Paper} elevation={0} className={styles.tableContainer}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead sx={{ bgcolor: "background.default" }}>
+                <TableHead className={styles.tableHead}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>
+                    <TableCell className={styles.columnHeader}>
                       <TableSortLabel
                         active={orderBy === "symbol"}
                         direction={orderBy === "symbol" && orderDesc ? "desc" : "asc"}
@@ -449,7 +420,7 @@ export default function Activos() {
                         Activo
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>
+                    <TableCell className={styles.columnHeader}>
                       <TableSortLabel
                         active={orderBy === "precio"}
                         direction={orderBy === "precio" && orderDesc ? "desc" : "asc"}
@@ -459,7 +430,7 @@ export default function Activos() {
                         Precio
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>
+                    <TableCell className={styles.columnHeader}>
                       <TableSortLabel
                         active={orderBy === "variacion"}
                         direction={orderBy === "variacion" && orderDesc ? "desc" : "asc"}
@@ -469,8 +440,8 @@ export default function Activos() {
                         24h %
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Sector</TableCell>
-                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>
+                    <TableCell className={styles.columnHeader}>Sector</TableCell>
+                    <TableCell className={styles.columnHeader}>
                       <TableSortLabel
                         active={orderBy === "marketCap"}
                         direction={orderBy === "marketCap" && orderDesc ? "desc" : "asc"}
@@ -480,32 +451,22 @@ export default function Activos() {
                         Market Cap
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Moneda</TableCell>
-                    <TableCell sx={{ fontWeight: "bold", color: "text.secondary" }}>Origen</TableCell>
-                    <TableCell align="right" sx={{ fontWeight: "bold", color: "text.secondary" }}>Acciones</TableCell>
+                    <TableCell className={styles.columnHeader}>Moneda</TableCell>
+                    <TableCell className={styles.columnHeader}>Origen</TableCell>
+                    <TableCell align="right" className={styles.columnHeader}>Acciones</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {currentActivos.map((activo) => (
                     <TableRow
                       key={activo.id}
-                      sx={{
-                        '&:last-child td, &:last-child th': { border: 0 },
-                        '&:hover': { bgcolor: "action.hover" },
-                        transition: "background-color 0.2s"
-                      }}
+                      className={styles.tableRow}
                     >
                       <TableCell component="th" scope="row">
                         <Stack direction="row" alignItems="center" spacing={2}>
                           <Avatar
-                            sx={{
-                              bgcolor: getAvatarColor(activo.tipo),
-                              color: "#fff",
-                              fontWeight: "bold",
-                              width: 40,
-                              height: 40,
-                              fontSize: "0.9rem"
-                            }}
+                            className={styles.avatar}
+                            sx={{ bgcolor: getAvatarColor(activo.tipo) }}
                           >
                             {activo.symbol.substring(0, 1)}
                           </Avatar>
@@ -520,7 +481,7 @@ export default function Activos() {
                         </Stack>
                       </TableCell>
                       <TableCell>
-                        <Typography variant="body2" fontWeight={600}>
+                        <Typography variant="body2" className={styles.priceText}>
                           {(activo.precioActual !== null && activo.precioActual !== undefined)
                             ? new Intl.NumberFormat('en-US', { style: 'currency', currency: activo.moneda }).format(activo.precioActual)
                             : '-'
@@ -532,12 +493,10 @@ export default function Activos() {
                           <Chip
                             label={`${activo.variacion24h >= 0 ? '+' : ''}${activo.variacion24h.toFixed(2)}%`}
                             size="small"
+                            className={styles.variationChip}
                             sx={{
                               bgcolor: activo.variacion24h >= 0 ? 'success.lighter' : 'error.lighter',
                               color: activo.variacion24h >= 0 ? 'success.main' : 'error.main',
-                              fontWeight: 700,
-                              borderRadius: "6px",
-                              height: 24,
                             }}
                           />
                         ) : (
@@ -545,7 +504,7 @@ export default function Activos() {
                         )}
                       </TableCell>
                       <TableCell>
-                        <Chip label={activo.sector || "-"} size="small" variant="outlined" sx={{ borderRadius: "6px" }} />
+                        <Chip label={activo.sector || "-"} size="small" variant="outlined" className={styles.chipRounded} />
                       </TableCell>
                       <TableCell>
                         <Typography variant="body2">
@@ -560,12 +519,12 @@ export default function Activos() {
                           size="small"
                           variant="outlined"
                           color={activo.moneda === "USD" ? "success" : "default"}
-                          sx={{ borderRadius: "6px", fontWeight: 600 }}
+                          className={styles.chipBold}
                         />
                       </TableCell>
                       <TableCell>
                         {activo.esLocal ? (
-                          <Chip label="ARG" size="small" color="info" variant="outlined" sx={{ height: 24, borderRadius: "6px" }} />
+                          <Chip label="ARG" size="small" color="info" variant="outlined" className={styles.chipRounded} />
                         ) : (
                           <Typography variant="caption" color="text.secondary">-</Typography>
                         )}
@@ -576,18 +535,7 @@ export default function Activos() {
                           href={`/activos/${activo.id}`}
                           variant="outlined"
                           size="small"
-                          sx={{
-                            textTransform: "none",
-                            fontWeight: 600,
-                            borderRadius: "8px",
-                            borderColor: "divider",
-                            color: "text.primary",
-                            '&:hover': {
-                              borderColor: "primary.main",
-                              color: "primary.main",
-                              bgcolor: "primary.lighter"
-                            }
-                          }}
+                          className={styles.detailsButton}
                         >
                           Ver Detalles
                         </Button>
@@ -598,12 +546,12 @@ export default function Activos() {
               </Table>
             </TableContainer>
           ) : (
-            <Box sx={{ textAlign: "center", mt: 8, p: 6, bgcolor: "background.paper", borderRadius: "16px", border: "1px dashed", borderColor: "divider" }}>
-              <SearchIcon sx={{ fontSize: 60, color: "text.disabled", mb: 2, opacity: 0.5 }} />
+            <Box className={styles.noResultsBox}>
+              <SearchIcon className={styles.searchIconEmpty} />
               <Typography variant="h6" gutterBottom>
                 No se encontraron activos
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 400, mx: "auto", mb: 3 }}>
+              <Typography variant="body2" className={styles.noResultsText}>
                 No hay resultados para
                 {searchTerm ? <strong> "{searchTerm}" </strong> : ""}
                 {selectedType !== "Todos" ? ` del tipo "${tipos.find(t => t.id === Number(selectedType))?.nombre || selectedType}"` : ""}
@@ -618,7 +566,7 @@ export default function Activos() {
                   setSelectedSector("Todos");
                   setPage(1);
                 }}
-                sx={{ borderRadius: "8px", textTransform: "none" }}
+                className={styles.cleanFiltersButton}
               >
                 Limpiar Filtros
               </Button>
@@ -626,7 +574,7 @@ export default function Activos() {
           )}
 
           {activos.length > 0 && (
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
+            <Box className={styles.paginationContainer}>
               <Pagination
                 count={totalPages}
                 page={page}

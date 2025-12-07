@@ -12,6 +12,7 @@ import {
 import ArticleIcon from "@mui/icons-material/Article";
 import PublicIcon from "@mui/icons-material/Public";
 import InsightsIcon from "@mui/icons-material/Insights";
+import styles from "./styles/Noticias.module.css";
 
 type NewsSource = {
   key: string;
@@ -60,44 +61,36 @@ const SOURCES: NewsSource[] = [
 
 export default function Noticias() {
   return (
-    <main style={{ padding: 24 }}>
-      <Typography variant="h4" gutterBottom>
+    <main className={styles.main}>
+      <Typography variant="h4" gutterBottom className={styles.header}>
         Noticias
       </Typography>
-      <Typography variant="body2" color="text.secondary" paragraph>
-        Acceso rápido a fuentes confiables para seguir cripto, CCL/MEP y mercado local.  
+      <Typography variant="body2" className={styles.description}>
+        Acceso rápido a fuentes confiables para seguir cripto, CCL/MEP y mercado local.
         Próximamente: feed integrado y filtros por tema.
       </Typography>
 
-      <Box sx={{ maxWidth: 800, mx: "auto" }}>
+      <Box className={styles.listContainer}>
         <Stack spacing={3}>
           {SOURCES.map((s) => (
             <Card
               key={s.key}
-              sx={{
-                minHeight: 220,
-                borderRadius: 2,
-                border: "1px solid",
-                borderColor: "divider",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-              }}
+              className={styles.card}
             >
               <CardContent>
-                <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
+                <div className={styles.cardHeader}>
                   {s.icon}
                   <Box>
-                    <Typography variant="h6">{s.title}</Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="h6" className={styles.cardTitle}>{s.title}</Typography>
+                    <Typography variant="body2" className={styles.cardSubtitle}>
                       {s.subtitle}
                     </Typography>
                   </Box>
-                </Stack>
+                </div>
                 {s.notes?.length ? (
-                  <Box component="ul" sx={{ pl: 3, m: 0, mt: 1 }}>
+                  <Box component="ul" className={styles.notesList}>
                     {s.notes.map((n, i) => (
-                      <Typography key={i} component="li" variant="body2">
+                      <Typography key={i} component="li" variant="body2" className={styles.noteItem}>
                         {n}
                       </Typography>
                     ))}
@@ -106,7 +99,7 @@ export default function Noticias() {
               </CardContent>
 
               <Divider />
-              <CardActions sx={{ justifyContent: "flex-end", p: 2 }}>
+              <CardActions className={styles.actions}>
                 <Link href={s.href} target="_blank" rel="noopener noreferrer">
                   <Button variant="contained" size="small">
                     Ver ahora

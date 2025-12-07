@@ -73,6 +73,10 @@ const mockPositions: PositionRow[] = [
   },
 ];
 
+import styles from "./styles/Portfolio.module.css";
+
+// ... (imports)
+
 export default function PortfolioPage() {
   const router = useRouter();
   const [user, setUser] = React.useState<AuthUser | null>(null);
@@ -90,14 +94,7 @@ export default function PortfolioPage() {
 
   if (checking || !user) {
     return (
-      <Box
-        sx={{
-          minHeight: "calc(100vh - 96px)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      <Box className={styles.loadingContainer}>
         <Typography variant="body1" color="text.secondary">
           Cargando tu portafolio...
         </Typography>
@@ -127,24 +124,11 @@ export default function PortfolioPage() {
   const totalActivos = mockPositions.length;
 
   return (
-    <Box
-      sx={{
-        minHeight: "calc(100vh - 96px)",
-        px: { xs: 2, md: 4 },
-        py: 4,
-      }}
-    >
+    <Box className={styles.container}>
       <Grid container spacing={3}>
         {/* HEADER */}
         <Grid item xs={12}>
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              bgcolor: "rgba(15,15,15,0.95)",
-              border: "1px solid rgba(255,255,255,0.08)",
-            }}
-          >
+          <Paper className={styles.headerPaper}>
             <Stack
               direction={{ xs: "column", md: "row" }}
               justifyContent="space-between"
@@ -153,17 +137,14 @@ export default function PortfolioPage() {
             >
               <Box>
                 <Stack direction="row" spacing={1} alignItems="center">
-                  <Typography
-                    variant="h4"
-                    sx={{ fontWeight: 800, mb: 0.5, letterSpacing: 0.4 }}
-                  >
+                  <Typography variant="h4" className={styles.headerTitle}>
                     Mi portafolio
                   </Typography>
                   <Chip
                     label={user.rol}
                     size="small"
                     color={user.rol === "Admin" ? "secondary" : "primary"}
-                    sx={{ fontWeight: 600 }}
+                    className={styles.roleChip}
                   />
                 </Stack>
                 <Typography variant="body2" color="text.secondary">
@@ -177,14 +158,14 @@ export default function PortfolioPage() {
                   variant="outlined"
                   color="inherit"
                   size="small"
-                  sx={{ textTransform: "none" }}
+                  className={styles.actionButton}
                 >
                   Exportar a PDF
                 </Button>
                 <Button
                   variant="contained"
                   size="small"
-                  sx={{ textTransform: "none" }}
+                  className={styles.actionButton}
                 >
                   Cargar operación
                 </Button>
@@ -195,22 +176,11 @@ export default function PortfolioPage() {
 
         {/* CARDS RESUMEN */}
         <Grid item xs={12} md={4}>
-          <Paper
-            sx={{
-              p: 2.5,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(0,255,135,0.3)",
-              boxShadow: "0 0 18px rgba(0,255,135,0.12)",
-            }}
-          >
+          <Paper className={`${styles.card} ${styles.highlightCard}`}>
             <Typography variant="caption" color="text.secondary">
               Valor total del portafolio
             </Typography>
-            <Typography
-              variant="h5"
-              sx={{ fontWeight: 800, mt: 0.5 }}
-            >
+            <Typography variant="h5" className={styles.cardValue}>
               ARS {totalValor.toLocaleString("es-AR")}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
@@ -220,20 +190,13 @@ export default function PortfolioPage() {
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <Paper
-            sx={{
-              p: 2.5,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(255,255,255,0.08)",
-            }}
-          >
+          <Paper className={styles.card}>
             <Typography variant="caption" color="text.secondary">
               Exposición en activos de riesgo
             </Typography>
             <Typography
               variant="h5"
-              sx={{ fontWeight: 800, mt: 0.5, color: "#39ff14" }}
+              className={`${styles.cardValue} ${styles.neonGreenText}`}
             >
               {exposicionRiesgoPct.toFixed(1)} %
             </Typography>
@@ -244,18 +207,11 @@ export default function PortfolioPage() {
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <Paper
-            sx={{
-              p: 2.5,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(255,255,255,0.08)",
-            }}
-          >
+          <Paper className={styles.card}>
             <Typography variant="caption" color="text.secondary">
               Cantidad de activos distintos
             </Typography>
-            <Typography variant="h5" sx={{ fontWeight: 800, mt: 0.5 }}>
+            <Typography variant="h5" className={styles.cardValue}>
               {totalActivos}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
@@ -266,15 +222,8 @@ export default function PortfolioPage() {
 
         {/* DISTRIBUCIONES */}
         <Grid item xs={12} md={6}>
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(255,255,255,0.05)",
-            }}
-          >
-            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+          <Paper className={styles.distributionsPaper}>
+            <Typography variant="h6" className={styles.sectionTitle}>
               Distribución por tipo de activo
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
@@ -300,15 +249,8 @@ export default function PortfolioPage() {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(255,255,255,0.05)",
-            }}
-          >
-            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+          <Paper className={styles.distributionsPaper}>
+            <Typography variant="h6" className={styles.sectionTitle}>
               Ideas para evolucionar el portafolio
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
@@ -336,19 +278,13 @@ export default function PortfolioPage() {
 
         {/* TABLA DE POSICIONES */}
         <Grid item xs={12}>
-          <Paper
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              bgcolor: "rgba(10,10,10,0.95)",
-              border: "1px solid rgba(255,255,255,0.05)",
-            }}
-          >
+          <Paper className={styles.tablePaper}>
             <Stack
               direction={{ xs: "column", md: "row" }}
               justifyContent="space-between"
               alignItems={{ xs: "flex-start", md: "center" }}
               spacing={1.5}
+              className={styles.tableHeaderStack}
               sx={{ mb: 2 }}
             >
               <Box>
@@ -364,7 +300,7 @@ export default function PortfolioPage() {
               <Button
                 variant="outlined"
                 size="small"
-                sx={{ textTransform: "none" }}
+                className={styles.actionButton}
               >
                 Filtrar / ordenar
               </Button>
@@ -401,30 +337,26 @@ export default function PortfolioPage() {
                       </TableCell>
                       <TableCell
                         align="right"
-                        sx={{
-                          color:
-                            p.variacionDiaPct > 0
-                              ? "#39ff14"
-                              : p.variacionDiaPct < 0
-                              ? "#ff4d4d"
-                              : "inherit",
-                          fontWeight: 600,
-                        }}
+                        className={
+                          p.variacionDiaPct > 0
+                            ? styles.positiveChange
+                            : p.variacionDiaPct < 0
+                              ? styles.negativeChange
+                              : styles.neutralChange
+                        }
                       >
                         {p.variacionDiaPct > 0 ? "+" : ""}
                         {p.variacionDiaPct.toFixed(2)}%
                       </TableCell>
                       <TableCell
                         align="right"
-                        sx={{
-                          color:
-                            p.variacionTotalPct > 0
-                              ? "#39ff14"
-                              : p.variacionTotalPct < 0
-                              ? "#ff4d4d"
-                              : "inherit",
-                          fontWeight: 600,
-                        }}
+                        className={
+                          p.variacionTotalPct > 0
+                            ? styles.positiveChange
+                            : p.variacionTotalPct < 0
+                              ? styles.negativeChange
+                              : styles.neutralChange
+                        }
                       >
                         {p.variacionTotalPct > 0 ? "+" : ""}
                         {p.variacionTotalPct.toFixed(2)}%

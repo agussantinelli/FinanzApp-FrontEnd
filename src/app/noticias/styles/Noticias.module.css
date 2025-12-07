@@ -1,0 +1,68 @@
+.main {
+    padding: 24px;
+}
+
+.header {
+    font-weight: 700 !important;
+    margin-bottom: 0.35em !important;
+}
+
+.description {
+    color: rgba(255, 255, 255, 0.7);
+    /* text.secondary */
+    margin-bottom: 16px !important;
+}
+
+.listContainer {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.card {
+    min-height: 220px;
+    border-radius: 16px !important;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: transparent !important;
+    /* or keep default paper but transparent looks cleaner for 'neon' feel usually, or stick to default */
+    /* If we want to match the other cards (like Login), maybe keep default Paper bgcolor but Ensure borders match */
+}
+
+/* Specific to match theme of other cards if needed, otherwise standard card styles */
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+.cardTitle {
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+}
+
+.cardSubtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.875rem !important;
+}
+
+.notesList {
+    padding-left: 24px;
+    margin: 0;
+    margin-top: 8px;
+}
+
+.noteItem {
+    font-size: 0.875rem !important;
+    /* article body2 */
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.actions {
+    justify-content: flex-end;
+    padding: 16px !important;
+}

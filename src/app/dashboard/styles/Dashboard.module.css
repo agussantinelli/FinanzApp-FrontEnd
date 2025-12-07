@@ -1,0 +1,86 @@
+.container {
+    min-height: calc(100vh - 96px);
+    padding-top: 32px;
+    padding-bottom: 32px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+@media (min-width: 900px) {
+    .container {
+        padding-left: 32px;
+        padding-right: 32px;
+    }
+}
+
+.loadingContainer {
+    min-height: calc(100vh - 96px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.headerPaper {
+    padding: 24px;
+    border-radius: 24px !important;
+    background-color: rgba(15, 15, 15, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.headerTitle {
+    font-weight: 800 !important;
+    margin-bottom: 4px !important;
+    letter-spacing: 0.4px !important;
+}
+
+.roleChip {
+    font-weight: 600 !important;
+}
+
+.actionButton {
+    text-transform: none !important;
+}
+
+.card {
+    padding: 20px;
+    border-radius: 24px !important;
+    background-color: rgba(10, 10, 10, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    height: 100%;
+}
+
+.highlightCard {
+    border: 1px solid rgba(0, 255, 135, 0.3);
+    box-shadow: 0 0 18px rgba(0, 255, 135, 0.12);
+}
+
+.cardValue {
+    font-weight: 800 !important;
+    margin-top: 4px !important;
+}
+
+.neonGreenText {
+    color: #39ff14 !important;
+}
+
+.sectionPaper {
+    padding: 24px;
+    border-radius: 24px !important;
+    background-color: rgba(10, 10, 10, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    height: 100%;
+}
+
+.sectionTitle {
+    font-weight: 700 !important;
+    margin-bottom: 8px !important;
+}
+
+.subtitle {
+    font-weight: 600 !important;
+}
+
+.divider {
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+}

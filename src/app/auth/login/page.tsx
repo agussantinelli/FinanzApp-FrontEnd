@@ -20,8 +20,13 @@ type LoginErrors = {
   password?: string;
 };
 
+import styles from "./styles/Login.module.css";
+
+// ... (imports)
+
 export default function LoginPage() {
   const [email, setEmail] = React.useState("");
+  // ... (state) ...
   const [password, setPassword] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
@@ -32,6 +37,7 @@ export default function LoginPage() {
   const router = useRouter();
 
   const validate = (): boolean => {
+    // ... (logic)
     const errors: LoginErrors = {};
     const emailTrim = email.trim();
 
@@ -58,7 +64,7 @@ export default function LoginPage() {
 
     try {
       setLoading(true);
-      const resp = await login({ email, password }); // AuthService guarda token+user
+      const resp = await login({ email, password });
       const destino = getHomePathForRole(resp.rol);
 
       setSuccessMessage("Inicio de sesión correcto. Redirigiendo…");
@@ -75,43 +81,20 @@ export default function LoginPage() {
   };
 
   return (
-    <Box
-      sx={{
-        minHeight: "calc(100vh - 96px)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        px: 2,
-        py: 4,
-      }}
-    >
-      <Paper
-        elevation={6}
-        sx={{
-          width: "100%",
-          maxWidth: 420,
-          p: 4,
-          borderRadius: 3,
-          bgcolor: "rgba(15, 15, 15, 0.95)",
-          border: "1px solid rgba(255,255,255,0.06)",
-          backdropFilter: "blur(10px)",
-        }}
-      >
+    <Box className={styles.container}>
+      <Paper elevation={6} className={styles.card}>
         <Stack spacing={3}>
           <Box>
-            <Typography
-              variant="h4"
-              sx={{ fontWeight: 800, mb: 0.5, letterSpacing: 0.4 }}
-            >
+            <Typography variant="h4" className={styles.title}>
               Iniciar sesión
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" className={styles.subtitle}>
               Accedé a tu panel de FinanzApp con tu correo y contraseña.
             </Typography>
           </Box>
 
           <Box component="form" onSubmit={handleSubmit} noValidate>
-            <Stack spacing={2.5}>
+            <div className={styles.inputStack}>
               <TextField
                 label="Email"
                 type="email"
@@ -159,20 +142,14 @@ export default function LoginPage() {
                 variant="contained"
                 fullWidth
                 disabled={loading}
-                sx={{
-                  mt: 1,
-                  py: 1.2,
-                  fontWeight: 700,
-                  textTransform: "none",
-                  fontSize: "1rem",
-                }}
+                className={styles.submitButton}
               >
                 {loading ? "Ingresando..." : "Entrar"}
               </Button>
-            </Stack>
+            </div>
           </Box>
 
-          <Box sx={{ textAlign: "center", mt: 1 }}>
+          <Box className={styles.footer}>
             <Typography variant="body2" color="text.secondary">
               ¿Todavía no tenés cuenta?{" "}
               <MuiLink component={Link} href="/auth/register" underline="hover">
