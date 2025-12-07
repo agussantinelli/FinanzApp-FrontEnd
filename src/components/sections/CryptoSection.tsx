@@ -4,11 +4,11 @@ import { useCallback, useEffect, useState } from "react";
 import { getTopCryptos } from "@/services/CryptoService";
 import { CryptoTopDTO } from "@/types/Crypto";
 import {
-  Paper, Stack, Typography, Button, Grid, Card, CardContent,
+  Paper, Typography, Button, Grid, Card, CardContent,
   CircularProgress, Divider, Box
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import "./styles/CryptoSection.css";
+import styles from "./styles/CryptoSection.module.css";
 
 function formatUSD(n?: number) {
   if (typeof n !== "number" || Number.isNaN(n)) return "—";
@@ -35,11 +35,10 @@ export default function CryptoSection() {
   }, [fetchData]);
 
   return (
-    <Paper className="section-paper">
-      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
-        alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
+    <Paper className={styles.sectionPaper}>
+      <div className={styles.headerContainer}>
         <Box>
-          <Typography variant="h5" className="header-title">
+          <Typography variant="h5" className={styles.headerTitle}>
             CriptoMonedas Top 10 por Market Cap
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -57,30 +56,30 @@ export default function CryptoSection() {
           color="primary"
           startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
           disabled={loading}
-          className="refresh-button"
+          className={styles.refreshButton}
         >
           {loading ? "Actualizando..." : "ACTUALIZAR"}
         </Button>
-      </Stack>
+      </div>
 
-      <Divider className="section-divider" />
+      <Divider className={styles.sectionDivider} />
 
-      <Stack spacing={{ xs: 2, md: 3 }}>
+      <Box display="flex" flexDirection="column" gap={{ xs: 2, md: 3 }}>
         <Grid container spacing={3} justifyContent="center">
           {data.slice(0, 4).map((c) => (
             <Grid item xs={12} md={3} key={c.symbol} component="div">
-              <Card className="crypto-card">
+              <Card className={styles.cryptoCard}>
                 <CardContent>
-                  <Typography variant="h6" className="card-title">
+                  <Typography variant="h6" className={styles.cardTitle}>
                     {c.name}
                   </Typography>
-                  <Typography variant="caption" className="card-subtitle" sx={{ display: "block", mb: 1 }}>
+                  <Typography variant="caption" className={styles.cardSubtitle}>
                     {c.symbol}
                   </Typography>
-                  <Typography variant="body2" className="card-text">
+                  <Typography variant="body2" className={styles.cardText}>
                     Precio: <strong>{formatUSD(c.priceUsd)}</strong>
                   </Typography>
-                  <Typography variant="caption" sx={{ display: "block", mt: 1, color: (c.changePct24h ?? 0) >= 0 ? "#39ff14" : "#ff1744" }}>
+                  <Typography variant="caption" className={`${styles.cardChange} ${(c.changePct24h ?? 0) >= 0 ? styles.positive : styles.negative}`}>
                     24h: {(c.changePct24h ?? 0) > 0 ? "+" : ""}{c.changePct24h}%
                   </Typography>
                   <Typography variant="caption" color="text.secondary">
@@ -95,18 +94,18 @@ export default function CryptoSection() {
         <Grid container spacing={3} justifyContent="center">
           {data.slice(4, 8).map((c) => (
             <Grid item xs={12} md={3} key={c.symbol} component="div">
-              <Card className="crypto-card">
+              <Card className={styles.cryptoCard}>
                 <CardContent>
-                  <Typography variant="h6" className="card-title">
+                  <Typography variant="h6" className={styles.cardTitle}>
                     {c.name}
                   </Typography>
-                  <Typography variant="caption" className="card-subtitle" sx={{ display: "block", mb: 1 }}>
+                  <Typography variant="caption" className={styles.cardSubtitle}>
                     {c.symbol}
                   </Typography>
-                  <Typography variant="body2" className="card-text">
+                  <Typography variant="body2" className={styles.cardText}>
                     Precio: <strong>{formatUSD(c.priceUsd)}</strong>
                   </Typography>
-                  <Typography variant="caption" sx={{ display: "block", mt: 1, color: (c.changePct24h ?? 0) >= 0 ? "#39ff14" : "#ff1744" }}>
+                  <Typography variant="caption" className={`${styles.cardChange} ${(c.changePct24h ?? 0) >= 0 ? styles.positive : styles.negative}`}>
                     24h: {(c.changePct24h ?? 0) > 0 ? "+" : ""}{c.changePct24h}%
                   </Typography>
                   <Typography variant="caption" color="text.secondary">
@@ -121,18 +120,18 @@ export default function CryptoSection() {
         <Grid container spacing={3} justifyContent="center">
           {data.slice(8, 10).map((c) => (
             <Grid item xs={12} md={3} key={c.symbol} component="div">
-              <Card className="crypto-card">
+              <Card className={styles.cryptoCard}>
                 <CardContent>
-                  <Typography variant="h6" className="card-title">
+                  <Typography variant="h6" className={styles.cardTitle}>
                     {c.name}
                   </Typography>
-                  <Typography variant="caption" className="card-subtitle" sx={{ display: "block", mb: 1 }}>
+                  <Typography variant="caption" className={styles.cardSubtitle}>
                     {c.symbol}
                   </Typography>
-                  <Typography variant="body2" className="card-text">
+                  <Typography variant="body2" className={styles.cardText}>
                     Precio: <strong>{formatUSD(c.priceUsd)}</strong>
                   </Typography>
-                  <Typography variant="caption" sx={{ display: "block", mt: 1, color: (c.changePct24h ?? 0) >= 0 ? "#39ff14" : "#ff1744" }}>
+                  <Typography variant="caption" className={`${styles.cardChange} ${(c.changePct24h ?? 0) >= 0 ? styles.positive : styles.negative}`}>
                     24h: {(c.changePct24h ?? 0) > 0 ? "+" : ""}{c.changePct24h}%
                   </Typography>
                   <Typography variant="caption" color="text.secondary">
@@ -143,7 +142,7 @@ export default function CryptoSection() {
             </Grid>
           ))}
         </Grid>
-      </Stack>
+      </Box>
     </Paper>
   );
 }

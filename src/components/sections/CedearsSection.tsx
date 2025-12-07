@@ -5,11 +5,11 @@ import { getCedearDuals } from "@/services/CedearsService";
 import { getCotizacionesDolar } from "@/services/DolarService";
 import { DualQuoteDTO } from "@/types/Market";
 import {
-  Paper, Stack, Typography, Button, Grid, Card, CardContent,
+  Paper, Typography, Button, Grid, Card, CardContent,
   CircularProgress, Divider, Box
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import "./styles/CedearsSection.css";
+import styles from "./styles/CedearsSection.module.css";
 
 function formatARS(n: number) {
   return n.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 2 });
@@ -89,24 +89,24 @@ export default function CedearsSection() {
     const isCedearLocal = d.cedearRatio != null;
     const company = COMPANY[d.localSymbol?.toUpperCase() || ""] ?? d.usSymbol;
     return (
-      <Card className="cedear-card">
+      <Card className={styles.cedearCard}>
         <CardContent>
-          <Typography variant="h6" className="card-title">
+          <Typography variant="h6" className={styles.cardTitle}>
             {company}
           </Typography>
 
-          <Typography variant="caption" className="card-subtitle">
+          <Typography variant="caption" className={styles.cardSubtitle}>
             {isCedearLocal ? `Precio local = CEDEAR · Ratio ${d.cedearRatio}:1` : "Precio local = Acción BYMA (no CEDEAR)"}
           </Typography>
 
-          <Typography className="card-symbol">
+          <Typography className={styles.cardSymbol}>
             {d.localSymbol} ↔ {d.usSymbol}
           </Typography>
 
-          <Typography className="card-text">
+          <Typography className={styles.cardText}>
             CEDEAR (ARS): <strong>{formatARS(d.localPriceARS)}</strong>
             {d.localChangePct !== undefined && d.localChangePct !== null && (
-              <span style={{ color: d.localChangePct >= 0 ? "green" : "red", marginLeft: "8px", fontSize: "0.9em" }}>
+              <span className={`${styles.changePercent} ${d.localChangePct >= 0 ? styles.positive : styles.negative}`}>
                 {d.localChangePct > 0 ? "+" : ""}{d.localChangePct}%
               </span>
             )}
@@ -114,13 +114,13 @@ export default function CedearsSection() {
           <Typography>
             Acción USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong>
             {d.usChangePct !== undefined && d.usChangePct !== null && (
-              <span style={{ color: d.usChangePct >= 0 ? "green" : "red", marginLeft: "8px", fontSize: "0.9em" }}>
+              <span className={`${styles.changePercent} ${d.usChangePct >= 0 ? styles.positive : styles.negative}`}>
                 {d.usChangePct > 0 ? "+" : ""}{d.usChangePct}%
               </span>
             )}
           </Typography>
 
-          <Typography variant="caption" color="text.secondary" className="card-rate">
+          <Typography variant="caption" color="text.secondary" className={styles.cardRate}>
             Tasa (CCL): {d.usedDollarRate.toLocaleString("es-AR")}
           </Typography>
         </CardContent>
@@ -129,11 +129,10 @@ export default function CedearsSection() {
   };
 
   return (
-    <Paper className="section-paper">
-      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
-        alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
+    <Paper className={styles.sectionPaper}>
+      <div className={styles.headerContainer}>
         <Box>
-          <Typography variant="h5" className="header-title">
+          <Typography variant="h5" className={styles.headerTitle}>
             CEDEARs ↔ Acción USA
           </Typography>
           {updatedAt && (
@@ -148,29 +147,29 @@ export default function CedearsSection() {
           color="primary"
           startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
           disabled={loading}
-          className="refresh-button"
+          className={styles.refreshButton}
         >
           {loading ? "Actualizando..." : "Actualizar"}
         </Button>
-      </Stack>
+      </div>
 
-      <Divider className="section-divider" />
+      <Divider className={styles.sectionDivider} />
 
       {withDerived.length === 0 && !loading && (
         <Typography color="text.secondary">No se encontraron cotizaciones.</Typography>
       )}
 
-      <Stack spacing={3}>
+      <Box display="flex" flexDirection="column" gap={3}>
         {rows.map((row, idx) => (
           <Grid key={idx} container spacing={3} justifyContent="center">
             {row.map(d => (
-              <Grid item xs={12} md={4} key={d.localSymbol} component="div">
+              <Grid item xs={12} md={4} key={d.localSymbol}>
                 {UnifiedCard(d)}
               </Grid>
             ))}
           </Grid>
         ))}
-      </Stack>
+      </Box>
     </Paper>
   );
 }

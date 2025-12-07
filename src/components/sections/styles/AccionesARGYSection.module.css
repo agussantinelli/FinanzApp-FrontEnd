@@ -1,4 +1,5 @@
-.section-paper {
+
+.sectionPaper {
     padding: 20px;
     background-color: rgba(0, 255, 0, 0.03);
     border: 1px solid rgba(57, 255, 20, 0.35);
@@ -7,38 +8,57 @@
 }
 
 @media (min-width: 900px) {
-    .section-paper {
+    .sectionPaper {
         padding: 24px;
     }
 }
 
-.header-title {
+.headerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+@media (min-width: 600px) {
+    .headerContainer {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+.errorAlert {
+    margin-bottom: 16px;
+}
+
+.headerTitle {
     font-weight: 800 !important;
     color: #39ff14 !important;
 }
 
-.refresh-button {
+.refreshButton {
     border-color: #39ff14 !important;
     color: #39ff14 !important;
 }
 
-.refresh-button:hover {
+.refreshButton:hover {
     border-color: #39ff14 !important;
 }
 
-.section-divider {
+.sectionDivider {
     margin-top: 20px !important;
     margin-bottom: 20px !important;
     border-color: rgba(57, 255, 20, 0.25) !important;
 }
 
-.section-divider-soft {
+.sectionDividerSoft {
     margin-top: 20px !important;
     margin-bottom: 20px !important;
     border-color: rgba(57, 255, 20, 0.15) !important;
 }
 
-.section-subtitle {
+.sectionSubtitle {
     color: #39ff14 !important;
     font-weight: 700 !important;
     text-align: center !important;
@@ -47,7 +67,7 @@
     letter-spacing: 1px;
 }
 
-.acciones-card {
+.accionesCard {
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -62,33 +82,46 @@
     transition: all 0.25s ease !important;
 }
 
-.acciones-card:hover {
+.accionesCard:hover {
     transform: translateY(-3px);
     box-shadow: 0 0 18px rgba(57, 255, 20, 0.5) !important;
 }
 
-.card-title {
+.cardTitle {
     font-weight: 800 !important;
     margin-bottom: 2px !important;
 }
 
-.card-subtitle {
+.cardSubtitle {
     color: #9ca3af !important;
     display: block !important;
     margin-bottom: 6px !important;
 }
 
-.card-symbol {
+.cardSymbol {
     color: #39ff14 !important;
     font-weight: 700 !important;
     margin-bottom: 4px !important;
 }
 
-.card-text {
+.cardText {
     margin-top: 8px !important;
 }
 
-.card-rate {
+.cardRate {
     display: block !important;
     margin-top: 8px !important;
+}
+
+.changePercent {
+    margin-left: 8px;
+    font-size: 0.9em;
+}
+
+.positive {
+    color: green;
+}
+
+.negative {
+    color: red;
 }

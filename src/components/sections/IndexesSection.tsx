@@ -2,13 +2,13 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
-    Paper, Stack, Typography, Button, Grid, Card, CardContent,
+    Paper, Typography, Button, Grid, Card, CardContent,
     CircularProgress, Divider, Box
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { DualQuoteDTO } from "@/types/Market";
 import { getIndices } from "@/services/StocksService";
-import "./styles/IndexesSection.css";
+import styles from "./styles/IndexesSection.module.css";
 
 function formatARS(val?: number) {
     if (val === undefined || val === null || isNaN(val)) return "—";
@@ -90,18 +90,18 @@ export default function IndexesSection() {
 
         if (isRiesgo) {
             return (
-                <Card className="acciones-card risk-card">
-                    <CardContent sx={{ textAlign: 'center', padding: '24px !important' }}>
-                        <Typography variant="h6" className="card-title-risk" sx={{ mb: 1 }}>
+                <Card className={`${styles.accionesCard} ${styles.riskCard}`}>
+                    <CardContent className={styles.riskCardContent}>
+                        <Typography variant="h6" className={styles.cardTitleRisk}>
                             {title}
                         </Typography>
-                        <Typography variant="caption" className="card-subtitle-risk" sx={{ mb: 2, display: 'block' }}>
+                        <Typography variant="caption" className={`${styles.cardSubtitleRisk} ${styles.riskSubtitleBlock}`}>
                             Índice Nacional
                         </Typography>
-                        <Typography variant="h3" className="risk-value">
+                        <Typography variant="h3" className={styles.riskValue}>
                             {Math.round(d.usPriceUSD)}
                         </Typography>
-                        <Typography variant="caption" className="card-subtitle-risk">
+                        <Typography variant="caption" className={styles.cardSubtitleRisk}>
                             Puntos Básicos (pbs)
                         </Typography>
                     </CardContent>
@@ -114,39 +114,39 @@ export default function IndexesSection() {
         const labelUsd = isLocalIndex ? "Valor (USD)" : "Indice USA (USD)";
 
         return (
-            <Card className="acciones-card">
+            <Card className={styles.accionesCard}>
                 <CardContent>
-                    <Typography variant="h6" className="card-title">
+                    <Typography variant="h6" className={styles.cardTitle}>
                         {title}
                     </Typography>
 
-                    <Typography variant="caption" className="card-subtitle">
+                    <Typography variant="caption" className={styles.cardSubtitle}>
                         {isLocalIndex ? 'Índice Nacional' : 'Índice Internacional'}
                     </Typography>
 
-                    <Typography className="card-symbol">
+                    <Typography className={styles.cardSymbol}>
                         {d.localSymbol}
                     </Typography>
 
-                    <Typography className="card-text">
+                    <Typography className={styles.cardText}>
                         {labelArs}: <strong>{formatARS(d.usPriceARS)}</strong>
                         {d.usChangePct !== undefined && d.usChangePct !== null && (
-                            <span style={{ color: d.usChangePct >= 0 ? "green" : "red", marginLeft: "8px", fontSize: "0.9em" }}>
+                            <span className={`${styles.changePercent} ${d.usChangePct >= 0 ? styles.positive : styles.negative}`}>
                                 {d.usChangePct > 0 ? "+" : ""}{d.usChangePct}%
                             </span>
                         )}
                     </Typography>
 
-                    <Typography className="card-text">
+                    <Typography className={styles.cardText}>
                         {labelUsd}: <strong>{formatUSD(d.usPriceUSD)}</strong>
                         {d.usChangePct !== undefined && d.usChangePct !== null && (
-                            <span style={{ color: d.usChangePct >= 0 ? "green" : "red", marginLeft: "8px", fontSize: "0.9em" }}>
+                            <span className={`${styles.changePercent} ${d.usChangePct >= 0 ? styles.positive : styles.negative}`}>
                                 {d.usChangePct > 0 ? "+" : ""}{d.usChangePct}%
                             </span>
                         )}
                     </Typography>
 
-                    <Typography variant="caption" color="text.secondary" className="card-rate">
+                    <Typography variant="caption" color="text.secondary" className={styles.cardRate}>
                         Ref: {d.dollarRateName} ({formatARS(d.usedDollarRate)})
                     </Typography>
                 </CardContent>
@@ -155,11 +155,10 @@ export default function IndexesSection() {
     };
 
     return (
-        <Paper className="section-paper">
-            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
-                alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
+        <Paper className={styles.sectionPaper}>
+            <div className={styles.headerContainer}>
                 <Box>
-                    <Typography variant="h5" className="header-title">
+                    <Typography variant="h5" className={styles.headerTitle}>
                         Tablero de Índices
                     </Typography>
                     {updatedAt && (
@@ -174,13 +173,13 @@ export default function IndexesSection() {
                     color="primary"
                     startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
                     disabled={loading}
-                    className="refresh-button"
+                    className={styles.refreshButton}
                 >
                     {loading ? "Actualizando..." : "Actualizar"}
                 </Button>
-            </Stack>
+            </div>
 
-            <Divider className="section-divider" />
+            <Divider className={styles.sectionDivider} />
 
             {data.length === 0 && !loading && (
                 <Typography color="text.secondary">Cargando índices de mercado...</Typography>
@@ -188,10 +187,10 @@ export default function IndexesSection() {
 
             {(row1.length > 0 || row2.length > 0) && (
                 <>
-                    <Typography variant="subtitle1" className="section-subtitle">
+                    <Typography variant="subtitle1" className={styles.sectionSubtitle}>
                         Wall Street & Emergentes
                     </Typography>
-                    <Stack spacing={3}>
+                    <Box display="flex" flexDirection="column" gap={3}>
                         {row1.length > 0 && (
                             <Grid container spacing={3} justifyContent="center">
                                 {row1.map((d, idx) => (
@@ -210,14 +209,14 @@ export default function IndexesSection() {
                                 ))}
                             </Grid>
                         )}
-                    </Stack>
+                    </Box>
                 </>
             )}
 
             {national.length > 0 && (
                 <>
-                    <Divider className="section-divider-soft" />
-                    <Typography variant="subtitle1" className="section-subtitle">
+                    <Divider className={styles.sectionDividerSoft} />
+                    <Typography variant="subtitle1" className={styles.sectionSubtitle}>
                         Argentina
                     </Typography>
                     <Grid container spacing={3} justifyContent="center">

@@ -4,13 +4,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { getCotizacionesDolar } from "@/services/DolarService";
 import { DolarDTO } from "@/types/Dolar";
 import {
-  Paper, Box, Stack, Typography, Divider, Button, Grid, Card,
+  Paper, Box, Typography, Divider, Button, Grid, Card,
   CardContent, CircularProgress
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import Link from "next/link";
 import BarChartIcon from "@mui/icons-material/BarChart";
-import "./styles/DolarSection.css";
+import styles from "./styles/DolarSection.module.css";
 
 function formatARS(n?: number) {
   if (typeof n !== "number" || Number.isNaN(n)) return "—";
@@ -76,11 +76,10 @@ export default function DolarSection() {
   const secondRow = useMemo(() => uniqueData.slice(4), [uniqueData]);
 
   return (
-    <Paper className="section-paper">
-      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
-        alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
+    <Paper className={styles.sectionPaper}>
+      <div className={styles.headerContainer}>
         <Box>
-          <Typography variant="h5" className="header-title">
+          <Typography variant="h5" className={styles.headerTitle}>
             Cotizaciones del dólar
           </Typography>
           {updatedAt && (
@@ -90,14 +89,14 @@ export default function DolarSection() {
           )}
         </Box>
 
-        <Stack direction="row" spacing={1.5}>
+        <div className={styles.actionButtons}>
           <Button
             component={Link}
             href="/reportes/dolar"
             variant="contained"
             color="primary"
             startIcon={<BarChartIcon />}
-            className="chart-button"
+            className={styles.chartButton}
           >
             Ver gráfico
           </Button>
@@ -108,44 +107,36 @@ export default function DolarSection() {
             color="primary"
             startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
             disabled={loading}
-            className="refresh-button"
+            className={styles.refreshButton}
           >
             {loading ? "Actualizando..." : "Actualizar"}
           </Button>
-        </Stack>
-      </Stack>
+        </div>
+      </div>
 
-      <Divider className="section-divider" />
+      <Divider className={styles.sectionDivider} />
 
-      <Stack spacing={{ xs: 2, md: 3 }}>
+      <Box display="flex" flexDirection="column" gap={{ xs: 2, md: 3 }}>
         <Grid container spacing={3} justifyContent="center">
           {firstRow.map((c, i) => {
             const label = normalizeName(c?.nombre) || "—";
             return (
               <Grid item xs={12} sm={6} md={3} key={`row1-${i}`} component="div">
-                <Card className="dolar-card">
+                <Card className={styles.dolarCard}>
                   <CardContent>
-                    <Typography variant="h6" className="card-title">
+                    <Typography variant="h6" className={styles.cardTitle}>
                       {label}
                     </Typography>
-                    <Typography variant="body2" className="card-text">
+                    <Typography variant="body2" className={styles.cardText}>
                       Compra: <strong>{formatARS(c?.compra)}</strong>
                     </Typography>
-                    <Typography variant="body2" className="card-text">
+                    <Typography variant="body2" className={styles.cardText}>
                       Venta: <strong>{formatARS(c?.venta)}</strong>
                     </Typography>
                     {c?.variacion !== undefined && c?.variacion !== null && (
-                      <Typography variant="caption" className="card-text" sx={{ display: 'block', mt: 1 }}>
+                      <Typography variant="caption" className={`${styles.cardText} ${styles.cardVariation}`}>
                         Variación:
-                        <span style={{ color: c.variacion >= 0 ? "green" : "red", marginLeft: "4px", fontWeight: "bold" }}>
-                          {c.variacion > 0 ? "+" : ""}{c.variacion}%
-                        </span>
-                      </Typography>
-                    )}
-                    {c?.variacion !== undefined && c?.variacion !== null && (
-                      <Typography variant="caption" className="card-text" sx={{ display: 'block', mt: 1 }}>
-                        Variación:
-                        <span style={{ color: c.variacion >= 0 ? "green" : "red", marginLeft: "4px", fontWeight: "bold" }}>
+                        <span className={`${styles.variationValue} ${c.variacion >= 0 ? styles.positive : styles.negative}`}>
                           {c.variacion > 0 ? "+" : ""}{c.variacion}%
                         </span>
                       </Typography>
@@ -163,15 +154,15 @@ export default function DolarSection() {
               const label = normalizeName(c?.nombre) || "—";
               return (
                 <Grid item xs={12} sm={6} md={3} key={`row2-${i}`} component="div">
-                  <Card className="dolar-card">
+                  <Card className={styles.dolarCard}>
                     <CardContent>
-                      <Typography variant="h6" className="card-title">
+                      <Typography variant="h6" className={styles.cardTitle}>
                         {label}
                       </Typography>
-                      <Typography variant="body2" className="card-text">
+                      <Typography variant="body2" className={styles.cardText}>
                         Compra: <strong>{formatARS(c?.compra)}</strong>
                       </Typography>
-                      <Typography variant="body2" className="card-text">
+                      <Typography variant="body2" className={styles.cardText}>
                         Venta: <strong>{formatARS(c?.venta)}</strong>
                       </Typography>
                     </CardContent>
@@ -181,7 +172,7 @@ export default function DolarSection() {
             })}
           </Grid>
         )}
-      </Stack>
+      </Box>
     </Paper>
   );
 }

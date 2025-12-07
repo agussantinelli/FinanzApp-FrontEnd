@@ -1,4 +1,4 @@
-.section-paper {
+.sectionPaper {
     padding: 20px;
     background-color: rgba(0, 255, 0, 0.03);
     border: 1px solid rgba(57, 255, 20, 0.35);
@@ -7,34 +7,63 @@
 }
 
 @media (min-width: 900px) {
-    .section-paper {
+    .sectionPaper {
         padding: 24px;
     }
 }
 
-.header-title {
+.headerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+@media (min-width: 600px) {
+    .headerContainer {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+.actionButtons {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
+.headerTitle {
     font-weight: 800 !important;
     color: #39ff14 !important;
 }
 
-.refresh-button {
+.chartButton {
+    background-color: #39ff14 !important;
+    color: #000 !important;
+}
+
+.chartButton:hover {
+    background-color: #39ff14 !important;
+}
+
+.refreshButton {
     border-color: #39ff14 !important;
     color: #39ff14 !important;
 }
 
-.refresh-button:hover {
+.refreshButton:hover {
     border-color: #39ff14 !important;
 }
 
-.section-divider {
+.sectionDivider {
     margin-top: 20px !important;
     margin-bottom: 20px !important;
     border-color: rgba(57, 255, 20, 0.25) !important;
 }
 
-.crypto-card {
-    height: 165px !important;
-    width: 195px !important;
+.dolarCard {
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -48,17 +77,35 @@
     transition: all 0.25s ease !important;
 }
 
-.crypto-card:hover {
+.dolarCard:hover {
     transform: translateY(-3px);
     box-shadow: 0 0 18px rgba(57, 255, 20, 0.5) !important;
 }
 
-.card-title {
+.cardTitle {
     color: #39ff14 !important;
     font-weight: 700 !important;
     margin-bottom: 4px !important;
 }
 
-.card-text {
+.cardText {
     color: #fff !important;
+}
+
+.cardVariation {
+    display: block !important;
+    margin-top: 8px !important;
+}
+
+.variationValue {
+    margin-left: 4px;
+    font-weight: bold;
+}
+
+.positive {
+    color: green;
+}
+
+.negative {
+    color: red;
 }

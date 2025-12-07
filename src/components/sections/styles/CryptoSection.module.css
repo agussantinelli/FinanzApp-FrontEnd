@@ -1,4 +1,4 @@
-.section-paper {
+.sectionPaper {
     padding: 20px;
     background-color: rgba(0, 255, 0, 0.03);
     border: 1px solid rgba(57, 255, 20, 0.35);
@@ -7,33 +7,49 @@
 }
 
 @media (min-width: 900px) {
-    .section-paper {
+    .sectionPaper {
         padding: 24px;
     }
 }
 
-.header-title {
+.headerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+@media (min-width: 600px) {
+    .headerContainer {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+.headerTitle {
     font-weight: 800 !important;
     color: #39ff14 !important;
 }
 
-.refresh-button {
+.refreshButton {
     border-color: #39ff14 !important;
     color: #39ff14 !important;
 }
 
-.refresh-button:hover {
+.refreshButton:hover {
     border-color: #39ff14 !important;
 }
 
-.section-divider {
+.sectionDivider {
     margin-top: 20px !important;
     margin-bottom: 20px !important;
     border-color: rgba(57, 255, 20, 0.25) !important;
 }
 
-.cedear-card {
-    height: 100%;
+.cryptoCard {
+    height: 165px !important;
+    width: 195px !important;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -45,35 +61,38 @@
     backdrop-filter: blur(3px);
     box-shadow: 0 0 12px rgba(57, 255, 20, 0.25) !important;
     transition: all 0.25s ease !important;
+    margin: 0 auto;
 }
 
-.cedear-card:hover {
+.cryptoCard:hover {
     transform: translateY(-3px);
     box-shadow: 0 0 18px rgba(57, 255, 20, 0.5) !important;
 }
 
-.card-title {
-    font-weight: 800 !important;
-    margin-bottom: 2px !important;
-}
-
-.card-subtitle {
-    color: #9ca3af !important;
-    display: block !important;
-    margin-bottom: 6px !important;
-}
-
-.card-symbol {
+.cardTitle {
     color: #39ff14 !important;
     font-weight: 700 !important;
     margin-bottom: 4px !important;
 }
 
-.card-text {
+.cardSubtitle {
+    display: block !important;
+    margin-bottom: 8px !important;
+}
+
+.cardText {
+    color: #fff !important;
+}
+
+.cardChange {
+    display: block !important;
     margin-top: 8px !important;
 }
 
-.card-rate {
-    display: block !important;
-    margin-top: 8px !important;
+.positive {
+    color: #39ff14;
+}
+
+.negative {
+    color: #ff1744;
 }

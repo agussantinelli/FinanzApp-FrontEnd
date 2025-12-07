@@ -5,11 +5,11 @@ import { getStockDuals } from "@/services/StocksService";
 import { getCotizacionesDolar } from "@/services/DolarService";
 import { DualQuoteDTO } from "@/types/Market";
 import {
-  Paper, Stack, Alert, Typography, Button, Card, CardContent,
+  Paper, Alert, Typography, Button, Card, CardContent,
   CircularProgress, Divider, Grid, Box
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import "./styles/AccionesARGYSection.css";
+import styles from "./styles/AccionesARGYSection.module.css";
 
 function isCCL(nombreRaw: string) {
   const n = (nombreRaw || "").toLowerCase();
@@ -116,24 +116,24 @@ export default function AccionesARSection() {
   const UnifiedCard = (d: DualQuoteDTO & { name?: string }) => {
     const isCedearLocal = d.cedearRatio != null;
     return (
-      <Card className="acciones-card">
+      <Card className={styles.accionesCard}>
         <CardContent>
-          <Typography variant="h6" className="card-title">
+          <Typography variant="h6" className={styles.cardTitle}>
             {d.name ?? d.usSymbol}
           </Typography>
 
-          <Typography variant="caption" className="card-subtitle">
+          <Typography variant="caption" className={styles.cardSubtitle}>
             {isCedearLocal ? `Precio local = CEDEAR · Ratio ${d.cedearRatio}:1` : "Precio local = Acción BYMA (no CEDEAR)"}
           </Typography>
 
-          <Typography className="card-symbol">
+          <Typography className={styles.cardSymbol}>
             {d.localSymbol} ↔ {d.usSymbol}
           </Typography>
 
-          <Typography className="card-text">
+          <Typography className={styles.cardText}>
             Local (ARS): <strong>{formatARS(d.localPriceARS)}</strong>
             {d.localChangePct !== undefined && d.localChangePct !== null && (
-              <span style={{ color: d.localChangePct >= 0 ? "green" : "red", marginLeft: "8px", fontSize: "0.9em" }}>
+              <span className={`${styles.changePercent} ${d.localChangePct >= 0 ? styles.positive : styles.negative}`}>
                 {d.localChangePct > 0 ? "+" : ""}{d.localChangePct}%
               </span>
             )}
@@ -141,13 +141,13 @@ export default function AccionesARSection() {
           <Typography>
             USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong>
             {d.usChangePct !== undefined && d.usChangePct !== null && (
-              <span style={{ color: d.usChangePct >= 0 ? "green" : "red", marginLeft: "8px", fontSize: "0.9em" }}>
+              <span className={`${styles.changePercent} ${d.usChangePct >= 0 ? styles.positive : styles.negative}`}>
                 {d.usChangePct > 0 ? "+" : ""}{d.usChangePct}%
               </span>
             )}
           </Typography>
 
-          <Typography variant="caption" color="text.secondary" className="card-rate">
+          <Typography variant="caption" color="text.secondary" className={styles.cardRate}>
             Tasa (CCL): {d.usedDollarRate.toLocaleString("es-AR")}
           </Typography>
         </CardContent>
@@ -156,12 +156,11 @@ export default function AccionesARSection() {
   };
 
   return (
-    <Paper className="section-paper">
-      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}
-        alignItems={{ xs: "flex-start", sm: "center" }} justifyContent="space-between">
+    <Paper className={styles.sectionPaper}>
+      <div className={styles.headerContainer}>
         <Box>
-          {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-          <Typography variant="h5" className="header-title">
+          {error && <Alert severity="error" className={styles.errorAlert}>{error}</Alert>}
+          <Typography variant="h5" className={styles.headerTitle}>
             Empresas Argentinas ↔ ADR / CEDEARs
           </Typography>
           {updatedAt && (
@@ -176,18 +175,18 @@ export default function AccionesARSection() {
           color="primary"
           startIcon={loading ? <CircularProgress size={18} /> : <RefreshIcon />}
           disabled={loading}
-          className="refresh-button"
+          className={styles.refreshButton}
         >
           {loading ? "Actualizando..." : "Actualizar"}
         </Button>
-      </Stack>
+      </div>
 
-      <Divider className="section-divider" />
+      <Divider className={styles.sectionDivider} />
 
-      <Typography variant="subtitle1" className="section-subtitle">
+      <Typography variant="subtitle1" className={styles.sectionSubtitle}>
         Sector Energético
       </Typography>
-      <Stack spacing={3}>
+      <Box display="flex" flexDirection="column" gap={3}>
         {rowsEnergetico.map((row, idx) => (
           <Grid container spacing={3} key={`en-${idx}`} justifyContent="center">
             {row.map(d => (
@@ -197,14 +196,14 @@ export default function AccionesARSection() {
             ))}
           </Grid>
         ))}
-      </Stack>
+      </Box>
 
-      <Divider className="section-divider-soft" />
+      <Divider className={styles.sectionDividerSoft} />
 
-      <Typography variant="subtitle1" className="section-subtitle">
+      <Typography variant="subtitle1" className={styles.sectionSubtitle}>
         Sector Bancario
       </Typography>
-      <Stack spacing={3}>
+      <Box display="flex" flexDirection="column" gap={3}>
         {rowsBancario.map((row, idx) => (
           <Grid container spacing={3} key={`ban-${idx}`} justifyContent="center">
             {row.map(d => (
@@ -214,14 +213,14 @@ export default function AccionesARSection() {
             ))}
           </Grid>
         ))}
-      </Stack>
+      </Box>
 
-      <Divider className="section-divider-soft" />
+      <Divider className={styles.sectionDividerSoft} />
 
-      <Typography variant="subtitle1" className="section-subtitle">
+      <Typography variant="subtitle1" className={styles.sectionSubtitle}>
         Otros
       </Typography>
-      <Stack spacing={3}>
+      <Box display="flex" flexDirection="column" gap={3}>
         {rowsExtra.map((row, idx) => (
           <Grid container spacing={3} key={`ex-${idx}`} justifyContent="center">
             {row.map(d => (
@@ -231,7 +230,7 @@ export default function AccionesARSection() {
             ))}
           </Grid>
         ))}
-      </Stack>
+      </Box>
     </Paper >
   );
 }
