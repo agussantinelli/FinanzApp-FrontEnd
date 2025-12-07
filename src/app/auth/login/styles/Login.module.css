@@ -12,12 +12,18 @@
 .card {
     width: 100%;
     max-width: 420px;
-    padding: 32px;
+    padding: 24px;
     border-radius: 24px !important;
     /* using !important to override MUI default if needed, or just standard css */
     background-color: rgba(15, 15, 15, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(10px);
+}
+
+@media (min-width: 600px) {
+    .card {
+        padding: 32px;
+    }
 }
 
 .title {
