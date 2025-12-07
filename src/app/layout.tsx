@@ -3,7 +3,7 @@ import "@/app/styles/globals.css";
 import Providers from "@/components/Providers";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import ClientBackground from "@/components/ClientBackground"; 
+import ClientBackground from "@/components/ClientBackground";
 
 export const metadata: Metadata = {
   title: "FinanzApp",
@@ -13,20 +13,16 @@ export const metadata: Metadata = {
   },
 };
 
+import styles from "./styles/Layout.module.css";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body style={{ margin: 0 }}>
+      <body className={styles.body}>
         <ClientBackground />
         <Providers>
           <Navbar />
-          <main
-            style={{
-              position: "relative",
-              zIndex: 1,
-              minHeight: "calc(100svh - 72px)",
-            }}
-          >
+          <main className={styles.main}>
             {children}
           </main>
           <Footer />

@@ -14,24 +14,21 @@ import CryptoSection from "@/components/sections/CryptoSection";
 import AccionesARGYSection from "@/components/sections/AccionesARGYSection";
 import MarketHoursCard from "@/components/sections/MarketHoursCard";
 
+import styles from "./styles/Home.module.css";
+
 export default function HomePage() {
   return (
-    <Container maxWidth="lg" sx={{ py: { xs: 6, md: 10 } }}>
-      <Box sx={{ textAlign: "center", mb: 4 }}>
-        <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+    <Container maxWidth="lg" className={styles.container}>
+      <Box className={styles.headerBox}>
+        <Typography variant="h3" className={styles.title}>
           Controlá tus finanzas con{" "}
-          <span style={{ color: "#39ff14" }}>FinanzApp</span>
+          <span className={styles.brandSpan}>FinanzApp</span>
         </Typography>
-        <Typography variant="h6" color="text.secondary" sx={{ mb: 3 }}>
+        <Typography variant="h6" color="text.secondary" className={styles.subtitle}>
           Registrá movimientos, organizá categorías y obtené reportes claros.
         </Typography>
 
-        <Stack
-          direction="row"
-          spacing={2}
-          justifyContent="center"
-          sx={{ mb: 2 }}
-        >
+        <div className={styles.buttonStack}>
           <Button
             component={Link}
             href="/auth/login"
@@ -50,26 +47,25 @@ export default function HomePage() {
           >
             Activos Disponibles
           </Button>
-        </Stack>
+        </div>
       </Box>
 
-      <Box sx={{ mt: 6 }}>
+      <Box className={styles.sectionBox}>
         <DolarSection />
       </Box>
-      <Box sx={{ mt: 6 }}>
+      <Box className={styles.sectionBox}>
         <AccionesARGYSection />
       </Box>
-      <Box sx={{ mt: 6 }}>
+      <Box className={styles.sectionBox}>
         <CedearsSection />
       </Box>
-      <Box sx={{ mt: 6 }}>
+      <Box className={styles.sectionBox}>
         <IndexesSection />
       </Box>
-      <Box sx={{ mt: 6 }}>
+      <Box className={styles.sectionBox}>
         <CryptoSection />
       </Box>
-
-      <Box sx={{ mt: 3, display: "flex", justifyContent: "center" }}>
+      <Box className={styles.marketHoursBox}>
         <MarketHoursCard />
       </Box>
     </Container>

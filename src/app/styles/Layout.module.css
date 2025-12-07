@@ -1,0 +1,9 @@
+.body {
+    margin: 0;
+}
+
+.main {
+    position: relative;
+    z-index: 1;
+    min-height: calc(100svh - 72px);
+}
