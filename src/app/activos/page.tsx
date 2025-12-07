@@ -49,6 +49,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import SearchIcon from '@mui/icons-material/Search';
 import NeonLoader from "@/components/ui/NeonLoader";
+import styles from "./styles/Activos.module.css";
 
 const getAvatarColor = (tipo: string) => {
   switch (tipo?.toLowerCase()) {
@@ -74,13 +75,9 @@ const getAvatarColor = (tipo: string) => {
   }
 };
 
-import styles from "./styles/Activos.module.css";
-
-// ... (previous imports and functions remain the same)
 
 export default function Activos() {
   const router = useRouter();
-  // ... state declarations ...
   const [selectedType, setSelectedType] = useState<string | number>("Todos");
   const [selectedSector, setSelectedSector] = useState<string>("Todos");
   const [activos, setActivos] = useState<ActivoDTO[]>([]);
@@ -170,7 +167,6 @@ export default function Activos() {
       };
 
       if (cache) {
-        // --- Client-Side Filtering from Cache ---
         data = [...cache];
 
         if (selectedType !== "Todos") {
