@@ -8,12 +8,18 @@
 }
 
 .paper {
-    padding: 24px;
+    padding: 16px;
     max-width: 480px;
     width: 100%;
     border-radius: 12px;
     background-color: rgba(15, 15, 15, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (min-width: 600px) {
+    .paper {
+        padding: 24px;
+    }
 }
 
 .title {
