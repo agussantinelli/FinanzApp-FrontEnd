@@ -14,6 +14,21 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+.assetInfo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+}
+
+.optionInfo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
 .title {
     background: linear-gradient(135deg, #0dff21ff 0%, #7aff85ff 50%, #bcffc2ff 100%);
     -webkit-background-clip: text;
@@ -33,6 +48,16 @@
 
 .controlsStack {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+
+@media (min-width: 900px) {
+    .controlsStack {
+        flex-direction: row;
+    }
 }
 
 .searchInput {

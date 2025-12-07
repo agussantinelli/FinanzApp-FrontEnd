@@ -287,7 +287,7 @@ export default function Activos() {
             </Typography>
           </Box>
 
-          <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="center" className={styles.controlsStack}>
+          <div className={styles.controlsStack}>
 
             <Autocomplete
               freeSolo
@@ -332,7 +332,7 @@ export default function Activos() {
                 const { key, ...otherProps } = props;
                 return (
                   <li key={key} {...otherProps}>
-                    <Stack direction="row" spacing={1} alignItems="center">
+                    <div className={styles.optionInfo}>
                       <Avatar sx={{ width: 24, height: 24, fontSize: '0.7rem', bgcolor: getAvatarColor(typeof option === 'string' ? '' : option.tipo) }}>
                         {typeof option === 'string' ? '?' : option.symbol[0]}
                       </Avatar>
@@ -344,7 +344,7 @@ export default function Activos() {
                           {typeof option === 'string' ? '' : option.nombre}
                         </Typography>
                       </Box>
-                    </Stack>
+                    </div>
                   </li>
                 );
               }}
@@ -397,7 +397,7 @@ export default function Activos() {
                 ))}
               </Select>
             </FormControl>
-          </Stack>
+          </div>
         </Stack>
       </Box>
 
@@ -463,7 +463,7 @@ export default function Activos() {
                       className={styles.tableRow}
                     >
                       <TableCell component="th" scope="row">
-                        <Stack direction="row" alignItems="center" spacing={2}>
+                        <div className={styles.assetInfo}>
                           <Avatar
                             className={styles.avatar}
                             sx={{ bgcolor: getAvatarColor(activo.tipo) }}
@@ -478,7 +478,7 @@ export default function Activos() {
                               {activo.nombre}
                             </Typography>
                           </Box>
-                        </Stack>
+                        </div>
                       </TableCell>
                       <TableCell>
                         <Typography variant="body2" className={styles.priceText}>
