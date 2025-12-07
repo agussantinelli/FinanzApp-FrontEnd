@@ -6,6 +6,7 @@ import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import { getCotizacionesDolar } from "@/services/DolarService";
 import type { DolarDTO } from "@/types/Dolar";
+import styles from "./styles/DolarBarChart.module.css";
 
 type DatoDolar = Pick<DolarDTO, "nombre" | "venta" | "compra">;
 
@@ -51,7 +52,7 @@ export default function DolarBarChart() {
           {
             label: "Venta",
             data: ventas,
-            backgroundColor: "#39ff14", 
+            backgroundColor: "#39ff14",
             borderRadius: 8,
             barThickness: 28,
           },
@@ -103,10 +104,10 @@ export default function DolarBarChart() {
 
   if (loading) {
     return (
-      <Card sx={{ height: 460 }}>
+      <Card className={styles.card}>
         <CardHeader title="Cotizaciones de Dólar (ARS)" subheader="Cargando…" />
         <CardContent>
-          <Skeleton variant="rounded" height={36} sx={{ mb: 2 }} />
+          <Skeleton variant="rounded" height={36} className={styles.loadingSkeleton} />
           <Skeleton variant="rounded" height={320} />
         </CardContent>
       </Card>
@@ -115,29 +116,20 @@ export default function DolarBarChart() {
 
   if (error) {
     return (
-      <Card sx={{ p: 3 }}>
+      <Card className={styles.errorCard}>
         <Typography color="error">{error}</Typography>
       </Card>
     );
   }
 
   return (
-    <Card
-      sx={{
-        height: 460,
-        borderRadius: 2,
-        border: "1px solid",
-        borderColor: "divider",
-        background:
-          "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 100%)",
-      }}
-    >
+    <Card className={styles.card}>
       <CardHeader
         title="Cotizaciones de Dólar (ARS)"
         subheader={updatedAt ? `Actualizado: ${updatedAt.toLocaleString("es-AR")}` : undefined}
       />
 
-      <Box sx={{ px: 2, pb: 1 }}>
+      <Box className={styles.cardHeaderWrapper}>
         <Stack direction="row" spacing={1} flexWrap="wrap">
           <Chip size="small" label={`Máximo venta: ${ARS(kpis.maxVenta || 0)}`} />
           <Chip size="small" label={`Mínimo venta: ${ARS(kpis.minVenta || 0)}`} />
@@ -145,8 +137,8 @@ export default function DolarBarChart() {
         </Stack>
       </Box>
 
-      <CardContent sx={{ height: 330, pt: 1 }}>
-        <Box sx={{ height: "100%" }}>
+      <CardContent className={styles.kpiCardContent}>
+        <Box className={styles.chartContainer}>
           <Bar data={chart.data as any} options={chart.options as any} />
         </Box>
       </CardContent>

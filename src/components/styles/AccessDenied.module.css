@@ -1,0 +1,26 @@
+.container {
+    min-height: calc(100vh - 96px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.paper {
+    padding: 24px;
+    max-width: 480px;
+    width: 100%;
+    border-radius: 12px;
+    background-color: rgba(15, 15, 15, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.title {
+    font-weight: 700;
+}
+
+.button {
+    text-transform: none;
+    margin-top: 8px;
+}

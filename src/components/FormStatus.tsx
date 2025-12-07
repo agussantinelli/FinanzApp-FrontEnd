@@ -7,13 +7,15 @@ interface FormStatusProps {
   errorMessage?: string | null;
 }
 
+import styles from "./styles/FormStatus.module.css";
+
 export function FormStatus({ successMessage, errorMessage }: FormStatusProps) {
   if (!successMessage && !errorMessage) return null;
 
   return (
-    <Box sx={{ mt: 1 }}>
+    <Box className={styles.container}>
       {successMessage && (
-        <Alert severity="success" sx={{ mb: errorMessage ? 1 : 0 }}>
+        <Alert severity="success" className={styles.alert}>
           {successMessage}
         </Alert>
       )}

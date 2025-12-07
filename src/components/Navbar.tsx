@@ -32,6 +32,8 @@ import {
   type AuthUser,
 } from "@/services/AuthService";
 
+import styles from "./styles/Navbar.module.css";
+
 const baseNavItems = [
   { label: "Inicio", href: "/" },
   { label: "Activos", href: "/activos" },
@@ -101,75 +103,42 @@ export default function Navbar() {
     user?.rol === "Admin"
       ? "Admin"
       : user?.rol === "Inversor"
-      ? "Inversor"
-      : user?.rol ?? "";
+        ? "Inversor"
+        : user?.rol ?? "";
 
   return (
     <>
-      <AppBar position="sticky" elevation={0}>
-        <Toolbar
-          sx={{
-            minHeight: { xs: 84, md: 96 },
-            px: { xs: 2, md: 3 },
-            backdropFilter: "blur(6px)",
-            bgcolor: "rgba(0,0,0,0.45)",
-          }}
-        >
+      <AppBar position="sticky" elevation={0} className={styles.appBar}>
+        <Toolbar className={styles.toolbar}>
           <Box
             component={Link}
             href={logoHref}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1.5,
-              textDecoration: "none",
-              color: "inherit",
-              cursor: "pointer",
-            }}
+            className={styles.logoLink}
           >
             <Image
               src="/favicon.png"
               alt="FinanzApp"
               width={87}
               height={48}
-              style={{ borderRadius: 12 }}
+              className={styles.logoImage}
               priority
             />
-            <Typography
-              variant="h4"
-              sx={{
-                fontWeight: 800,
-                letterSpacing: 0.6,
-                fontSize: { xs: "1.6rem", sm: "1.9rem", md: "2.1rem" },
-                lineHeight: 1,
-              }}
-            >
+            <Typography variant="h4" className={styles.logoText}>
               FinanzApp
             </Typography>
           </Box>
 
-          <Box sx={{ flexGrow: 1 }} />
+          <Box className={styles.flexGrow} />
 
           {/* Desktop nav */}
-          <Box
-            sx={{
-              display: { xs: "none", md: "flex" },
-              gap: 1.2,
-              alignItems: "center",
-            }}
-          >
+          <Box className={styles.desktopNav}>
             {navItems.map((item) => (
               <Button
                 key={item.href}
                 component={Link}
                 href={item.href}
                 color="inherit"
-                sx={{
-                  textTransform: "none",
-                  fontWeight: 600,
-                  fontSize: "1rem",
-                  px: 2,
-                }}
+                className={styles.navButton}
               >
                 {item.label}
               </Button>
@@ -178,7 +147,7 @@ export default function Navbar() {
             <Divider
               orientation="vertical"
               flexItem
-              sx={{ mx: 1.5, borderColor: "rgba(255,255,255,0.2)" }}
+              className={styles.dividerVertical}
             />
 
             {!isLogged ? (
@@ -187,12 +156,7 @@ export default function Navbar() {
                   component={Link}
                   href="/auth/login"
                   color="inherit"
-                  sx={{
-                    textTransform: "none",
-                    fontWeight: 600,
-                    fontSize: "0.95rem",
-                    px: 2,
-                  }}
+                  className={styles.loginButton}
                 >
                   Iniciar sesión
                 </Button>
@@ -200,13 +164,7 @@ export default function Navbar() {
                   component={Link}
                   href="/auth/register"
                   variant="contained"
-                  sx={{
-                    textTransform: "none",
-                    fontWeight: 700,
-                    fontSize: "0.95rem",
-                    px: 2.5,
-                    borderRadius: 999,
-                  }}
+                  className={styles.registerButton}
                 >
                   Registrarse
                 </Button>
@@ -217,15 +175,10 @@ export default function Navbar() {
                   color="inherit"
                   onClick={handleOpenUserMenu}
                   endIcon={<ArrowDropDownIcon />}
-                  sx={{
-                    textTransform: "none",
-                    fontWeight: 600,
-                    fontSize: "0.95rem",
-                    px: 2,
-                  }}
+                  className={styles.userButton}
                 >
                   {roleLabel} •{" "}
-                  <Box component="span" sx={{ ml: 0.7, fontWeight: 700 }}>
+                  <Box component="span" className={styles.userNameSpan}>
                     {user!.nombre} {user!.apellido}
                   </Box>
                 </Button>
@@ -274,7 +227,7 @@ export default function Navbar() {
             )}
           </Box>
 
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+          <Box className={styles.mobileMenuIconBox}>
             <IconButton color="inherit" onClick={toggle(true)} aria-label="menu">
               <MenuIcon />
             </IconButton>
@@ -285,23 +238,23 @@ export default function Navbar() {
       <Drawer anchor="right" open={open} onClose={toggle(false)}>
         <Box
           role="presentation"
-          sx={{ width: 280, mt: 2 }}
+          className={styles.drawerContent}
           onClick={toggle(false)}
           onKeyDown={toggle(false)}
         >
-          <Box sx={{ px: 2, pb: 1 }}>
+          <Box className={styles.drawerHeader}>
             {isLogged ? (
               <>
                 <Typography variant="subtitle2" color="text.secondary">
                   Sesión
                 </Typography>
-                <Typography variant="body1" sx={{ fontWeight: 700 }}>
+                <Typography variant="body1" className={styles.drawerUserName}>
                   {user!.nombre} {user!.apellido}
                 </Typography>
                 <Typography
                   variant="body2"
                   color="text.secondary"
-                  sx={{ mb: 1 }}
+                  className={styles.drawerRole}
                 >
                   Rol: {user!.rol}
                 </Typography>
@@ -309,7 +262,7 @@ export default function Navbar() {
             ) : (
               <Typography
                 variant="body1"
-                sx={{ fontWeight: 700, mb: 1, px: 0.5 }}
+                className={styles.drawerMenuTitle}
               >
                 Menú
               </Typography>
@@ -326,7 +279,7 @@ export default function Navbar() {
             ))}
           </List>
 
-          <Divider sx={{ my: 1 }} />
+          <Divider className={styles.drawerDivider} />
 
           {!isLogged ? (
             <List>

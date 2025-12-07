@@ -11,6 +11,8 @@ type AccessDeniedProps = {
   backLabel?: string;
 };
 
+import styles from "./styles/AccessDenied.module.css";
+
 export function AccessDenied({
   title = "Acceso restringido",
   message = "No tenés permisos para ver esta sección.",
@@ -18,27 +20,10 @@ export function AccessDenied({
   backLabel = "Volver al inicio",
 }: AccessDeniedProps) {
   return (
-    <Box
-      sx={{
-        minHeight: "calc(100vh - 96px)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        px: 2,
-      }}
-    >
-      <Paper
-        sx={{
-          p: 3,
-          maxWidth: 480,
-          width: "100%",
-          borderRadius: 3,
-          bgcolor: "rgba(15,15,15,0.95)",
-          border: "1px solid rgba(255,255,255,0.08)",
-        }}
-      >
+    <Box className={styles.container}>
+      <Paper className={styles.paper}>
         <Stack spacing={2}>
-          <Typography variant="h6" sx={{ fontWeight: 700 }}>
+          <Typography variant="h6" className={styles.title}>
             {title}
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -48,7 +33,7 @@ export function AccessDenied({
             component={Link}
             href={backHref}
             variant="contained"
-            sx={{ textTransform: "none", mt: 1 }}
+            className={styles.button}
           >
             {backLabel}
           </Button>

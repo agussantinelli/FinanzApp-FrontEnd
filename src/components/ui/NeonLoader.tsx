@@ -1,6 +1,8 @@
 import React from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 
+import styles from './styles/NeonLoader.module.css';
+
 interface NeonLoaderProps {
     message?: string;
     size?: number;
@@ -8,70 +10,23 @@ interface NeonLoaderProps {
 
 const NeonLoader: React.FC<NeonLoaderProps> = ({ message = "Cargando...", size = 60 }) => {
     return (
-        <Box
-            sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                minHeight: '200px',
-                width: '100%',
-                p: 4,
-            }}
-        >
-            <Box
-                sx={{
-                    position: 'relative',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}
-            >
+        <Box className={styles.container}>
+            <Box className={styles.loaderWrapper}>
                 {/* Outer glow effect */}
                 <Box
-                    sx={{
-                        position: 'absolute',
-                        width: size,
-                        height: size,
-                        borderRadius: '50%',
-                        boxShadow: '0 0 20px #39FF14, 0 0 40px #39FF14', // Neon Green Glow
-                        opacity: 0.6,
-                        animation: 'pulse 1.5s ease-in-out infinite',
-                        '@keyframes pulse': {
-                            '0%': { transform: 'scale(0.95)', opacity: 0.5 },
-                            '50%': { transform: 'scale(1.1)', opacity: 0.8 },
-                            '100%': { transform: 'scale(0.95)', opacity: 0.5 },
-                        },
-                    }}
+                    className={styles.glowEffect}
+                    sx={{ width: size, height: size }}
                 />
                 <CircularProgress
                     size={size}
                     thickness={4}
+                    className={styles.circularProgress}
                     sx={{
-                        color: '#39FF14', // Neon Green
-                        filter: 'drop-shadow(0 0 5px #39FF14)',
-                        zIndex: 1,
-                        '& .MuiCircularProgress-circle': {
-                            strokeLinecap: 'round',
-                        }
+                        '& .MuiCircularProgress-circle': { strokeLinecap: 'round' } // Keeping this specific nested selector in sx for safety alongside the class
                     }}
                 />
             </Box>
-            <Typography
-                variant="h6"
-                sx={{
-                    mt: 3,
-                    color: '#39FF14', // Neon Green Text
-                    fontWeight: 'bold',
-                    textShadow: '0 0 10px rgba(57, 255, 20, 0.5)',
-                    letterSpacing: 1,
-                    animation: 'blink 2s linear infinite',
-                    '@keyframes blink': {
-                        '0%, 100%': { opacity: 1 },
-                        '50%': { opacity: 0.6 },
-                    },
-                }}
-            >
+            <Typography variant="h6" className={styles.loadingText}>
                 {message}
             </Typography>
         </Box>

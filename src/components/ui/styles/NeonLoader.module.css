@@ -1,0 +1,74 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    width: 100%;
+    padding: 32px;
+}
+
+.loaderWrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.glowEffect {
+    position: absolute;
+    border-radius: 50%;
+    box-shadow: 0 0 20px #39FF14, 0 0 40px #39FF14;
+    opacity: 0.6;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(0.95);
+        opacity: 0.5;
+    }
+}
+
+.circularProgress {
+    color: #39FF14 !important;
+    filter: drop-shadow(0 0 5px #39FF14);
+    z-index: 1;
+}
+
+/* Note: Targeting internal MUI class usually requires :global or careful targeting. 
+   Since this is a CSS module, we might need a wrapper or use sx for deep internal overrides if this fails.
+   However, for .MuiCircularProgress-circle, it's often better to leave it or use global css if complex selectors are needed.
+   Here we will try to use a class on the component.
+*/
+
+.loadingText {
+    margin-top: 24px !important;
+    color: #39FF14 !important;
+    font-weight: bold !important;
+    text-shadow: 0 0 10px rgba(57, 255, 20, 0.5) !important;
+    letter-spacing: 1px !important;
+    animation: blink 2s linear infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}

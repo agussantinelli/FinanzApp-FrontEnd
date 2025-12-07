@@ -1,0 +1,15 @@
+.footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+    text-align: center;
+    color: var(--mui-palette-text-secondary);
+    /* Using MUI CSS variable if available, else fallback */
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    /* Default divider color approximation */
+}
+
+/* Fallback for color if variable not present */
+.footer {
+    color: rgba(255, 255, 255, 0.7);
+}

@@ -3,19 +3,11 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
+import styles from "./styles/Footer.module.css";
+
 export default function Footer() {
   return (
-    <Box
-      component="footer"
-      sx={{
-        mt: 6,
-        py: 3,
-        textAlign: "center",
-        color: "text.secondary",
-        borderTop: "1px solid",
-        borderColor: "divider",
-      }}
-    >
+    <Box component="footer" className={styles.footer}>
       <Typography variant="body2">
         © {new Date().getFullYear()} FinanzApp — Todos los derechos reservados
       </Typography>

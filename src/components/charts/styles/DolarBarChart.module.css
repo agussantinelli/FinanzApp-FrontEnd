@@ -1,0 +1,29 @@
+.card {
+    height: 460px;
+    border-radius: 8px !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.15) 100%) !important;
+}
+
+.cardHeaderWrapper {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 8px;
+}
+
+.kpiCardContent {
+    height: 330px;
+    padding-top: 8px !important;
+}
+
+.chartContainer {
+    height: 100%;
+}
+
+.loadingSkeleton {
+    margin-bottom: 16px;
+}
+
+.errorCard {
+    padding: 24px;
+}

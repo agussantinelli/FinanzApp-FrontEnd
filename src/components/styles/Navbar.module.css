@@ -1,0 +1,151 @@
+.appBar {
+    background-color: transparent !important;
+}
+
+.toolbar {
+    min-height: 84px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    backdrop-filter: blur(6px);
+    background-color: rgba(0, 0, 0, 0.45);
+}
+
+@media (min-width: 900px) {
+    .toolbar {
+        min-height: 96px !important;
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+    }
+}
+
+.logoLink {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.logoImage {
+    border-radius: 12px;
+}
+
+.logoText {
+    font-weight: 800 !important;
+    letter-spacing: 0.6px !important;
+    font-size: 1.6rem !important;
+    line-height: 1 !important;
+}
+
+@media (min-width: 600px) {
+    .logoText {
+        font-size: 1.9rem !important;
+    }
+}
+
+@media (min-width: 900px) {
+    .logoText {
+        font-size: 2.1rem !important;
+    }
+}
+
+.flexGrow {
+    flex-grow: 1;
+}
+
+.desktopNav {
+    display: none;
+    gap: 10px;
+    /* 1.2 * 8px approx */
+    align-items: center;
+}
+
+@media (min-width: 900px) {
+    .desktopNav {
+        display: flex;
+    }
+}
+
+.navButton {
+    text-transform: none !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+}
+
+.dividerVertical {
+    margin-left: 12px !important;
+    margin-right: 12px !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.loginButton {
+    text-transform: none !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+}
+
+.registerButton {
+    text-transform: none !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    border-radius: 999px !important;
+}
+
+.userButton {
+    text-transform: none !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+}
+
+.userNameSpan {
+    margin-left: 6px;
+    font-weight: 700;
+}
+
+.mobileMenuIconBox {
+    display: flex;
+}
+
+@media (min-width: 900px) {
+    .mobileMenuIconBox {
+        display: none;
+    }
+}
+
+.drawerContent {
+    width: 280px;
+    margin-top: 16px;
+}
+
+.drawerHeader {
+    padding-left: 16px;
+    padding-bottom: 8px;
+}
+
+.drawerUserName {
+    font-weight: 700 !important;
+}
+
+.drawerRole {
+    margin-bottom: 8px !important;
+}
+
+.drawerMenuTitle {
+    font-weight: 700 !important;
+    margin-bottom: 8px !important;
+    padding-left: 4px !important;
+}
+
+.drawerDivider {
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+}
