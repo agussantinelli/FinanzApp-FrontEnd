@@ -1,10 +1,10 @@
-
 .sectionPaper {
-    padding: 20px;
+    padding: 24px;
     background-color: rgba(0, 255, 0, 0.03);
     border: 1px solid rgba(57, 255, 20, 0.35);
     border-radius: 36px;
     backdrop-filter: blur(3px);
+    margin-bottom: 24px;
 }
 
 @media (min-width: 900px) {
@@ -35,36 +35,42 @@
 .headerTitle {
     font-weight: 800 !important;
     color: #39ff14 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .refreshButton {
     border-color: #39ff14 !important;
     color: #39ff14 !important;
+    text-transform: none !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
 }
 
 .refreshButton:hover {
+    background-color: rgba(57, 255, 20, 0.1) !important;
     border-color: #39ff14 !important;
 }
 
 .sectionDivider {
-    margin-top: 20px !important;
-    margin-bottom: 20px !important;
+    margin: 20px 0 !important;
     border-color: rgba(57, 255, 20, 0.25) !important;
 }
 
 .sectionDividerSoft {
-    margin-top: 20px !important;
-    margin-bottom: 20px !important;
+    margin: 30px 0 20px 0 !important;
     border-color: rgba(57, 255, 20, 0.15) !important;
 }
 
 .sectionSubtitle {
-    color: #39ff14 !important;
     font-weight: 700 !important;
-    text-align: center !important;
+    color: #fff;
     margin-bottom: 16px !important;
     text-transform: uppercase;
+    font-size: 0.9rem !important;
     letter-spacing: 1px;
+    border-left: 4px solid #39ff14;
+    padding-left: 12px;
 }
 
 .accionesCard {
@@ -72,56 +78,72 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    text-align: center;
     background-color: rgba(0, 255, 0, 0.05) !important;
     border: 1px solid rgba(57, 255, 20, 0.25) !important;
-    border-radius: 36px !important;
+    border-radius: 24px !important;
     overflow: hidden;
     backdrop-filter: blur(3px);
-    box-shadow: 0 0 12px rgba(57, 255, 20, 0.25) !important;
+    box-shadow: 0 0 12px rgba(57, 255, 20, 0.15) !important;
     transition: all 0.25s ease !important;
 }
 
 .accionesCard:hover {
     transform: translateY(-3px);
-    box-shadow: 0 0 18px rgba(57, 255, 20, 0.5) !important;
+    box-shadow: 0 0 18px rgba(57, 255, 20, 0.4) !important;
 }
 
 .cardTitle {
-    font-weight: 800 !important;
-    margin-bottom: 2px !important;
-}
-
-.cardSubtitle {
-    color: #9ca3af !important;
-    display: block !important;
-    margin-bottom: 6px !important;
-}
-
-.cardSymbol {
-    color: #39ff14 !important;
     font-weight: 700 !important;
+    color: #39ff14 !important;
+    line-height: 1.2 !important;
     margin-bottom: 4px !important;
 }
 
+.cardSubtitle {
+    display: block;
+    color: #aaa !important;
+    margin-bottom: 12px !important;
+    font-weight: 500;
+    font-size: 0.75rem !important;
+}
+
+.cardSymbol {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.75rem !important;
+    background-color: rgba(57, 255, 20, 0.2);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: #39ff14 !important;
+    display: inline-block;
+    margin-bottom: 12px !important;
+    border: 1px solid rgba(57, 255, 20, 0.3);
+}
+
 .cardText {
-    margin-top: 8px !important;
+    font-size: 0.9rem !important;
+    color: #eee !important;
+    margin-bottom: 6px !important;
 }
 
 .cardRate {
     display: block !important;
-    margin-top: 8px !important;
+    margin-top: 12px !important;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(57, 255, 20, 0.3);
+    color: #aaa !important;
+    font-size: 0.75rem !important;
 }
 
 .changePercent {
     margin-left: 8px;
     font-size: 0.9em;
+    font-weight: bold;
 }
 
 .positive {
-    color: green;
+    color: #39ff14 !important;
 }
 
 .negative {
-    color: red;
+    color: #ff3333 !important;
 }
