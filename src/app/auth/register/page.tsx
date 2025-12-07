@@ -37,7 +37,6 @@ type RegisterFieldErrors = {
 
 import styles from "./styles/Register.module.css";
 
-// ... (imports)
 
 export default function RegisterPage() {
   const [nombre, setNombre] = React.useState("");

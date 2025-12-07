@@ -2,9 +2,6 @@
     margin-top: 8px;
 }
 
-.alert {
-    /* Base alert helper if needed */
-}
 
 .alert:not(:last-child) {
     margin-bottom: 8px;
