@@ -27,27 +27,7 @@ import { getActivoById, getActivoFromCache } from "@/services/ActivosService";
 
 import styles from "./styles/ActivoDetail.module.css";
 
-// Helper for brand colors (duplicated from main page for self-containment)
-const getAvatarColor = (tipo: string) => {
-    switch (tipo?.toLowerCase()) {
-        case 'accion':
-        case 'acciones':
-            return "#2196f3"; // Blue
-        case 'cedear':
-        case 'cedears':
-            return "#9c27b0"; // Purple
-        case 'bono':
-        case 'bonos':
-            return "#4caf50"; // Green
-        case 'obligacion negociable':
-        case 'on':
-            return "#ff9800"; // Orange
-        case 'fci':
-            return "#00bcd4"; // Cyan
-        default:
-            return "#757575"; // Grey
-    }
-};
+import { getAvatarColor } from "@/utils/colorUtils";
 
 export default function ActivoDetalle() {
     const params = useParams();
