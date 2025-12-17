@@ -71,7 +71,7 @@ export default function IndexesSection() {
         return {
             row1: [spy, nasdaq, dow].filter(Boolean) as DualQuoteDTO[],
             row2: [xlp, emergentes, ewz].filter(Boolean) as DualQuoteDTO[],
-            national: [riesgo, merval].filter(Boolean) as DualQuoteDTO[],
+            national: [merval, riesgo].filter(Boolean) as DualQuoteDTO[],
         };
     }, [data]);
 
