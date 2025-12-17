@@ -158,16 +158,14 @@ export default function ActivoDetalle() {
                                         : '$ --'
                                     }
                                 </Typography>
-                                {(activo.variacion24h !== null && activo.variacion24h !== undefined) && (
-                                    <Chip
-                                        label={`${activo.variacion24h >= 0 ? '+' : ''}${activo.variacion24h.toFixed(2)}%`}
-                                        size="medium"
-                                        className={styles.variationChip}
-                                        sx={{
-                                            bgcolor: activo.variacion24h >= 0 ? 'success.light' : 'error.light',
-                                        }}
-                                    />
-                                )}
+                                <Chip
+                                    label={`${(activo.variacion24h ?? 0) >= 0 ? '+' : ''}${(activo.variacion24h ?? 0).toFixed(2)}%`}
+                                    size="medium"
+                                    className={styles.variationChip}
+                                    sx={{
+                                        bgcolor: (activo.variacion24h ?? 0) >= 0 ? 'success.light' : 'error.light',
+                                    }}
+                                />
                             </div>
                             <Typography variant="body2" className={styles.updateText}>
                                 {activo.ultimaActualizacion

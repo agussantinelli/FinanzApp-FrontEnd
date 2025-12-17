@@ -485,19 +485,15 @@ export default function Activos() {
                         </Typography>
                       </TableCell>
                       <TableCell>
-                        {(activo.variacion24h !== null && activo.variacion24h !== undefined) ? (
-                          <Chip
-                            label={`${activo.variacion24h >= 0 ? '+' : ''}${activo.variacion24h.toFixed(2)}%`}
-                            size="small"
-                            className={styles.variationChip}
-                            sx={{
-                              bgcolor: activo.variacion24h >= 0 ? 'success.lighter' : 'error.lighter',
-                              color: activo.variacion24h >= 0 ? 'success.main' : 'error.main',
-                            }}
-                          />
-                        ) : (
-                          <Typography variant="body2" color="text.secondary">-</Typography>
-                        )}
+                        <Chip
+                          label={`${(activo.variacion24h ?? 0) >= 0 ? '+' : ''}${(activo.variacion24h ?? 0).toFixed(2)}%`}
+                          size="small"
+                          className={styles.variationChip}
+                          sx={{
+                            bgcolor: (activo.variacion24h ?? 0) >= 0 ? 'success.lighter' : 'error.lighter',
+                            color: (activo.variacion24h ?? 0) >= 0 ? 'success.main' : 'error.main',
+                          }}
+                        />
                       </TableCell>
                       <TableCell>
                         <Chip label={activo.sector || "-"} size="small" variant="outlined" className={styles.chipRounded} />
