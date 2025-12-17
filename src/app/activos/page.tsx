@@ -200,6 +200,10 @@ export default function Activos() {
       }
 
       const criterio = criterioMap[orderBy] || "marketCap";
+
+      if (criterio === "marketCap") {
+        data = data.filter(a => a.marketCap !== null && a.marketCap !== undefined && a.marketCap > 0);
+      }
       data.sort((a, b) => {
         let valA: any = 0;
         let valB: any = 0;
