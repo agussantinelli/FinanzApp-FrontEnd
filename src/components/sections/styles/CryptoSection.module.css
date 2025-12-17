@@ -93,6 +93,26 @@
     color: #fff !important;
 }
 
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    width: 100%;
+}
+
+@media (min-width: 600px) {
+    .gridContainer {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1200px) {
+    .gridContainer {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
 .cardChange {
     display: block !important;
     margin-top: 8px !important;

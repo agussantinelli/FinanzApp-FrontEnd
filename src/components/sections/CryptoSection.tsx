@@ -64,84 +64,28 @@ export default function CryptoSection() {
 
       <Divider className={styles.sectionDivider} />
 
-      <Box display="flex" flexDirection="column" gap={{ xs: 2, md: 3 }}>
-        <Grid container spacing={3} justifyContent="center">
-          {data.slice(0, 4).map((c) => (
-            <Grid item xs={12} md={3} key={c.symbol} component="div">
-              <Card className={styles.cryptoCard}>
-                <CardContent>
-                  <Typography variant="h6" className={styles.cardTitle}>
-                    {c.name}
-                  </Typography>
-                  <Typography variant="caption" className={styles.cardSubtitle}>
-                    {c.symbol}
-                  </Typography>
-                  <Typography variant="body2" className={styles.cardText}>
-                    Precio: <strong>{formatUSD(c.priceUsd)}</strong>
-                  </Typography>
-                  <Typography variant="caption" className={`${styles.cardChange} ${(c.changePct24h ?? 0) >= 0 ? styles.positive : styles.negative}`}>
-                    24h: {(c.changePct24h ?? 0) > 0 ? "+" : ""}{c.changePct24h}%
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    Rank #{c.rank}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-
-        <Grid container spacing={3} justifyContent="center">
-          {data.slice(4, 8).map((c) => (
-            <Grid item xs={12} md={3} key={c.symbol} component="div">
-              <Card className={styles.cryptoCard}>
-                <CardContent>
-                  <Typography variant="h6" className={styles.cardTitle}>
-                    {c.name}
-                  </Typography>
-                  <Typography variant="caption" className={styles.cardSubtitle}>
-                    {c.symbol}
-                  </Typography>
-                  <Typography variant="body2" className={styles.cardText}>
-                    Precio: <strong>{formatUSD(c.priceUsd)}</strong>
-                  </Typography>
-                  <Typography variant="caption" className={`${styles.cardChange} ${(c.changePct24h ?? 0) >= 0 ? styles.positive : styles.negative}`}>
-                    24h: {(c.changePct24h ?? 0) > 0 ? "+" : ""}{c.changePct24h}%
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    Rank #{c.rank}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-
-        <Grid container spacing={3} justifyContent="center">
-          {data.slice(8, 10).map((c) => (
-            <Grid item xs={12} md={3} key={c.symbol} component="div">
-              <Card className={styles.cryptoCard}>
-                <CardContent>
-                  <Typography variant="h6" className={styles.cardTitle}>
-                    {c.name}
-                  </Typography>
-                  <Typography variant="caption" className={styles.cardSubtitle}>
-                    {c.symbol}
-                  </Typography>
-                  <Typography variant="body2" className={styles.cardText}>
-                    Precio: <strong>{formatUSD(c.priceUsd)}</strong>
-                  </Typography>
-                  <Typography variant="caption" className={`${styles.cardChange} ${(c.changePct24h ?? 0) >= 0 ? styles.positive : styles.negative}`}>
-                    24h: {(c.changePct24h ?? 0) > 0 ? "+" : ""}{c.changePct24h}%
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    Rank #{c.rank}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+      <Box className={styles.gridContainer}>
+        {data.map((c) => (
+          <Card key={c.symbol} className={styles.cryptoCard}>
+            <CardContent>
+              <Typography variant="h6" className={styles.cardTitle}>
+                {c.name}
+              </Typography>
+              <Typography variant="caption" className={styles.cardSubtitle}>
+                {c.symbol}
+              </Typography>
+              <Typography variant="body2" className={styles.cardText}>
+                Precio: <strong>{formatUSD(c.priceUsd)}</strong>
+              </Typography>
+              <Typography variant="caption" className={`${styles.cardChange} ${(c.changePct24h ?? 0) >= 0 ? styles.positive : styles.negative}`}>
+                24h: {(c.changePct24h ?? 0) > 0 ? "+" : ""}{c.changePct24h}%
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                Rank #{c.rank}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
       </Box>
     </Paper>
   );
