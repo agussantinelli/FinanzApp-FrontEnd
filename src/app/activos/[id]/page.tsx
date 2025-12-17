@@ -28,6 +28,7 @@ import { getActivoById, getActivoFromCache } from "@/services/ActivosService";
 import styles from "./styles/ActivoDetail.module.css";
 
 import { getAvatarColor } from "@/utils/colorUtils";
+import { getCurrentUser } from "@/services/AuthService";
 
 export default function ActivoDetalle() {
     const params = useParams();
@@ -62,6 +63,16 @@ export default function ActivoDetalle() {
             loadActivo();
         }
     }, [id]);
+
+    const handleOperation = () => {
+        const user = getCurrentUser();
+        if (!user) {
+            router.push("/auth/login");
+            return;
+        }
+        // TODO: Implement actual buy/sell modal or navigation
+        console.log("Operación autorizada para:", user.email);
+    };
 
     if (loading) {
         return (
@@ -248,6 +259,7 @@ export default function ActivoDetalle() {
                                     size="large"
                                     startIcon={<TrendingUpIcon />}
                                     className={styles.primaryActionButton}
+                                    onClick={handleOperation}
                                     sx={{
                                         bgcolor: "success.main",
                                         "&:hover": { bgcolor: "success.dark" },
@@ -260,6 +272,7 @@ export default function ActivoDetalle() {
                                     size="large"
                                     startIcon={<AttachMoneyIcon />}
                                     className={styles.secondaryActionButton}
+                                    onClick={handleOperation}
                                 >
                                     Vender
                                 </Button>
