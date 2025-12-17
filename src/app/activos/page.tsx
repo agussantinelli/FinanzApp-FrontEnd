@@ -203,6 +203,8 @@ export default function Activos() {
 
       if (criterio === "marketCap") {
         data = data.filter(a => a.marketCap !== null && a.marketCap !== undefined && a.marketCap > 0);
+      } else if (criterio === "precio") {
+        data = data.filter(a => a.precioActual !== null && a.precioActual !== undefined && a.precioActual > 0);
       }
       data.sort((a, b) => {
         let valA: any = 0;
