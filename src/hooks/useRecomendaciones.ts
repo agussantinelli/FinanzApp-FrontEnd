@@ -8,6 +8,7 @@ interface FilterState {
     sectorId?: string;
     autorId?: string;
     activoId?: string;
+    horizonteId?: number;
 }
 
 export function useRecomendaciones() {
@@ -28,22 +29,27 @@ export function useRecomendaciones() {
         setLoading(true);
         setError(null);
 
-        const isGenericFetch = !filters.sectorId && !filters.autorId && !filters.activoId;
+        const isGenericFetch = !filters.sectorId && !filters.autorId && !filters.activoId && !filters.horizonteId;
         if (isGenericFetch) {
             const cached = getAllRecomendacionesFromCache();
             if (cached && cached.length > 0) {
+                // Logic to use cache if valid? Assuming cache strategy handles this
+                // For now, let's keep it simple and just re-fetch to ensure fresh active data
             }
         }
 
         try {
             let res: RecomendacionDTO[] = [];
 
+            // Pass filters.soloActivas (defaults true) to all
             if (filters.sectorId) {
-                res = await service.getRecomendacionesBySector(filters.sectorId);
+                res = await service.getRecomendacionesBySector(filters.sectorId, filters.soloActivas);
             } else if (filters.autorId) {
-                res = await service.getRecomendacionesByAutor(filters.autorId);
+                res = await service.getRecomendacionesByAutor(filters.autorId, filters.soloActivas);
             } else if (filters.activoId) {
-                res = await service.getRecomendacionesByActivo(filters.activoId);
+                res = await service.getRecomendacionesByActivo(filters.activoId, filters.soloActivas);
+            } else if (filters.horizonteId) {
+                res = await service.getRecomendacionesByHorizonte(filters.horizonteId, filters.soloActivas);
             } else {
                 res = await service.getRecomendaciones(filters.soloActivas);
             }

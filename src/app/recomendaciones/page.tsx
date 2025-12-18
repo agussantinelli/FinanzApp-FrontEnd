@@ -27,6 +27,7 @@ export default function RecomendacionesPage() {
     // Local Filter States
     const [selectedSector, setSelectedSector] = useState(filters.sectorId || "");
     const [selectedAutor, setSelectedAutor] = useState(filters.autorId || "");
+    const [selectedHorizonte, setSelectedHorizonte] = useState(filters.horizonteId || "");
     const [selectedAsset, setSelectedAsset] = useState<ActivoDTO | null>(null);
 
     // Derived Authors from data (showing all possible authors from current view)
@@ -73,6 +74,7 @@ export default function RecomendacionesPage() {
         applyFilters({
             sectorId: selectedSector || undefined,
             autorId: selectedAutor || undefined,
+            horizonteId: selectedHorizonte ? Number(selectedHorizonte) : undefined,
             activoId: selectedAsset?.id || undefined
         });
     };
@@ -81,6 +83,7 @@ export default function RecomendacionesPage() {
         clearFilters();
         setSelectedSector("");
         setSelectedAutor("");
+        setSelectedHorizonte("");
         setSelectedAsset(null);
     };
 
@@ -127,6 +130,23 @@ export default function RecomendacionesPage() {
                                 {authors.map(a => (
                                     <MenuItem key={a.id} value={a.id}>{a.nombre} {a.apellido}</MenuItem>
                                 ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+
+                    {/* Horizon Filter */}
+                    <Grid size={{ xs: 12, md: 3 }}>
+                        <FormControl fullWidth size="small">
+                            <InputLabel>Horizonte</InputLabel>
+                            <Select
+                                value={selectedHorizonte}
+                                label="Horizonte"
+                                onChange={(e) => setSelectedHorizonte(e.target.value)}
+                            >
+                                <MenuItem value=""><em>Todos</em></MenuItem>
+                                <MenuItem value={1}>Corto (&lt; 6 meses)</MenuItem>
+                                <MenuItem value={2}>Mediano (6-18 meses)</MenuItem>
+                                <MenuItem value={3}>Largo (&gt; 18 meses)</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
