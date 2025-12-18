@@ -3,10 +3,7 @@ import { Box, CircularProgress, Typography } from '@mui/material';
 
 import styles from './styles/NeonLoader.module.css';
 
-interface NeonLoaderProps {
-    message?: string;
-    size?: number;
-}
+import { NeonLoaderProps } from '@/types/ComponentProps';
 
 const NeonLoader: React.FC<NeonLoaderProps> = ({ message = "Cargando...", size = 60 }) => {
     return (

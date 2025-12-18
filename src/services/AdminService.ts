@@ -1,25 +1,6 @@
 import { OperacionResponseDTO } from "@/types/Operacion";
 import { AuthUser } from "./AuthService";
-
-export interface DashboardStats {
-    totalUsuarios: number;
-    usuariosHoy: number;
-    totalOperaciones: number;
-    operacionesHoy: number;
-    volumenHoyArs: number;
-    volumenHoyUsd: number;
-    totalActivos: number;
-}
-
-export interface UserDTO {
-    id: string; // UUID
-    nombre: string;
-    email: string;
-    rol: string;
-    fechaRegistro: string;
-    ultimoLogin?: string;
-}
-
+import { DashboardStats, UserDTO } from "@/types/Admin";
 // Mock data generator since endpoints might not exist yet
 const MOCK_STATS: DashboardStats = {
     totalUsuarios: 1250,
