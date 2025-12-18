@@ -1,8 +1,8 @@
 import { http } from "./Http";
-import { RegisterGeoDataDTO } from "@/types/RegisterGeoData";
-import { LoginRequest } from "@/types/LoginRequest";
-import { RegisterRequest } from "@/types/RegisterRequest";
-import { LoginResponseDTO } from "@/types/LoginResponse";
+import { RegisterGeoDataDTO } from "@/types/Geo";
+import { LoginRequest } from "@/types/Login";
+import { RegisterRequest } from "@/types/Register";
+import { LoginResponseDTO } from "@/types/Login";
 
 function notifyAuthChanged() {
   if (typeof window === "undefined") return;
