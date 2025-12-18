@@ -12,7 +12,7 @@ import {
 } from '@/services/ActivosService';
 import { getTiposActivoNoMoneda } from '@/services/TipoActivosService';
 import { getSectores } from '@/services/SectorService';
-import { getAllActivosFromCache } from '@/lib/cache';
+import { getAllActivosFromCache } from '@/lib/activos-cache';
 
 export function useActivosFilters() {
     const [selectedType, setSelectedType] = useState<string | number>("Todos");

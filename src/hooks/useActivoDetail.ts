@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ActivoDTO } from '@/types/Activo';
 import { getActivoById } from '@/services/ActivosService';
-import { getActivoFromCache } from '@/lib/cache';
+import { getActivoFromCache } from '@/lib/activos-cache';
 
 export function useActivoDetail(id: string) {
     const [activo, setActivo] = useState<ActivoDTO | null>(null);
