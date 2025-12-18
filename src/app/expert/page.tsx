@@ -62,7 +62,7 @@ export default function ExpertDashboardPage() {
   return (
     <Box className={styles.container}>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Paper className={styles.headerPaper}>
             <Stack
               direction={{ xs: "column", md: "row" }}
@@ -104,7 +104,7 @@ export default function ExpertDashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Paper className={styles.summaryCard}>
             <Typography variant="caption" color="text.secondary">
               Resumen de recomendaciones del sistema
@@ -168,7 +168,7 @@ export default function ExpertDashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper className={styles.infoCard}>
             <Typography variant="caption" color="text.secondary">
               Alcance entre inversores
@@ -186,7 +186,7 @@ export default function ExpertDashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper className={styles.infoCard}>
             <Typography variant="caption" color="text.secondary">
               Listas y carteras modelo
@@ -204,7 +204,7 @@ export default function ExpertDashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper className={styles.highlightInfoCard}>
             <Typography variant="caption" color="text.secondary">
               Desempeño estimado
@@ -223,7 +223,7 @@ export default function ExpertDashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper className={styles.infoCard}>
             <Typography variant="caption" color="text.secondary">
               Horizonte de inversión
@@ -240,7 +240,7 @@ export default function ExpertDashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Paper className={styles.roadmapPaper}>
             <Typography variant="h6" className={styles.sectionTitle}>
               Próximos pasos para el módulo de experto

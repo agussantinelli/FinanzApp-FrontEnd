@@ -194,7 +194,7 @@ export default function IndexesSection() {
                         {row1.length > 0 && (
                             <Grid container spacing={3} justifyContent="center">
                                 {row1.map((d, idx) => (
-                                    <Grid item xs={12} sm={6} md={4} key={d.usSymbol || idx}>
+                                    <Grid size={{ xs: 12, sm: 6, md: 4 }} key={d.usSymbol || idx}>
                                         {IndexCard(d)}
                                     </Grid>
                                 ))}
@@ -203,7 +203,7 @@ export default function IndexesSection() {
                         {row2.length > 0 && (
                             <Grid container spacing={3} justifyContent="center">
                                 {row2.map((d, idx) => (
-                                    <Grid item xs={12} sm={6} md={4} key={d.usSymbol || idx}>
+                                    <Grid size={{ xs: 12, sm: 6, md: 4 }} key={d.usSymbol || idx}>
                                         {IndexCard(d)}
                                     </Grid>
                                 ))}
@@ -221,7 +221,7 @@ export default function IndexesSection() {
                     </Typography>
                     <Grid container spacing={3} justifyContent="center">
                         {national.map((d, idx) => (
-                            <Grid item xs={12} sm={6} md={4} key={d.usSymbol || idx}>
+                            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={d.usSymbol || idx}>
                                 {IndexCard(d)}
                             </Grid>
                         ))}

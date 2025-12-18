@@ -190,7 +190,7 @@ export default function AccionesARSection() {
         {rowsEnergetico.map((row, idx) => (
           <Grid container spacing={3} key={`en-${idx}`} justifyContent="center">
             {row.map(d => (
-              <Grid item xs={12} md={4} key={d.localSymbol}>
+              <Grid size={{ xs: 12, md: 4 }} key={d.localSymbol}>
                 {UnifiedCard(d)}
               </Grid>
             ))}
@@ -207,7 +207,7 @@ export default function AccionesARSection() {
         {rowsBancario.map((row, idx) => (
           <Grid container spacing={3} key={`ban-${idx}`} justifyContent="center">
             {row.map(d => (
-              <Grid item xs={12} md={4} key={d.localSymbol}>
+              <Grid size={{ xs: 12, md: 4 }} key={d.localSymbol}>
                 {UnifiedCard(d)}
               </Grid>
             ))}
@@ -224,7 +224,7 @@ export default function AccionesARSection() {
         {rowsExtra.map((row, idx) => (
           <Grid container spacing={3} key={`ex-${idx}`} justifyContent="center">
             {row.map(d => (
-              <Grid item xs={12} md={4} key={d.localSymbol}>
+              <Grid size={{ xs: 12, md: 4 }} key={d.localSymbol}>
                 {UnifiedCard(d)}
               </Grid>
             ))}

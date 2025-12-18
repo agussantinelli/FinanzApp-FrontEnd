@@ -56,7 +56,7 @@ export default function DashboardPage() {
   return (
     <Box className={styles.container}>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Paper className={styles.headerPaper}>
             <Stack
               direction={{ xs: "column", md: "row" }}
@@ -98,7 +98,7 @@ export default function DashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <Paper className={`${styles.card} ${styles.highlightCard}`}>
             <Typography variant="caption" color="text.secondary">
               Valor estimado del portafolio
@@ -113,7 +113,7 @@ export default function DashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <Paper className={styles.card}>
             <Typography variant="caption" color="text.secondary">
               Resultado diario (P&L)
@@ -131,7 +131,7 @@ export default function DashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <Paper className={styles.card}>
             <Typography variant="caption" color="text.secondary">
               Cantidad de activos
@@ -146,7 +146,7 @@ export default function DashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <Paper className={styles.card}>
             <Typography variant="caption" color="text.secondary">
               Exposición en cripto
@@ -161,7 +161,7 @@ export default function DashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper className={styles.sectionPaper}>
             <Typography variant="h6" className={styles.sectionTitle}>
               Atajos rápidos
@@ -251,7 +251,7 @@ export default function DashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper className={styles.sectionPaper}>
             <Typography variant="h6" className={styles.sectionTitle}>
               Próximos pasos en FinanzApp
@@ -278,7 +278,7 @@ export default function DashboardPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Paper className={styles.sectionPaper}>
             <Typography variant="h6" className={styles.sectionTitle}>
               Últimos movimientos y noticias

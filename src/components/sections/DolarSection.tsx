@@ -121,7 +121,7 @@ export default function DolarSection() {
           {firstRow.map((c, i) => {
             const label = normalizeName(c?.nombre) || "—";
             return (
-              <Grid item xs={12} sm={6} md={3} key={`row1-${i}`} component="div">
+              <Grid size={{ xs: 12, sm: 6, md: 3 }} key={`row1-${i}`} component="div">
                 <Card className={styles.dolarCard}>
                   <CardContent>
                     <Typography variant="h6" className={styles.cardTitle}>
@@ -153,7 +153,7 @@ export default function DolarSection() {
             {secondRow.map((c, i) => {
               const label = normalizeName(c?.nombre) || "—";
               return (
-                <Grid item xs={12} sm={6} md={3} key={`row2-${i}`} component="div">
+                <Grid size={{ xs: 12, sm: 6, md: 3 }} key={`row2-${i}`} component="div">
                   <Card className={styles.dolarCard}>
                     <CardContent>
                       <Typography variant="h6" className={styles.cardTitle}>
