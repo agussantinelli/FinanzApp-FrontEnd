@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Box, Paper, Typography, Button } from "@mui/material";
 import styles from "./styles/AccessDenied.module.css";
