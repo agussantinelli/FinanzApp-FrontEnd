@@ -87,15 +87,15 @@ export default function RecomendacionesPage() {
     return (
         <main className={styles.container}>
             <Box mb={4}>
-                <Typography variant="h4" className={styles.title} gutterBottom>
+                <Typography variant="h3" component="h1" fontWeight="bold" className={styles.title} gutterBottom sx={{ letterSpacing: '-0.02em' }}>
                     Recomendaciones de Expertos
                 </Typography>
-                <Typography color="text.secondary">
+                <Typography variant="subtitle1" color="text.secondary">
                     Descubre estrategias de inversión diseñadas por profesionales.
                 </Typography>
             </Box>
 
-            <Paper variant="outlined" sx={{ p: 2, mb: 4 }}>
+            <Paper variant="outlined" sx={{ p: 3, mb: 5, borderRadius: 2 }}>
                 <Grid container spacing={2} alignItems="center">
                     {/* Sector Filter */}
                     <Grid size={{ xs: 12, md: 3 }} >
@@ -158,23 +158,22 @@ export default function RecomendacionesPage() {
                         />
                     </Grid>
 
-
-
                     {/* Actions */}
-                    <Grid size={{ xs: 12 }} display="flex" gap={2} justifyContent="flex-end">
+                    <Grid size={{ xs: 12, md: 3 }} display="flex" gap={1} justifyContent="flex-end">
                         <Button
                             variant="outlined"
-                            startIcon={<CleaningServicesIcon />}
                             onClick={handleClear}
+                            sx={{ minWidth: 'auto', px: 2 }}
                         >
-                            Limpiar
+                            <CleaningServicesIcon />
                         </Button>
                         <Button
                             variant="contained"
                             startIcon={<FilterListIcon />}
                             onClick={handleApply}
+                            fullWidth
                         >
-                            Aplicar Filtros
+                            Aplicar
                         </Button>
                     </Grid>
                 </Grid>
