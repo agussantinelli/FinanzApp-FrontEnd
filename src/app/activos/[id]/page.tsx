@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
     Box,
@@ -23,8 +23,7 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { ActivoDTO } from "@/types/Activo";
-import { getActivoById } from "@/services/ActivosService";
-import { getActivoFromCache } from "@/lib/cache";
+import { useActivoDetail } from "@/hooks/useActivoDetail";
 
 import styles from "./styles/ActivoDetail.module.css";
 
@@ -36,34 +35,7 @@ export default function ActivoDetalle() {
     const router = useRouter();
     const id = params.id as string;
 
-    const [activo, setActivo] = useState<ActivoDTO | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const loadActivo = async () => {
-            try {
-                // Try to get from cache first
-                const cached = getActivoFromCache(id);
-                if (cached) {
-                    setActivo(cached);
-                    setLoading(false);
-                    return;
-                }
-
-                // If not in cache, fetch from backend (by ID, not all)
-                const data = await getActivoById(id);
-                setActivo(data);
-            } catch (error) {
-                console.error("Error loading asset details:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (id) {
-            loadActivo();
-        }
-    }, [id]);
+    const { activo, loading } = useActivoDetail(id);
 
     const handleOperation = () => {
         const user = getCurrentUser();

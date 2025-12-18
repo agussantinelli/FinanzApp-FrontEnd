@@ -25,12 +25,8 @@ import {
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
+import { useAdminData } from "@/hooks/useAdminData";
 import { RoleGuard } from "@/components/auth/RoleGuard";
-import {
-  getDashboardStats,
-  getUsers,
-  getAllOperations
-} from "@/services/AdminService";
 import { AdminDashboardStats } from "@/types/Admin";
 import { UserDTO } from "@/types/Usuario";
 import { OperacionResponseDTO } from "@/types/Operacion";
@@ -41,7 +37,6 @@ import PersonIcon from '@mui/icons-material/Person';
 import DescriptionIcon from '@mui/icons-material/Description';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import { getActivosNoMoneda } from "@/services/ActivosService";
 import { ActivoDTO } from "@/types/Activo";
 
 import { TabPanelProps } from "@/types/ComponentProps";
@@ -74,32 +69,14 @@ export default function AdminDashboardPage() {
   const { user } = useAuth();
 
   const [tabValue, setTabValue] = React.useState(0);
-  const [stats, setStats] = React.useState<AdminDashboardStats | null>(null);
-  const [users, setUsers] = React.useState<UserDTO[]>([]);
-  const [operations, setOperations] = React.useState<OperacionResponseDTO[]>([]);
-  const [activos, setActivos] = React.useState<ActivoDTO[]>([]);
-  const [loadingData, setLoadingData] = React.useState(false);
-
-  // Data loading now happens only if user is present (RoleGuard handles the rest)
-  const loadData = React.useCallback(async () => {
-    setLoadingData(true);
-    try {
-      const [statsData, usersData, opsData, activosData] = await Promise.all([
-        getDashboardStats(),
-        getUsers(),
-        getAllOperations(),
-        getActivosNoMoneda()
-      ]);
-      setStats(statsData);
-      setUsers(usersData);
-      setOperations(opsData);
-      setActivos(activosData);
-    } catch (error) {
-      console.error("Error loading admin data:", error);
-    } finally {
-      setLoadingData(false);
-    }
-  }, []);
+  const {
+    stats,
+    users,
+    operations,
+    activos,
+    loading: loadingData,
+    loadData
+  } = useAdminData();
 
   React.useEffect(() => {
     if (user) {
