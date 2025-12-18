@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASEURL } from "./BaseURL";
+import { BASEURL } from "@/config/api";
 
 export const http = axios.create({
   baseURL: BASEURL,
@@ -8,7 +8,6 @@ export const http = axios.create({
   },
 });
 
-// Interceptor para agregar Authorization: Bearer <token> si existe
 http.interceptors.request.use((config) => {
   if (typeof window !== "undefined") {
     const token = localStorage.getItem("fa_token");
