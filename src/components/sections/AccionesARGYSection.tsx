@@ -98,7 +98,7 @@ export default function AccionesARSection() {
     for (const p of list) {
       const d = bySymbol.get(p.localBA.toUpperCase());
       if (!d) continue;
-      const ratio = d.cedearRatio ?? p.cedearRatio ?? null;
+      const ratio = d.cedearRatio ?? p.cedearRatio ?? undefined;
       const rate = cclRate && cclRate > 0 ? cclRate : d.usedDollarRate;
       arr.push({ ...d, name: p.name, cedearRatio: ratio, usedDollarRate: rate });
     }
