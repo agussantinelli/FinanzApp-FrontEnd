@@ -23,7 +23,8 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { ActivoDTO } from "@/types/Activo";
-import { getActivoById, getActivoFromCache } from "@/services/ActivosService";
+import { getActivoById } from "@/services/ActivosService";
+import { getActivoFromCache } from "@/utils/assets-cache";
 
 import styles from "./styles/ActivoDetail.module.css";
 

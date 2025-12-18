@@ -40,8 +40,8 @@ import {
   getRankingActivos,
   getActivosBySector,
   getActivosByTipoAndSector,
-  getAllActivosFromCache
 } from "@/services/ActivosService";
+import { getAllActivosFromCache } from "@/utils/assets-cache";
 import { getTiposActivoNoMoneda } from "@/services/TipoActivosService";
 import { getSectores } from "@/services/SectorService";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
