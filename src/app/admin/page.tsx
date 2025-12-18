@@ -30,7 +30,8 @@ import {
   getUsers,
   getAllOperations
 } from "@/services/AdminService";
-import { DashboardStats, UserDTO } from "@/types/Admin";
+import { DashboardStats } from "@/types/Admin";
+import { UserDTO } from "@/types/Usuario";
 import { OperacionResponseDTO } from "@/types/Operacion";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import EditIcon from '@mui/icons-material/Edit';

@@ -1,6 +1,7 @@
 import { OperacionResponseDTO } from "@/types/Operacion";
 import { AuthUser } from "./AuthService";
-import { DashboardStats, UserDTO } from "@/types/Admin";
+import { DashboardStats } from "@/types/Admin";
+import { UserDTO } from "@/types/Usuario";
 
 const MOCK_STATS: DashboardStats = {
     totalUsuarios: 1250,
