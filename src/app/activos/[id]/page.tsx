@@ -27,7 +27,7 @@ import { getActivoById, getActivoFromCache } from "@/services/ActivosService";
 
 import styles from "./styles/ActivoDetail.module.css";
 
-import { getAvatarColor } from "@/utils/colorUtils";
+import { getAvatarColor } from "@/app-theme/icons-appearance";
 import { getCurrentUser } from "@/services/AuthService";
 
 export default function ActivoDetalle() {

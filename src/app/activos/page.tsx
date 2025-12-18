@@ -51,7 +51,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import NeonLoader from "@/components/ui/NeonLoader";
 import styles from "./styles/Activos.module.css";
 
-import { getAvatarColor } from "@/utils/colorUtils";
+import { getAvatarColor } from "@/app-theme/icons-appearance";
 
 
 export default function Activos() {
