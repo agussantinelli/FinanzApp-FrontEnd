@@ -18,3 +18,20 @@ http.interceptors.request.use((config) => {
   }
   return config;
 });
+
+http.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("fa_token");
+        localStorage.removeItem("fa_user");
+        // Only redirect if not already on login page to avoid loops (optional but good practice)
+        if (!window.location.pathname.includes("/auth/login")) {
+          window.location.href = "/auth/login";
+        }
+      }
+    }
+    return Promise.reject(error);
+  }
+);
