@@ -30,7 +30,7 @@ import {
   getUsers,
   getAllOperations
 } from "@/services/AdminService";
-import { DashboardStats } from "@/types/Admin";
+import { AdminDashboardStats } from "@/types/Admin";
 import { UserDTO } from "@/types/Usuario";
 import { OperacionResponseDTO } from "@/types/Operacion";
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -74,7 +74,7 @@ export default function AdminDashboardPage() {
   const [checking, setChecking] = React.useState(true);
 
   const [tabValue, setTabValue] = React.useState(0);
-  const [stats, setStats] = React.useState<DashboardStats | null>(null);
+  const [stats, setStats] = React.useState<AdminDashboardStats | null>(null);
   const [users, setUsers] = React.useState<UserDTO[]>([]);
   const [operations, setOperations] = React.useState<OperacionResponseDTO[]>([]);
   const [activos, setActivos] = React.useState<ActivoDTO[]>([]);

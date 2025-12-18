@@ -1,9 +1,9 @@
 import { OperacionResponseDTO } from "@/types/Operacion";
 import { AuthUser } from "./AuthService";
-import { DashboardStats } from "@/types/Admin";
+import { AdminDashboardStats } from "@/types/Admin";
 import { UserDTO } from "@/types/Usuario";
 
-const MOCK_STATS: DashboardStats = {
+const MOCK_STATS: AdminDashboardStats = {
     totalUsuarios: 1250,
     usuariosHoy: 45,
     totalOperaciones: 15320,
@@ -22,7 +22,7 @@ const MOCK_USERS: UserDTO[] = Array.from({ length: 50 }).map((_, i) => ({
     ultimoLogin: new Date(Date.now() - Math.random() * 100000000).toISOString(),
 }));
 
-export const getDashboardStats = async (): Promise<DashboardStats> => {
+export const getDashboardStats = async (): Promise<AdminDashboardStats> => {
     return new Promise((resolve) => setTimeout(() => resolve(MOCK_STATS), 500));
 };
 

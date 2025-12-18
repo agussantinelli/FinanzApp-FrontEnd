@@ -1,4 +1,4 @@
-export interface DashboardStats {
+export interface AdminDashboardStats {
     totalUsuarios: number;
     usuariosHoy: number;
     totalOperaciones: number;
