@@ -6,9 +6,10 @@ export enum Riesgo {
 }
 
 export enum Horizonte {
-    Corto = 1, // < 6 meses
-    Mediano = 2, // 6-18 meses
-    Largo = 3 // > 18 meses
+    Intradia = 1, // < 1 día
+    Corto = 2, // < 6 meses
+    Mediano = 3, // 6-18 meses
+    Largo = 4 // > 18 meses
 }
 
 export enum AccionRecomendada {
