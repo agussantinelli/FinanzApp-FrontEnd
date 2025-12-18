@@ -17,7 +17,8 @@ import {
   Button,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { getCurrentUser, type AuthUser } from "@/services/AuthService";
+import { getCurrentUser } from "@/services/AuthService";
+import { AuthenticatedUser } from "@/types/Usuario";
 
 type PositionRow = {
   ticker: string;
@@ -78,7 +79,7 @@ import styles from "./styles/Portfolio.module.css";
 
 export default function PortfolioPage() {
   const router = useRouter();
-  const [user, setUser] = React.useState<AuthUser | null>(null);
+  const [user, setUser] = React.useState<AuthenticatedUser | null>(null);
   const [checking, setChecking] = React.useState(true);
 
   React.useEffect(() => {

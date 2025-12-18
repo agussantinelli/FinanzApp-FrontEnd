@@ -24,7 +24,8 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { getCurrentUser, type AuthUser } from "@/services/AuthService";
+import { getCurrentUser } from "@/services/AuthService";
+import { AuthenticatedUser } from "@/types/Usuario";
 import {
   getDashboardStats,
   getUsers,
@@ -70,7 +71,7 @@ function CustomTabPanel(props: TabPanelProps) {
 
 export default function AdminDashboardPage() {
   const router = useRouter();
-  const [user, setUser] = React.useState<AuthUser | null>(null);
+  const [user, setUser] = React.useState<AuthenticatedUser | null>(null);
   const [checking, setChecking] = React.useState(true);
 
   const [tabValue, setTabValue] = React.useState(0);

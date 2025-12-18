@@ -29,8 +29,8 @@ import {
   getCurrentUser,
   clearAuthSession,
   getHomePathForRole,
-  type AuthUser,
 } from "@/services/AuthService";
+import { AuthenticatedUser } from "@/types/Usuario";
 
 import styles from "./styles/Navbar.module.css";
 
@@ -43,7 +43,7 @@ const baseNavItems = [
 
 export default function Navbar() {
   const [open, setOpen] = React.useState(false);
-  const [user, setUser] = React.useState<AuthUser | null>(null);
+  const [user, setUser] = React.useState<AuthenticatedUser | null>(null);
   const [userMenuAnchor, setUserMenuAnchor] =
     React.useState<null | HTMLElement>(null);
 

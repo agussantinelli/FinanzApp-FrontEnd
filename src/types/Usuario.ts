@@ -6,3 +6,38 @@ export interface UserDTO {
     fechaRegistro: string;
     ultimoLogin?: string;
 }
+
+export interface AuthenticatedUser {
+    id: string; // UUID
+    nombre: string;
+    apellido: string;
+    email: string;
+    rol: "Admin" | "Inversor" | "Experto" | string;
+}
+
+export interface UserLoginRequest {
+    email: string;
+    password: string;
+}
+
+export interface UserLoginResponseDTO {
+    token: string;
+    expiraUtc: string;
+    personaId: string; // UUID
+    nombre: string;
+    apellido: string;
+    email: string;
+    rol: "Admin" | "Inversor" | string;
+}
+
+export interface UserRegisterRequest {
+    nombre: string;
+    apellido: string;
+    email: string;
+    fechaNacimiento: string;          // ISO yyyy-MM-dd
+    password: string;
+    nacionalidadId: number;
+    paisResidenciaId: number | null;
+    localidadResidenciaId: number | null;
+    esResidenteArgentina: boolean;
+}

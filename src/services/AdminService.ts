@@ -1,5 +1,5 @@
 import { OperacionResponseDTO } from "@/types/Operacion";
-import { AuthUser } from "./AuthService";
+import { AuthenticatedUser } from "@/types/Usuario";
 import { AdminDashboardStats } from "@/types/Admin";
 import { UserDTO } from "@/types/Usuario";
 
