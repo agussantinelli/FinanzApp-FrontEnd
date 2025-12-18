@@ -10,12 +10,12 @@ import { DualQuoteDTO } from "@/types/Market";
 import { getIndices } from "@/services/StocksService";
 import styles from "./styles/IndexesSection.module.css";
 
-function formatARS(val?: number) {
+function formatARS(val?: number | null) {
     if (val === undefined || val === null || isNaN(val)) return "—";
     return val.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 });
 }
 
-function formatUSD(val?: number) {
+function formatUSD(val?: number | null) {
     if (val === undefined || val === null || isNaN(val)) return "—";
     const digits = val > 1000 ? 0 : 2;
     return val.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: digits });

@@ -12,7 +12,7 @@ import Link from "next/link";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import styles from "./styles/DolarSection.module.css";
 
-function formatARS(n?: number) {
+function formatARS(n?: number | null) {
   if (typeof n !== "number" || Number.isNaN(n)) return "—";
   return n.toLocaleString("es-AR", {
     style: "currency",
