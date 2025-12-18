@@ -14,18 +14,21 @@ export const getRecomendacionById = async (id: string): Promise<RecomendacionDTO
     return data;
 };
 
-export const getRecomendacionesBySector = async (sectorId: string): Promise<RecomendacionDTO[]> => {
-    const { data } = await http.get<RecomendacionDTO[]>(`${ENDPOINT}/sector/${sectorId}`);
+export const getRecomendacionesBySector = async (sectorId: string, soloActivas: boolean = true): Promise<RecomendacionDTO[]> => {
+    const params = soloActivas ? { soloActivas: true } : {};
+    const { data } = await http.get<RecomendacionDTO[]>(`${ENDPOINT}/sector/${sectorId}`, { params });
     return data;
 };
 
-export const getRecomendacionesByAutor = async (personaId: string): Promise<RecomendacionDTO[]> => {
-    const { data } = await http.get<RecomendacionDTO[]>(`${ENDPOINT}/autor/${personaId}`);
+export const getRecomendacionesByAutor = async (personaId: string, soloActivas: boolean = true): Promise<RecomendacionDTO[]> => {
+    const params = soloActivas ? { soloActivas: true } : {};
+    const { data } = await http.get<RecomendacionDTO[]>(`${ENDPOINT}/autor/${personaId}`, { params });
     return data;
 };
 
-export const getRecomendacionesByActivo = async (activoId: string): Promise<RecomendacionDTO[]> => {
-    const { data } = await http.get<RecomendacionDTO[]>(`${ENDPOINT}/activo/${activoId}`);
+export const getRecomendacionesByActivo = async (activoId: string, soloActivas: boolean = true): Promise<RecomendacionDTO[]> => {
+    const params = soloActivas ? { soloActivas: true } : {};
+    const { data } = await http.get<RecomendacionDTO[]>(`${ENDPOINT}/activo/${activoId}`, { params });
     return data;
 };
 

@@ -158,18 +158,7 @@ export default function RecomendacionesPage() {
                         />
                     </Grid>
 
-                    {/* Solo Activas Checkbox */}
-                    <Grid size={{ xs: 12, md: 3 }} display="flex" alignItems="center">
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={filters.soloActivas}
-                                    onChange={(e) => applyFilters({ soloActivas: e.target.checked })}
-                                />
-                            }
-                            label="Solo Activas"
-                        />
-                    </Grid>
+
 
                     {/* Actions */}
                     <Grid size={{ xs: 12 }} display="flex" gap={2} justifyContent="flex-end">
