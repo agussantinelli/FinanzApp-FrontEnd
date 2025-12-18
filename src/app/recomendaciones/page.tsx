@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect } from 'react';
 import { Typography, Grid, Box, CircularProgress, Alert } from "@mui/material";
 import { useRecomendaciones } from '@/hooks/useRecomendaciones';
@@ -42,7 +44,7 @@ export default function RecomendacionesPage() {
 
             <Grid container spacing={3}>
                 {data.map((item) => (
-                    <Grid item xs={12} md={6} lg={4} key={item.id}>
+                    <Grid size={{ xs: 12, md: 6, lg: 4 }} key={item.id}>
                         <RecomendacionCard item={item} />
                     </Grid>
                 ))}
