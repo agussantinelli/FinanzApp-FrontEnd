@@ -1,5 +1,6 @@
 "use client";
 
+import "@/app/styles/globals.css";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import theme from "@/app-theme/theme";
 

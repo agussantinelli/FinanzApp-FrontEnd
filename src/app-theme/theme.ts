@@ -38,12 +38,26 @@ const theme = createTheme({
     typography: {
         fontFamily: [
             "Roboto",
+            "-apple-system",
+            "BlinkMacSystemFont",
+            '"Segoe UI"',
+            "Arial",
+            "sans-serif",
         ].join(","),
         h1: { fontWeight: 700 },
         h2: { fontWeight: 700 },
         h3: { fontWeight: 700 },
     },
     components: {
+        MuiCssBaseline: {
+            styleOverrides: {
+                body: {
+                    backgroundColor: colors.black,
+                    color: colors.textPrimary,
+                    fontFamily: 'Roboto, Arial, sans-serif',
+                },
+            },
+        },
         MuiAppBar: {
             styleOverrides: {
                 root: { background: "rgba(0,0,0,.5)", backdropFilter: "blur(8px)" },
