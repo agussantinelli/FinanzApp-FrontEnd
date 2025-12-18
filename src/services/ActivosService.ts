@@ -1,7 +1,7 @@
 import { http } from "@/lib/http";
 import { ActivoDTO } from "@/types/Activo";
 
-import { cacheActivos } from "@/utils/assets-cache";
+import { cacheActivos } from "@/lib/cache";
 
 export async function getActivos(tipo?: string): Promise<ActivoDTO[]> {
     const params = tipo && tipo !== "Todos" ? { tipo } : {};

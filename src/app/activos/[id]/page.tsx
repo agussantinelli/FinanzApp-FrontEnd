@@ -24,7 +24,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { ActivoDTO } from "@/types/Activo";
 import { getActivoById } from "@/services/ActivosService";
-import { getActivoFromCache } from "@/utils/assets-cache";
+import { getActivoFromCache } from "@/lib/cache";
 
 import styles from "./styles/ActivoDetail.module.css";
 
