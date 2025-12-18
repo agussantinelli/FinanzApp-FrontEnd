@@ -1,4 +1,4 @@
-import { http } from "./Http";
+import { http } from "@/lib/http";
 import { RegisterGeoDataDTO } from "@/types/Geo";
 import { UserLoginRequest, UserRegisterRequest, UserLoginResponseDTO, AuthenticatedUser } from "@/types/Usuario";
 

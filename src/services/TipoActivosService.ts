@@ -1,4 +1,4 @@
-import { http } from "./Http";
+import { http } from "@/lib/http";
 import { TipoActivoDTO } from "@/types/TipoActivo";
 
 export async function getTiposActivo(): Promise<TipoActivoDTO[]> {

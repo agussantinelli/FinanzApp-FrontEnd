@@ -1,4 +1,4 @@
-import { http } from "./Http";
+import { http } from "@/lib/http";
 import { SectorDTO } from "@/types/Sector";
 
 export async function getSectores(): Promise<SectorDTO[]> {

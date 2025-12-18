@@ -1,4 +1,4 @@
-import { http } from "./Http";
+import { http } from "@/lib/http";
 import { CryptoTopDTO } from "@/types/Crypto";
 
 export async function getTopCryptos(

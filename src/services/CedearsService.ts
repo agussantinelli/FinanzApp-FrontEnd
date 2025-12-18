@@ -1,4 +1,4 @@
-import { http } from "./Http";
+import { http } from "@/lib/http";
 import { DualQuoteDTO } from "@/types/Market";
 
 export async function getCedearDuals(

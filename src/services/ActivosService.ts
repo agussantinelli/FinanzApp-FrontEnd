@@ -1,4 +1,4 @@
-import { http } from "./Http";
+import { http } from "@/lib/http";
 import { ActivoDTO } from "@/types/Activo";
 
 import { cacheActivos } from "@/utils/assets-cache";

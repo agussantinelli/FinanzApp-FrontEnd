@@ -1,6 +1,7 @@
 import { OperacionResponseDTO } from "@/types/Operacion";
 import { AuthenticatedUser } from "@/types/Usuario";
 import { AdminDashboardStats } from "@/types/Admin";
+import { http } from "@/lib/http";
 import { UserDTO } from "@/types/Usuario";
 
 const MOCK_STATS: AdminDashboardStats = {

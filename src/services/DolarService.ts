@@ -1,4 +1,4 @@
-import { http } from "./Http";
+import { http } from "@/lib/http";
 import { DolarDTO } from "@/types/Dolar";
 
 export async function getCotizacionesDolar(): Promise<DolarDTO[]> {
