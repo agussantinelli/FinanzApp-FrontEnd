@@ -18,7 +18,7 @@ export default function ReporteDolar() {
         </Typography>
 
         <Grid container spacing={3}>
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <DolarBarChart />
           </Grid>
         </Grid>

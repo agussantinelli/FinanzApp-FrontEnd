@@ -126,7 +126,7 @@ export default function PortfolioPage() {
     <Box className={styles.container}>
       <Grid container spacing={3}>
         {/* HEADER */}
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Paper className={styles.headerPaper}>
             <Stack
               direction={{ xs: "column", md: "row" }}
@@ -174,7 +174,7 @@ export default function PortfolioPage() {
         </Grid>
 
         {/* CARDS RESUMEN */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Paper className={`${styles.card} ${styles.highlightCard}`}>
             <Typography variant="caption" color="text.secondary">
               Valor total del portafolio
@@ -188,7 +188,7 @@ export default function PortfolioPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Paper className={styles.card}>
             <Typography variant="caption" color="text.secondary">
               Exposición en activos de riesgo
@@ -205,7 +205,7 @@ export default function PortfolioPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Paper className={styles.card}>
             <Typography variant="caption" color="text.secondary">
               Cantidad de activos distintos
@@ -220,7 +220,7 @@ export default function PortfolioPage() {
         </Grid>
 
         {/* DISTRIBUCIONES */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper className={styles.distributionsPaper}>
             <Typography variant="h6" className={styles.sectionTitle}>
               Distribución por tipo de activo
@@ -247,7 +247,7 @@ export default function PortfolioPage() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper className={styles.distributionsPaper}>
             <Typography variant="h6" className={styles.sectionTitle}>
               Ideas para evolucionar el portafolio
@@ -276,7 +276,7 @@ export default function PortfolioPage() {
         </Grid>
 
         {/* TABLA DE POSICIONES */}
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Paper className={styles.tablePaper}>
             <Stack
               direction={{ xs: "column", md: "row" }}

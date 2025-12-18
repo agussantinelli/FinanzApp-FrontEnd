@@ -2,10 +2,7 @@
 
 import { Alert, Box } from "@mui/material";
 
-interface FormStatusProps {
-  successMessage?: string | null;
-  errorMessage?: string | null;
-}
+import { FormStatusProps } from "@/types/ComponentProps";
 
 import styles from "./styles/FormStatus.module.css";
 

@@ -15,12 +15,11 @@ export default function Reportes() {
         </Typography>
 
         <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
+          <Grid size={{ xs: 12, md: 8 }}>
             <DolarBarChart />
           </Grid>
 
-          {/* Slot para un segundo card: por ejemplo, un resumen de patrimonio */}
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Box className={styles.gradientCard}>
               <Typography variant="h6">Resumen rápido</Typography>
               <Typography variant="body2" color="text.secondary">

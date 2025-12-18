@@ -28,10 +28,9 @@ import { getCurrentUser, type AuthUser } from "@/services/AuthService";
 import {
   getDashboardStats,
   getUsers,
-  getAllOperations,
-  DashboardStats,
-  UserDTO
+  getAllOperations
 } from "@/services/AdminService";
+import { DashboardStats, UserDTO } from "@/types/Admin";
 import { OperacionResponseDTO } from "@/types/Operacion";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import EditIcon from '@mui/icons-material/Edit';
@@ -43,11 +42,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import { getActivosNoMoneda } from "@/services/ActivosService";
 import { ActivoDTO } from "@/types/Activo";
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
+import { TabPanelProps } from "@/types/ComponentProps";
 
 import styles from "./styles/Admin.module.css";
 
@@ -176,7 +171,7 @@ export default function AdminDashboardPage() {
         ) : stats ? (
           <Grid container spacing={3}>
             {/* KPI Cards */}
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <Paper className={styles.kpiPaper}>
                 <Typography variant="caption" color="text.secondary">Total Usuarios</Typography>
                 <Typography variant="h4" className={styles.kpiValue}>{stats.totalUsuarios}</Typography>
@@ -185,7 +180,7 @@ export default function AdminDashboardPage() {
                 </Typography>
               </Paper>
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <Paper className={styles.kpiPaper}>
                 <Typography variant="caption" color="text.secondary">Operaciones Totales</Typography>
                 <Typography variant="h4" className={styles.kpiValue}>{stats.totalOperaciones}</Typography>
@@ -194,14 +189,14 @@ export default function AdminDashboardPage() {
                 </Typography>
               </Paper>
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <Paper className={styles.kpiPaper}>
                 <Typography variant="caption" color="text.secondary">Volumen (ARS)</Typography>
                 <Typography variant="h5" className={styles.kpiValue}>${stats.volumenHoyArs.toLocaleString()}</Typography>
                 <Typography variant="body2" color="text.secondary" mt={1}>Hoy</Typography>
               </Paper>
             </Grid>
-            <Grid item xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <Paper className={styles.kpiPaper}>
                 <Typography variant="caption" color="text.secondary">Total Activos</Typography>
                 <Typography variant="h4" className={styles.kpiValue}>{stats.totalActivos}</Typography>
@@ -210,7 +205,7 @@ export default function AdminDashboardPage() {
             </Grid>
 
             {/* Recent Activity Placeholders */}
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Paper className={styles.sectionPaper}>
                 <Typography variant="h6" className={styles.sectionTitle}>Distribución de Usuarios</Typography>
                 <Divider className={styles.divider} />
@@ -219,7 +214,7 @@ export default function AdminDashboardPage() {
                 </Typography>
               </Paper>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Paper className={styles.sectionPaper}>
                 <Typography variant="h6" className={styles.sectionTitle}>Últimos Registros</Typography>
                 <Divider className={styles.divider} />
