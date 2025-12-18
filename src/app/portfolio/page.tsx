@@ -17,8 +17,7 @@ import {
   Button,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { getCurrentUser } from "@/services/AuthService";
-import { AuthenticatedUser } from "@/types/Usuario";
+import { useAuth } from "@/hooks/useAuth";
 
 type PositionRow = {
   ticker: string;
@@ -79,20 +78,17 @@ import styles from "./styles/Portfolio.module.css";
 
 export default function PortfolioPage() {
   const router = useRouter();
-  const [user, setUser] = React.useState<AuthenticatedUser | null>(null);
-  const [checking, setChecking] = React.useState(true);
+  const { user, loading: authLoading } = useAuth();
 
   React.useEffect(() => {
-    const u = getCurrentUser();
-    if (!u) {
-      router.replace("/auth/login");
-      return;
-    }
-    setUser(u);
-    setChecking(false);
-  }, [router]);
+    if (authLoading) return;
 
-  if (checking || !user) {
+    if (!user) {
+      router.replace("/auth/login");
+    }
+  }, [user, authLoading, router]);
+
+  if (authLoading || !user) {
     return (
       <Box className={styles.loadingContainer}>
         <Typography variant="body1" color="text.secondary">
