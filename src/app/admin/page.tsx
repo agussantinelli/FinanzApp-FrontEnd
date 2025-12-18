@@ -24,8 +24,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { getCurrentUser } from "@/services/AuthService";
-import { AuthenticatedUser } from "@/types/Usuario";
+import { useAuth } from "@/hooks/useAuth";
 import {
   getDashboardStats,
   getUsers,
@@ -71,8 +70,7 @@ function CustomTabPanel(props: TabPanelProps) {
 
 export default function AdminDashboardPage() {
   const router = useRouter();
-  const [user, setUser] = React.useState<AuthenticatedUser | null>(null);
-  const [checking, setChecking] = React.useState(true);
+  const { user, loading: authLoading } = useAuth();
 
   const [tabValue, setTabValue] = React.useState(0);
   const [stats, setStats] = React.useState<AdminDashboardStats | null>(null);
@@ -82,18 +80,17 @@ export default function AdminDashboardPage() {
   const [loadingData, setLoadingData] = React.useState(false);
 
   React.useEffect(() => {
-    const u = getCurrentUser();
-    if (!u) {
+    if (authLoading) return;
+
+    if (!user) {
       router.replace("/auth/login");
       return;
     }
-    if (u.rol !== "Admin") {
+    if (user.rol !== "Admin") {
       router.replace("/access-denied");
       return;
     }
-    setUser(u);
-    setChecking(false);
-  }, [router]);
+  }, [user, authLoading, router]);
 
   const loadData = React.useCallback(async () => {
     setLoadingData(true);
@@ -116,16 +113,16 @@ export default function AdminDashboardPage() {
   }, []);
 
   React.useEffect(() => {
-    if (!checking && user) {
+    if (!authLoading && user) {
       loadData();
     }
-  }, [checking, user, loadData]);
+  }, [authLoading, user, loadData]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
-  if (checking || !user) {
+  if (authLoading || !user) {
     return (
       <Box className={styles.loadingContainer}>
         <CircularProgress color="secondary" />

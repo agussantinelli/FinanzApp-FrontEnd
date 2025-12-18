@@ -26,11 +26,9 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 import {
-  getCurrentUser,
-  clearAuthSession,
   getHomePathForRole,
 } from "@/services/AuthService";
-import { AuthenticatedUser } from "@/types/Usuario";
+import { useAuth } from "@/hooks/useAuth";
 
 import styles from "./styles/Navbar.module.css";
 
@@ -43,48 +41,22 @@ const baseNavItems = [
 
 export default function Navbar() {
   const [open, setOpen] = React.useState(false);
-  const [user, setUser] = React.useState<AuthenticatedUser | null>(null);
+  const { user, logout, isAuthenticated } = useAuth();
   const [userMenuAnchor, setUserMenuAnchor] =
     React.useState<null | HTMLElement>(null);
 
   const router = useRouter();
 
-  React.useEffect(() => {
-    const loadUser = () => {
-      const u = getCurrentUser();
-      setUser(u);
-    };
-
-    loadUser();
-
-    const handler = () => loadUser();
-
-    if (typeof window !== "undefined") {
-      window.addEventListener("fa-auth-changed", handler);
-    }
-
-    return () => {
-      if (typeof window !== "undefined") {
-        window.removeEventListener("fa-auth-changed", handler);
-      }
-    };
-  }, []);
-
-  const isLogged = !!user;
-
   const navItems = React.useMemo(() => {
-    if (!isLogged) return baseNavItems;
-    // logueado: base + Mi portafolio
+    if (!isAuthenticated) return baseNavItems;
     return [...baseNavItems, { label: "Mi portafolio", href: "/portfolio" }];
-  }, [isLogged]);
+  }, [isAuthenticated]);
 
   const defaultPanelHref = getHomePathForRole(user?.rol ?? null);
 
   const handleLogout = () => {
-    clearAuthSession();
-    setUser(null); // por si acaso
+    logout();
     setUserMenuAnchor(null);
-    router.push("/auth/login");
   };
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -97,7 +69,7 @@ export default function Navbar() {
 
   const toggle = (v: boolean) => () => setOpen(v);
 
-  const logoHref = isLogged ? defaultPanelHref : "/";
+  const logoHref = isAuthenticated ? defaultPanelHref : "/";
 
   const roleLabel =
     user?.rol === "Admin"
@@ -150,7 +122,7 @@ export default function Navbar() {
               className={styles.dividerVertical}
             />
 
-            {!isLogged ? (
+            {!isAuthenticated ? (
               <>
                 <Button
                   component={Link}
@@ -243,7 +215,7 @@ export default function Navbar() {
           onKeyDown={toggle(false)}
         >
           <Box className={styles.drawerHeader}>
-            {isLogged ? (
+            {isAuthenticated ? (
               <>
                 <Typography variant="subtitle2" color="text.secondary">
                   Sesión
@@ -281,7 +253,7 @@ export default function Navbar() {
 
           <Divider className={styles.drawerDivider} />
 
-          {!isLogged ? (
+          {!isAuthenticated ? (
             <List>
               <ListItem disablePadding>
                 <ListItemButton component={Link} href="/auth/login">
