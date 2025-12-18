@@ -18,7 +18,7 @@ import {
   register as registerService,
   getHomePathForRole,
 } from "@/services/AuthService";
-import { RegisterGeoDataDTO } from "@/types/RegisterGeoData";
+import { RegisterGeoDataDTO } from "@/types/Geo";
 import { useRouter } from "next/navigation";
 import { FormStatus } from "@/components/FormStatus";
 
