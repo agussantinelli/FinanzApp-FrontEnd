@@ -43,3 +43,8 @@ next-env.d.ts
 Thumbs.db
 
 *.pem
+
+.env.local
+
+tsc_error_*.txt
+build_error_*.txt
