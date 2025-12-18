@@ -49,7 +49,11 @@ export default function Navbar() {
 
   const navItems = React.useMemo(() => {
     if (!isAuthenticated) return baseNavItems;
-    return [...baseNavItems, { label: "Mi portafolio", href: "/portfolio" }];
+    return [
+      ...baseNavItems,
+      { label: "Recomendaciones", href: "/recomendaciones" },
+      { label: "Mi portafolio", href: "/portfolio" },
+    ];
   }, [isAuthenticated]);
 
   const defaultPanelHref = getHomePathForRole(user?.rol ?? null);
