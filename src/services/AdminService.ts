@@ -1,7 +1,7 @@
 import { OperacionResponseDTO } from "@/types/Operacion";
 import { AuthUser } from "./AuthService";
 import { DashboardStats, UserDTO } from "@/types/Admin";
-// Mock data generator since endpoints might not exist yet
+
 const MOCK_STATS: DashboardStats = {
     totalUsuarios: 1250,
     usuariosHoy: 45,
@@ -12,9 +12,8 @@ const MOCK_STATS: DashboardStats = {
     totalActivos: 156
 };
 
-// Mock users
 const MOCK_USERS: UserDTO[] = Array.from({ length: 50 }).map((_, i) => ({
-    id: `u-${i + 1}-uuid-mock`, // UUID mock string
+    id: `u-${i + 1}-uuid-mock`,
     nombre: `Usuario ${i + 1}`,
     email: `usuario${i + 1}@example.com`,
     rol: i % 10 === 0 ? "Admin" : "Inversor",
@@ -22,21 +21,16 @@ const MOCK_USERS: UserDTO[] = Array.from({ length: 50 }).map((_, i) => ({
     ultimoLogin: new Date(Date.now() - Math.random() * 100000000).toISOString(),
 }));
 
-// Service functions
 export const getDashboardStats = async (): Promise<DashboardStats> => {
-    // In a real app: return (await http.get<DashboardStats>("/api/admin/stats")).data;
     return new Promise((resolve) => setTimeout(() => resolve(MOCK_STATS), 500));
 };
 
 export const getUsers = async (): Promise<UserDTO[]> => {
-    // In a real app: return (await http.get<UserDTO[]>("/api/usuarios")).data;
     return new Promise((resolve) => setTimeout(() => resolve(MOCK_USERS), 600));
 };
 
 export const getAllOperations = async (): Promise<OperacionResponseDTO[]> => {
-    // In a real app: return (await http.get<OperacionResponseDTO[]>("/api/operaciones/todas")).data;
-    // For now, return empty or mock if needed. Let's return empty to simulate "no data yet" or mock some if needed.
-    // Let's mock a few for display.
+
     const mockOps: OperacionResponseDTO[] = Array.from({ length: 20 }).map((_, i) => ({
         id: `op-${i + 1000}-uuid-mock`, // UUID mock string
         activoSymbol: ["AAPL", "BTC", "YPF", "TSLA"][i % 4],
