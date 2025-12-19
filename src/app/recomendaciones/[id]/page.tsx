@@ -194,11 +194,15 @@ export default function RecomendacionDetallePage() {
                                     <TableCell>
                                         {/* Link to Asset Detail Page */}
                                         {detalle.activo ? (
-                                            <Link href={`/activos/${detalle.activoId}`} passHref legacyBehavior>
-                                                <MuiLink underline="hover" fontWeight="bold" color="primary">
-                                                    {detalle.activo.symbol}
-                                                </MuiLink>
-                                            </Link>
+                                            <MuiLink
+                                                component={Link}
+                                                href={`/activos/${detalle.activoId}`}
+                                                underline="hover"
+                                                fontWeight="bold"
+                                                color="primary"
+                                            >
+                                                {detalle.activo.symbol}
+                                            </MuiLink>
                                         ) : (
                                             <Typography variant="body2" color="text.secondary">Unknown</Typography>
                                         )}
