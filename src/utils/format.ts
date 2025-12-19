@@ -15,3 +15,11 @@ export function formatUSD(n?: number | null) {
         maximumFractionDigits: 2,
     });
 }
+
+export function formatPercentage(n?: number | null) {
+    if (typeof n !== "number" || Number.isNaN(n)) return "—";
+    return n.toLocaleString("es-AR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+}
