@@ -18,12 +18,11 @@
     line-height: 1.1;
     margin: 0;
 
-    /* Left-to-Right Flow Gradient
-       Colors: White -> Soft Silver -> White
-    */
     background-image: linear-gradient(to right,
             #ffffff 0%,
-            #2cff7d 50%,
+            #2cff7d 25%,
+            #046429 50%,
+            #2cff7d 75%,
             #ffffff 100%);
     background-size: 200% auto;
 
@@ -31,10 +30,8 @@
     background-clip: text;
     color: transparent;
 
-    /* Continuous Left-to-Right Movement */
-    animation: gradientFlow 3s linear infinite;
+    animation: gradientFlow 6s linear infinite;
 
-    /* Reduced shadow opacity for clarity */
     filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.15));
 }
 
