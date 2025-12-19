@@ -59,8 +59,8 @@ export default function RecomendacionCard({ item }: Props) {
 
     return (
         <Card variant="outlined" sx={{ height: '100%', display: 'flex', flexDirection: 'column', position: 'relative', transition: 'transform 0.2s, box-shadow 0.2s', '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 4px 20px rgba(0,0,0,0.4)', borderColor: 'primary.main', cursor: 'pointer' } }}>
-            <Link href={`/recomendaciones/${item.id}`} passHref legacyBehavior>
-                <Box component="a" sx={{ textDecoration: 'none', color: 'inherit', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Link href={`/recomendaciones/${item.id}`} style={{ textDecoration: 'none', color: 'inherit', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                     <CardContent sx={{ flex: 1 }}>
                         <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={1}>
                             <Box>
