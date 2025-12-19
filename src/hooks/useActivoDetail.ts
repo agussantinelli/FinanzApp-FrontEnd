@@ -5,6 +5,7 @@ import { getActivoById, searchActivos } from '@/services/ActivosService';
 import { getRecomendacionesByActivo, getRecomendacionById } from '@/services/RecomendacionesService';
 import { RecomendacionResumenDTO, RecomendacionDetalleDTO, RecomendacionDTO } from '@/types/Recomendacion';
 import { getActivoFromCache } from '@/lib/activos-cache';
+import { getCurrentUser } from '@/services/AuthService';
 
 export interface ActiveRecommendation {
     summary: RecomendacionResumenDTO;
@@ -47,34 +48,36 @@ export function useActivoDetail(id: string) {
 
                 setActivo(currentActivo);
 
-                // Fetch Recommendations if asset found
+                // Fetch Recommendations if asset found AND user is logged in
                 if (currentActivo) {
-                    const recs = await getRecomendacionesByActivo(currentActivo.id, true); // true = active only
+                    const user = getCurrentUser();
+                    if (user) {
+                        const recs = await getRecomendacionesByActivo(currentActivo.id, true); // true = active only
 
-                    // Fetch details for each recommendation to get the specific target/action for THIS asset
-                    const detailedRecs = await Promise.all(recs.map(async (r) => {
-                        try {
-                            // We need the full detail to know the Action/Target for this specific asset
-                            // Optimization idea: The backend could return this in the summary if we asked, but for now we fetch detail.
-                            const fullRec = await getRecomendacionById(r.id);
-                            const specificDetail = fullRec.detalles.find(d => d.activoId === currentActivo!.id);
+                        // Fetch details for each recommendation to get the specific target/action for THIS asset
+                        const detailedRecs = await Promise.all(recs.map(async (r) => {
+                            try {
+                                // We need the full detail to know the Action/Target for this specific asset
+                                // Optimization idea: The backend could return this in the summary if we asked, but for now we fetch detail.
+                                const fullRec = await getRecomendacionById(r.id);
+                                const specificDetail = fullRec.detalles.find(d => d.activoId === currentActivo!.id);
 
-                            return {
-                                summary: r,
-                                detail: specificDetail
-                            };
-                        } catch (e) {
-                            console.error(`Error fetching detail for recommendation ${r.id}`, e);
-                            return { summary: r, detail: undefined };
-                        }
-                    }));
+                                return {
+                                    summary: r,
+                                    detail: specificDetail
+                                };
+                            } catch (e) {
+                                console.error(`Error fetching detail for recommendation ${r.id}`, e);
+                                return { summary: r, detail: undefined };
+                            }
+                        }));
 
-                    setActiveRecommendations(detailedRecs);
+                        setActiveRecommendations(detailedRecs);
+                    }
                 }
 
             } catch (error) {
                 console.error("Error loading asset details:", error);
-                // Optionally redirect or handle error state differently
             } finally {
                 setLoading(false);
             }

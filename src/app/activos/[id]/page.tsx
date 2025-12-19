@@ -24,6 +24,7 @@ import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import Link from "next/link";
 
 import { useActivoDetail } from "@/hooks/useActivoDetail";
+import { useAuth } from "@/hooks/useAuth";
 import styles from "./styles/ActivoDetail.module.css";
 
 import { formatPercentage } from "@/utils/format";
@@ -58,6 +59,7 @@ export default function ActivoDetalle() {
     const router = useRouter();
     const id = params.id as string;
 
+    const { isAuthenticated } = useAuth();
     const { activo, activeRecommendations, loading } = useActivoDetail(id);
 
     const handleOperation = () => {
@@ -66,7 +68,6 @@ export default function ActivoDetalle() {
             router.push("/auth/login");
             return;
         }
-        // TODO: Implement actual buy/sell modal or navigation
         console.log("Operación autorizada para:", user.email);
     };
 
@@ -234,8 +235,7 @@ export default function ActivoDetalle() {
                             </Grid>
                         </Paper>
 
-                        {/* NEW RECOMMENATIONS SECTION */}
-                        {activeRecommendations && activeRecommendations.length > 0 && (
+                        {isAuthenticated && activeRecommendations && activeRecommendations.length > 0 && (
                             <Paper
                                 elevation={0}
                                 className={styles.detailPaper}
