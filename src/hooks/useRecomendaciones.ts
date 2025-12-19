@@ -9,6 +9,7 @@ interface FilterState {
     autorId?: string;
     activoId?: string;
     horizonteId?: number;
+    riesgoId?: number;
 }
 
 export function useRecomendaciones() {
@@ -29,7 +30,7 @@ export function useRecomendaciones() {
         setLoading(true);
         setError(null);
 
-        const isGenericFetch = !filters.sectorId && !filters.autorId && !filters.activoId && !filters.horizonteId;
+        const isGenericFetch = !filters.sectorId && !filters.autorId && !filters.activoId && !filters.horizonteId && !filters.riesgoId;
         if (isGenericFetch) {
             const cached = getAllRecomendacionesFromCache();
             if (cached && cached.length > 0) {
@@ -50,6 +51,8 @@ export function useRecomendaciones() {
                 res = await service.getRecomendacionesByActivo(filters.activoId, filters.soloActivas);
             } else if (filters.horizonteId) {
                 res = await service.getRecomendacionesByHorizonte(filters.horizonteId, filters.soloActivas);
+            } else if (filters.riesgoId) {
+                res = await service.getRecomendacionesByRiesgo(filters.riesgoId, filters.soloActivas);
             } else {
                 res = await service.getRecomendaciones(filters.soloActivas);
             }
