@@ -1,6 +1,6 @@
 import { http } from "@/lib/http";
 import { RegisterGeoDataDTO } from "@/types/Geo";
-import { UserLoginRequest, UserRegisterRequest, UserLoginResponseDTO, AuthenticatedUser } from "@/types/Usuario";
+import { UserLoginRequest, UserRegisterRequest, UserLoginResponseDTO, AuthenticatedUser, RolUsuario } from "@/types/Usuario";
 
 function notifyAuthChanged() {
   if (typeof window === "undefined") return;
@@ -45,6 +45,13 @@ export function getCurrentUser(): AuthenticatedUser | null {
   } catch {
     return null;
   }
+}
+
+export function hasRole(rolesPermitidos: RolUsuario[]): boolean {
+  const user = getCurrentUser();
+  if (!user) return false;
+  // Cast string role to RolUsuario for check if necessary, or ensure types align
+  return rolesPermitidos.includes(user.rol as RolUsuario);
 }
 
 // Llamadas HTTP

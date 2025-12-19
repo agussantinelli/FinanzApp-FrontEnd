@@ -24,11 +24,12 @@ http.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       if (typeof window !== "undefined") {
+        console.error('Sesión inválida o servidor reiniciado. Redirigiendo...');
         localStorage.removeItem("fa_token");
         localStorage.removeItem("fa_user");
-        // Only redirect if not already on login page to avoid loops (optional but good practice)
+
         if (!window.location.pathname.includes("/auth/login")) {
-          window.location.href = "/auth/login";
+          window.location.href = "/auth/login?expired=true";
         }
       }
     }
