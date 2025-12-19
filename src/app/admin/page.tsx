@@ -28,7 +28,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useAdminData } from "@/hooks/useAdminData";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { AdminDashboardStats } from "@/types/Admin";
-import { UserDTO } from "@/types/Usuario";
+import { UserDTO, RolUsuario } from "@/types/Usuario";
 import { OperacionResponseDTO } from "@/types/Operacion";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import EditIcon from '@mui/icons-material/Edit';
@@ -91,7 +91,7 @@ export default function AdminDashboardPage() {
 
 
   return (
-    <RoleGuard allowedRoles={["Admin"]}>
+    <RoleGuard allowedRoles={[RolUsuario.Admin]}>
       <Box className={styles.container}>
 
         {/* Header */}
