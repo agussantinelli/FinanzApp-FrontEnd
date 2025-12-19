@@ -1,3 +1,9 @@
+export enum RolUsuario {
+    Admin = 'Admin',
+    Experto = 'Experto',
+    Inversor = 'Inversor'
+}
+
 export interface UserDTO {
     id: string; // UUID
     nombre: string;
@@ -12,7 +18,7 @@ export interface AuthenticatedUser {
     nombre: string;
     apellido: string;
     email: string;
-    rol: "Admin" | "Inversor" | "Experto" | string;
+    rol: RolUsuario | string;
 }
 
 export interface UserLoginRequest {
@@ -27,7 +33,7 @@ export interface UserLoginResponseDTO {
     nombre: string;
     apellido: string;
     email: string;
-    rol: "Admin" | "Inversor" | string;
+    rol: RolUsuario | string;
 }
 
 export interface UserRegisterRequest {
