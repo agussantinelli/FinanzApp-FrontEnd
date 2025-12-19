@@ -71,15 +71,14 @@ export default function Noticias() {
       />
 
       <Box className={styles.listContainer}>
-        <Stack spacing={3}>
+        <div className={styles.grid}>
           {SOURCES.map((s) => (
-            <Card
-              key={s.key}
-              className={styles.card}
-            >
-              <CardContent>
+            <Card key={s.key} className={styles.card}>
+              <CardContent className={styles.cardContent}>
                 <div className={styles.cardHeader}>
-                  {s.icon}
+                  <div className={styles.iconWrapper}>
+                    {s.icon}
+                  </div>
                   <Box>
                     <Typography variant="h6" className={styles.cardTitle}>{s.title}</Typography>
                     <Typography variant="body2" className={styles.cardSubtitle}>
@@ -87,10 +86,11 @@ export default function Noticias() {
                     </Typography>
                   </Box>
                 </div>
+
                 {s.notes?.length ? (
-                  <Box component="ul" className={styles.notesList}>
+                  <Box className={styles.notesWrapper}>
                     {s.notes.map((n, i) => (
-                      <Typography key={i} component="li" variant="body2" className={styles.noteItem}>
+                      <Typography key={i} component="div" className={styles.noteItem}>
                         {n}
                       </Typography>
                     ))}
@@ -98,17 +98,20 @@ export default function Noticias() {
                 ) : null}
               </CardContent>
 
-              <Divider />
               <CardActions className={styles.actions}>
-                <Link href={s.href} target="_blank" rel="noopener noreferrer">
-                  <Button variant="contained" size="small">
-                    Ver ahora
+                <Link href={s.href} target="_blank" rel="noopener noreferrer" style={{ width: '100%' }}>
+                  <Button
+                    className={styles.actionButton}
+                    fullWidth
+                    disableElevation
+                  >
+                    Leer Noticia
                   </Button>
                 </Link>
               </CardActions>
             </Card>
           ))}
-        </Stack>
+        </div>
       </Box>
     </main>
   );
