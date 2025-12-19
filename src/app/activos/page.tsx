@@ -50,6 +50,7 @@ export default function Activos() {
   const {
     selectedType,
     selectedSector,
+    selectedCurrency,
     activos,
     tipos,
     sectores,
@@ -65,6 +66,7 @@ export default function Activos() {
     handleRequestSort,
     handleTypeChange,
     handleSectorChange,
+    handleCurrencyChange,
     handlePageChange,
     handleRefresh,
     executeSearch,
@@ -192,6 +194,22 @@ export default function Activos() {
                     {type.nombre}
                   </MenuItem>
                 ))}
+              </Select>
+            </FormControl>
+
+            <FormControl size="small" className={styles.filterControl}>
+              <InputLabel id="currency-select-label">Moneda</InputLabel>
+              <Select
+                labelId="currency-select-label"
+                id="currency-select"
+                value={selectedCurrency}
+                label="Moneda"
+                onChange={handleCurrencyChange}
+                className={styles.filterSelect}
+              >
+                <MenuItem value="Todos">Todas</MenuItem>
+                <MenuItem value="ARS">Pesos (ARS)</MenuItem>
+                <MenuItem value="USD">Dólares (USD)</MenuItem>
               </Select>
             </FormControl>
           </div>

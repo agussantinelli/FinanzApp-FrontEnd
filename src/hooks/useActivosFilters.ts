@@ -17,6 +17,7 @@ import { getAllActivosFromCache } from '@/lib/activos-cache';
 export function useActivosFilters() {
     const [selectedType, setSelectedType] = useState<string | number>("Todos");
     const [selectedSector, setSelectedSector] = useState<string>("Todos");
+    const [selectedCurrency, setSelectedCurrency] = useState<string>("Todos");
     const [activos, setActivos] = useState<ActivoDTO[]>([]);
     const [tipos, setTipos] = useState<TipoActivoDTO[]>([]);
     const [sectores, setSectores] = useState<SectorDTO[]>([]);
@@ -84,18 +85,17 @@ export function useActivosFilters() {
                     data = await getActivosByTipoId(Number(selectedType));
                 }
             }
+            // Apply currency filter if searching
+            if (selectedCurrency !== "Todos") {
+                data = data.filter(a => a.moneda === selectedCurrency);
+            }
             setActivos(data);
         } catch (error) {
-            // Fallback to fetching all/filtered if search fails, logic handled in fetchActivos usually
-            // but here we just catch. The original code called fetchActivos() in catch.
-            // We need to define fetchActivos first or hoist. Since it's inside hook, we can rely on reference.
-            // But executeSearch is called inside handleRefresh which calls executeSearch OR fetchActivos.
-            // Let's keep it simple.
             console.error(error);
         } finally {
             setLoading(false);
         }
-    }, [searchTerm, selectedType]);
+    }, [searchTerm, selectedType, selectedCurrency]);
 
     const fetchActivos = useCallback(async () => {
         setLoading(true);
@@ -143,6 +143,11 @@ export function useActivosFilters() {
                 }
             }
 
+            // Apply Currency Filter
+            if (selectedCurrency !== "Todos") {
+                data = data.filter(a => a.moneda === selectedCurrency);
+            }
+
             const criterio = criterioMap[orderBy] || "marketCap";
 
             if (criterio === "marketCap") {
@@ -179,14 +184,14 @@ export function useActivosFilters() {
         } finally {
             setLoading(false);
         }
-    }, [selectedType, selectedSector, orderBy, orderDesc, tipos, sectores]);
+    }, [selectedType, selectedSector, selectedCurrency, orderBy, orderDesc, tipos, sectores]);
 
     // Initial load and filter changes
     useEffect(() => {
         if (searchTerm === "") {
             fetchActivos();
         }
-    }, [selectedType, selectedSector, orderBy, orderDesc, fetchActivos, searchTerm]);
+    }, [selectedType, selectedSector, selectedCurrency, orderBy, orderDesc, fetchActivos, searchTerm]);
 
     const handleRefresh = useCallback(() => {
         if (searchTerm.length > 0) {
@@ -212,6 +217,11 @@ export function useActivosFilters() {
         setPage(1);
     };
 
+    const handleCurrencyChange = (event: any) => {
+        setSelectedCurrency(event.target.value);
+        setPage(1);
+    };
+
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
     };
@@ -220,6 +230,7 @@ export function useActivosFilters() {
         setSearchTerm("");
         setSelectedType("Todos");
         setSelectedSector("Todos");
+        setSelectedCurrency("Todos");
         setPage(1);
     };
 
@@ -233,6 +244,7 @@ export function useActivosFilters() {
     return {
         selectedType,
         selectedSector,
+        selectedCurrency,
         activos,
         tipos,
         sectores,
@@ -248,6 +260,7 @@ export function useActivosFilters() {
         handleRequestSort,
         handleTypeChange,
         handleSectorChange,
+        handleCurrencyChange,
         handlePageChange,
         handleRefresh,
         executeSearch,
