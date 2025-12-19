@@ -92,76 +92,6 @@ export default function RecomendacionesPage() {
 
             <Paper variant="outlined" sx={{ p: 2, mb: 4, borderRadius: 2 }}>
                 <Grid container spacing={1.5} alignItems="center">
-                    {/* Sector Filter */}
-                    <Grid size={{ xs: 12, md: 2 }} >
-                        <FormControl fullWidth size="small">
-                            <InputLabel>Sector</InputLabel>
-                            <Select
-                                value={selectedSector}
-                                label="Sector"
-                                onChange={(e) => setSelectedSector(e.target.value)}
-                            >
-                                <MenuItem value=""><em>Todos</em></MenuItem>
-                                {sectores.map(s => (
-                                    <MenuItem key={s.id} value={s.id}>{s.nombre}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </Grid>
-
-                    {/* Author Filter */}
-                    <Grid size={{ xs: 12, md: 2 }}>
-                        <FormControl fullWidth size="small">
-                            <InputLabel>Experto</InputLabel>
-                            <Select
-                                value={selectedAutor}
-                                label="Experto"
-                                onChange={(e) => setSelectedAutor(e.target.value)}
-                            >
-                                <MenuItem value=""><em>Todos</em></MenuItem>
-                                {authors.map(a => (
-                                    <MenuItem key={a.id} value={a.id}>{a.nombre} {a.apellido}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </Grid>
-
-                    {/* Horizon Filter */}
-                    <Grid size={{ xs: 12, md: 2 }}>
-                        <FormControl fullWidth size="small">
-                            <InputLabel>Horizonte</InputLabel>
-                            <Select
-                                value={selectedHorizonte}
-                                label="Horizonte"
-                                onChange={(e) => setSelectedHorizonte(e.target.value)}
-                            >
-                                <MenuItem value=""><em>Todos</em></MenuItem>
-                                <MenuItem value={1}>Intradía (Hoy)</MenuItem>
-                                <MenuItem value={2}>Corto (&lt; 6 meses)</MenuItem>
-                                <MenuItem value={3}>Mediano (6-18 meses)</MenuItem>
-                                <MenuItem value={4}>Largo (&gt; 18 meses)</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-
-                    {/* Risk Filter */}
-                    <Grid size={{ xs: 12, md: 2 }}>
-                        <FormControl fullWidth size="small">
-                            <InputLabel>Riesgo</InputLabel>
-                            <Select
-                                value={selectedRiesgo}
-                                label="Riesgo"
-                                onChange={(e) => setSelectedRiesgo(e.target.value)}
-                            >
-                                <MenuItem value=""><em>Todos</em></MenuItem>
-                                <MenuItem value={1}>Conservador</MenuItem>
-                                <MenuItem value={2}>Moderado</MenuItem>
-                                <MenuItem value={3}>Agresivo</MenuItem>
-                                <MenuItem value={4}>Especulativo</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-
                     {/* Asset Autocomplete */}
                     <Grid size={{ xs: 12, md: 2 }}>
                         <Autocomplete
@@ -188,6 +118,76 @@ export default function RecomendacionesPage() {
                             )}
                             noOptionsText="Buscar..."
                         />
+                    </Grid>
+
+                    {/* Sector Filter */}
+                    <Grid size={{ xs: 12, md: 2 }} >
+                        <FormControl fullWidth size="small">
+                            <InputLabel>Sector</InputLabel>
+                            <Select
+                                value={selectedSector}
+                                label="Sector"
+                                onChange={(e) => setSelectedSector(e.target.value)}
+                            >
+                                <MenuItem value=""><em>Todos</em></MenuItem>
+                                {sectores.map(s => (
+                                    <MenuItem key={s.id} value={s.id}>{s.nombre}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+
+                    {/* Risk Filter */}
+                    <Grid size={{ xs: 12, md: 2 }}>
+                        <FormControl fullWidth size="small">
+                            <InputLabel>Riesgo</InputLabel>
+                            <Select
+                                value={selectedRiesgo}
+                                label="Riesgo"
+                                onChange={(e) => setSelectedRiesgo(e.target.value)}
+                            >
+                                <MenuItem value=""><em>Todos</em></MenuItem>
+                                <MenuItem value={1}>Conservador</MenuItem>
+                                <MenuItem value={2}>Moderado</MenuItem>
+                                <MenuItem value={3}>Agresivo</MenuItem>
+                                <MenuItem value={4}>Especulativo</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+
+                    {/* Horizon Filter */}
+                    <Grid size={{ xs: 12, md: 2 }}>
+                        <FormControl fullWidth size="small">
+                            <InputLabel>Horizonte</InputLabel>
+                            <Select
+                                value={selectedHorizonte}
+                                label="Horizonte"
+                                onChange={(e) => setSelectedHorizonte(e.target.value)}
+                            >
+                                <MenuItem value=""><em>Todos</em></MenuItem>
+                                <MenuItem value={1}>Intradía (Hoy)</MenuItem>
+                                <MenuItem value={2}>Corto (&lt; 6 meses)</MenuItem>
+                                <MenuItem value={3}>Mediano (6-18 meses)</MenuItem>
+                                <MenuItem value={4}>Largo (&gt; 18 meses)</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+
+                    {/* Author Filter */}
+                    <Grid size={{ xs: 12, md: 2 }}>
+                        <FormControl fullWidth size="small">
+                            <InputLabel>Experto</InputLabel>
+                            <Select
+                                value={selectedAutor}
+                                label="Experto"
+                                onChange={(e) => setSelectedAutor(e.target.value)}
+                            >
+                                <MenuItem value=""><em>Todos</em></MenuItem>
+                                {authors.map(a => (
+                                    <MenuItem key={a.id} value={a.id}>{a.nombre} {a.apellido}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                     </Grid>
 
                     {/* Actions */}
