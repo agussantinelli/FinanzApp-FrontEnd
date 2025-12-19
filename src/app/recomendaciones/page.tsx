@@ -28,17 +28,15 @@ export default function RecomendacionesPage() {
     const [selectedSector, setSelectedSector] = useState(filters.sectorId || "");
     const [selectedAutor, setSelectedAutor] = useState(filters.autorId || "");
     const [selectedHorizonte, setSelectedHorizonte] = useState(filters.horizonteId || "");
+    const [selectedRiesgo, setSelectedRiesgo] = useState(filters.riesgoId || "");
     const [selectedAsset, setSelectedAsset] = useState<ActivoDTO | null>(null);
 
     const authors: { id: string, nombre: string, apellido?: string }[] = [];
 
-
-    // Load Sectors on mount
     useEffect(() => {
         getSectores().then(setSectores).catch(console.error);
     }, []);
 
-    // Asset Search Debounce
     const handleAssetSearch = useMemo(
         () => debounce(async (input: string, callback: (results: ActivoDTO[]) => void) => {
             if (input.length < 2) {
@@ -67,6 +65,7 @@ export default function RecomendacionesPage() {
             sectorId: selectedSector || undefined,
             autorId: selectedAutor || undefined,
             horizonteId: selectedHorizonte ? Number(selectedHorizonte) : undefined,
+            riesgoId: selectedRiesgo ? Number(selectedRiesgo) : undefined,
             activoId: selectedAsset?.id || undefined
         });
     };
@@ -76,6 +75,7 @@ export default function RecomendacionesPage() {
         setSelectedSector("");
         setSelectedAutor("");
         setSelectedHorizonte("");
+        setSelectedRiesgo("");
         setSelectedAsset(null);
     };
 
@@ -90,10 +90,10 @@ export default function RecomendacionesPage() {
                 </Typography>
             </Box>
 
-            <Paper variant="outlined" sx={{ p: 3, mb: 5, borderRadius: 2 }}>
-                <Grid container spacing={2} alignItems="center">
+            <Paper variant="outlined" sx={{ p: 2, mb: 4, borderRadius: 2 }}>
+                <Grid container spacing={1.5} alignItems="center">
                     {/* Sector Filter */}
-                    <Grid size={{ xs: 12, md: 3 }} >
+                    <Grid size={{ xs: 12, md: 2 }} >
                         <FormControl fullWidth size="small">
                             <InputLabel>Sector</InputLabel>
                             <Select
@@ -110,7 +110,7 @@ export default function RecomendacionesPage() {
                     </Grid>
 
                     {/* Author Filter */}
-                    <Grid size={{ xs: 12, md: 3 }}>
+                    <Grid size={{ xs: 12, md: 2 }}>
                         <FormControl fullWidth size="small">
                             <InputLabel>Experto</InputLabel>
                             <Select
@@ -127,7 +127,7 @@ export default function RecomendacionesPage() {
                     </Grid>
 
                     {/* Horizon Filter */}
-                    <Grid size={{ xs: 12, md: 3 }}>
+                    <Grid size={{ xs: 12, md: 2 }}>
                         <FormControl fullWidth size="small">
                             <InputLabel>Horizonte</InputLabel>
                             <Select
@@ -144,8 +144,26 @@ export default function RecomendacionesPage() {
                         </FormControl>
                     </Grid>
 
+                    {/* Risk Filter */}
+                    <Grid size={{ xs: 12, md: 2 }}>
+                        <FormControl fullWidth size="small">
+                            <InputLabel>Riesgo</InputLabel>
+                            <Select
+                                value={selectedRiesgo}
+                                label="Riesgo"
+                                onChange={(e) => setSelectedRiesgo(e.target.value)}
+                            >
+                                <MenuItem value=""><em>Todos</em></MenuItem>
+                                <MenuItem value={1}>Conservador</MenuItem>
+                                <MenuItem value={2}>Moderado</MenuItem>
+                                <MenuItem value={3}>Agresivo</MenuItem>
+                                <MenuItem value={4}>Especulativo</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+
                     {/* Asset Autocomplete */}
-                    <Grid size={{ xs: 12, md: 3 }}>
+                    <Grid size={{ xs: 12, md: 2 }}>
                         <Autocomplete
                             size="small"
                             options={assetOptions}
@@ -167,12 +185,12 @@ export default function RecomendacionesPage() {
                             renderInput={(params) => (
                                 <TextField {...params} label="Activo (Ticker)" fullWidth />
                             )}
-                            noOptionsText="Escribe para buscar..."
+                            noOptionsText="Buscar..."
                         />
                     </Grid>
 
                     {/* Actions */}
-                    <Grid size={{ xs: 12, md: 3 }} display="flex" gap={1} justifyContent="flex-end">
+                    <Grid size={{ xs: 12, md: 2 }} display="flex" gap={1} justifyContent="flex-end">
                         <Button
                             variant="outlined"
                             onClick={handleClear}
