@@ -18,6 +18,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ShieldIcon from '@mui/icons-material/Shield';
 import { colors } from '@/app-theme/design-tokens';
 import styles from './styles/RecomendacionDetail.module.css';
+import { RoleGuard } from "@/components/auth/RoleGuard";
 
 // Helper for Action Action Colors
 const getAccionColor = (accion: AccionRecomendada) => {
@@ -41,8 +42,6 @@ const getAccionLabel = (accion: AccionRecomendada) => {
 };
 
 const getRiesgoLabel = (r: number | string) => {
-    // Handle both string (from Resumen) and Enum number (from DTO) if needed
-    // DTO says Riesgo enum (1,2,3,4)
     const val = Number(r);
     switch (val) {
         case 1: return "Conservador";
@@ -138,133 +137,135 @@ export default function RecomendacionDetallePage() {
     });
 
     return (
-        <Container maxWidth="lg" className={styles.mainContainer}>
-            <Button
-                startIcon={<ArrowBackIcon />}
-                onClick={() => router.back()}
-                className={styles.backButton}
-            >
-                Volver
-            </Button>
-
-            <Paper variant="outlined" className={styles.headerPaper}>
-                {/* Header */}
-                <Box className={styles.headerContentBox}>
-                    <Grid container spacing={2} alignItems="center" justifyContent="space-between">
-                        <Grid size={{ xs: 12, md: 8 }}>
-                            <Typography variant="overline" color="text.secondary" display="block" mb={1}>
-                                {recomendacion.fuente} • {formattedDate}
-                            </Typography>
-                            <Typography variant="h3" component="h1" gutterBottom className={styles.headerTitle}>
-                                {recomendacion.titulo}
-                            </Typography>
-
-                            <Stack direction="row" spacing={2} alignItems="center" className={styles.chipsStack}>
-                                <Chip
-                                    icon={<PersonIcon />}
-                                    label={recomendacion.persona ? `${recomendacion.persona.nombre} ${recomendacion.persona.apellido}` : "Experto"}
-                                    variant="outlined"
-                                />
-                                <Chip
-                                    icon={<AccessTimeIcon />}
-                                    label={getHorizonteLabel(recomendacion.horizonte)}
-                                    variant="outlined"
-                                    sx={{
-                                        fontWeight: 'bold',
-                                        ...getHorizonteStyle(recomendacion.horizonte)
-                                    }}
-                                />
-                                <Chip
-                                    icon={<ShieldIcon />}
-                                    label={getRiesgoLabel(recomendacion.riesgo)}
-                                    color={getRiesgoColor(recomendacion.riesgo) as any}
-                                    variant="outlined"
-                                />
-                            </Stack>
-                        </Grid>
-                    </Grid>
-                </Box>
-            </Paper>
-
-            <Divider className={styles.tesisDivider} />
-
-            {/* Justification / Content */}
-            <Box className={styles.tesisContainerBox}>
-                <Paper
-                    variant="outlined"
-                    className={styles.tesisPaper}
+        <RoleGuard>
+            <Container maxWidth="lg" className={styles.mainContainer}>
+                <Button
+                    startIcon={<ArrowBackIcon />}
+                    onClick={() => router.back()}
+                    className={styles.backButton}
                 >
-                    <Box className={styles.tesisTitleBox}>
-                        <AutoGraphIcon className={styles.tesisIcon} />
-                        <Typography variant="h6" fontWeight="bold">
-                            Tesis de Inversión
-                        </Typography>
+                    Volver
+                </Button>
+
+                <Paper variant="outlined" className={styles.headerPaper}>
+                    {/* Header */}
+                    <Box className={styles.headerContentBox}>
+                        <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+                            <Grid size={{ xs: 12, md: 8 }}>
+                                <Typography variant="overline" color="text.secondary" display="block" mb={1}>
+                                    {recomendacion.fuente} • {formattedDate}
+                                </Typography>
+                                <Typography variant="h3" component="h1" gutterBottom className={styles.headerTitle}>
+                                    {recomendacion.titulo}
+                                </Typography>
+
+                                <Stack direction="row" spacing={2} alignItems="center" className={styles.chipsStack}>
+                                    <Chip
+                                        icon={<PersonIcon />}
+                                        label={recomendacion.persona ? `${recomendacion.persona.nombre} ${recomendacion.persona.apellido}` : "Experto"}
+                                        variant="outlined"
+                                    />
+                                    <Chip
+                                        icon={<AccessTimeIcon />}
+                                        label={getHorizonteLabel(recomendacion.horizonte)}
+                                        variant="outlined"
+                                        sx={{
+                                            fontWeight: 'bold',
+                                            ...getHorizonteStyle(recomendacion.horizonte)
+                                        }}
+                                    />
+                                    <Chip
+                                        icon={<ShieldIcon />}
+                                        label={getRiesgoLabel(recomendacion.riesgo)}
+                                        color={getRiesgoColor(recomendacion.riesgo) as any}
+                                        variant="outlined"
+                                    />
+                                </Stack>
+                            </Grid>
+                        </Grid>
                     </Box>
-
-                    <Typography
-                        variant="body1"
-                        className={styles.tesisText}
-                    >
-                        {recomendacion.justificacionLogica}
-                    </Typography>
                 </Paper>
-            </Box>
 
-            <Divider className={styles.tesisDivider} />
+                <Divider className={styles.tesisDivider} />
 
-            {/* Recommended Assets */}
-            <Box>
-                <Typography variant="h5" gutterBottom className={styles.assetsTitle}>Activos Recomendados</Typography>
-                <TableContainer component={Paper} variant="outlined">
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Ticker</TableCell>
-                                <TableCell>Empresa</TableCell>
-                                <TableCell>Acción</TableCell>
-                                <TableCell align="right">Precio Entrada</TableCell>
-                                <TableCell align="right">Precio Objetivo</TableCell>
-                                <TableCell align="right">Stop Loss</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {recomendacion.detalles.map((detalle, index) => (
-                                <TableRow key={index} hover>
-                                    <TableCell>
-                                        {/* Link to Asset Detail Page */}
-                                        {detalle.activo ? (
-                                            <MuiLink
-                                                component={Link}
-                                                href={`/activos/${detalle.activo.symbol}`}
-                                                className={styles.assetLink}
-                                            >
-                                                {detalle.activo.symbol}
-                                            </MuiLink>
-                                        ) : (
-                                            <Typography variant="body2" color="text.secondary">Unknown</Typography>
-                                        )}
-                                    </TableCell>
-                                    <TableCell>{detalle.activo?.nombre || '-'}</TableCell>
-                                    <TableCell>
-                                        <Typography
-                                            variant="subtitle2"
-                                            fontWeight="bold"
-                                            sx={{ color: getAccionColor(detalle.accion) }}
-                                        >
-                                            {getAccionLabel(detalle.accion)}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell align="right">${detalle.precioAlRecomendar?.toFixed(2)}</TableCell>
-                                    <TableCell align="right">${detalle.precioObjetivo?.toFixed(2)}</TableCell>
-                                    <TableCell align="right" className={styles.stopLossCell}>
-                                        ${detalle.stopLoss?.toFixed(2)}
-                                    </TableCell>
+                {/* Justification / Content */}
+                <Box className={styles.tesisContainerBox}>
+                    <Paper
+                        variant="outlined"
+                        className={styles.tesisPaper}
+                    >
+                        <Box className={styles.tesisTitleBox}>
+                            <AutoGraphIcon className={styles.tesisIcon} />
+                            <Typography variant="h6" fontWeight="bold">
+                                Tesis de Inversión
+                            </Typography>
+                        </Box>
+
+                        <Typography
+                            variant="body1"
+                            className={styles.tesisText}
+                        >
+                            {recomendacion.justificacionLogica}
+                        </Typography>
+                    </Paper>
+                </Box>
+
+                <Divider className={styles.tesisDivider} />
+
+                {/* Recommended Assets */}
+                <Box>
+                    <Typography variant="h5" gutterBottom className={styles.assetsTitle}>Activos Recomendados</Typography>
+                    <TableContainer component={Paper} variant="outlined">
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Ticker</TableCell>
+                                    <TableCell>Empresa</TableCell>
+                                    <TableCell>Acción</TableCell>
+                                    <TableCell align="right">Precio Entrada</TableCell>
+                                    <TableCell align="right">Precio Objetivo</TableCell>
+                                    <TableCell align="right">Stop Loss</TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Box>
-        </Container>
+                            </TableHead>
+                            <TableBody>
+                                {recomendacion.detalles.map((detalle, index) => (
+                                    <TableRow key={index} hover>
+                                        <TableCell>
+                                            {/* Link to Asset Detail Page */}
+                                            {detalle.activo ? (
+                                                <MuiLink
+                                                    component={Link}
+                                                    href={`/activos/${detalle.activo.symbol}`}
+                                                    className={styles.assetLink}
+                                                >
+                                                    {detalle.activo.symbol}
+                                                </MuiLink>
+                                            ) : (
+                                                <Typography variant="body2" color="text.secondary">Unknown</Typography>
+                                            )}
+                                        </TableCell>
+                                        <TableCell>{detalle.activo?.nombre || '-'}</TableCell>
+                                        <TableCell>
+                                            <Typography
+                                                variant="subtitle2"
+                                                fontWeight="bold"
+                                                sx={{ color: getAccionColor(detalle.accion) }}
+                                            >
+                                                {getAccionLabel(detalle.accion)}
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell align="right">${detalle.precioAlRecomendar?.toFixed(2)}</TableCell>
+                                        <TableCell align="right">${detalle.precioObjetivo?.toFixed(2)}</TableCell>
+                                        <TableCell align="right" className={styles.stopLossCell}>
+                                            ${detalle.stopLoss?.toFixed(2)}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Box>
+            </Container>
+        </RoleGuard>
     );
 }
