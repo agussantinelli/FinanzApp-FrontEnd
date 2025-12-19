@@ -19,6 +19,16 @@ export const colors = {
     // sombras verdes
     shadow: "0 0 12px rgba(57,255,20,0.25)",
     shadowHover: "0 0 18px rgba(57,255,20,0.5)",
+
+    // fluo / neon palette
+    neon: {
+        magenta: "#FF00FF",
+        cyan: "#00FFFF",
+        orange: "#FFAA00",
+        green: "#39ff14", // Same as primary but explicit for palette
+        yellow: "#FFFF00",
+        blue: "#0088FF",
+    }
 };
 
 export const radius = 12;

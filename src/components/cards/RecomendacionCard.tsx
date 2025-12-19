@@ -9,6 +9,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ShieldIcon from '@mui/icons-material/Shield';
 import PersonIcon from '@mui/icons-material/Person';
+import { colors } from '@/app-theme/design-tokens';
 
 interface Props {
     item: RecomendacionResumenDTO;
@@ -38,15 +39,15 @@ const getHorizonteLabel = (h: string) => {
 const getHorizonteStyle = (h: string) => {
     switch (h) {
         case "Intradia":
-            return { color: '#FF00FF', borderColor: '#FF00FF', boxShadow: '0 0 5px #FF00FF40' }; // Neon Magenta
+            return { color: colors.neon.magenta, borderColor: colors.neon.magenta, boxShadow: `0 0 5px ${colors.neon.magenta}40` };
         case "CortoPlazo":
-            return { color: '#00FFFF', borderColor: '#00FFFF', boxShadow: '0 0 5px #00FFFF40' }; // Neon Cyan
+            return { color: colors.neon.cyan, borderColor: colors.neon.cyan, boxShadow: `0 0 5px ${colors.neon.cyan}40` };
         case "MedianoPlazo":
-            return { color: '#FFAA00', borderColor: '#FFAA00', boxShadow: '0 0 5px #FFAA0040' }; // Neon Orange
+            return { color: colors.neon.orange, borderColor: colors.neon.orange, boxShadow: `0 0 5px ${colors.neon.orange}40` };
         case "LargoPlazo":
-            return { color: '#00FF00', borderColor: '#00FF00', boxShadow: '0 0 5px #00FF0040' }; // Neon Green
+            return { color: colors.neon.green, borderColor: colors.neon.green, boxShadow: `0 0 5px ${colors.neon.green}40` };
         default:
-            return { color: '#FFFFFF', borderColor: '#FFFFFF' };
+            return { color: colors.textPrimary, borderColor: colors.textPrimary };
     }
 };
 
