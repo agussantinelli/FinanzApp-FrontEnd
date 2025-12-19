@@ -34,7 +34,7 @@ export default function RecomendacionesPage() {
     const authors = useMemo(() => {
         const unique = new Map<string, { id: string, nombre: string, apellido: string }>();
         data.forEach(r => {
-            if (!unique.has(r.persona.id)) {
+            if (r.persona && !unique.has(r.persona.id)) {
                 unique.set(r.persona.id, r.persona);
             }
         });
