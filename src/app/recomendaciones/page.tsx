@@ -20,18 +20,29 @@ import { debounce } from "@mui/material/utils";
 export default function RecomendacionesPage() {
     const { data, loading, error, filters, applyFilters, clearFilters } = useRecomendaciones();
 
-    // UI Metadata States
     const [sectores, setSectores] = useState<SectorDTO[]>([]);
     const [assetOptions, setAssetOptions] = useState<ActivoDTO[]>([]);
 
-    // Local Filter States
     const [selectedSector, setSelectedSector] = useState(filters.sectorId || "");
     const [selectedAutor, setSelectedAutor] = useState(filters.autorId || "");
     const [selectedHorizonte, setSelectedHorizonte] = useState(filters.horizonteId || "");
     const [selectedRiesgo, setSelectedRiesgo] = useState(filters.riesgoId || "");
     const [selectedAsset, setSelectedAsset] = useState<ActivoDTO | null>(null);
 
-    const authors: { id: string, nombre: string, apellido?: string }[] = [];
+    const authors = useMemo(() => {
+        const uniqueAuthors: { id: string, nombre: string }[] = [];
+        const seen = new Set();
+
+        if (data && data.length > 0) {
+            data.forEach(r => {
+                if (r.autorId && r.autorNombre && !seen.has(r.autorId)) {
+                    seen.add(r.autorId);
+                    uniqueAuthors.push({ id: r.autorId, nombre: r.autorNombre });
+                }
+            });
+        }
+        return uniqueAuthors;
+    }, [data]);
 
     useEffect(() => {
         getSectores().then(setSectores).catch(console.error);
@@ -183,7 +194,7 @@ export default function RecomendacionesPage() {
                             >
                                 <MenuItem value=""><em>Todos</em></MenuItem>
                                 {authors.map(a => (
-                                    <MenuItem key={a.id} value={a.id}>{a.nombre} {a.apellido}</MenuItem>
+                                    <MenuItem key={a.id} value={a.id}>{a.nombre}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>

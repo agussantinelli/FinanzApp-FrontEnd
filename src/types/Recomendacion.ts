@@ -62,6 +62,7 @@ export interface RecomendacionResumenDTO {
     fecha: string; // DateTime
     riesgo: string; // String from backend
     horizonte: string; // String from backend
+    autorId: string; // Added to keys for filtering
     autorNombre: string;
     cantidadActivos: number;
     estado: number; // Enum
