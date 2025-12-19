@@ -38,6 +38,12 @@ export const getRecomendacionesByHorizonte = async (horizonte: number, soloActiv
     return data;
 };
 
+export const getRecomendacionesByRiesgo = async (riesgo: number, soloActivas: boolean = true): Promise<RecomendacionDTO[]> => {
+    const params = soloActivas ? { soloActivas: true } : {};
+    const { data } = await http.get<RecomendacionDTO[]>(`${ENDPOINT}/riesgo/${riesgo}`, { params });
+    return data;
+};
+
 export const getRecomendacionesRecientes = async (): Promise<RecomendacionDTO[]> => {
     const { data } = await http.get<RecomendacionDTO[]>(`${ENDPOINT}/recientes-semana`);
     return data;
