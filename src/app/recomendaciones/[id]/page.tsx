@@ -17,6 +17,7 @@ import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ShieldIcon from '@mui/icons-material/Shield';
 import { colors } from '@/app-theme/design-tokens';
+import styles from './styles/RecomendacionDetail.module.css';
 
 // Helper for Action Action Colors
 const getAccionColor = (accion: AccionRecomendada) => {
@@ -137,28 +138,28 @@ export default function RecomendacionDetallePage() {
     });
 
     return (
-        <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Container maxWidth="lg" className={styles.mainContainer}>
             <Button
                 startIcon={<ArrowBackIcon />}
                 onClick={() => router.back()}
-                sx={{ mb: 3 }}
+                className={styles.backButton}
             >
                 Volver
             </Button>
 
-            <Paper variant="outlined" sx={{ p: 4, borderRadius: 2, mb: 4 }}>
+            <Paper variant="outlined" className={styles.headerPaper}>
                 {/* Header */}
-                <Box mb={3}>
+                <Box className={styles.headerContentBox}>
                     <Grid container spacing={2} alignItems="center" justifyContent="space-between">
                         <Grid size={{ xs: 12, md: 8 }}>
                             <Typography variant="overline" color="text.secondary" display="block" mb={1}>
                                 {recomendacion.fuente} • {formattedDate}
                             </Typography>
-                            <Typography variant="h3" component="h1" gutterBottom fontWeight="bold">
+                            <Typography variant="h3" component="h1" gutterBottom className={styles.headerTitle}>
                                 {recomendacion.titulo}
                             </Typography>
 
-                            <Stack direction="row" spacing={2} alignItems="center" mt={2}>
+                            <Stack direction="row" spacing={2} alignItems="center" className={styles.chipsStack}>
                                 <Chip
                                     icon={<PersonIcon />}
                                     label={recomendacion.persona ? `${recomendacion.persona.nombre} ${recomendacion.persona.apellido}` : "Experto"}
@@ -185,21 +186,16 @@ export default function RecomendacionDetallePage() {
                 </Box>
             </Paper>
 
-            <Divider sx={{ my: 3 }} />
+            <Divider className={styles.tesisDivider} />
 
             {/* Justification / Content */}
-            <Box mb={4}>
+            <Box className={styles.tesisContainerBox}>
                 <Paper
                     variant="outlined"
-                    sx={{
-                        p: 3,
-                        background: `linear-gradient(135deg, ${colors.cardBgTranslucent} 0%, rgba(0,0,0,0) 100%)`,
-                        borderLeft: `4px solid ${colors.primary}`,
-                        borderRadius: 2
-                    }}
+                    className={styles.tesisPaper}
                 >
-                    <Box display="flex" alignItems="center" mb={2}>
-                        <AutoGraphIcon color="primary" sx={{ mr: 1 }} />
+                    <Box className={styles.tesisTitleBox}>
+                        <AutoGraphIcon className={styles.tesisIcon} />
                         <Typography variant="h6" fontWeight="bold">
                             Tesis de Inversión
                         </Typography>
@@ -207,23 +203,18 @@ export default function RecomendacionDetallePage() {
 
                     <Typography
                         variant="body1"
-                        sx={{
-                            whiteSpace: 'pre-line',
-                            lineHeight: 1.8,
-                            color: 'text.primary',
-                            fontSize: '1.05rem'
-                        }}
+                        className={styles.tesisText}
                     >
                         {recomendacion.justificacionLogica}
                     </Typography>
                 </Paper>
             </Box>
 
-            <Divider sx={{ my: 3 }} />
+            <Divider className={styles.tesisDivider} />
 
             {/* Recommended Assets */}
             <Box>
-                <Typography variant="h5" gutterBottom sx={{ mb: 2 }}>Activos Recomendados</Typography>
+                <Typography variant="h5" gutterBottom className={styles.assetsTitle}>Activos Recomendados</Typography>
                 <TableContainer component={Paper} variant="outlined">
                     <Table>
                         <TableHead>
@@ -245,9 +236,7 @@ export default function RecomendacionDetallePage() {
                                             <MuiLink
                                                 component={Link}
                                                 href={`/activos/${detalle.activo.symbol}`}
-                                                underline="hover"
-                                                fontWeight="bold"
-                                                color="primary"
+                                                className={styles.assetLink}
                                             >
                                                 {detalle.activo.symbol}
                                             </MuiLink>
@@ -267,7 +256,7 @@ export default function RecomendacionDetallePage() {
                                     </TableCell>
                                     <TableCell align="right">${detalle.precioAlRecomendar?.toFixed(2)}</TableCell>
                                     <TableCell align="right">${detalle.precioObjetivo?.toFixed(2)}</TableCell>
-                                    <TableCell align="right" sx={{ color: 'error.main' }}>
+                                    <TableCell align="right" className={styles.stopLossCell}>
                                         ${detalle.stopLoss?.toFixed(2)}
                                     </TableCell>
                                 </TableRow>
