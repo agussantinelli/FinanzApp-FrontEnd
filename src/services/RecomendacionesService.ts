@@ -3,6 +3,21 @@ import { CrearRecomendacionDTO, RecomendacionDTO } from "@/types/Recomendacion";
 
 const ENDPOINT = "/api/recomendaciones";
 
+// Admin
+export const aprobarRecomendacion = async (id: string): Promise<void> => {
+    await http.patch(`${ENDPOINT}/${id}/aceptar`);
+};
+
+export const rechazarRecomendacion = async (id: string): Promise<void> => {
+    await http.patch(`${ENDPOINT}/${id}/rechazar`);
+};
+
+export const deleteRecomendacion = async (id: string): Promise<void> => {
+    await http.delete(`${ENDPOINT}/${id}`);
+};
+
+
+// Usuario Logueado
 export const getRecomendaciones = async (soloActivas: boolean = false): Promise<RecomendacionDTO[]> => {
     const params = soloActivas ? { soloActivas: true } : {};
     const { data } = await http.get<RecomendacionDTO[]>(ENDPOINT, { params });
