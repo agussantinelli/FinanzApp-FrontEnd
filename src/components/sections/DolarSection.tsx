@@ -3,13 +3,14 @@
 import { useDolarData } from "@/hooks/useDolarData";
 import { DolarDTO } from "@/types/Dolar";
 import {
-  Paper, Box, Typography, Divider, Button, Grid, Card,
-  CardContent, CircularProgress
+  Paper, Box, Typography, Divider, Button, Grid,
+  CircularProgress
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import Link from "next/link";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import styles from "./styles/DolarSection.module.css";
+import DolarCard from "@/components/cards/DolarCard";
 
 function formatARS(n?: number | null) {
   if (typeof n !== "number" || Number.isNaN(n)) return "—";
@@ -79,27 +80,7 @@ export default function DolarSection() {
             const label = normalizeName(c?.nombre) || "—";
             return (
               <Grid size={{ xs: 12, sm: 6, md: 3 }} key={`row1-${i}`} component="div">
-                <Card className={styles.dolarCard}>
-                  <CardContent>
-                    <Typography variant="h6" className={styles.cardTitle}>
-                      {label}
-                    </Typography>
-                    <Typography variant="body2" className={styles.cardText}>
-                      Compra: <strong>{formatARS(c?.compra)}</strong>
-                    </Typography>
-                    <Typography variant="body2" className={styles.cardText}>
-                      Venta: <strong>{formatARS(c?.venta)}</strong>
-                    </Typography>
-                    {c?.variacion !== undefined && c?.variacion !== null && (
-                      <Typography variant="caption" className={`${styles.cardText} ${styles.cardVariation}`}>
-                        Variación:
-                        <span className={`${styles.variationValue} ${c.variacion >= 0 ? styles.positive : styles.negative}`}>
-                          {c.variacion > 0 ? "+" : ""}{c.variacion}%
-                        </span>
-                      </Typography>
-                    )}
-                  </CardContent>
-                </Card>
+                <DolarCard data={c} title={label} />
               </Grid>
             );
           })}
@@ -111,19 +92,7 @@ export default function DolarSection() {
               const label = normalizeName(c?.nombre) || "—";
               return (
                 <Grid size={{ xs: 12, sm: 6, md: 3 }} key={`row2-${i}`} component="div">
-                  <Card className={styles.dolarCard}>
-                    <CardContent>
-                      <Typography variant="h6" className={styles.cardTitle}>
-                        {label}
-                      </Typography>
-                      <Typography variant="body2" className={styles.cardText}>
-                        Compra: <strong>{formatARS(c?.compra)}</strong>
-                      </Typography>
-                      <Typography variant="body2" className={styles.cardText}>
-                        Venta: <strong>{formatARS(c?.venta)}</strong>
-                      </Typography>
-                    </CardContent>
-                  </Card>
+                  <DolarCard data={c} title={label} />
                 </Grid>
               );
             })}
