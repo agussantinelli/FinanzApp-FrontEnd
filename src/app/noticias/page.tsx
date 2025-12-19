@@ -67,11 +67,8 @@ export default function Noticias() {
       <PageHeader
         title="Noticias"
         subtitle="Actualidad Financiera"
+        description="Acceso rápido a fuentes confiables para seguir cripto, CCL/MEP y mercado local. Próximamente: feed integrado y filtros por tema."
       />
-      <Typography variant="body2" className={styles.description}>
-        Acceso rápido a fuentes confiables para seguir cripto, CCL/MEP y mercado local.
-        Próximamente: feed integrado y filtros por tema.
-      </Typography>
 
       <Box className={styles.listContainer}>
         <Stack spacing={3}>

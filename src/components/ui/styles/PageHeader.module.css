@@ -1,44 +1,95 @@
 .headerContainer {
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
     position: relative;
-    padding-left: 1rem;
-    border-left: 4px solid #00F0FF;
-    /* Cyan accent line for "firmness" */
+    padding-left: 1.25rem;
+    border-left: 6px solid #00F0FF;
+    /* Thicker accent line */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .subtitle {
     font-family: 'Inter', sans-serif;
     color: #94a3b8;
-    /* Slate 400 */
     text-transform: uppercase;
-    letter-spacing: 0.15em;
-    font-size: 0.85rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
+    letter-spacing: 0.25em;
+    /* Wider spacing for "firmness" */
+    font-size: 0.75rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
     display: block;
+    opacity: 0.8;
 }
 
 .title {
     font-family: 'Outfit', sans-serif;
-    /* Using Outfit if available, or fallback */
-    font-size: 2.5rem;
-    font-weight: 800;
+    font-size: 3rem;
+    /* Larger */
+    font-weight: 900;
+    /* Bolder */
     line-height: 1.1;
     margin: 0;
 
-    /* Modern Gradient Text */
-    background: linear-gradient(135deg, #ffffff 30%, #00ff9d 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    /* User requested specific gradient flow adapted to green/cyan palette */
+    background-image: linear-gradient(to right,
+            #00ff9d,
+            /* Neon Green */
+            #ffffff,
+            /* White */
+            #00F0FF,
+            /* Cyan */
+            #ffffff,
+            /* White */
+            #00ff9d
+            /* Neon Green */
+        );
+    background-size: 300% 100%;
 
-    /* Glow Effect */
-    text-shadow: 0 0 30px rgba(0, 255, 157, 0.2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+    /* Smooth flow animation */
+    animation: gradientMove 6s linear infinite;
+
+    /* Keeping the glow for neon effect */
+    filter: drop-shadow(0 0 15px rgba(0, 255, 157, 0.4));
 }
 
-/* Optional: Mobile adjustment */
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+
 @media (max-width: 600px) {
     .title {
-        font-size: 2rem;
+        font-size: 2.25rem;
     }
+
+    .headerContainer {
+        padding-left: 1rem;
+        border-left-width: 4px;
+    }
+}
+
+.description {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: #94a3b8;
+    /* Slate 400 */
+    margin-top: 1rem;
+    max-width: 600px;
+    line-height: 1.6;
 }

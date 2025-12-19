@@ -101,10 +101,8 @@ export default function RecomendacionesPage() {
             <PageHeader
                 title="Recomendaciones"
                 subtitle="Opinión Experta"
+                description="Descubre estrategias de inversión diseñadas por profesionales."
             />
-            <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 4 }}>
-                Descubre estrategias de inversión diseñadas por profesionales.
-            </Typography>
 
             <Paper variant="outlined" sx={{ p: 2, mb: 4, borderRadius: 2 }}>
                 <Grid container spacing={1.5} alignItems="center" columns={{ xs: 12, md: 14 }}>

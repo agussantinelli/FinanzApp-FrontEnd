@@ -11,10 +11,8 @@ export default function Reportes() {
         <PageHeader
           title="Reportes"
           subtitle="Análisis y Métricas"
+          description="Vista temporal con datos actuales del backend. Próximamente más métricas y series históricas."
         />
-        <Typography variant="body2" className={styles.description} paragraph>
-          Vista temporal con datos actuales del backend. Próximamente más métricas y series históricas.
-        </Typography>
 
         <Grid container spacing={3}>
           <Grid size={{ xs: 12, md: 8 }}>

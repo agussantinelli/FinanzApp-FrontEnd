@@ -81,10 +81,8 @@ export default function Activos() {
           <PageHeader
             title="Mercado Financiero"
             subtitle="Activos en Tiempo Real"
+            description="Explora, analiza y descubre oportunidades de inversión en tiempo real."
           />
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-            Explora, analiza y descubre oportunidades de inversión en tiempo real.
-          </Typography>
 
           <div className={styles.controlsStack}>
 

@@ -8,10 +8,8 @@ export default function Movimientos() {
       <PageHeader
         title="Movimientos"
         subtitle="Historial de Transacciones"
+        description="Próximamente: Historial detallado de transacciones."
       />
-      <Typography color="text.secondary">
-        Próximamente: Historial detallado de transacciones.
-      </Typography>
     </main>
   );
 }
