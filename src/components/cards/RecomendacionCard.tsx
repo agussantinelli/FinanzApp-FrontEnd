@@ -25,8 +25,6 @@ const getRiesgoColor = (r: string) => {
 };
 
 const getHorizonteLabel = (h: string) => {
-    // Add space before capital letters if missing (e.g. LargoPlazo -> Largo Plazo)
-    // Also fix specific known cases if needed
     if (!h) return "Desconocido";
     switch (h) {
         case "Intradia": return "Intradía";
@@ -37,13 +35,18 @@ const getHorizonteLabel = (h: string) => {
     }
 };
 
-const getHorizonteColor = (h: string): "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning" => {
+const getHorizonteStyle = (h: string) => {
     switch (h) {
-        case "Intradia": return "secondary"; // Purple/Pink for very short term
-        case "CortoPlazo": return "info"; // Blue
-        case "MedianoPlazo": return "warning"; // Orange
-        case "LargoPlazo": return "success"; // Green
-        default: return "default";
+        case "Intradia":
+            return { color: '#FF00FF', borderColor: '#FF00FF', boxShadow: '0 0 5px #FF00FF40' }; // Neon Magenta
+        case "CortoPlazo":
+            return { color: '#00FFFF', borderColor: '#00FFFF', boxShadow: '0 0 5px #00FFFF40' }; // Neon Cyan
+        case "MedianoPlazo":
+            return { color: '#FFAA00', borderColor: '#FFAA00', boxShadow: '0 0 5px #FFAA0040' }; // Neon Orange
+        case "LargoPlazo":
+            return { color: '#00FF00', borderColor: '#00FF00', boxShadow: '0 0 5px #00FF0040' }; // Neon Green
+        default:
+            return { color: '#FFFFFF', borderColor: '#FFFFFF' };
     }
 };
 
@@ -86,17 +89,16 @@ export default function RecomendacionCard({ item }: Props) {
 
                 <Stack direction="row" spacing={1} mb={2}>
                     <Chip
-                        icon={<AccessTimeIcon />}
+                        icon={<AccessTimeIcon style={{ color: 'inherit' }} />}
                         label={getHorizonteLabel(item.horizonte)}
-                        color={getHorizonteColor(item.horizonte)}
                         size="small"
-                        variant="outlined"  // Changed to outlined or could be filled based on preference. User asked for "better visually". 
-                        // Filled with color usually pops more. Let's try filled for logic but maybe user wants cleaner?
-                        // Activo tags are usually outlined. Risk is outlined. Let's use outlined for consistency or filled? 
-                        // Risk is Outlined in my code above. Let's use variant="outlined" to match Risk style.
-                        // Actually user image shows Risk is Outlined with color font/border.
-                        // Let's use variant="outlined" to match Risk.
-                        sx={{ fontSize: '0.75rem', fontWeight: 500 }}
+                        variant="outlined"
+                        sx={{
+                            fontSize: '0.75rem',
+                            fontWeight: 'bold',
+                            ...getHorizonteStyle(item.horizonte),
+                            backgroundColor: 'rgba(0,0,0,0.2)'
+                        }}
                     />
                 </Stack>
 

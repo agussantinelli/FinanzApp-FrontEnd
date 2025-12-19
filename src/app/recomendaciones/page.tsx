@@ -164,10 +164,10 @@ export default function RecomendacionesPage() {
                                 onChange={(e) => setSelectedHorizonte(e.target.value)}
                             >
                                 <MenuItem value=""><em>Todos</em></MenuItem>
-                                <MenuItem value={1}>Intradía (Hoy)</MenuItem>
-                                <MenuItem value={2}>Corto (&lt; 6 meses)</MenuItem>
-                                <MenuItem value={3}>Mediano (6-18 meses)</MenuItem>
-                                <MenuItem value={4}>Largo (&gt; 18 meses)</MenuItem>
+                                <MenuItem value={1}>Intradía  ( Hoy )</MenuItem>
+                                <MenuItem value={2}>Corto  ( &lt; 6 meses )</MenuItem>
+                                <MenuItem value={3}>Mediano  ( 6 - 18 meses )</MenuItem>
+                                <MenuItem value={4}>Largo  ( &gt; 18 meses )</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
