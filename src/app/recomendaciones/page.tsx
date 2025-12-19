@@ -165,6 +165,7 @@ export default function RecomendacionesPage() {
                     {/* Asset Autocomplete */}
                     <Grid size={{ xs: 12, md: 2 }}>
                         <Autocomplete
+                            forcePopupIcon={false}
                             size="small"
                             options={assetOptions}
                             getOptionLabel={(option) => option.symbol} // Showing Symbol as main label
