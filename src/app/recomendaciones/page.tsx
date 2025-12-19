@@ -91,9 +91,9 @@ export default function RecomendacionesPage() {
             </Box>
 
             <Paper variant="outlined" sx={{ p: 2, mb: 4, borderRadius: 2 }}>
-                <Grid container spacing={1.5} alignItems="center">
-                    {/* Asset Autocomplete */}
-                    <Grid size={{ xs: 12, md: 2 }}>
+                <Grid container spacing={1.5} alignItems="center" columns={{ xs: 12, md: 14 }}>
+                    {/* Asset Autocomplete (Ticker) - Larger */}
+                    <Grid size={{ xs: 12, md: 3 }}>
                         <Autocomplete
                             forcePopupIcon={false}
                             size="small"
@@ -120,7 +120,7 @@ export default function RecomendacionesPage() {
                         />
                     </Grid>
 
-                    {/* Sector Filter */}
+                    {/* Sector Filter - Smaller */}
                     <Grid size={{ xs: 12, md: 2 }} >
                         <FormControl fullWidth size="small">
                             <InputLabel>Sector</InputLabel>
@@ -137,7 +137,7 @@ export default function RecomendacionesPage() {
                         </FormControl>
                     </Grid>
 
-                    {/* Risk Filter */}
+                    {/* Risk Filter - Smaller */}
                     <Grid size={{ xs: 12, md: 2 }}>
                         <FormControl fullWidth size="small">
                             <InputLabel>Riesgo</InputLabel>
@@ -155,7 +155,7 @@ export default function RecomendacionesPage() {
                         </FormControl>
                     </Grid>
 
-                    {/* Horizon Filter */}
+                    {/* Horizon Filter - Smaller */}
                     <Grid size={{ xs: 12, md: 2 }}>
                         <FormControl fullWidth size="small">
                             <InputLabel>Horizonte</InputLabel>
@@ -173,7 +173,7 @@ export default function RecomendacionesPage() {
                         </FormControl>
                     </Grid>
 
-                    {/* Author Filter */}
+                    {/* Author Filter - Smaller */}
                     <Grid size={{ xs: 12, md: 2 }}>
                         <FormControl fullWidth size="small">
                             <InputLabel>Experto</InputLabel>
@@ -190,8 +190,8 @@ export default function RecomendacionesPage() {
                         </FormControl>
                     </Grid>
 
-                    {/* Actions */}
-                    <Grid size={{ xs: 12, md: 2 }} display="flex" gap={1} justifyContent="flex-end">
+                    {/* Actions - Larger to fit buttons */}
+                    <Grid size={{ xs: 12, md: 3 }} display="flex" gap={1} justifyContent="flex-end">
                         <Button
                             variant="outlined"
                             onClick={handleClear}
