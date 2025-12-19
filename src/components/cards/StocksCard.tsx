@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, Typography } from "@mui/material";
 import { DualQuoteDTO } from "@/types/Market";
 import styles from "./styles/StocksCard.module.css";
-import { formatARS, formatUSD } from "@/utils/format";
+import { formatARS, formatUSD, formatPercentage } from "@/utils/format";
 
 interface Props {
     data: DualQuoteDTO & { name?: string };
@@ -32,7 +32,7 @@ export default function StocksCard({ data: d, title }: Props) {
                     Local (ARS): <strong>{formatARS(d.localPriceARS)}</strong>
                     {d.localChangePct !== undefined && d.localChangePct !== null && (
                         <span className={`${styles.changePercent} ${d.localChangePct >= 0 ? styles.positive : styles.negative}`}>
-                            {d.localChangePct > 0 ? "+" : ""}{d.localChangePct}%
+                            {d.localChangePct > 0 ? "+" : ""}{formatPercentage(d.localChangePct)}%
                         </span>
                     )}
                 </Typography>
@@ -40,7 +40,7 @@ export default function StocksCard({ data: d, title }: Props) {
                     USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong>
                     {d.usChangePct !== undefined && d.usChangePct !== null && (
                         <span className={`${styles.changePercent} ${d.usChangePct >= 0 ? styles.positive : styles.negative}`}>
-                            {d.usChangePct > 0 ? "+" : ""}{d.usChangePct}%
+                            {d.usChangePct > 0 ? "+" : ""}{formatPercentage(d.usChangePct)}%
                         </span>
                     )}
                 </Typography>

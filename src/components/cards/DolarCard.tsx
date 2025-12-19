@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent, Typography } from "@mui/material";
 import { DolarDTO } from "@/types/Dolar";
 import styles from "./styles/DolarCard.module.css";
-import { formatARS } from "@/utils/format";
+import { formatARS, formatPercentage } from "@/utils/format";
 
 interface Props {
     data: DolarDTO | null;
@@ -28,7 +28,7 @@ export default function DolarCard({ data: c, title }: Props) {
                     <Typography variant="caption" className={`${styles.cardText} ${styles.cardVariation}`}>
                         Variación:
                         <span className={`${styles.variationValue} ${c.variacion >= 0 ? styles.positive : styles.negative}`}>
-                            {c.variacion > 0 ? "+" : ""}{c.variacion}%
+                            {c.variacion > 0 ? "+" : ""}{formatPercentage(c.variacion)}%
                         </span>
                     </Typography>
                 )}

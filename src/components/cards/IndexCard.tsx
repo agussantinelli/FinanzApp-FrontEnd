@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent, Typography } from "@mui/material";
 import { DualQuoteDTO } from "@/types/Market";
 import styles from "./styles/IndexCard.module.css";
-import { formatARS, formatUSD } from "@/utils/format";
+import { formatARS, formatUSD, formatPercentage } from "@/utils/format";
 
 interface Props {
     data: DualQuoteDTO;
@@ -65,7 +65,7 @@ export default function IndexCard({ data: d }: Props) {
                     {labelArs}: <strong>{formatARS(d.usPriceARS)}</strong>
                     {d.usChangePct !== undefined && d.usChangePct !== null && (
                         <span className={`${styles.changePercent} ${d.usChangePct >= 0 ? styles.positive : styles.negative}`}>
-                            {d.usChangePct > 0 ? "+" : ""}{d.usChangePct}%
+                            {d.usChangePct > 0 ? "+" : ""}{formatPercentage(d.usChangePct)}%
                         </span>
                     )}
                 </Typography>
@@ -74,7 +74,7 @@ export default function IndexCard({ data: d }: Props) {
                     {labelUsd}: <strong>{formatUSD(d.usPriceUSD)}</strong>
                     {d.usChangePct !== undefined && d.usChangePct !== null && (
                         <span className={`${styles.changePercent} ${d.usChangePct >= 0 ? styles.positive : styles.negative}`}>
-                            {d.usChangePct > 0 ? "+" : ""}{d.usChangePct}%
+                            {d.usChangePct > 0 ? "+" : ""}{formatPercentage(d.usChangePct)}%
                         </span>
                     )}
                 </Typography>
