@@ -41,6 +41,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import NeonLoader from "@/components/ui/NeonLoader";
 import styles from "./styles/Activos.module.css";
 
+import { formatPercentage } from "@/utils/format";
 import { getAvatarColor } from "@/app-theme/icons-appearance";
 
 
@@ -286,7 +287,7 @@ export default function Activos() {
                       </TableCell>
                       <TableCell>
                         <Chip
-                          label={`${(activo.variacion24h ?? 0) >= 0 ? '+' : ''}${(activo.variacion24h ?? 0).toFixed(2)}%`}
+                          label={`${(activo.variacion24h ?? 0) >= 0 ? '+' : ''}${formatPercentage(activo.variacion24h)}%`}
                           size="small"
                           className={styles.variationChip}
                           sx={{

@@ -27,6 +27,7 @@ import { useActivoDetail } from "@/hooks/useActivoDetail";
 
 import styles from "./styles/ActivoDetail.module.css";
 
+import { formatPercentage } from "@/utils/format";
 import { getAvatarColor } from "@/app-theme/icons-appearance";
 import { getCurrentUser } from "@/services/AuthService";
 
@@ -123,7 +124,7 @@ export default function ActivoDetalle() {
                                     }
                                 </Typography>
                                 <Chip
-                                    label={`${(activo.variacion24h ?? 0) >= 0 ? '+' : ''}${(activo.variacion24h ?? 0).toFixed(2)}%`}
+                                    label={`${(activo.variacion24h ?? 0) >= 0 ? '+' : ''}${formatPercentage(activo.variacion24h)}%`}
                                     size="medium"
                                     className={styles.variationChip}
                                     sx={{
