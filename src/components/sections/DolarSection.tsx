@@ -12,15 +12,7 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import styles from "./styles/DolarSection.module.css";
 import DolarCard from "@/components/cards/DolarCard";
 
-function formatARS(n?: number | null) {
-  if (typeof n !== "number" || Number.isNaN(n)) return "—";
-  return n.toLocaleString("es-AR", {
-    style: "currency",
-    currency: "ARS",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-}
+
 
 
 export default function DolarSection() {

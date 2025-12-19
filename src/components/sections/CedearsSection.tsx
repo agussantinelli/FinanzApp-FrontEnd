@@ -10,13 +10,8 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import styles from "./styles/CedearsSection.module.css";
 import StocksCard from "@/components/cards/StocksCard";
 
-function formatARS(n: number) {
-  return n.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 2 });
-}
-function formatUSD(n?: number | null) {
-  if (typeof n !== "number" || Number.isNaN(n)) return "—";
-  return n.toLocaleString("es-AR", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
-}
+
+
 
 const COMPANY: Record<string, string> = {
   "AAPL.BA": "Apple", "AMZN.BA": "Amazon", "NVDA.BA": "NVIDIA",

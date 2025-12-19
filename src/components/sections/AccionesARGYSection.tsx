@@ -10,14 +10,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import styles from "./styles/AccionesARGYSection.module.css";
 import StocksCard from "@/components/cards/StocksCard";
 
-function formatARS(val: number) {
-  return val.toLocaleString("es-AR", { style: "currency", currency: "ARS" });
-}
 
-function formatUSD(val: number | null | undefined) {
-  if (val === undefined || val === null || isNaN(val)) return "N/A";
-  return val.toLocaleString("en-US", { style: "currency", currency: "USD" });
-}
 
 export default function AccionesARSection() {
   const {
