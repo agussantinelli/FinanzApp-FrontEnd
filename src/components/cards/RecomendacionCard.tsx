@@ -24,7 +24,28 @@ const getRiesgoColor = (r: string) => {
     }
 };
 
-const getHorizonteLabel = (h: string) => h;
+const getHorizonteLabel = (h: string) => {
+    // Add space before capital letters if missing (e.g. LargoPlazo -> Largo Plazo)
+    // Also fix specific known cases if needed
+    if (!h) return "Desconocido";
+    switch (h) {
+        case "Intradia": return "Intradía";
+        case "CortoPlazo": return "Corto Plazo";
+        case "MedianoPlazo": return "Mediano Plazo";
+        case "LargoPlazo": return "Largo Plazo";
+        default: return h.replace(/([A-Z])/g, ' $1').trim(); // Fallback: "CamelCase" -> "Camel Case"
+    }
+};
+
+const getHorizonteColor = (h: string): "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning" => {
+    switch (h) {
+        case "Intradia": return "secondary"; // Purple/Pink for very short term
+        case "CortoPlazo": return "info"; // Blue
+        case "MedianoPlazo": return "warning"; // Orange
+        case "LargoPlazo": return "success"; // Green
+        default: return "default";
+    }
+};
 
 export default function RecomendacionCard({ item }: Props) {
     const formattedDate = new Date(item.fecha).toLocaleDateString('es-AR', {
@@ -66,10 +87,16 @@ export default function RecomendacionCard({ item }: Props) {
                 <Stack direction="row" spacing={1} mb={2}>
                     <Chip
                         icon={<AccessTimeIcon />}
-                        label={`Horizonte: ${item.horizonte}`}
+                        label={getHorizonteLabel(item.horizonte)}
+                        color={getHorizonteColor(item.horizonte)}
                         size="small"
-                        variant="filled"
-                        sx={{ fontSize: '0.7rem' }}
+                        variant="outlined"  // Changed to outlined or could be filled based on preference. User asked for "better visually". 
+                        // Filled with color usually pops more. Let's try filled for logic but maybe user wants cleaner?
+                        // Activo tags are usually outlined. Risk is outlined. Let's use outlined for consistency or filled? 
+                        // Risk is Outlined in my code above. Let's use variant="outlined" to match Risk style.
+                        // Actually user image shows Risk is Outlined with color font/border.
+                        // Let's use variant="outlined" to match Risk.
+                        sx={{ fontSize: '0.75rem', fontWeight: 500 }}
                     />
                 </Stack>
 
