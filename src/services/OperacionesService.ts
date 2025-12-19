@@ -1,43 +1,24 @@
 import { http } from "@/lib/http";
+import { OperacionResponseDTO, CreateOperacionDTO } from "@/types/Operacion";
 
 const ENDPOINT = "/api/operaciones";
 
-export interface OperacionDTO {
-    id: string;
-    activoId: string;
-    personaId: string;
-    tipo: 'Compra' | 'Venta';
-    cantidad: number;
-    precio: number;
-    fechaOperacion: string;
-    activo?: {
-        symbol: string;
-        nombre: string;
-    };
-}
-
-export interface CrearOperacionDTO {
-    activoId: string;
-    cantidad: number;
-    tipo: 'Compra' | 'Venta';
-}
-
-export const getOperaciones = async (): Promise<OperacionDTO[]> => {
-    const { data } = await http.get<OperacionDTO[]>(ENDPOINT);
+export const getOperaciones = async (): Promise<OperacionResponseDTO[]> => {
+    const { data } = await http.get<OperacionResponseDTO[]>(ENDPOINT);
     return data;
 };
 
-export const getOperacionesByPersona = async (personaId: string): Promise<OperacionDTO[]> => {
-    const { data } = await http.get<OperacionDTO[]>(`${ENDPOINT}/persona/${personaId}`);
+export const getOperacionesByPersona = async (personaId: string): Promise<OperacionResponseDTO[]> => {
+    const { data } = await http.get<OperacionResponseDTO[]>(`${ENDPOINT}/persona/${personaId}`);
     return data;
 };
 
-export const getOperacionesByActivo = async (activoId: string): Promise<OperacionDTO[]> => {
-    const { data } = await http.get<OperacionDTO[]>(`${ENDPOINT}/activo/${activoId}`);
+export const getOperacionesByActivo = async (activoId: string): Promise<OperacionResponseDTO[]> => {
+    const { data } = await http.get<OperacionResponseDTO[]>(`${ENDPOINT}/activo/${activoId}`);
     return data;
 };
 
-export const createOperacion = async (dto: CrearOperacionDTO): Promise<OperacionDTO> => {
-    const { data } = await http.post<OperacionDTO>(ENDPOINT, dto);
+export const createOperacion = async (dto: CreateOperacionDTO): Promise<OperacionResponseDTO> => {
+    const { data } = await http.post<OperacionResponseDTO>(ENDPOINT, dto);
     return data;
 };
