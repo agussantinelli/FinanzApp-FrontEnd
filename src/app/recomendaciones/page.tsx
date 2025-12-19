@@ -92,14 +92,13 @@ export default function RecomendacionesPage() {
 
             <Paper variant="outlined" sx={{ p: 2, mb: 4, borderRadius: 2 }}>
                 <Grid container spacing={1.5} alignItems="center" columns={{ xs: 12, md: 14 }}>
-                    {/* Asset Autocomplete (Ticker) - Larger */}
                     <Grid size={{ xs: 12, md: 3 }}>
                         <Autocomplete
                             forcePopupIcon={false}
                             size="small"
                             options={assetOptions}
-                            getOptionLabel={(option) => option.symbol} // Showing Symbol as main label
-                            filterOptions={(x) => x} // Disable built-in filter, we filter server-side
+                            getOptionLabel={(option) => option.symbol}
+                            filterOptions={(x) => x}
                             value={selectedAsset}
                             onChange={(event: any, newValue: ActivoDTO | null) => {
                                 setSelectedAsset(newValue);
