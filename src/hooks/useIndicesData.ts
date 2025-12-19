@@ -11,16 +11,7 @@ function findIndex(data: DualQuoteDTO[], queries: string[]) {
     });
 }
 
-function formatARS(val?: number | null) {
-    if (val === undefined || val === null || isNaN(val)) return "—";
-    return val.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 });
-}
 
-function formatUSD(val?: number | null) {
-    if (val === undefined || val === null || isNaN(val)) return "—";
-    const digits = val > 1000 ? 0 : 2;
-    return val.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: digits });
-}
 
 export function useIndicesData() {
     const [data, setData] = useState<DualQuoteDTO[]>([]);
@@ -75,7 +66,6 @@ export function useIndicesData() {
         loading,
         updatedAt,
         fetchData,
-        formatARS,
-        formatUSD,
+
     };
 }

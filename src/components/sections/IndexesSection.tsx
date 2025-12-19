@@ -20,8 +20,6 @@ export default function IndexesSection() {
         loading,
         updatedAt,
         fetchData,
-        formatARS,
-        formatUSD,
     } = useIndicesData();
 
 
