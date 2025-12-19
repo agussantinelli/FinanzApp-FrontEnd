@@ -12,6 +12,7 @@ import { RecomendacionDTO, RecomendacionDetalleDTO, AccionRecomendada } from '@/
 import { getRecomendacionById } from '@/services/RecomendacionesService';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PersonIcon from '@mui/icons-material/Person';
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ShieldIcon from '@mui/icons-material/Shield';
 import { colors } from '@/app-theme/design-tokens';
@@ -165,10 +166,34 @@ export default function RecomendacionDetallePage() {
 
             {/* Justification / Content */}
             <Box mb={4}>
-                <Typography variant="h6" gutterBottom>Análisis</Typography>
-                <Typography variant="body1" sx={{ whiteSpace: 'pre-line', lineHeight: 1.8 }}>
-                    {recomendacion.justificacionLogica}
-                </Typography>
+                <Paper
+                    variant="outlined"
+                    sx={{
+                        p: 3,
+                        background: `linear-gradient(135deg, ${colors.cardBgTranslucent} 0%, rgba(0,0,0,0) 100%)`,
+                        borderLeft: `4px solid ${colors.primary}`,
+                        borderRadius: 2
+                    }}
+                >
+                    <Box display="flex" alignItems="center" mb={2}>
+                        <AutoGraphIcon color="primary" sx={{ mr: 1 }} />
+                        <Typography variant="h6" fontWeight="bold">
+                            Tesis de Inversión
+                        </Typography>
+                    </Box>
+
+                    <Typography
+                        variant="body1"
+                        sx={{
+                            whiteSpace: 'pre-line',
+                            lineHeight: 1.8,
+                            color: 'text.primary',
+                            fontSize: '1.05rem'
+                        }}
+                    >
+                        {recomendacion.justificacionLogica}
+                    </Typography>
+                </Paper>
             </Box>
 
             <Divider sx={{ my: 3 }} />
