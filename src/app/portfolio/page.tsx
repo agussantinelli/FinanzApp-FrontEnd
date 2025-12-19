@@ -22,6 +22,7 @@ import { RoleGuard } from "@/components/auth/RoleGuard";
 
 import { usePortfolioData } from "@/hooks/usePortfolioData";
 import styles from "./styles/Portfolio.module.css";
+import { formatPercentage } from "@/utils/format";
 
 
 export default function PortfolioPage() {
@@ -114,7 +115,7 @@ export default function PortfolioPage() {
                 variant="h5"
                 className={`${styles.cardValue} ${styles.neonGreenText}`}
               >
-                {exposicionRiesgoPct.toFixed(1)} %
+                {formatPercentage(exposicionRiesgoPct)} %
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
                 Acciones + criptos sobre el total del portafolio.
@@ -154,7 +155,7 @@ export default function PortfolioPage() {
                   • Bonos / renta fija: ~25% del valor total.
                 </Typography>
                 <Typography variant="body2">
-                  • Criptomonedas: ~{exposicionCriptoPct.toFixed(1)}% del total.
+                  • Criptomonedas: ~{formatPercentage(exposicionCriptoPct)}% del total.
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                   Más adelante esto se puede reemplazar por un gráfico de torta
@@ -262,7 +263,7 @@ export default function PortfolioPage() {
                           }
                         >
                           {p.variacionDiaPct > 0 ? "+" : ""}
-                          {p.variacionDiaPct.toFixed(2)}%
+                          {formatPercentage(p.variacionDiaPct)}%
                         </TableCell>
                         <TableCell
                           align="right"
@@ -275,7 +276,7 @@ export default function PortfolioPage() {
                           }
                         >
                           {p.variacionTotalPct > 0 ? "+" : ""}
-                          {p.variacionTotalPct.toFixed(2)}%
+                          {formatPercentage(p.variacionTotalPct)}%
                         </TableCell>
                       </TableRow>
                     ))}
