@@ -1,3 +1,4 @@
+// Enum mappings for UI helpers
 export enum Riesgo {
     Conservador = 1,
     Moderado = 2,
@@ -18,6 +19,7 @@ export enum AccionRecomendada {
     Mantener = 3,
     Vender = 4
 }
+
 
 export interface RecomendacionDetalleDTO {
     nroRecomendacionDetalle?: number;
@@ -40,8 +42,8 @@ export interface RecomendacionDTO {
     fechaInforme: string; // date-time string
     riesgo: Riesgo;
     horizonte: Horizonte;
-    estado: boolean;
-    persona: {
+    estado: number; // Enum: EstadoRecomendacion
+    persona?: {
         id: string;
         nombre: string;
         apellido: string;
@@ -51,6 +53,18 @@ export interface RecomendacionDTO {
         nombre: string;
     }[];
     detalles: RecomendacionDetalleDTO[];
+}
+
+export interface RecomendacionResumenDTO {
+    id: string;
+    titulo: string;
+    fuente: string;
+    fecha: string; // DateTime
+    riesgo: string; // String from backend
+    horizonte: string; // String from backend
+    autorNombre: string;
+    cantidadActivos: number;
+    estado: number; // Enum
 }
 
 export interface CrearRecomendacionDTO {
