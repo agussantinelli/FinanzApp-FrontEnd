@@ -9,3 +9,8 @@ export async function getTopCryptos(
   });
   return res.data;
 }
+
+export async function getCryptoBySymbol(symbol: string): Promise<CryptoTopDTO> {
+  const res = await http.get<CryptoTopDTO>(`/api/crypto/${symbol}`);
+  return res.data;
+}
