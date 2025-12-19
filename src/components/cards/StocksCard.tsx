@@ -2,19 +2,11 @@ import React from 'react';
 import { Card, CardContent, Typography } from "@mui/material";
 import { DualQuoteDTO } from "@/types/Market";
 import styles from "./styles/StocksCard.module.css";
+import { formatARS, formatUSD } from "@/utils/format";
 
 interface Props {
     data: DualQuoteDTO & { name?: string };
     title?: string;
-}
-
-function formatARS(val: number) {
-    return val.toLocaleString("es-AR", { style: "currency", currency: "ARS" });
-}
-
-function formatUSD(val: number | null | undefined) {
-    if (val === undefined || val === null || isNaN(val)) return "N/A";
-    return val.toLocaleString("en-US", { style: "currency", currency: "USD" });
 }
 
 export default function StocksCard({ data: d, title }: Props) {

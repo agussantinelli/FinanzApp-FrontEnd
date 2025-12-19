@@ -2,20 +2,11 @@ import React from "react";
 import { Card, CardContent, Typography } from "@mui/material";
 import { DolarDTO } from "@/types/Dolar";
 import styles from "./styles/DolarCard.module.css";
+import { formatARS } from "@/utils/format";
 
 interface Props {
     data: DolarDTO | null;
     title: string;
-}
-
-function formatARS(n?: number | null) {
-    if (typeof n !== "number" || Number.isNaN(n)) return "—";
-    return n.toLocaleString("es-AR", {
-        style: "currency",
-        currency: "ARS",
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-    });
 }
 
 export default function DolarCard({ data: c, title }: Props) {

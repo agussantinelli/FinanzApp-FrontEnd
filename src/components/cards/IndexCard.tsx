@@ -2,17 +2,10 @@ import React from "react";
 import { Card, CardContent, Typography } from "@mui/material";
 import { DualQuoteDTO } from "@/types/Market";
 import styles from "./styles/IndexCard.module.css";
+import { formatARS, formatUSD } from "@/utils/format";
 
 interface Props {
     data: DualQuoteDTO;
-}
-
-function formatARS(n: number) {
-    return n.toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 2 });
-}
-function formatUSD(n?: number | null) {
-    if (typeof n !== "number" || Number.isNaN(n)) return "—";
-    return n.toLocaleString("es-AR", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 }
 
 export default function IndexCard({ data: d }: Props) {

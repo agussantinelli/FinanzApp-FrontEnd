@@ -2,14 +2,10 @@ import React from "react";
 import { Card, CardContent, Typography } from "@mui/material";
 import { CryptoTopDTO } from "@/types/Crypto";
 import styles from "./styles/CryptoCard.module.css";
+import { formatUSD } from "@/utils/format";
 
 interface Props {
     data: CryptoTopDTO;
-}
-
-function formatUSD(n?: number) {
-    if (typeof n !== "number" || Number.isNaN(n)) return "—";
-    return n.toLocaleString("es-AR", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 }
 
 export default function CryptoCard({ data: c }: Props) {
