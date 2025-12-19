@@ -14,6 +14,8 @@ import PublicIcon from "@mui/icons-material/Public";
 import InsightsIcon from "@mui/icons-material/Insights";
 import styles from "./styles/Noticias.module.css";
 
+import PageHeader from "@/components/ui/PageHeader";
+
 type NewsSource = {
   key: string;
   title: string;
@@ -62,9 +64,10 @@ const SOURCES: NewsSource[] = [
 export default function Noticias() {
   return (
     <main className={styles.main}>
-      <Typography variant="h4" gutterBottom className={styles.header}>
-        Noticias
-      </Typography>
+      <PageHeader
+        title="Noticias"
+        subtitle="Actualidad Financiera"
+      />
       <Typography variant="body2" className={styles.description}>
         Acceso rápido a fuentes confiables para seguir cripto, CCL/MEP y mercado local.
         Próximamente: feed integrado y filtros por tema.

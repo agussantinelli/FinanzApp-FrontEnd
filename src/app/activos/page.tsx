@@ -43,6 +43,7 @@ import styles from "./styles/Activos.module.css";
 
 import { formatPercentage } from "@/utils/format";
 import { getAvatarColor } from "@/app-theme/icons-appearance";
+import PageHeader from "@/components/ui/PageHeader";
 
 
 export default function Activos() {
@@ -77,14 +78,13 @@ export default function Activos() {
     <main className={styles.main}>
       <Box className={styles.headerContainer}>
         <Stack spacing={3}>
-          <Box>
-            <Typography variant="h3" gutterBottom className={styles.title}>
-              Mercado Financiero
-            </Typography>
-            <Typography variant="h6" className={styles.subtitle}>
-              Explora, analiza y descubre oportunidades de inversión en tiempo real.
-            </Typography>
-          </Box>
+          <PageHeader
+            title="Mercado Financiero"
+            subtitle="Activos en Tiempo Real"
+          />
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+            Explora, analiza y descubre oportunidades de inversión en tiempo real.
+          </Typography>
 
           <div className={styles.controlsStack}>
 

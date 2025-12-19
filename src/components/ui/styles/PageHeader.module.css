@@ -1,0 +1,44 @@
+.headerContainer {
+    margin-bottom: 2rem;
+    position: relative;
+    padding-left: 1rem;
+    border-left: 4px solid #00F0FF;
+    /* Cyan accent line for "firmness" */
+}
+
+.subtitle {
+    font-family: 'Inter', sans-serif;
+    color: #94a3b8;
+    /* Slate 400 */
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.title {
+    font-family: 'Outfit', sans-serif;
+    /* Using Outfit if available, or fallback */
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0;
+
+    /* Modern Gradient Text */
+    background: linear-gradient(135deg, #ffffff 30%, #00ff9d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    /* Glow Effect */
+    text-shadow: 0 0 30px rgba(0, 255, 157, 0.2);
+}
+
+/* Optional: Mobile adjustment */
+@media (max-width: 600px) {
+    .title {
+        font-size: 2rem;
+    }
+}

@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { useRecomendaciones } from '@/hooks/useRecomendaciones';
 import RecomendacionCard from '@/components/cards/RecomendacionCard';
+import PageHeader from '@/components/ui/PageHeader';
 import styles from "./styles/Recomendaciones.module.css";
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
@@ -97,14 +98,13 @@ export default function RecomendacionesPage() {
 
     return (
         <main className={styles.container}>
-            <Box mb={4}>
-                <Typography variant="h3" component="h1" fontWeight="bold" className={styles.title} gutterBottom sx={{ letterSpacing: '-0.02em' }}>
-                    Recomendaciones de Expertos
-                </Typography>
-                <Typography variant="subtitle1" color="text.secondary">
-                    Descubre estrategias de inversión diseñadas por profesionales.
-                </Typography>
-            </Box>
+            <PageHeader
+                title="Recomendaciones"
+                subtitle="Opinión Experta"
+            />
+            <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 4 }}>
+                Descubre estrategias de inversión diseñadas por profesionales.
+            </Typography>
 
             <Paper variant="outlined" sx={{ p: 2, mb: 4, borderRadius: 2 }}>
                 <Grid container spacing={1.5} alignItems="center" columns={{ xs: 12, md: 14 }}>

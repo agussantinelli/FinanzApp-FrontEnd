@@ -2,14 +2,16 @@ import { Typography, Box } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import DolarBarChart from "@/components/charts/DolarBarChart";
 import styles from "./styles/Reportes.module.css";
+import PageHeader from "@/components/ui/PageHeader";
 
 export default function Reportes() {
   return (
     <main className={styles.container}>
       <Box className={styles.maxWidthContainer}>
-        <Typography variant="h4" gutterBottom className={styles.headerTitle}>
-          Reportes
-        </Typography>
+        <PageHeader
+          title="Reportes"
+          subtitle="Análisis y Métricas"
+        />
         <Typography variant="body2" className={styles.description} paragraph>
           Vista temporal con datos actuales del backend. Próximamente más métricas y series históricas.
         </Typography>
