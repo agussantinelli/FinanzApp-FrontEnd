@@ -1,19 +1,9 @@
 import { http } from "@/lib/http";
-import { ActivoDTO } from "@/types/Activo";
+import { ActivoDTO, ActivoCreateDTO } from "@/types/Activo";
 
 import { cacheActivos } from "@/lib/activos-cache";
 
-export interface CrearActivoDTO {
-    tipoId: number;
-    sectorId: number;
-    nombre: string;
-    symbol: string;
-    precio: number;
-    cantidad: number;
-    moneda: string;
-}
-
-export async function createActivo(dto: CrearActivoDTO): Promise<ActivoDTO> {
+export async function createActivo(dto: ActivoCreateDTO): Promise<ActivoDTO> {
     const res = await http.post<ActivoDTO>("/api/activos", dto);
     cacheActivos([res.data]);
     return res.data;
