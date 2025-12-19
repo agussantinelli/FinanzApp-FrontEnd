@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { RoleGuard } from "@/components/auth/RoleGuard";
+import { RolUsuario } from "@/types/Usuario";
 
 import styles from "./styles/Dashboard.module.css";
 
@@ -26,7 +27,7 @@ export default function DashboardPage() {
   // No need for effects or loading states here anymore
 
   return (
-    <RoleGuard allowedRoles={["Inversor"]}>
+    <RoleGuard allowedRoles={[RolUsuario.Inversor]}>
       <Box className={styles.container}>
         <Grid container spacing={3}>
           <Grid size={{ xs: 12 }}>
