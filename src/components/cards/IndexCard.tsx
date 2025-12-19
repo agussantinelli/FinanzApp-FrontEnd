@@ -80,7 +80,7 @@ export default function IndexCard({ data: d }: Props) {
                 </Typography>
 
                 <Typography variant="caption" color="text.secondary" className={styles.cardRate}>
-                    Ref: {d.dollarRateName} ({formatARS(d.usedDollarRate)})
+                    Tasa (CCL): {d.usedDollarRate.toLocaleString("es-AR")}
                 </Typography>
             </CardContent>
         </Card>
