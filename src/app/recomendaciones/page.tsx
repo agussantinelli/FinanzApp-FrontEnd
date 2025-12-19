@@ -30,16 +30,8 @@ export default function RecomendacionesPage() {
     const [selectedHorizonte, setSelectedHorizonte] = useState(filters.horizonteId || "");
     const [selectedAsset, setSelectedAsset] = useState<ActivoDTO | null>(null);
 
-    // Derived Authors from data (showing all possible authors from current view)
-    const authors = useMemo(() => {
-        const unique = new Map<string, { id: string, nombre: string, apellido: string }>();
-        data.forEach(r => {
-            if (r.persona && !unique.has(r.persona.id)) {
-                unique.set(r.persona.id, r.persona);
-            }
-        });
-        return Array.from(unique.values());
-    }, [data]);
+    const authors: { id: string, nombre: string, apellido?: string }[] = [];
+
 
     // Load Sectors on mount
     useEffect(() => {

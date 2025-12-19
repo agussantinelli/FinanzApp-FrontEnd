@@ -2,58 +2,34 @@ import React from 'react';
 import {
     Card, CardContent, Typography, Box, Chip, Divider, Stack
 } from '@mui/material';
-import { RecomendacionDTO, Riesgo, AccionRecomendada, Horizonte } from '@/types/Recomendacion';
+import { RecomendacionResumenDTO, Riesgo, AccionRecomendada, Horizonte } from '@/types/Recomendacion';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ShieldIcon from '@mui/icons-material/Shield';
+import PersonIcon from '@mui/icons-material/Person';
 
 interface Props {
-    item: RecomendacionDTO;
+    item: RecomendacionResumenDTO;
 }
 
-const getRiesgoColor = (r: Riesgo) => {
+const getRiesgoColor = (r: string) => {
     switch (r) {
-        case Riesgo.Conservador: return "success";
-        case Riesgo.Moderado: return "info";
-        case Riesgo.Agresivo: return "warning";
-        case Riesgo.Especulativo: return "error";
+        case "Conservador": return "success";
+        case "Moderado": return "info";
+        case "Agresivo": return "warning";
+        case "Especulativo": return "error";
         default: return "default";
     }
 };
 
-const getRiesgoLabel = (r: Riesgo) => {
-    return Riesgo[r];
-};
-
-const getAccionIcon = (a: AccionRecomendada) => {
-    switch (a) {
-        case AccionRecomendada.Comprar:
-        case AccionRecomendada.CompraFuerte:
-            return <TrendingUpIcon fontSize="small" />;
-        case AccionRecomendada.Vender:
-            return <TrendingDownIcon fontSize="small" />;
-        default:
-            return <RemoveIcon fontSize="small" />;
-    }
-};
-
-const getAccionColor = (a: AccionRecomendada) => {
-    if (a === AccionRecomendada.Comprar || a === AccionRecomendada.CompraFuerte) return "success.main";
-    if (a === AccionRecomendada.Vender) return "error.main";
-    return "text.secondary";
-};
+const getHorizonteLabel = (h: string) => h;
 
 export default function RecomendacionCard({ item }: Props) {
-    const formattedDate = new Date(item.fechaInforme).toLocaleDateString('es-AR', {
+    const formattedDate = new Date(item.fecha).toLocaleDateString('es-AR', {
         day: '2-digit', month: 'short', year: 'numeric'
     });
-
-    const nombrePersona = item.persona?.nombre || 'Desconocido';
-    const apellidoPersona = item.persona?.apellido || '';
-    const sectores = item.sectoresObjetivo || [];
-    const detalles = item.detalles || [];
 
     return (
         <Card variant="outlined" sx={{ height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }}>
@@ -66,12 +42,12 @@ export default function RecomendacionCard({ item }: Props) {
                         <Typography variant="h6" component="div" sx={{ lineHeight: 1.2, mb: 0.5 }}>
                             {item.titulo}
                         </Typography>
-                        <Typography variant="caption" color="primary">
-                            Por {nombrePersona} {apellidoPersona}
+                        <Typography variant="caption" color="primary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                            <PersonIcon fontSize="inherit" /> {item.autorNombre}
                         </Typography>
                     </Box>
                     <Chip
-                        label={getRiesgoLabel(item.riesgo)}
+                        label={item.riesgo}
                         color={getRiesgoColor(item.riesgo) as any}
                         size="small"
                         icon={<ShieldIcon />}
@@ -80,24 +56,17 @@ export default function RecomendacionCard({ item }: Props) {
                 </Box>
 
                 <Box mb={2}>
-                    <Typography variant="body2" color="text.secondary"
-                        sx={{
-                            display: '-webkit-box',
-                            WebkitLineClamp: 3,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden'
-                        }}>
-                        {item.justificacionLogica}
+                    <Typography variant="body2" color="text.secondary">
+                        {item.cantidadActivos} activo{item.cantidadActivos !== 1 ? 's' : ''} recomendados.
+                        <br />
+                        Ver detalle completo para más información.
                     </Typography>
                 </Box>
 
                 <Stack direction="row" spacing={1} mb={2}>
-                    {sectores.map(s => (
-                        <Chip key={s.id} label={s.nombre} size="small" sx={{ fontSize: '0.7rem' }} />
-                    ))}
                     <Chip
                         icon={<AccessTimeIcon />}
-                        label={`Horizonte: ${Horizonte[item.horizonte]}`}
+                        label={`Horizonte: ${item.horizonte}`}
                         size="small"
                         variant="filled"
                         sx={{ fontSize: '0.7rem' }}
@@ -106,29 +75,10 @@ export default function RecomendacionCard({ item }: Props) {
 
                 <Divider sx={{ my: 1 }} />
 
-                <Box>
-                    {detalles.slice(0, 3).map((det, idx) => (
-                        <Box key={idx} display="flex" justifyContent="space-between" alignItems="center" my={0.5}>
-                            <Box display="flex" alignItems="center" gap={1}>
-                                <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
-                                    {det.activo?.symbol}
-                                </Typography>
-                                <Typography variant="caption" sx={{ color: getAccionColor(det.accion), display: 'flex', alignItems: 'center' }}>
-                                    {getAccionIcon(det.accion)} {AccionRecomendada[det.accion]}
-                                </Typography>
-                            </Box>
-                            <Box textAlign="right">
-                                <Typography variant="caption" display="block" color="text.secondary">
-                                    Target: ${det.precioObjetivo}
-                                </Typography>
-                            </Box>
-                        </Box>
-                    ))}
-                    {detalles.length > 3 && (
-                        <Typography variant="caption" align="center" display="block" color="text.secondary" mt={1}>
-                            +{detalles.length - 3} activos más...
-                        </Typography>
-                    )}
+                <Box mt={1}>
+                    <Typography variant="caption" color="text.secondary" fontStyle="italic">
+                        Haz clic para ver la estrategia completa.
+                    </Typography>
                 </Box>
             </CardContent>
         </Card>
