@@ -35,9 +35,14 @@ export default function RecomendacionesPage() {
 
         if (data && data.length > 0) {
             data.forEach(r => {
-                if (r.autorId && r.autorNombre && !seen.has(r.autorId)) {
-                    seen.add(r.autorId);
-                    uniqueAuthors.push({ id: r.autorId, nombre: r.autorNombre });
+                // Determine ID: try autorId, fallback to autorNombre, lastly random (shouldn't happen if nombre exists)
+                // We trust autorNombre matches display needs.
+                const id = r.autorId || r.autorNombre;
+                const nombre = r.autorNombre;
+
+                if (id && nombre && !seen.has(id)) {
+                    seen.add(id);
+                    uniqueAuthors.push({ id, nombre });
                 }
             });
         }
