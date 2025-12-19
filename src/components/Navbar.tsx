@@ -44,17 +44,22 @@ export default function Navbar() {
   const { user, logout, isAuthenticated } = useAuth();
   const [userMenuAnchor, setUserMenuAnchor] =
     React.useState<null | HTMLElement>(null);
+  const [mounted, setMounted] = React.useState(false);
 
   const router = useRouter();
 
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const navItems = React.useMemo(() => {
-    if (!isAuthenticated) return baseNavItems;
+    if (!mounted || !isAuthenticated) return baseNavItems;
     return [
       ...baseNavItems,
       { label: "Recomendaciones", href: "/recomendaciones" },
       { label: "Mi portafolio", href: "/portfolio" },
     ];
-  }, [isAuthenticated]);
+  }, [isAuthenticated, mounted]);
 
   const defaultPanelHref = getHomePathForRole(user?.rol ?? null);
 
@@ -73,7 +78,7 @@ export default function Navbar() {
 
   const toggle = (v: boolean) => () => setOpen(v);
 
-  const logoHref = isAuthenticated ? defaultPanelHref : "/";
+  const logoHref = (mounted && isAuthenticated) ? defaultPanelHref : "/";
 
   const roleLabel =
     user?.rol === "Admin"
@@ -81,6 +86,9 @@ export default function Navbar() {
       : user?.rol === "Inversor"
         ? "Inversor"
         : user?.rol ?? "";
+
+  // Helper to safely render auth/unauth content
+  const showAuthContent = mounted && isAuthenticated;
 
   return (
     <>
@@ -126,7 +134,7 @@ export default function Navbar() {
               className={styles.dividerVertical}
             />
 
-            {!isAuthenticated ? (
+            {!showAuthContent ? (
               <>
                 <Button
                   component={Link}
@@ -219,7 +227,7 @@ export default function Navbar() {
           onKeyDown={toggle(false)}
         >
           <Box className={styles.drawerHeader}>
-            {isAuthenticated ? (
+            {showAuthContent ? (
               <>
                 <Typography variant="subtitle2" color="text.secondary">
                   Sesión
@@ -257,7 +265,7 @@ export default function Navbar() {
 
           <Divider className={styles.drawerDivider} />
 
-          {!isAuthenticated ? (
+          {!showAuthContent ? (
             <List>
               <ListItem disablePadding>
                 <ListItemButton component={Link} href="/auth/login">
