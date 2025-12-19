@@ -6,3 +6,8 @@ export async function getSectores(): Promise<SectorDTO[]> {
     return res.data;
 }
 
+export async function getSectorById(id: string): Promise<SectorDTO> {
+    const res = await http.get<SectorDTO>(`/api/sectores/${id}`);
+    return res.data;
+}
+
