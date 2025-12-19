@@ -2,12 +2,14 @@
 
 import React, { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { RolUsuario } from "@/types/Usuario";
+import { hasRole } from "@/services/AuthService";
 import { useRouter } from "next/navigation";
 import { Box, CircularProgress, Typography } from "@mui/material";
 
 interface RoleGuardProps {
     children: React.ReactNode;
-    allowedRoles?: string[]; // Si es undefined o vacío, solo requiere estar logueado
+    allowedRoles?: RolUsuario[]; // Si es undefined o vacío, solo requiere estar logueado
 }
 
 export const RoleGuard: React.FC<RoleGuardProps> = ({
@@ -25,7 +27,7 @@ export const RoleGuard: React.FC<RoleGuardProps> = ({
             return;
         }
 
-        if (allowedRoles.length > 0 && !allowedRoles.includes(user.rol)) {
+        if (allowedRoles.length > 0 && !hasRole(allowedRoles)) {
             router.replace("/access-denied");
         }
     }, [user, loading, allowedRoles, router]);
@@ -46,7 +48,7 @@ export const RoleGuard: React.FC<RoleGuardProps> = ({
     }
 
     if (!user) return null;
-    if (allowedRoles.length > 0 && !allowedRoles.includes(user.rol)) return null;
+    if (allowedRoles.length > 0 && !hasRole(allowedRoles)) return null;
 
     return <>{children}</>;
 };
