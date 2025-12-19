@@ -5,9 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import {
     Box,
     Button,
-    Card,
-    CardContent,
-    Chip,
     Container,
     Divider,
     Stack,
@@ -16,27 +13,52 @@ import {
     Paper,
     Grid,
     Avatar,
-    IconButton,
+    Chip,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import { ActivoDTO } from "@/types/Activo";
-import { useActivoDetail } from "@/hooks/useActivoDetail";
+import LightbulbIcon from '@mui/icons-material/Lightbulb';
 
+import Link from "next/link";
+
+import { useActivoDetail } from "@/hooks/useActivoDetail";
 import styles from "./styles/ActivoDetail.module.css";
 
 import { formatPercentage } from "@/utils/format";
 import { getAvatarColor } from "@/app-theme/icons-appearance";
 import { getCurrentUser } from "@/services/AuthService";
+import { createSlug } from "@/utils/slug";
+import { AccionRecomendada } from "@/types/Recomendacion";
+
+// Helpers
+const getAccionLabel = (accion: AccionRecomendada) => {
+    switch (accion) {
+        case AccionRecomendada.CompraFuerte: return "Compra Fuerte";
+        case AccionRecomendada.Comprar: return "Comprar";
+        case AccionRecomendada.Mantener: return "Mantener";
+        case AccionRecomendada.Vender: return "Vender";
+        default: return "Desconocido";
+    }
+};
+
+const getAccionColor = (accion: AccionRecomendada) => {
+    switch (accion) {
+        case AccionRecomendada.CompraFuerte: return "success";
+        case AccionRecomendada.Comprar: return "success";
+        case AccionRecomendada.Mantener: return "warning";
+        case AccionRecomendada.Vender: return "error";
+        default: return "default";
+    }
+};
 
 export default function ActivoDetalle() {
     const params = useParams();
     const router = useRouter();
     const id = params.id as string;
 
-    const { activo, loading } = useActivoDetail(id);
+    const { activo, activeRecommendations, loading } = useActivoDetail(id);
 
     const handleOperation = () => {
         const user = getCurrentUser();
@@ -211,6 +233,76 @@ export default function ActivoDetalle() {
                                 </Grid>
                             </Grid>
                         </Paper>
+
+                        {/* NEW RECOMMENATIONS SECTION */}
+                        {activeRecommendations && activeRecommendations.length > 0 && (
+                            <Paper
+                                elevation={0}
+                                className={styles.detailPaper}
+                                sx={{ mt: 3 }}
+                            >
+                                <div className={styles.sectionHeaderStack}>
+                                    <LightbulbIcon color="warning" />
+                                    <Typography variant="h6" fontWeight="bold">
+                                        Recomendaciones de Expertos
+                                    </Typography>
+                                </div>
+                                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                                    Análisis vigentes que incluyen este activo.
+                                </Typography>
+
+                                <Stack spacing={2}>
+                                    {activeRecommendations.map((rec) => (
+                                        <Box key={rec.summary.id} sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2, bgcolor: 'background.default' }}>
+                                            <Typography
+                                                variant="subtitle1"
+                                                fontWeight="bold"
+                                                component={Link}
+                                                href={`/recomendaciones/${createSlug(rec.summary.titulo)}`}
+                                                sx={{
+                                                    textDecoration: 'none',
+                                                    color: 'primary.main',
+                                                    '&:hover': { textDecoration: 'underline' }
+                                                }}
+                                            >
+                                                {rec.summary.titulo}
+                                            </Typography>
+
+                                            <Typography variant="caption" display="block" color="text.secondary" gutterBottom>
+                                                Por {rec.summary.autorNombre} • {new Date(rec.summary.fecha).toLocaleDateString()}
+                                            </Typography>
+
+                                            {rec.detail && (
+                                                <Grid container spacing={2} sx={{ mt: 1 }}>
+                                                    <Grid size={{ xs: 4 }}>
+                                                        <Typography variant="caption" display="block" fontWeight="bold">Estrategia</Typography>
+                                                        <Chip
+                                                            label={getAccionLabel(rec.detail.accion)}
+                                                            color={getAccionColor(rec.detail.accion) as any}
+                                                            size="small"
+                                                            variant="outlined"
+                                                            sx={{ fontWeight: 'bold' }}
+                                                        />
+                                                    </Grid>
+                                                    <Grid size={{ xs: 4 }}>
+                                                        <Typography variant="caption" display="block" fontWeight="bold">Target</Typography>
+                                                        <Typography variant="body2" fontWeight="bold" color="success.main">
+                                                            ${rec.detail.precioObjetivo?.toFixed(2)}
+                                                        </Typography>
+                                                    </Grid>
+                                                    <Grid size={{ xs: 4 }}>
+                                                        <Typography variant="caption" display="block" fontWeight="bold">Stop Loss</Typography>
+                                                        <Typography variant="body2" fontWeight="bold" color="error.main">
+                                                            ${rec.detail.stopLoss?.toFixed(2)}
+                                                        </Typography>
+                                                    </Grid>
+                                                </Grid>
+                                            )}
+                                        </Box>
+                                    ))}
+                                </Stack>
+                            </Paper>
+                        )}
 
                     </Grid>
 
