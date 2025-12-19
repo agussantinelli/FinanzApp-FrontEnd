@@ -4,16 +4,12 @@ import { useCallback, useEffect, useState } from "react";
 import { getTopCryptos } from "@/services/CryptoService";
 import { CryptoTopDTO } from "@/types/Crypto";
 import {
-  Paper, Typography, Button, Grid, Card, CardContent,
-  CircularProgress, Divider, Box
+  Paper, Typography, Button, Divider, Box,
+  CircularProgress
 } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import styles from "./styles/CryptoSection.module.css";
-
-function formatUSD(n?: number) {
-  if (typeof n !== "number" || Number.isNaN(n)) return "—";
-  return n.toLocaleString("es-AR", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
-}
+import CryptoCard from "@/components/cards/CryptoCard";
 
 export default function CryptoSection() {
   const [data, setData] = useState<CryptoTopDTO[]>([]);
@@ -66,25 +62,7 @@ export default function CryptoSection() {
 
       <Box className={styles.gridContainer}>
         {data.map((c) => (
-          <Card key={c.symbol} className={styles.cryptoCard}>
-            <CardContent>
-              <Typography variant="h6" className={styles.cardTitle}>
-                {c.name}
-              </Typography>
-              <Typography variant="caption" className={styles.cardSubtitle}>
-                {c.symbol}
-              </Typography>
-              <Typography variant="body2" className={styles.cardText}>
-                Precio: <strong>{formatUSD(c.priceUsd)}</strong>
-              </Typography>
-              <Typography variant="caption" className={`${styles.cardChange} ${(c.changePct24h ?? 0) >= 0 ? styles.positive : styles.negative}`}>
-                24h: {(c.changePct24h ?? 0) > 0 ? "+" : ""}{c.changePct24h}%
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                Rank #{c.rank}
-              </Typography>
-            </CardContent>
-          </Card>
+          <CryptoCard key={c.symbol} data={c} />
         ))}
       </Box>
     </Paper>
