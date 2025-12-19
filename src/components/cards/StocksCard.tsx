@@ -36,7 +36,7 @@ export default function StocksCard({ data: d, title }: Props) {
                         </span>
                     )}
                 </Typography>
-                <Typography>
+                <Typography className={styles.cardText}>
                     USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong>
                     {d.usChangePct !== undefined && d.usChangePct !== null && (
                         <span className={`${styles.changePercent} ${d.usChangePct >= 0 ? styles.positive : styles.negative}`}>

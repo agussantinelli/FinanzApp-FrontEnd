@@ -26,6 +26,8 @@
 
 .cardText {
     color: #fff !important;
+    font-size: 0.9rem !important;
+    margin-bottom: 6px !important;
 }
 
 .cardVariation {
