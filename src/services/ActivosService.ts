@@ -3,6 +3,22 @@ import { ActivoDTO } from "@/types/Activo";
 
 import { cacheActivos } from "@/lib/activos-cache";
 
+export interface CrearActivoDTO {
+    tipoId: number;
+    sectorId: number;
+    nombre: string;
+    symbol: string;
+    precio: number;
+    cantidad: number;
+    moneda: string;
+}
+
+export async function createActivo(dto: CrearActivoDTO): Promise<ActivoDTO> {
+    const res = await http.post<ActivoDTO>("/api/activos", dto);
+    cacheActivos([res.data]);
+    return res.data;
+}
+
 export async function getActivos(tipo?: string): Promise<ActivoDTO[]> {
     const params = tipo && tipo !== "Todos" ? { tipo } : {};
     const res = await http.get<ActivoDTO[]>("/api/activos", { params });
