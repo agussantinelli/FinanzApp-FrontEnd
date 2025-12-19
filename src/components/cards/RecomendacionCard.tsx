@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { createSlug } from "@/utils/slug";
 import {
     Card, CardContent, Typography, Box, Chip, Divider, Stack
 } from '@mui/material';
@@ -57,9 +58,10 @@ export default function RecomendacionCard({ item }: Props) {
         day: '2-digit', month: 'short', year: 'numeric'
     });
 
+
     return (
         <Card variant="outlined" sx={{ height: '100%', display: 'flex', flexDirection: 'column', position: 'relative', transition: 'transform 0.2s, box-shadow 0.2s', '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 4px 20px rgba(0,0,0,0.4)', borderColor: 'primary.main', cursor: 'pointer' } }}>
-            <Link href={`/recomendaciones/${item.id}`} style={{ textDecoration: 'none', color: 'inherit', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Link href={`/recomendaciones/${createSlug(item.titulo)}`} style={{ textDecoration: 'none', color: 'inherit', height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                     <CardContent sx={{ flex: 1 }}>
                         <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={1}>

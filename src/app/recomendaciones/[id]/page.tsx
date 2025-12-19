@@ -9,7 +9,8 @@ import {
 } from '@mui/material';
 import Link from 'next/link';
 import { RecomendacionDTO, RecomendacionDetalleDTO, AccionRecomendada } from '@/types/Recomendacion';
-import { getRecomendacionById } from '@/services/RecomendacionesService';
+import { getRecomendacionById, getRecomendaciones } from '@/services/RecomendacionesService';
+import { createSlug } from '@/utils/slug';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PersonIcon from '@mui/icons-material/Person';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
@@ -90,19 +91,41 @@ export default function RecomendacionDetallePage() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (id) {
+        const loadData = async () => {
+            if (!id) return;
             setLoading(true);
-            getRecomendacionById(id as string)
-                .then(data => {
-                    setRecomendacion(data);
-                    setLoading(false);
-                })
-                .catch(err => {
-                    console.error(err);
-                    setError("No se pudo cargar la recomendación.");
-                    setLoading(false);
-                });
-        }
+
+            try {
+                const param = id as string;
+                // Check if it's a UUID
+                const isUuid = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(param);
+
+                let realId = param;
+
+                if (!isUuid) {
+                    // It's a slug, we need to find the ID
+                    // Optimization: We could have a searchBySlug endpoint in backend, but for now we fetch list
+                    const allRecs = await getRecomendaciones(true); // Fetch active ones
+                    const match = allRecs.find(r => createSlug(r.titulo) === param);
+
+                    if (match) {
+                        realId = match.id;
+                    } else {
+                        throw new Error("Recomendación no encontrada por slug");
+                    }
+                }
+
+                const data = await getRecomendacionById(realId);
+                setRecomendacion(data);
+                setLoading(false);
+            } catch (err) {
+                console.error(err);
+                setError("No se pudo cargar la recomendación.");
+                setLoading(false);
+            }
+        };
+
+        loadData();
     }, [id]);
 
     if (loading) return <Box display="flex" justifyContent="center" height="50vh" alignItems="center"><CircularProgress /></Box>;
