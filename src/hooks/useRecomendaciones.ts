@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { RecomendacionDTO } from "@/types/Recomendacion";
+import { RecomendacionDTO, RecomendacionResumenDTO } from "@/types/Recomendacion";
 import * as service from "@/services/RecomendacionesService";
 import { cacheRecomendaciones, getAllRecomendacionesFromCache } from "@/lib/recomendaciones-cache";
 
@@ -12,7 +12,7 @@ interface FilterState {
 }
 
 export function useRecomendaciones() {
-    const [data, setData] = useState<RecomendacionDTO[]>([]);
+    const [data, setData] = useState<RecomendacionResumenDTO[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [filters, setFilters] = useState<FilterState>({ soloActivas: true });
@@ -39,7 +39,7 @@ export function useRecomendaciones() {
         }
 
         try {
-            let res: RecomendacionDTO[] = [];
+            let res: RecomendacionResumenDTO[] = [];
 
             // Pass filters.soloActivas (defaults true) to all
             if (filters.sectorId) {
