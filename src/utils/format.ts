@@ -9,7 +9,7 @@ export function formatARS(n?: number | null) {
 
 export function formatUSD(n?: number | null) {
     if (typeof n !== "number" || Number.isNaN(n)) return "—";
-    return n.toLocaleString("en-US", {
+    return n.toLocaleString("es-AR", {
         style: "currency",
         currency: "USD",
         maximumFractionDigits: 2,
