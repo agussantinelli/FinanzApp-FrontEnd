@@ -1,19 +1,19 @@
 export interface CreateOperacionDTO {
-    personaId: string; // UUID
-    activoId: string; // UUID
+    personaId: string; // Guid
+    activoId: string; // Guid
     tipo: number; // Enum: 0 = Compra, 1 = Venta
     cantidad: number;
     precioUnitario: number;
-    monedaOperacion: string;
+    monedaOperacion: string; // "ARS" default
     comision?: number;
     fechaOperacion?: string;
 }
 
 export interface OperacionResponseDTO {
-    id: string; // UUID
+    id: string; // Guid
     activoSymbol: string;
     activoNombre: string;
-    tipo: string;
+    tipo: string; // "Compra" | "Venta" string description
     cantidad: number;
     precioUnitario: number;
     totalOperado: number;
