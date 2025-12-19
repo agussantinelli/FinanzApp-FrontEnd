@@ -42,7 +42,7 @@ export default function IndexCard({ data: d }: Props) {
         );
     }
 
-    const isLocalIndex = d.dollarRateName === 'ARS';
+    const isLocalIndex = d.dollarRateName === 'ARS' || title === 'Merval';
     const labelArs = isLocalIndex ? "Valor (ARS)" : "CEDEAR (ARS)";
     const labelUsd = isLocalIndex ? "Valor (USD)" : "Indice USA (USD)";
 
