@@ -343,7 +343,7 @@ export default function Activos() {
                       <TableCell align="right">
                         <Button
                           component={Link}
-                          href={`/activos/${activo.id}`}
+                          href={`/activos/${activo.symbol}`}
                           variant="outlined"
                           size="small"
                           className={styles.detailsButton}

@@ -221,7 +221,7 @@ export default function RecomendacionDetallePage() {
                                         {detalle.activo ? (
                                             <MuiLink
                                                 component={Link}
-                                                href={`/activos/${detalle.activoId}`}
+                                                href={`/activos/${detalle.activo.symbol}`}
                                                 underline="hover"
                                                 fontWeight="bold"
                                                 color="primary"
