@@ -50,6 +50,11 @@ export default function RecomendacionCard({ item }: Props) {
         day: '2-digit', month: 'short', year: 'numeric'
     });
 
+    const nombrePersona = item.persona?.nombre || 'Desconocido';
+    const apellidoPersona = item.persona?.apellido || '';
+    const sectores = item.sectoresObjetivo || [];
+    const detalles = item.detalles || [];
+
     return (
         <Card variant="outlined" sx={{ height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }}>
             <CardContent>
@@ -62,7 +67,7 @@ export default function RecomendacionCard({ item }: Props) {
                             {item.titulo}
                         </Typography>
                         <Typography variant="caption" color="primary">
-                            Por {item.persona.nombre} {item.persona.apellido}
+                            Por {nombrePersona} {apellidoPersona}
                         </Typography>
                     </Box>
                     <Chip
@@ -87,7 +92,7 @@ export default function RecomendacionCard({ item }: Props) {
                 </Box>
 
                 <Stack direction="row" spacing={1} mb={2}>
-                    {item.sectoresObjetivo.map(s => (
+                    {sectores.map(s => (
                         <Chip key={s.id} label={s.nombre} size="small" sx={{ fontSize: '0.7rem' }} />
                     ))}
                     <Chip
@@ -102,7 +107,7 @@ export default function RecomendacionCard({ item }: Props) {
                 <Divider sx={{ my: 1 }} />
 
                 <Box>
-                    {item.detalles.slice(0, 3).map((det, idx) => (
+                    {detalles.slice(0, 3).map((det, idx) => (
                         <Box key={idx} display="flex" justifyContent="space-between" alignItems="center" my={0.5}>
                             <Box display="flex" alignItems="center" gap={1}>
                                 <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
@@ -119,9 +124,9 @@ export default function RecomendacionCard({ item }: Props) {
                             </Box>
                         </Box>
                     ))}
-                    {item.detalles.length > 3 && (
+                    {detalles.length > 3 && (
                         <Typography variant="caption" align="center" display="block" color="text.secondary" mt={1}>
-                            +{item.detalles.length - 3} activos más...
+                            +{detalles.length - 3} activos más...
                         </Typography>
                     )}
                 </Box>
