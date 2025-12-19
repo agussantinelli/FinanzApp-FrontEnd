@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import {
     Card, CardContent, Typography, Box, Chip, Divider, Stack
 } from '@mui/material';
@@ -57,60 +58,64 @@ export default function RecomendacionCard({ item }: Props) {
     });
 
     return (
-        <Card variant="outlined" sx={{ height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }}>
-            <CardContent>
-                <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={1}>
-                    <Box>
-                        <Typography variant="overline" color="text.secondary">
-                            {item.fuente} • {formattedDate}
-                        </Typography>
-                        <Typography variant="h6" component="div" sx={{ lineHeight: 1.2, mb: 0.5 }}>
-                            {item.titulo}
-                        </Typography>
-                        <Typography variant="caption" color="primary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                            <PersonIcon fontSize="inherit" /> {item.autorNombre}
-                        </Typography>
-                    </Box>
-                    <Chip
-                        label={item.riesgo}
-                        color={getRiesgoColor(item.riesgo) as any}
-                        size="small"
-                        icon={<ShieldIcon />}
-                        variant="outlined"
-                    />
+        <Card variant="outlined" sx={{ height: '100%', display: 'flex', flexDirection: 'column', position: 'relative', transition: 'transform 0.2s, box-shadow 0.2s', '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 4px 20px rgba(0,0,0,0.4)', borderColor: 'primary.main', cursor: 'pointer' } }}>
+            <Link href={`/recomendaciones/${item.id}`} passHref legacyBehavior>
+                <Box component="a" sx={{ textDecoration: 'none', color: 'inherit', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                    <CardContent sx={{ flex: 1 }}>
+                        <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={1}>
+                            <Box>
+                                <Typography variant="overline" color="text.secondary">
+                                    {item.fuente} • {formattedDate}
+                                </Typography>
+                                <Typography variant="h6" component="div" sx={{ lineHeight: 1.2, mb: 0.5 }}>
+                                    {item.titulo}
+                                </Typography>
+                                <Typography variant="caption" color="primary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                    <PersonIcon fontSize="inherit" /> {item.autorNombre}
+                                </Typography>
+                            </Box>
+                            <Chip
+                                label={item.riesgo}
+                                color={getRiesgoColor(item.riesgo) as any}
+                                size="small"
+                                icon={<ShieldIcon />}
+                                variant="outlined"
+                            />
+                        </Box>
+
+                        <Box mb={2}>
+                            <Typography variant="body2" color="text.secondary">
+                                {item.cantidadActivos} activo{item.cantidadActivos !== 1 ? 's' : ''} recomendados.
+                                <br />
+                                Ver detalle completo para más información.
+                            </Typography>
+                        </Box>
+
+                        <Stack direction="row" spacing={1} mb={2}>
+                            <Chip
+                                icon={<AccessTimeIcon style={{ color: 'inherit' }} />}
+                                label={getHorizonteLabel(item.horizonte)}
+                                size="small"
+                                variant="outlined"
+                                sx={{
+                                    fontSize: '0.75rem',
+                                    fontWeight: 'bold',
+                                    ...getHorizonteStyle(item.horizonte),
+                                    backgroundColor: 'rgba(0,0,0,0.2)'
+                                }}
+                            />
+                        </Stack>
+
+                        <Divider sx={{ my: 1 }} />
+
+                        <Box mt={1}>
+                            <Typography variant="caption" color="text.secondary" fontStyle="italic">
+                                Haz clic para ver la estrategia completa.
+                            </Typography>
+                        </Box>
+                    </CardContent>
                 </Box>
-
-                <Box mb={2}>
-                    <Typography variant="body2" color="text.secondary">
-                        {item.cantidadActivos} activo{item.cantidadActivos !== 1 ? 's' : ''} recomendados.
-                        <br />
-                        Ver detalle completo para más información.
-                    </Typography>
-                </Box>
-
-                <Stack direction="row" spacing={1} mb={2}>
-                    <Chip
-                        icon={<AccessTimeIcon style={{ color: 'inherit' }} />}
-                        label={getHorizonteLabel(item.horizonte)}
-                        size="small"
-                        variant="outlined"
-                        sx={{
-                            fontSize: '0.75rem',
-                            fontWeight: 'bold',
-                            ...getHorizonteStyle(item.horizonte),
-                            backgroundColor: 'rgba(0,0,0,0.2)'
-                        }}
-                    />
-                </Stack>
-
-                <Divider sx={{ my: 1 }} />
-
-                <Box mt={1}>
-                    <Typography variant="caption" color="text.secondary" fontStyle="italic">
-                        Haz clic para ver la estrategia completa.
-                    </Typography>
-                </Box>
-            </CardContent>
+            </Link>
         </Card>
     );
 }
