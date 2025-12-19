@@ -3,8 +3,6 @@ import { CrearRecomendacionDTO, RecomendacionDTO, RecomendacionResumenDTO } from
 
 const ENDPOINT = "/api/recomendaciones";
 
-// Cache simple en memoria
-// import { cacheRecomendaciones } from "@/lib/recomendaciones-cache"; // Disabled for now due to type mismatch
 
 // Admin
 export const aprobarRecomendacion = async (id: string): Promise<void> => {

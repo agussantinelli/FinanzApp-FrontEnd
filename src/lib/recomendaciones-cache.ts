@@ -1,18 +1,18 @@
-import { RecomendacionDTO } from "@/types/Recomendacion";
+import { RecomendacionDTO, RecomendacionResumenDTO } from "@/types/Recomendacion";
 
-const recsCache = new Map<string, RecomendacionDTO>();
+const recsCache = new Map<string, RecomendacionDTO | RecomendacionResumenDTO>();
 let isFullCache = false;
 
-export function getRecomendacionFromCache(id: string): RecomendacionDTO | undefined {
+export function getRecomendacionFromCache(id: string): RecomendacionDTO | RecomendacionResumenDTO | undefined {
     return recsCache.get(id);
 }
 
-export function getAllRecomendacionesFromCache(): RecomendacionDTO[] | null {
+export function getAllRecomendacionesFromCache(): (RecomendacionDTO | RecomendacionResumenDTO)[] | null {
     if (!isFullCache && recsCache.size === 0) return null;
     return Array.from(recsCache.values());
 }
 
-export function cacheRecomendaciones(list: RecomendacionDTO[], fullList: boolean = false) {
+export function cacheRecomendaciones(list: (RecomendacionDTO | RecomendacionResumenDTO)[], fullList: boolean = false) {
     list.forEach(r => recsCache.set(r.id, r));
     if (fullList) isFullCache = true;
 }
