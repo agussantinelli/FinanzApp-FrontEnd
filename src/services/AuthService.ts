@@ -10,8 +10,8 @@ function notifyAuthChanged() {
 export function setAuthSession(resp: UserLoginResponseDTO) {
   if (typeof window === "undefined") return;
 
-  localStorage.setItem("fa_token", resp.token);
-  localStorage.setItem(
+  sessionStorage.setItem("fa_token", resp.token);
+  sessionStorage.setItem(
     "fa_user",
     JSON.stringify({
       id: resp.personaId,
@@ -28,16 +28,14 @@ export function setAuthSession(resp: UserLoginResponseDTO) {
 export function clearAuthSession() {
   if (typeof window === "undefined") return;
 
-  localStorage.removeItem("fa_token");
-  localStorage.removeItem("fa_user");
-
+  sessionStorage.clear();
   notifyAuthChanged();
 }
 
 export function getCurrentUser(): AuthenticatedUser | null {
   if (typeof window === "undefined") return null;
 
-  const raw = localStorage.getItem("fa_user");
+  const raw = sessionStorage.getItem("fa_user");
   if (!raw) return null;
 
   try {
@@ -45,6 +43,22 @@ export function getCurrentUser(): AuthenticatedUser | null {
   } catch {
     return null;
   }
+}
+
+/**
+ * Validates the current session by making a request to a protected endpoint.
+ * If the token is invalid (server restart), the global 401 interceptor will trigger logout.
+ */
+export async function verifySession() {
+    // We try to fetch the generic dashboard stats. 
+    // This endpoint should be protected and light enough.
+    // The interceptor in http.ts handles the 401 cleanup.
+    try {
+        await http.get("/api/dashboard/inversor/stats");
+    } catch (error) {
+        // Ignore other errors, we only care about 401 which is handled by interceptor
+        console.error("Session verification probe failed", error);
+    }
 }
 
 export function hasRole(rolesPermitidos: RolUsuario[]): boolean {

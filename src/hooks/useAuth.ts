@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { AuthenticatedUser } from "@/types/Usuario";
-import { getCurrentUser, clearAuthSession } from "@/services/AuthService";
+import { getCurrentUser, clearAuthSession, verifySession } from "@/services/AuthService";
 import { useRouter } from "next/navigation";
 
 export function useAuth() {
@@ -12,6 +12,11 @@ export function useAuth() {
         const u = getCurrentUser();
         setUser(u);
         setLoading(false);
+
+        // Verify session validity with backend if local user exists
+        if (u) {
+            verifySession();
+        }
     }, []);
 
     useEffect(() => {

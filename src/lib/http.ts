@@ -10,7 +10,7 @@ export const http = axios.create({
 
 http.interceptors.request.use((config) => {
   if (typeof window !== "undefined") {
-    const token = localStorage.getItem("fa_token");
+    const token = sessionStorage.getItem("fa_token");
     if (token) {
       config.headers = config.headers ?? {};
       config.headers.Authorization = `Bearer ${token}`;
@@ -25,11 +25,10 @@ http.interceptors.response.use(
     if (error.response?.status === 401) {
       if (typeof window !== "undefined") {
         console.error('Sesión inválida o servidor reiniciado. Redirigiendo...');
-        localStorage.removeItem("fa_token");
-        localStorage.removeItem("fa_user");
+        sessionStorage.clear();
 
         if (!window.location.pathname.includes("/auth/login")) {
-          window.location.href = "/auth/login?expired=true";
+          window.location.href = "/auth/login?session=expired";
         }
       }
     }
