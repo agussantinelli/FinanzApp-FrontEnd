@@ -16,6 +16,7 @@ import styles from "./styles/Recomendaciones.module.css";
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import AddIcon from '@mui/icons-material/Add';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import { getSectores } from "@/services/SectorService";
 import { searchActivos } from "@/services/ActivosService";
 import { SectorDTO } from "@/types/Sector";
@@ -108,15 +109,26 @@ export default function RecomendacionesPage() {
                 description="Descubre estrategias de inversión diseñadas por profesionales."
             >
                 {user?.rol === RolUsuario.Experto && (
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        startIcon={<AddIcon />}
-                        onClick={() => router.push('/recomendaciones/realizar')}
-                        sx={{ whiteSpace: 'nowrap', px: 3, borderRadius: 2 }}
-                    >
-                        Realizar Recomendación
-                    </Button>
+                    <Box display="flex" gap={2}>
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                            startIcon={<AssignmentIndIcon />}
+                            onClick={() => router.push('/recomendaciones/me')}
+                            sx={{ whiteSpace: 'nowrap', borderRadius: 2, borderWidth: 2, '&:hover': { borderWidth: 2 } }}
+                        >
+                            Mis Recomendaciones
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            startIcon={<AddIcon />}
+                            onClick={() => router.push('/recomendaciones/realizar')}
+                            sx={{ whiteSpace: 'nowrap', px: 3, borderRadius: 2 }}
+                        >
+                            Realizar Recomendación
+                        </Button>
+                    </Box>
                 )}
             </PageHeader>
 

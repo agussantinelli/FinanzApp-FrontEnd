@@ -4,7 +4,6 @@ import { createSlug } from "@/utils/slug";
 import {
     Card, CardContent, Typography, Box, Chip, Divider, Stack
 } from '@mui/material';
-import { RecomendacionResumenDTO, Riesgo, AccionRecomendada, Horizonte } from '@/types/Recomendacion';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -12,9 +11,12 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ShieldIcon from '@mui/icons-material/Shield';
 import PersonIcon from '@mui/icons-material/Person';
 import { colors } from '@/app-theme/design-tokens';
+import { RecomendacionResumenDTO, Riesgo, AccionRecomendada, Horizonte, EstadoRecomendacion } from '@/types/Recomendacion';
+import CircleIcon from '@mui/icons-material/Circle';
 
 interface Props {
     item: RecomendacionResumenDTO;
+    showStatus?: boolean;
 }
 
 const getRiesgoColor = (r: string) => {
@@ -53,10 +55,29 @@ const getHorizonteStyle = (h: string) => {
     }
 };
 
-export default function RecomendacionCard({ item }: Props) {
+const getEstadoConfig = (e: number) => {
+    switch (e) {
+        case EstadoRecomendacion.Pendiente:
+            return { label: "Pendiente", color: "warning", icon: <AccessTimeIcon fontSize="small" /> };
+        case EstadoRecomendacion.Aceptada:
+            return { label: "Aceptada", color: "success", icon: <ShieldIcon fontSize="small" /> };
+        case EstadoRecomendacion.Rechazada:
+            return { label: "Rechazada", color: "error", icon: <RemoveIcon fontSize="small" /> };
+        case EstadoRecomendacion.Eliminada:
+            return { label: "Eliminada", color: "default", icon: <CircleIcon fontSize="small" /> };
+        default:
+            return { label: "Desconocido", color: "default", icon: <CircleIcon fontSize="small" /> };
+    }
+};
+
+export default function RecomendacionCard({ item, showStatus = false }: Props) {
     const formattedDate = new Date(item.fecha).toLocaleDateString('es-AR', {
         day: '2-digit', month: 'short', year: 'numeric'
     });
+
+    // Default to Aprobada if not present (backward comp), or check value
+    const estadoConfig = item.estado !== undefined ? getEstadoConfig(item.estado) : null;
+
 
 
     return (
@@ -76,13 +97,24 @@ export default function RecomendacionCard({ item }: Props) {
                                     <PersonIcon fontSize="inherit" /> {item.autorNombre}
                                 </Typography>
                             </Box>
-                            <Chip
-                                label={item.riesgo}
-                                color={getRiesgoColor(item.riesgo) as any}
-                                size="small"
-                                icon={<ShieldIcon />}
-                                variant="outlined"
-                            />
+                            <Box display="flex" gap={1}>
+                                {showStatus && estadoConfig && (
+                                    <Chip
+                                        label={estadoConfig.label}
+                                        color={estadoConfig.color as any}
+                                        size="small"
+                                        variant="filled" // Filled to distinguish from Risk
+                                        sx={{ fontWeight: 'bold' }}
+                                    />
+                                )}
+                                <Chip
+                                    label={item.riesgo}
+                                    color={getRiesgoColor(item.riesgo) as any}
+                                    size="small"
+                                    icon={<ShieldIcon />}
+                                    variant="outlined"
+                                />
+                            </Box>
                         </Box>
 
                         <Box mb={2}>

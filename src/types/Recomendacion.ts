@@ -20,6 +20,13 @@ export enum AccionRecomendada {
     Vender = 4
 }
 
+export enum EstadoRecomendacion {
+    Pendiente = 0,
+    Aceptada = 1,
+    Rechazada = 2,
+    Eliminada = 3
+}
+
 
 export interface RecomendacionDetalleDTO {
     nroRecomendacionDetalle?: number;
