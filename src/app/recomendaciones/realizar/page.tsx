@@ -22,7 +22,6 @@ import { debounce } from "@mui/material/utils";
 
 import styles from "./styles/CrearRecomendacion.module.css";
 
-// --- Subcomponent for Asset Search ---
 interface AssetSearchProps {
     value: ActivoDTO | null;
     onChange: (val: ActivoDTO | null) => void;

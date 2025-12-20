@@ -112,10 +112,10 @@ export default function RecomendacionesPage() {
                         variant="contained"
                         color="primary"
                         startIcon={<AddIcon />}
-                        onClick={() => router.push('/recomendaciones/crear')}
+                        onClick={() => router.push('/recomendaciones/realizar')}
                         sx={{ whiteSpace: 'nowrap', px: 3, borderRadius: 2 }}
                     >
-                        Crear Recomendación
+                        Realizar Recomendación
                     </Button>
                 )}
             </PageHeader>
