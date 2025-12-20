@@ -1,33 +1,27 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import {
     Typography, Box, TextField, Button, Grid, Paper, Divider,
     MenuItem, Select, InputLabel, FormControl, Autocomplete, IconButton, FormHelperText,
     InputAdornment
 } from "@mui/material";
-import { useRouter } from "next/navigation";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import PsychologyIcon from '@mui/icons-material/Psychology';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import LayersIcon from '@mui/icons-material/Layers';
-import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { RolUsuario } from "@/types/Usuario";
 import PageHeader from "@/components/ui/PageHeader";
-import { getSectores } from "@/services/SectorService";
 import { searchActivos } from "@/services/ActivosService";
-import { createRecomendacion } from "@/services/RecomendacionesService";
-import { SectorDTO } from "@/types/Sector";
 import { ActivoDTO } from "@/types/Activo";
-import { Riesgo, Horizonte, AccionRecomendada, CrearRecomendacionDTO } from "@/types/Recomendacion";
+import { Riesgo, Horizonte, AccionRecomendada } from "@/types/Recomendacion";
 import { debounce } from "@mui/material/utils";
 
 import styles from "./styles/RealizarRecomendacion.module.css";
+import { useCrearRecomendacion } from "@/hooks/useCrearRecomendacion";
 
 interface AssetSearchProps {
     value: ActivoDTO | null;
@@ -79,106 +73,25 @@ const AssetSearch: React.FC<AssetSearchProps> = ({ value, onChange, error }) => 
     );
 };
 
-// --- Main Page ---
-
-interface AssetRow {
-    tempId: number;
-    activo: ActivoDTO | null;
-    precioAlRecomendar: string;
-    precioObjetivo: string;
-    stopLoss: string;
-    accion: AccionRecomendada | "";
-}
 
 export default function CrearRecomendacionPage() {
-    const router = useRouter();
+    const {
+        titulo, setTitulo,
+        justificacion, setJustificacion,
+        fuente, setFuente,
+        riesgo, setRiesgo,
+        horizonte, setHorizonte,
+        selectedSectores, setSelectedSectores,
+        availableSectores,
+        assetRows,
+        loading,
+        errors,
 
-    // Form States
-    const [titulo, setTitulo] = useState("");
-    const [justificacion, setJustificacion] = useState("");
-    const [fuente, setFuente] = useState("");
-    const [riesgo, setRiesgo] = useState<Riesgo | "">("");
-    const [horizonte, setHorizonte] = useState<Horizonte | "">("");
-    const [selectedSectores, setSelectedSectores] = useState<SectorDTO[]>([]);
-
-    const [availableSectores, setAvailableSectores] = useState<SectorDTO[]>([]);
-    const [assetRows, setAssetRows] = useState<AssetRow[]>([]);
-
-    // UI States
-    const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-    useEffect(() => {
-        getSectores().then(setAvailableSectores).catch(console.error);
-        setAssetRows([{ tempId: Date.now(), activo: null, precioAlRecomendar: "", precioObjetivo: "", stopLoss: "", accion: "" }]);
-    }, []);
-
-    const handleAddRow = () => {
-        setAssetRows(prev => [...prev, { tempId: Date.now(), activo: null, precioAlRecomendar: "", precioObjetivo: "", stopLoss: "", accion: "" }]);
-    };
-
-    const handleRemoveRow = (tempId: number) => {
-        setAssetRows(prev => prev.filter(r => r.tempId !== tempId));
-    };
-
-    const updateRow = (tempId: number, field: keyof AssetRow, value: any) => {
-        setAssetRows(prev => prev.map(r => r.tempId === tempId ? { ...r, [field]: value } : r));
-    };
-
-    const validate = (): boolean => {
-        const newErrors: { [key: string]: string } = {};
-        if (!titulo.trim()) newErrors.titulo = "El título es requerido";
-        if (!justificacion.trim()) newErrors.justificacion = "La justificación es requerida";
-        if (!riesgo) newErrors.riesgo = "El riesgo es requerido";
-        if (!horizonte) newErrors.horizonte = "El horizonte es requerido";
-        if (selectedSectores.length === 0) newErrors.sectores = "Selecciona al menos un sector";
-
-        if (assetRows.length === 0) {
-            newErrors.assets = "Debe haber al menos un activo recomendado";
-        } else {
-            assetRows.forEach((row, index) => {
-                if (!row.activo) newErrors[`asset_${index}_activ`] = "Selecciona un activo";
-                if (!row.precioAlRecomendar) newErrors[`asset_${index}_pAR`] = "Requerido";
-                if (!row.precioObjetivo) newErrors[`asset_${index}_pO`] = "Requerido";
-                if (!row.stopLoss) newErrors[`asset_${index}_sL`] = "Requerido";
-                if (!row.accion) newErrors[`asset_${index}_acc`] = "Requerido";
-            });
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const handleSubmit = async () => {
-        if (!validate()) return;
-        setLoading(true);
-
-        try {
-            const dto: CrearRecomendacionDTO = {
-                titulo,
-                justificacionLogica: justificacion,
-                fuente,
-                riesgo: Number(riesgo),
-                horizonte: Number(horizonte),
-                sectoresObjetivo: selectedSectores.map(s => ({ id: s.id })),
-                detalles: assetRows.map(r => ({
-                    activoId: r.activo!.id,
-                    precioAlRecomendar: Number(r.precioAlRecomendar),
-                    precioObjetivo: Number(r.precioObjetivo),
-                    stopLoss: Number(r.stopLoss),
-                    accion: Number(r.accion),
-                }))
-            };
-
-            await createRecomendacion(dto);
-            router.push("/recomendaciones");
-        } catch (error) {
-            console.error(error);
-            // Could add a global alert here
-        } finally {
-            setLoading(false);
-        }
-    };
+        handleAddRow,
+        handleRemoveRow,
+        updateRow,
+        handleSubmit
+    } = useCrearRecomendacion();
 
     return (
         <RoleGuard allowedRoles={[RolUsuario.Experto]}>
@@ -193,11 +106,11 @@ export default function CrearRecomendacionPage() {
 
                     {/* General Info Section */}
                     <Box className={styles.formSection}>
-                        <Typography variant="h5" className={styles.sectionTitle}>
+                        <Typography variant="h5" className={styles.sectionTitle} gutterBottom>
                             <InfoOutlinedIcon color="secondary" />
                             Información General
                         </Typography>
-                        <Grid container spacing={3}>
+                        <Grid container spacing={4} sx={{ mt: 1 }}>
                             <Grid size={{ xs: 12 }}>
                                 <TextField
                                     label="Título de la Recomendación"
@@ -307,9 +220,10 @@ export default function CrearRecomendacionPage() {
                         {errors.assets && <Typography color="error" variant="body2" mb={2}>{errors.assets}</Typography>}
 
                         {assetRows.map((row, index) => (
-                            <Box key={row.tempId} className={styles.assetCard}>
-                                <Grid container spacing={2} alignItems="center">
-                                    <Grid size={{ xs: 12, md: 4 }}>
+                            <Box key={row.tempId} className={styles.assetCard} sx={{ mb: 3, p: 2 }}>
+                                <Grid container spacing={3} alignItems="center">
+                                    {/* Row 1: Ticker and Action */}
+                                    <Grid size={{ xs: 12, md: 8 }}>
                                         <AssetSearch
                                             value={row.activo}
                                             onChange={(val) => updateRow(row.tempId, 'activo', val)}
@@ -317,7 +231,7 @@ export default function CrearRecomendacionPage() {
                                         />
                                     </Grid>
 
-                                    <Grid size={{ xs: 6, md: 2 }}>
+                                    <Grid size={{ xs: 12, md: 4 }}>
                                         <FormControl fullWidth error={!!errors[`asset_${index}_acc`]}>
                                             <InputLabel>Acción</InputLabel>
                                             <Select
@@ -333,7 +247,8 @@ export default function CrearRecomendacionPage() {
                                         </FormControl>
                                     </Grid>
 
-                                    <Grid size={{ xs: 6, md: 2 }}>
+                                    {/* Row 2: Prices */}
+                                    <Grid size={{ xs: 12, md: 4 }}>
                                         <TextField
                                             label="Precio Actual"
                                             type="number"
@@ -347,7 +262,7 @@ export default function CrearRecomendacionPage() {
                                         />
                                     </Grid>
 
-                                    <Grid size={{ xs: 6, md: 2 }}>
+                                    <Grid size={{ xs: 12, md: 4 }}>
                                         <TextField
                                             label="Target"
                                             type="number"
@@ -361,7 +276,7 @@ export default function CrearRecomendacionPage() {
                                         />
                                     </Grid>
 
-                                    <Grid size={{ xs: 6, md: 2 }}>
+                                    <Grid size={{ xs: 12, md: 3 }}>
                                         <TextField
                                             label="Stop Loss"
                                             type="number"
@@ -375,15 +290,14 @@ export default function CrearRecomendacionPage() {
                                         />
                                     </Grid>
 
-                                    <Grid size={{ xs: 12 }} display="flex" justifyContent="flex-end">
-                                        <Button
+                                    <Grid size={{ xs: 12, md: 1 }} display="flex" justifyContent="flex-end">
+                                        <IconButton
                                             onClick={() => handleRemoveRow(row.tempId)}
                                             color="error"
                                             disabled={assetRows.length === 1}
-                                            startIcon={<DeleteIcon />}
                                         >
-                                            Eliminar Activo
-                                        </Button>
+                                            <DeleteIcon />
+                                        </IconButton>
                                     </Grid>
                                 </Grid>
                             </Box>
