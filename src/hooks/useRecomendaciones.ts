@@ -12,19 +12,19 @@ interface FilterState {
     riesgoId?: number;
 }
 
-export function useRecomendaciones() {
+export function useRecomendaciones(initialOptions?: { soloActivas?: boolean }) {
     const [data, setData] = useState<RecomendacionResumenDTO[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [filters, setFilters] = useState<FilterState>({ soloActivas: true });
+    const [filters, setFilters] = useState<FilterState>({ soloActivas: initialOptions?.soloActivas ?? true });
 
-    const applyFilters = (newFilters: Partial<FilterState>) => {
+    const applyFilters = useCallback((newFilters: Partial<FilterState>) => {
         setFilters(prev => ({ ...prev, ...newFilters }));
-    };
+    }, []);
 
-    const clearFilters = () => {
+    const clearFilters = useCallback(() => {
         setFilters({ soloActivas: true });
-    };
+    }, []);
 
     const fetchData = useCallback(async () => {
         setLoading(true);
