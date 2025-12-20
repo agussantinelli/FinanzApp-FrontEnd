@@ -16,7 +16,8 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { RolUsuario } from "@/types/Usuario";
-import { RecomendacionDTO, Riesgo, Horizonte, AccionRecomendada } from "@/types/Recomendacion";
+import { RecomendacionDTO } from "@/types/Recomendacion";
+import { getExpertoStats, ExpertoStatsDTO } from "@/services/DashboardService";
 import styles from "./styles/Expert.module.css";
 import { formatARS } from "@/utils/format";
 
@@ -24,32 +25,21 @@ import { formatARS } from "@/utils/format";
 export default function ExpertPage() {
   const router = useRouter();
   const { user } = useAuth();
-  const [tabValue, setTabValue] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
+  const [stats, setStats] = React.useState<ExpertoStatsDTO | null>(null);
 
-  // Data State
-  const [recomendaciones, setRecomendaciones] = React.useState<RecomendacionDTO[]>([]);
-
-  // Form State needs to match DTO structure for creating, but here we just need to load data
-  // ... (omitted for brevity)
-
-  // Handlers ...
-
-  // Fetch Data
   React.useEffect(() => {
-    // ...
+    if (user?.rol === RolUsuario.Experto) {
+      getExpertoStats()
+        .then(data => {
+          setStats(data);
+        })
+        .catch(console.error)
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
   }, [user]);
-
-  // Datos demo / hardcodeados por ahora (moved up to avoid conditional issues if needed, but safe here)
-  const totalRecomendaciones = 86;
-  const recomendacionesHoy = 12;
-  const activosEnRecomendaciones = 34;
-
-  const inversoresSiguiendo = 27;
-  const listasSeguimiento = 9;
-
-  const tasaAcierto = 68; // %
-  const horizontePromedio = 45; // días
 
   return (
     <RoleGuard allowedRoles={[RolUsuario.Experto]}>
@@ -84,13 +74,13 @@ export default function ExpertPage() {
                 <Stack direction="row" spacing={1.5}>
                   <Button
                     component={Link}
-                    href="/portfolio"
+                    href="/recomendaciones/me"
                     variant="outlined"
                     color="inherit"
                     size="small"
                     className={styles.actionButton}
                   >
-                    Ver mi portafolio
+                    Mis Recomendaciones
                   </Button>
                 </Stack>
               </Stack>
@@ -111,14 +101,14 @@ export default function ExpertPage() {
               >
                 <Box>
                   <Typography variant="h4" className={styles.bigNumber}>
-                    {totalRecomendaciones}
+                    {stats?.totalRecomendaciones ?? 0}
                   </Typography>
                   <Typography
                     variant="body2"
                     color="text.secondary"
                     sx={{ mt: 0.5 }}
                   >
-                    recomendaciones activas emitidas por vos.
+                    recomendaciones totales emitidas por vos.
                   </Typography>
                 </Box>
 
@@ -132,13 +122,13 @@ export default function ExpertPage() {
                       variant="subtitle2"
                       className={styles.subtitleBold}
                     >
-                      Hoy
+                      Activas
                     </Typography>
                     <Typography variant="h6" className={styles.bigNumber}>
-                      {recomendacionesHoy}
+                      {stats?.recomendacionesActivas ?? 0}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      nuevas recomendaciones generadas.
+                      recomendaciones vigentes.
                     </Typography>
                   </Box>
 
@@ -150,10 +140,10 @@ export default function ExpertPage() {
                       Activos cubiertos
                     </Typography>
                     <Typography variant="h6" className={styles.bigNumber}>
-                      {activosEnRecomendaciones}
+                      -
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      activos distintos referidos en tus recomendaciones.
+                      activos distintos referidos.
                     </Typography>
                   </Box>
                 </Stack>
@@ -167,32 +157,10 @@ export default function ExpertPage() {
                 Alcance entre inversores
               </Typography>
               <Typography variant="h4" className={`${styles.bigNumber} ${styles.marginTop}`} sx={{ mt: 0.5 }}>
-                {inversoresSiguiendo}
+                -
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                inversores siguen al menos una de tus recomendaciones.
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                Más adelante podés vincular esto con las cuentas reales y
-                posiciones.
-              </Typography>
-            </Paper>
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Paper className={styles.infoCard}>
-              <Typography variant="caption" color="text.secondary">
-                Listas y carteras modelo
-              </Typography>
-              <Typography variant="h4" className={`${styles.bigNumber} ${styles.marginTop}`} sx={{ mt: 0.5 }}>
-                {listasSeguimiento}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                listas de seguimiento o carteras modelo asociadas a tus ideas.
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                Podés usar esto para armar paquetes de recomendaciones
-                “conservador / moderado / agresivo”.
+                inversores siguen tus recomendaciones.
               </Typography>
             </Paper>
           </Grid>
@@ -200,35 +168,17 @@ export default function ExpertPage() {
           <Grid size={{ xs: 12, md: 6 }}>
             <Paper className={styles.highlightInfoCard}>
               <Typography variant="caption" color="text.secondary">
-                Desempeño estimado
+                Ranking Global
               </Typography>
               <Typography
                 variant="h4"
                 className={`${styles.bigNumber} ${styles.neonGreenText}`}
                 sx={{ mt: 0.5 }}
               >
-                {tasaAcierto}%
+                #{stats?.ranking ?? "-"}
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                tasa de acierto de tus recomendaciones (demo). Después podés
-                calcularlo con precios históricos de los activos.
-              </Typography>
-            </Paper>
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Paper className={styles.infoCard}>
-              <Typography variant="caption" color="text.secondary">
-                Horizonte de inversión
-              </Typography>
-              <Typography variant="h4" className={`${styles.bigNumber} ${styles.marginTop}`} sx={{ mt: 0.5 }}>
-                {horizontePromedio} días
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                horizonte promedio sugerido en tus ideas (corto / mediano plazo).
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                Podrías segmentar recomendaciones por plazo y nivel de riesgo.
+                Tu posición entre expertos de la plataforma.
               </Typography>
             </Paper>
           </Grid>
@@ -239,29 +189,19 @@ export default function ExpertPage() {
                 Próximos pasos para el módulo de experto
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                Algunas ideas de funcionalidades que podrías implementar más
-                adelante:
+                Acciones rápidas para gestionar tu perfil:
               </Typography>
 
               <Divider sx={{ my: 1.5 }} />
 
               <Stack spacing={1.1}>
-                <Typography variant="body2">
-                  • Crear y editar recomendaciones con target de precio, stop loss
-                  y horizonte temporal.
-                </Typography>
-                <Typography variant="body2">
-                  • Asociar cada recomendación a un conjunto de activos (por
-                  ejemplo, CEDEAR + dólar de referencia).
-                </Typography>
-                <Typography variant="body2">
-                  • Mostrar a los inversores qué recomendaciones nuevas se
-                  publicaron desde su último ingreso.
-                </Typography>
-                <Typography variant="body2">
-                  • Armar métricas de performance históricas por experto
-                  (rentabilidad, drawdown, volatilidad).
-                </Typography>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  onClick={() => router.push('/recomendaciones/crear')}
+                >
+                  Crear Nueva Recomendación
+                </Button>
               </Stack>
             </Paper>
           </Grid>

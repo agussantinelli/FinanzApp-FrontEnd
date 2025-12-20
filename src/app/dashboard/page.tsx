@@ -154,13 +154,13 @@ export default function DashboardPage() {
       <Grid size={{ xs: 12, md: 4 }}>
         <Paper className={styles.card}>
           <Typography variant="caption" color="text.secondary">
-            Tasa de Acierto (Est.)
+            Ranking Global
           </Typography>
           <Typography variant="h4" className={`${styles.cardValue} ${styles.neonGreenText}`}>
-            {expertoStats?.tasaAcierto != null ? `${expertoStats.tasaAcierto}%` : "N/A"}
+            #{expertoStats?.ranking ?? "-"}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Rendimiento estimado de tus calls.
+            Tu posición entre expertos.
           </Typography>
         </Paper>
       </Grid>
