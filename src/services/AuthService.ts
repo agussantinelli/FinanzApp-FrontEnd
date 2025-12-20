@@ -50,15 +50,25 @@ export function getCurrentUser(): AuthenticatedUser | null {
  * If the token is invalid (server restart), the global 401 interceptor will trigger logout.
  */
 export async function verifySession() {
-    // We try to fetch the generic dashboard stats. 
-    // This endpoint should be protected and light enough.
-    // The interceptor in http.ts handles the 401 cleanup.
-    try {
-        await http.get("/api/dashboard/inversor/stats");
-    } catch (error) {
-        // Ignore other errors, we only care about 401 which is handled by interceptor
-        console.error("Session verification probe failed", error);
+  const user = getCurrentUser();
+  if (!user) return;
+
+  try {
+    let endpoint = "/api/dashboard/inversor/stats";
+
+    // Check role to call the correct protected endpoint
+    // This avoids 403 errors if an Admin tries to access Inversor stats
+    if (user.rol === RolUsuario.Experto) {
+      endpoint = "/api/dashboard/experto/stats";
+    } else if (user.rol === RolUsuario.Admin) {
+      endpoint = "/api/dashboard/admin/stats";
     }
+
+    await http.get(endpoint);
+  } catch (error) {
+    // Ignore other errors, we only care about 401 which is handled by interceptor
+    console.error("Session verification probe failed", error);
+  }
 }
 
 export function hasRole(rolesPermitidos: RolUsuario[]): boolean {
