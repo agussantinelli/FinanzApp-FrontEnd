@@ -40,9 +40,13 @@
 
     background-image: linear-gradient(to right,
             #ffffff 0%,
+            #a4fcc6 12.5%,
             #2cff7d 25%,
+            #00e959a8 37.5%,
             #046429 50%,
+            #00e959a8 62.5%,
             #2cff7d 75%,
+            #a4fcc6 87.5%,
             #ffffff 100%);
     background-size: 200% auto;
 
@@ -50,7 +54,7 @@
     background-clip: text;
     color: transparent;
 
-    animation: gradientFlow 6s linear infinite;
+    animation: gradientFlow 10s linear infinite;
 
     filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.15));
 }
