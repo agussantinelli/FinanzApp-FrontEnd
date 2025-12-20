@@ -1,24 +1,5 @@
 import { http } from "@/lib/http";
-
-export interface InversorStatsDTO {
-    valorTotal: number;
-    rendimientoDiario: number;
-    cantidadActivos: number;
-    exposicionCripto: number;
-}
-
-export interface ExpertoStatsDTO {
-    totalRecomendaciones: number;
-    recomendacionesActivas: number;
-    ranking: number;
-}
-
-export interface AdminStatsDTO {
-    totalUsuarios: number;
-    nuevosUsuariosMes: number;
-    totalActivos: number;
-    recomendacionesPendientes: number;
-}
+import { InversorStatsDTO, ExpertoStatsDTO, AdminStatsDTO } from "@/types/Dashboard";
 
 export async function getInversorStats(): Promise<InversorStatsDTO> {
     const { data } = await http.get<InversorStatsDTO>("/api/dashboard/inversor/stats");

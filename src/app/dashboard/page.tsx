@@ -17,10 +17,8 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { RolUsuario } from "@/types/Usuario";
-import {
-  getInversorStats, getExpertoStats, getAdminStats,
-  InversorStatsDTO, ExpertoStatsDTO, AdminStatsDTO
-} from "@/services/DashboardService";
+import { getInversorStats, getExpertoStats, getAdminStats } from "@/services/DashboardService";
+import { InversorStatsDTO, ExpertoStatsDTO, AdminStatsDTO } from "@/types/Dashboard";
 
 import styles from "./styles/Dashboard.module.css";
 

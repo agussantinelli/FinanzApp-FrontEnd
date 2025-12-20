@@ -17,7 +17,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { RolUsuario } from "@/types/Usuario";
 import { RecomendacionDTO } from "@/types/Recomendacion";
-import { getExpertoStats, ExpertoStatsDTO } from "@/services/DashboardService";
+import { getExpertoStats } from "@/services/DashboardService";
+import { ExpertoStatsDTO } from "@/types/Dashboard";
 import styles from "./styles/Expert.module.css";
 import { formatARS } from "@/utils/format";
 
