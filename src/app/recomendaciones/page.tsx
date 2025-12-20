@@ -6,12 +6,16 @@ import {
     FormControlLabel, Checkbox, Paper, Autocomplete, MenuItem, Select,
     InputLabel, FormControl
 } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+import { RolUsuario } from "@/types/Usuario";
 import { useRecomendaciones } from '@/hooks/useRecomendaciones';
 import RecomendacionCard from '@/components/cards/RecomendacionCard';
 import PageHeader from '@/components/ui/PageHeader';
 import styles from "./styles/Recomendaciones.module.css";
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
+import AddIcon from '@mui/icons-material/Add';
 import { getSectores } from "@/services/SectorService";
 import { searchActivos } from "@/services/ActivosService";
 import { SectorDTO } from "@/types/Sector";
@@ -20,6 +24,8 @@ import { debounce } from "@mui/material/utils";
 
 export default function RecomendacionesPage() {
     const { data, loading, error, filters, applyFilters, clearFilters } = useRecomendaciones();
+    const { user } = useAuth();
+    const router = useRouter();
 
     const [sectores, setSectores] = useState<SectorDTO[]>([]);
     const [assetOptions, setAssetOptions] = useState<ActivoDTO[]>([]);
@@ -36,8 +42,6 @@ export default function RecomendacionesPage() {
 
         if (data && data.length > 0) {
             data.forEach(r => {
-                // Determine ID: try autorId, fallback to autorNombre, lastly random (shouldn't happen if nombre exists)
-                // We trust autorNombre matches display needs.
                 const id = r.autorId || r.autorNombre;
                 const nombre = r.autorNombre;
 
@@ -102,7 +106,19 @@ export default function RecomendacionesPage() {
                 title="Recomendaciones"
                 subtitle="Opinión Experta"
                 description="Descubre estrategias de inversión diseñadas por profesionales."
-            />
+            >
+                {user?.rol === RolUsuario.Experto && (
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={<AddIcon />}
+                        onClick={() => router.push('/recomendaciones/crear')}
+                        sx={{ whiteSpace: 'nowrap', px: 3, borderRadius: 2 }}
+                    >
+                        Crear Recomendación
+                    </Button>
+                )}
+            </PageHeader>
 
             <Paper variant="outlined" sx={{ p: 2, mb: 4, borderRadius: 2 }}>
                 <Grid container spacing={1.5} alignItems="center" columns={{ xs: 12, md: 14 }}>

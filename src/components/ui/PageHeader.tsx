@@ -5,18 +5,26 @@ interface PageHeaderProps {
     title: string;
     subtitle: string;
     description?: string;
+    children?: React.ReactNode;
 }
 
-export default function PageHeader({ title, subtitle, description }: PageHeaderProps) {
+export default function PageHeader({ title, subtitle, description, children }: PageHeaderProps) {
     return (
         <div className={styles.headerContainer}>
-            <h1 className={styles.title}>
-                {title}
-            </h1>
-            {description && (
-                <p className={styles.description}>
-                    {description}
-                </p>
+            <div className={styles.content}>
+                <h1 className={styles.title}>
+                    {title}
+                </h1>
+                {description && (
+                    <p className={styles.description}>
+                        {description}
+                    </p>
+                )}
+            </div>
+            {children && (
+                <div className={styles.actions}>
+                    {children}
+                </div>
             )}
         </div>
     );
