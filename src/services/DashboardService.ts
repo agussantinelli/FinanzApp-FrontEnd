@@ -10,15 +10,14 @@ export interface InversorStatsDTO {
 export interface ExpertoStatsDTO {
     totalRecomendaciones: number;
     recomendacionesActivas: number;
-    tasaAcierto?: number;
-    ranking?: number;
+    ranking: number;
 }
 
 export interface AdminStatsDTO {
     totalUsuarios: number;
     nuevosUsuariosMes: number;
     totalActivos: number;
-    recomendacionesPendientes?: number;
+    recomendacionesPendientes: number;
 }
 
 export async function getInversorStats(): Promise<InversorStatsDTO> {
