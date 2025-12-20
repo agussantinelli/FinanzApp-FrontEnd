@@ -198,7 +198,7 @@ export default function CrearRecomendacionPage() {
                             Información General
                         </Typography>
                         <Grid container spacing={3}>
-                            <Grid item xs={12}>
+                            <Grid size={{ xs: 12 }}>
                                 <TextField
                                     label="Título de la Recomendación"
                                     fullWidth
@@ -208,7 +208,7 @@ export default function CrearRecomendacionPage() {
                                     helperText={errors.titulo}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid size={{ xs: 12 }}>
                                 <TextField
                                     label="Justificación Lógica"
                                     multiline
@@ -220,7 +220,7 @@ export default function CrearRecomendacionPage() {
                                     helperText={errors.justificacion}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid size={{ xs: 12 }}>
                                 <TextField
                                     label="Fuente (Opcional)"
                                     fullWidth
@@ -229,7 +229,7 @@ export default function CrearRecomendacionPage() {
                                 />
                             </Grid>
 
-                            <Grid item xs={12}>
+                            <Grid size={{ xs: 12 }}>
                                 <Autocomplete
                                     multiple
                                     options={availableSectores}
@@ -248,7 +248,7 @@ export default function CrearRecomendacionPage() {
                                 />
                             </Grid>
 
-                            <Grid item xs={12}>
+                            <Grid size={{ xs: 12 }}>
                                 <FormControl fullWidth error={!!errors.riesgo}>
                                     <InputLabel>Nivel de Riesgo</InputLabel>
                                     <Select
@@ -265,7 +265,7 @@ export default function CrearRecomendacionPage() {
                                 </FormControl>
                             </Grid>
 
-                            <Grid item xs={12}>
+                            <Grid size={{ xs: 12 }}>
                                 <FormControl fullWidth error={!!errors.horizonte}>
                                     <InputLabel>Horizonte de Inversión</InputLabel>
                                     <Select
@@ -309,7 +309,7 @@ export default function CrearRecomendacionPage() {
                         {assetRows.map((row, index) => (
                             <Box key={row.tempId} className={styles.assetCard}>
                                 <Grid container spacing={2} alignItems="center">
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 12, md: 4 }}>
                                         <AssetSearch
                                             value={row.activo}
                                             onChange={(val) => updateRow(row.tempId, 'activo', val)}
@@ -317,7 +317,7 @@ export default function CrearRecomendacionPage() {
                                         />
                                     </Grid>
 
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 6, md: 2 }}>
                                         <FormControl fullWidth error={!!errors[`asset_${index}_acc`]}>
                                             <InputLabel>Acción</InputLabel>
                                             <Select
@@ -333,7 +333,7 @@ export default function CrearRecomendacionPage() {
                                         </FormControl>
                                     </Grid>
 
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 6, md: 2 }}>
                                         <TextField
                                             label="Precio Actual"
                                             type="number"
@@ -347,7 +347,7 @@ export default function CrearRecomendacionPage() {
                                         />
                                     </Grid>
 
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 6, md: 2 }}>
                                         <TextField
                                             label="Target"
                                             type="number"
@@ -361,7 +361,7 @@ export default function CrearRecomendacionPage() {
                                         />
                                     </Grid>
 
-                                    <Grid item xs={12}>
+                                    <Grid size={{ xs: 6, md: 2 }}>
                                         <TextField
                                             label="Stop Loss"
                                             type="number"
@@ -375,7 +375,7 @@ export default function CrearRecomendacionPage() {
                                         />
                                     </Grid>
 
-                                    <Grid item xs={12} display="flex" justifyContent="flex-end">
+                                    <Grid size={{ xs: 12 }} display="flex" justifyContent="flex-end">
                                         <Button
                                             onClick={() => handleRemoveRow(row.tempId)}
                                             color="error"
