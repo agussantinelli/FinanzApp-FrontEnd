@@ -5,6 +5,7 @@ import { createRecomendacion } from "@/services/RecomendacionesService";
 import { SectorDTO } from "@/types/Sector";
 import { ActivoDTO } from "@/types/Activo";
 import { Riesgo, Horizonte, AccionRecomendada, CrearRecomendacionDTO } from "@/types/Recomendacion";
+import { useAuth } from "@/hooks/useAuth";
 
 export interface AssetRow {
     tempId: number;
@@ -17,6 +18,7 @@ export interface AssetRow {
 
 export const useCrearRecomendacion = () => {
     const router = useRouter();
+    const { user } = useAuth();
 
     // Form States
     const [titulo, setTitulo] = useState("");
@@ -101,7 +103,8 @@ export const useCrearRecomendacion = () => {
                 fuente,
                 riesgo: Number(riesgo),
                 horizonte: Number(horizonte),
-                sectoresObjetivo: selectedSectores.map(s => ({ id: s.id })),
+                personaId: user?.id || "",
+                sectoresIds: selectedSectores.map(s => s.id),
                 detalles: assetRows.map(r => ({
                     activoId: r.activo!.id,
                     precioAlRecomendar: Number(r.precioAlRecomendar),

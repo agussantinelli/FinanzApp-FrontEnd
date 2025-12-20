@@ -74,7 +74,8 @@ export interface CrearRecomendacionDTO {
     fuente: string;
     riesgo: Riesgo;
     horizonte: Horizonte;
-    sectoresObjetivo: { id: string }[];
+    personaId: string;
+    sectoresIds: string[];
     detalles: {
         activoId: string;
         precioAlRecomendar: number;
