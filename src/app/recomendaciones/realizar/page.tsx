@@ -11,6 +11,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import LayersIcon from '@mui/icons-material/Layers';
+import { useRouter } from "next/navigation";
 
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { RolUsuario } from "@/types/Usuario";
@@ -49,14 +50,17 @@ const AssetSearch: React.FC<AssetSearchProps> = ({ value, onChange, error }) => 
         <Autocomplete
             options={options}
             getOptionLabel={(option) => option.symbol}
-            filterOptions={(x) => x} // Disable client filtering
+            filterOptions={(x) => x}
             value={value}
             onChange={(_, newValue) => onChange(newValue)}
             onInputChange={(_, newInputValue) => handleSearch(newInputValue)}
+            forcePopupIcon={false} // Make it look like a text input
+            noOptionsText="Escribe para buscar..."
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    label="Activo"
+                    label="Buscar Activo (Ticker)"
+                    placeholder="Ej: AAPL, GGAL..."
                     error={error}
                     helperText={value ? value.nombre : ""}
                 />
@@ -65,7 +69,7 @@ const AssetSearch: React.FC<AssetSearchProps> = ({ value, onChange, error }) => 
                 <li {...props} key={option.id}>
                     <Box>
                         <Typography variant="body2" fontWeight="bold">{option.symbol}</Typography>
-                        <Typography variant="caption" color="text.secondary">{option.nombre}</Typography>
+                        <Typography variant="caption" color="text.secondary" ml={1}>{option.nombre}</Typography>
                     </Box>
                 </li>
             )}
@@ -75,6 +79,7 @@ const AssetSearch: React.FC<AssetSearchProps> = ({ value, onChange, error }) => 
 
 
 export default function CrearRecomendacionPage() {
+    const router = useRouter();
     const {
         titulo, setTitulo,
         justificacion, setJustificacion,
