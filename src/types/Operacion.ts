@@ -1,7 +1,12 @@
+export enum TipoOperacion {
+    Compra = 0,
+    Venta = 1
+}
+
 export interface CreateOperacionDTO {
     personaId: string; // Guid
     activoId: string; // Guid
-    tipo: number; // Enum: 0 = Compra, 1 = Venta
+    tipo: TipoOperacion;
     cantidad: number;
     precioUnitario: number;
     monedaOperacion: string; // "ARS" default
