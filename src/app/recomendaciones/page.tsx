@@ -21,6 +21,7 @@ import { getSectores } from "@/services/SectorService";
 import { searchActivos } from "@/services/ActivosService";
 import { SectorDTO } from "@/types/Sector";
 import { ActivoDTO } from "@/types/Activo";
+import { EstadoRecomendacion } from "@/types/Recomendacion";
 import { debounce } from "@mui/material/utils";
 
 export default function RecomendacionesPage() {
@@ -264,14 +265,14 @@ export default function RecomendacionesPage() {
                 </Alert>
             )}
 
-            {!loading && !error && data.length === 0 && (
+            {!loading && !error && data.filter(item => item.estado === EstadoRecomendacion.Aceptada).length === 0 && (
                 <Alert severity="info" sx={{ mb: 3 }}>
                     No hay recomendaciones encontradas con estos filtros.
                 </Alert>
             )}
 
             <Grid container spacing={3}>
-                {data.map((item) => (
+                {data.filter(item => item.estado === EstadoRecomendacion.Aceptada).map((item) => (
                     <Grid size={{ xs: 12, md: 6, lg: 4 }} key={item.id}>
                         <RecomendacionCard item={item} />
                     </Grid>
