@@ -1,0 +1,85 @@
+.container {
+    padding: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.paper {
+    background-color: #111 !important;
+    border: 1px solid #333 !important;
+    color: #fff !important;
+}
+
+.sectionTitle {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #2cff7d;
+    /* Neon Green */
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.assetCard {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 12px;
+    position: relative;
+    transition: all 0.3s ease;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.assetCard:hover {
+    border-color: #2cff7d;
+    box-shadow: 0 4px 20px rgba(44, 255, 125, 0.05);
+}
+
+.assetHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #333;
+}
+
+.assetIndex {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #444;
+}
+
+.activeAssetIndex {
+    color: #2cff7d;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 3rem;
+}
+
+/* Custom Overrides for standard MUI in dark context if needed, 
+   though ideally global theme handles this. 
+   Adding helper utility classes just in case. */
+.neonText {
+    color: #2cff7d;
+}

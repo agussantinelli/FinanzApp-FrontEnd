@@ -3,11 +3,18 @@
 import React, { useState, useEffect, useMemo } from "react";
 import {
     Typography, Box, TextField, Button, Grid, Paper, Divider,
-    MenuItem, Select, InputLabel, FormControl, Autocomplete, IconButton, FormHelperText
+    MenuItem, Select, InputLabel, FormControl, Autocomplete, IconButton, FormHelperText,
+    InputAdornment
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import PsychologyIcon from '@mui/icons-material/Psychology';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import LayersIcon from '@mui/icons-material/Layers';
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { RolUsuario } from "@/types/Usuario";
@@ -20,7 +27,7 @@ import { ActivoDTO } from "@/types/Activo";
 import { Riesgo, Horizonte, AccionRecomendada, CrearRecomendacionDTO } from "@/types/Recomendacion";
 import { debounce } from "@mui/material/utils";
 
-import styles from "./styles/CrearRecomendacion.module.css";
+import styles from "./styles/RealizarRecomendacion.module.css";
 
 interface AssetSearchProps {
     value: ActivoDTO | null;
@@ -182,11 +189,14 @@ export default function CrearRecomendacionPage() {
                     description="Comparte tu análisis experto con la comunidad de inversores."
                 />
 
-                <Paper variant="outlined" sx={{ p: 4, borderRadius: 2 }}>
+                <Paper variant="outlined" className={styles.paper} sx={{ p: 4, borderRadius: 2 }}>
 
                     {/* General Info Section */}
                     <Box className={styles.formSection}>
-                        <Typography variant="h6" gutterBottom color="primary">Información General</Typography>
+                        <Typography variant="h5" className={styles.sectionTitle}>
+                            <InfoOutlinedIcon color="secondary" />
+                            Información General
+                        </Typography>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <TextField
@@ -210,7 +220,7 @@ export default function CrearRecomendacionPage() {
                                     helperText={errors.justificacion}
                                 />
                             </Grid>
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={12}>
                                 <TextField
                                     label="Fuente (Opcional)"
                                     fullWidth
@@ -219,7 +229,7 @@ export default function CrearRecomendacionPage() {
                                 />
                             </Grid>
 
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={12}>
                                 <Autocomplete
                                     multiple
                                     options={availableSectores}
@@ -238,7 +248,7 @@ export default function CrearRecomendacionPage() {
                                 />
                             </Grid>
 
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={12}>
                                 <FormControl fullWidth error={!!errors.riesgo}>
                                     <InputLabel>Nivel de Riesgo</InputLabel>
                                     <Select
@@ -255,7 +265,7 @@ export default function CrearRecomendacionPage() {
                                 </FormControl>
                             </Grid>
 
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={12}>
                                 <FormControl fullWidth error={!!errors.horizonte}>
                                     <InputLabel>Horizonte de Inversión</InputLabel>
                                     <Select
@@ -279,8 +289,17 @@ export default function CrearRecomendacionPage() {
                     {/* Assets Section */}
                     <Box className={styles.formSection}>
                         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                            <Typography variant="h6" color="primary">Activos Recomendados</Typography>
-                            <Button startIcon={<AddCircleOutlineIcon />} onClick={handleAddRow}>
+                            <Typography variant="h5" className={styles.sectionTitle}>
+                                <LayersIcon color="secondary" />
+                                Activos Recomendados
+                            </Typography>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                startIcon={<AddCircleOutlineIcon />}
+                                onClick={handleAddRow}
+                                sx={{ fontWeight: 'bold' }}
+                            >
                                 Agregar Activo
                             </Button>
                         </Box>
@@ -290,7 +309,7 @@ export default function CrearRecomendacionPage() {
                         {assetRows.map((row, index) => (
                             <Box key={row.tempId} className={styles.assetCard}>
                                 <Grid container spacing={2} alignItems="center">
-                                    <Grid item xs={12} md={3}>
+                                    <Grid item xs={12}>
                                         <AssetSearch
                                             value={row.activo}
                                             onChange={(val) => updateRow(row.tempId, 'activo', val)}
@@ -298,7 +317,7 @@ export default function CrearRecomendacionPage() {
                                         />
                                     </Grid>
 
-                                    <Grid item xs={6} md={2}>
+                                    <Grid item xs={12}>
                                         <FormControl fullWidth error={!!errors[`asset_${index}_acc`]}>
                                             <InputLabel>Acción</InputLabel>
                                             <Select
@@ -314,7 +333,7 @@ export default function CrearRecomendacionPage() {
                                         </FormControl>
                                     </Grid>
 
-                                    <Grid item xs={6} md={2}>
+                                    <Grid item xs={12}>
                                         <TextField
                                             label="Precio Actual"
                                             type="number"
@@ -322,10 +341,13 @@ export default function CrearRecomendacionPage() {
                                             value={row.precioAlRecomendar}
                                             onChange={(e) => updateRow(row.tempId, 'precioAlRecomendar', e.target.value)}
                                             error={!!errors[`asset_${index}_pAR`]}
+                                            InputProps={{
+                                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                            }}
                                         />
                                     </Grid>
 
-                                    <Grid item xs={6} md={2}>
+                                    <Grid item xs={12}>
                                         <TextField
                                             label="Target"
                                             type="number"
@@ -333,10 +355,13 @@ export default function CrearRecomendacionPage() {
                                             value={row.precioObjetivo}
                                             onChange={(e) => updateRow(row.tempId, 'precioObjetivo', e.target.value)}
                                             error={!!errors[`asset_${index}_pO`]}
+                                            InputProps={{
+                                                startAdornment: <InputAdornment position="start"><TrendingUpIcon fontSize="small" /></InputAdornment>,
+                                            }}
                                         />
                                     </Grid>
 
-                                    <Grid item xs={6} md={2}>
+                                    <Grid item xs={12}>
                                         <TextField
                                             label="Stop Loss"
                                             type="number"
@@ -344,13 +369,21 @@ export default function CrearRecomendacionPage() {
                                             value={row.stopLoss}
                                             onChange={(e) => updateRow(row.tempId, 'stopLoss', e.target.value)}
                                             error={!!errors[`asset_${index}_sL`]}
+                                            InputProps={{
+                                                startAdornment: <InputAdornment position="start" sx={{ color: 'error.main' }}>!</InputAdornment>,
+                                            }}
                                         />
                                     </Grid>
 
-                                    <Grid item xs={12} md={1} display="flex" justifyContent="center">
-                                        <IconButton onClick={() => handleRemoveRow(row.tempId)} color="error" disabled={assetRows.length === 1}>
-                                            <DeleteIcon />
-                                        </IconButton>
+                                    <Grid item xs={12} display="flex" justifyContent="flex-end">
+                                        <Button
+                                            onClick={() => handleRemoveRow(row.tempId)}
+                                            color="error"
+                                            disabled={assetRows.length === 1}
+                                            startIcon={<DeleteIcon />}
+                                        >
+                                            Eliminar Activo
+                                        </Button>
                                     </Grid>
                                 </Grid>
                             </Box>
