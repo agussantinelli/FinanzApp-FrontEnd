@@ -64,13 +64,13 @@
 
 <p>Que FinanzApp sea el <strong>panel patrimonial de referencia</strong> para el inversor argentino.</p>
 
-<h2>🧩 Alcance Inicial (MVP)</h2>
+<h2>✨ Funcionalidades Destacadas</h2>
 
 <ul>
-    <li>Alta y gestión de activos: <code>CRYPTO</code>, <code>ACCION_LOCAL</code>, <code>CEDEAR</code>, <code>ON</code>.</li>
-    <li>Consulta de cotizaciones por clase de activo.</li>
-    <li>Conversión a ARS/USD usando MEP/CCL/Oficial/Blue (configurable).</li>
-    <li>Reportes base: patrimonio total y distribución por clase.</li>
+    <li><strong>Gestión Multi-Activo:</strong> Soporte para Criptomonedas, Acciones Locales, CEDEARs y Obligaciones Negociables (ONs).</li>
+    <li><strong>Cotizaciones Unificadas:</strong> Acceso centralizado a valores de mercado (Dólar, Crypto, BCBA).</li>
+    <li><strong>Valuación Inteligente:</strong> Conversión automática ARS/USD aplicando el tipo de cambio más conveniente (MEP/CCL/Blue).</li>
+    <li><strong>Dashboard Patrimonial:</strong> Visualización clara del patrimonio total y distribución por tipo de activo.</li>
 </ul>
 
 <hr>
@@ -123,7 +123,7 @@
 <pre><code>FinanzApp-FrontEnd/
 ├── public/                      # Archivos estáticos accesibles públicamente
 ├── src/                         # Código fuente principal
-│   ├── app/                     # App Router (Next.js 14+)
+│   ├── app/                     # App Router (Next.js 16+)
 │   │   ├── access-denied/       # Página de acceso denegado
 │   │   ├── activos/             # Buscador y detalles de Activos
 │   │   ├── admin/               # Panel de Administración (Guard: Admin)
