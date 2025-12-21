@@ -12,3 +12,8 @@ export async function getPortafolioValuado(id: string): Promise<PortafolioValuad
     const { data } = await http.get<PortafolioValuadoDTO>(`${ENDPOINT}/${id}/valuacion`);
     return data;
 }
+
+export async function updatePortafolio(id: string, nombre: string, descripcion: string): Promise<boolean> {
+    await http.put(`${ENDPOINT}/${id}`, { nombre, descripcion });
+    return true;
+}
