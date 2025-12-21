@@ -11,6 +11,7 @@ export interface UserDTO {
     rol: string;
     fechaRegistro: string;
     ultimoLogin?: string;
+    cantidadOperaciones?: number;
 }
 
 export interface AuthenticatedUser {
