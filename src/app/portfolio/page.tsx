@@ -15,27 +15,64 @@ import {
   TableCell,
   TableBody,
   Button,
+  Select,
+  MenuItem,
+  CircularProgress,
+  FormControl,
+  InputLabel
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 
-import { usePortfolioData } from "@/hooks/usePortfolioData";
+import { getMisPortafolios, getPortafolioValuado } from "@/services/PortafolioService";
+import { PortafolioDTO, PortafolioValuadoDTO } from "@/types/Portafolio";
 import styles from "./styles/Portfolio.module.css";
-import { formatPercentage } from "@/utils/format";
-
+import { formatARS, formatPercentage } from "@/utils/format";
 
 export default function PortfolioPage() {
   const router = useRouter();
   const { user } = useAuth();
 
-  const {
-    positions: mockPositions,
-    totalValor,
-    exposicionCriptoPct,
-    exposicionRiesgoPct,
-    totalActivos
-  } = usePortfolioData();
+  const [portfolios, setPortfolios] = React.useState<PortafolioDTO[]>([]);
+  const [selectedId, setSelectedId] = React.useState<string>("");
+  const [valuacion, setValuacion] = React.useState<PortafolioValuadoDTO | null>(null);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    getMisPortafolios()
+      .then((data) => {
+        setPortfolios(data);
+        if (data.length > 0) {
+          const firstId = data[0].id;
+          setSelectedId(firstId);
+          return getPortafolioValuado(firstId);
+        }
+        return null;
+      })
+      .then((val) => {
+        if (val) setValuacion(val);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handlePortfolioChange = (newId: string) => {
+    setSelectedId(newId);
+    setLoading(true);
+    getPortafolioValuado(newId)
+      .then(setValuacion)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  };
+
+  if (loading && !valuacion && portfolios.length === 0) {
+    return (
+      <Grid container justifyContent="center" sx={{ mt: 5 }}>
+        <CircularProgress />
+      </Grid>
+    );
+  }
 
   return (
     <RoleGuard>
@@ -44,245 +81,104 @@ export default function PortfolioPage() {
           {/* HEADER */}
           <Grid size={{ xs: 12 }}>
             <Paper className={styles.headerPaper}>
-              <Stack
-                direction={{ xs: "column", md: "row" }}
-                justifyContent="space-between"
-                alignItems={{ xs: "flex-start", md: "center" }}
-                spacing={2}
-              >
+              <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems="center" spacing={2}>
                 <Box>
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Typography variant="h4" className={styles.headerTitle}>
-                      Mi portafolio
-                    </Typography>
-                    {user && (
-                      <Chip
-                        label={user.rol}
-                        size="small"
-                        color={user.rol === "Admin" ? "secondary" : "primary"}
-                        className={styles.roleChip}
-                      />
-                    )}
-                  </Stack>
+                  <Typography variant="h4" className={styles.headerTitle}>Mi Portafolio</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Resumen de tus posiciones en CEDEARs, acciones, bonos y
-                    criptomonedas (datos de ejemplo).
+                    {valuacion?.descripcion || "Resumen de tus inversiones."}
                   </Typography>
                 </Box>
-
-                <Stack direction="row" spacing={1.5}>
-                  <Button
-                    variant="outlined"
-                    color="inherit"
-                    size="small"
-                    className={styles.actionButton}
-                  >
-                    Exportar a PDF
-                  </Button>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    className={styles.actionButton}
-                  >
-                    Cargar operación
-                  </Button>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  {portfolios.length > 1 && (
+                    <FormControl size="small" sx={{ minWidth: 150 }}>
+                      <InputLabel>Portafolio</InputLabel>
+                      <Select value={selectedId} label="Portafolio" onChange={(e) => handlePortfolioChange(e.target.value)}>
+                        {portfolios.map(p => <MenuItem key={p.id} value={p.id}>{p.nombre}</MenuItem>)}
+                      </Select>
+                    </FormControl>
+                  )}
                 </Stack>
               </Stack>
             </Paper>
           </Grid>
 
-          {/* CARDS RESUMEN */}
+          {/* CARDS */}
           <Grid size={{ xs: 12, md: 4 }}>
             <Paper className={`${styles.card} ${styles.highlightCard}`}>
-              <Typography variant="caption" color="text.secondary">
-                Valor total del portafolio
+              <Typography variant="caption" color="text.secondary">Valor Total</Typography>
+              <Typography variant="h4" className={styles.cardValue}>
+                {formatARS(valuacion?.totalPesos ?? 0)}
               </Typography>
-              <Typography variant="h5" className={styles.cardValue}>
-                ARS {totalValor.toLocaleString("es-AR")}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                Suma del valor estimado de todas tus posiciones actuales.
+              <Typography variant="body2" color="text.secondary">
+                USD {valuacion?.totalDolares?.toLocaleString("es-AR") ?? "0"}
               </Typography>
             </Paper>
           </Grid>
 
           <Grid size={{ xs: 12, md: 4 }}>
             <Paper className={styles.card}>
-              <Typography variant="caption" color="text.secondary">
-                Exposición en activos de riesgo
+              <Typography variant="caption" color="text.secondary">Ganancia/Pérdida (ARS)</Typography>
+              <Typography variant="h4" className={`${styles.cardValue} ${(valuacion?.gananciaPesos ?? 0) >= 0 ? styles.positiveChange : styles.negativeChange}`}>
+                {valuacion?.gananciaPesos ? (valuacion.gananciaPesos > 0 ? "+" : "") + formatARS(valuacion.gananciaPesos) : "-"}
               </Typography>
-              <Typography
-                variant="h5"
-                className={`${styles.cardValue} ${styles.neonGreenText}`}
-              >
-                {formatPercentage(exposicionRiesgoPct)} %
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                Acciones + criptos sobre el total del portafolio.
+              <Typography variant="body2" color="text.secondary">
+                Variación total: {valuacion?.variacionPorcentajePesos ? formatPercentage(valuacion.variacionPorcentajePesos) : "0"}%
               </Typography>
             </Paper>
           </Grid>
 
           <Grid size={{ xs: 12, md: 4 }}>
             <Paper className={styles.card}>
-              <Typography variant="caption" color="text.secondary">
-                Cantidad de activos distintos
+              <Typography variant="caption" color="text.secondary">Activos en Cartera</Typography>
+              <Typography variant="h4" className={styles.cardValue}>
+                {valuacion?.activos?.length ?? 0}
               </Typography>
-              <Typography variant="h5" className={styles.cardValue}>
-                {totalActivos}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                Número de instrumentos diferentes que componen tu portafolio.
-              </Typography>
+              <Typography variant="body2" color="text.secondary">Instrumentos distintos.</Typography>
             </Paper>
           </Grid>
 
-          {/* DISTRIBUCIONES */}
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Paper className={styles.distributionsPaper}>
-              <Typography variant="h6" className={styles.sectionTitle}>
-                Distribución por tipo de activo
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Ejemplo de cómo podrías mostrar el mix de cartera.
-              </Typography>
-
-              <Stack spacing={1.2}>
-                <Typography variant="body2">
-                  • CEDEARs / acciones: ~55% del valor total.
-                </Typography>
-                <Typography variant="body2">
-                  • Bonos / renta fija: ~25% del valor total.
-                </Typography>
-                <Typography variant="body2">
-                  • Criptomonedas: ~{formatPercentage(exposicionCriptoPct)}% del total.
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                  Más adelante esto se puede reemplazar por un gráfico de torta
-                  con datos reales desde la base.
-                </Typography>
-              </Stack>
-            </Paper>
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Paper className={styles.distributionsPaper}>
-              <Typography variant="h6" className={styles.sectionTitle}>
-                Ideas para evolucionar el portafolio
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Algunas funcionalidades futuras para el TP:
-              </Typography>
-
-              <Stack spacing={1.2}>
-                <Typography variant="body2">
-                  • Guardar cada operación (compra/venta) y reconstruir la
-                  posición histórica.
-                </Typography>
-                <Typography variant="body2">
-                  • Calcular rentabilidad total y anualizada de cada activo.
-                </Typography>
-                <Typography variant="body2">
-                  • Marcar activos objetivo recomendados por expertos.
-                </Typography>
-                <Typography variant="body2">
-                  • Agregar alertas por mail / push cuando un activo salga de un
-                  rango de precio.
-                </Typography>
-              </Stack>
-            </Paper>
-          </Grid>
-
-          {/* TABLA DE POSICIONES */}
+          {/* TABLE */}
           <Grid size={{ xs: 12 }}>
             <Paper className={styles.tablePaper}>
-              <Stack
-                direction={{ xs: "column", md: "row" }}
-                justifyContent="space-between"
-                alignItems={{ xs: "flex-start", md: "center" }}
-                spacing={1.5}
-                className={styles.tableHeaderStack}
-                sx={{ mb: 2 }}
-              >
-                <Box>
-                  <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                    Posiciones actuales
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Tabla demo, después podés enlazarla con los datos reales de
-                    la base / API.
-                  </Typography>
-                </Box>
-
-                <Button
-                  variant="outlined"
-                  size="small"
-                  className={styles.actionButton}
-                >
-                  Filtrar / ordenar
-                </Button>
-              </Stack>
-
+              <Typography variant="h6" className={styles.sectionTitle} gutterBottom>Composición</Typography>
               <Divider sx={{ mb: 2 }} />
-
-              <Box sx={{ overflowX: "auto" }}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Ticker</TableCell>
-                      <TableCell>Nombre</TableCell>
-                      <TableCell>Tipo</TableCell>
-                      <TableCell align="right">Cantidad</TableCell>
-                      <TableCell align="right">Precio actual (ARS)</TableCell>
-                      <TableCell align="right">Valor total (ARS)</TableCell>
-                      <TableCell align="right">Var. día</TableCell>
-                      <TableCell align="right">Var. total</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {mockPositions.map((p) => (
-                      <TableRow key={p.ticker}>
-                        <TableCell>{p.ticker}</TableCell>
-                        <TableCell>{p.nombre}</TableCell>
-                        <TableCell>{p.tipo}</TableCell>
-                        <TableCell align="right">{p.cantidad}</TableCell>
-                        <TableCell align="right">
-                          {p.precioActualArs.toLocaleString("es-AR")}
-                        </TableCell>
-                        <TableCell align="right">
-                          {p.valorTotalArs.toLocaleString("es-AR")}
-                        </TableCell>
-                        <TableCell
-                          align="right"
-                          className={
-                            p.variacionDiaPct > 0
-                              ? styles.positiveChange
-                              : p.variacionDiaPct < 0
-                                ? styles.negativeChange
-                                : styles.neutralChange
-                          }
-                        >
-                          {p.variacionDiaPct > 0 ? "+" : ""}
-                          {formatPercentage(p.variacionDiaPct)}%
-                        </TableCell>
-                        <TableCell
-                          align="right"
-                          className={
-                            p.variacionTotalPct > 0
-                              ? styles.positiveChange
-                              : p.variacionTotalPct < 0
-                                ? styles.negativeChange
-                                : styles.neutralChange
-                          }
-                        >
-                          {p.variacionTotalPct > 0 ? "+" : ""}
-                          {formatPercentage(p.variacionTotalPct)}%
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Ticker</TableCell>
+                    <TableCell align="right">Cantidad</TableCell>
+                    <TableCell align="right">PPC</TableCell>
+                    <TableCell align="right">Precio Actual</TableCell>
+                    <TableCell align="right">Total (ARS)</TableCell>
+                    <TableCell align="right">% Cartera</TableCell>
+                    <TableCell align="right">Resultado</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {valuacion?.activos?.map(a => {
+                    const totalVal = a.cantidad * a.precioActual;
+                    const varPct = a.precioPromedioCompra > 0 ? ((a.precioActual - a.precioPromedioCompra) / a.precioPromedioCompra * 100) : 0;
+                    return (
+                      <TableRow key={a.activoId}>
+                        <TableCell sx={{ fontWeight: 'bold' }}>{a.symbol}</TableCell>
+                        <TableCell align="right">{a.cantidad}</TableCell>
+                        <TableCell align="right">{formatARS(a.precioPromedioCompra)}</TableCell>
+                        <TableCell align="right">{formatARS(a.precioActual)}</TableCell>
+                        <TableCell align="right">{formatARS(totalVal)}</TableCell>
+                        <TableCell align="right">{formatPercentage(a.porcentajeCartera)}%</TableCell>
+                        <TableCell align="right" sx={{ color: varPct >= 0 ? 'success.main' : 'error.main' }}>
+                          {varPct > 0 ? "+" : ""}{formatPercentage(varPct)}%
                         </TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </Box>
+                    )
+                  })}
+                  {(!valuacion?.activos || valuacion.activos.length === 0) && (
+                    <TableRow>
+                      <TableCell colSpan={7} align="center">No hay activos en este portafolio.</TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
             </Paper>
           </Grid>
         </Grid>

@@ -17,8 +17,8 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { RolUsuario } from "@/types/Usuario";
-import { getInversorStats, getExpertoStats, getAdminStats } from "@/services/DashboardService";
-import { InversorStatsDTO, ExpertoStatsDTO, AdminStatsDTO } from "@/types/Dashboard";
+import { getInversorStats, getExpertoStats, getAdminStats, getAdminPortfolioStats } from "@/services/DashboardService";
+import { InversorStatsDTO, ExpertoStatsDTO, AdminStatsDTO, AdminPortfolioStatsDTO } from "@/types/Dashboard";
 
 import styles from "./styles/Dashboard.module.css";
 
@@ -29,6 +29,7 @@ export default function DashboardPage() {
   const [inversorStats, setInversorStats] = useState<InversorStatsDTO | null>(null);
   const [expertoStats, setExpertoStats] = useState<ExpertoStatsDTO | null>(null);
   const [adminStats, setAdminStats] = useState<AdminStatsDTO | null>(null);
+  const [adminPortfolioStats, setAdminPortfolioStats] = useState<AdminPortfolioStatsDTO | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -44,8 +45,12 @@ export default function DashboardPage() {
           const data = await getExpertoStats();
           setExpertoStats(data);
         } else if (user.rol === RolUsuario.Admin) {
-          const data = await getAdminStats();
-          setAdminStats(data);
+          const [stats, pStats] = await Promise.all([
+            getAdminStats(),
+            getAdminPortfolioStats()
+          ]);
+          setAdminStats(stats);
+          setAdminPortfolioStats(pStats);
         }
       } catch (error) {
         console.error("Error fetching dashboard stats:", error);
@@ -189,6 +194,35 @@ export default function DashboardPage() {
         <Paper className={styles.card}>
           <Typography variant="caption" color="text.secondary">Pendientes Rev.</Typography>
           <Typography variant="h5" className={styles.cardValue} color="warning.main">{adminStats?.recomendacionesPendientes ?? 0}</Typography>
+        </Paper>
+      </Grid>
+
+      <Grid size={{ xs: 12, md: 6 }}>
+        <Paper className={`${styles.card} ${styles.highlightCard}`}>
+          <Typography variant="caption" color="text.secondary">Capital Bajo Gestión (ARS)</Typography>
+          <Typography variant="h4" className={styles.cardValue} sx={{ mt: 1 }}>
+            $ {adminPortfolioStats?.totalCapitalPesos?.toLocaleString("es-AR") ?? "-"}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Equivalente a USD {adminPortfolioStats?.totalCapitalDolares?.toLocaleString("es-AR") ?? "-"}
+          </Typography>
+        </Paper>
+      </Grid>
+      <Grid size={{ xs: 12, md: 6 }}>
+        <Paper className={styles.card}>
+          <Typography variant="caption" color="text.secondary">Activo Más Popular</Typography>
+          {adminPortfolioStats?.activosMasPopulares && adminPortfolioStats.activosMasPopulares.length > 0 ? (
+            <>
+              <Typography variant="h4" className={styles.cardValue} sx={{ mt: 1 }}>
+                {adminPortfolioStats.activosMasPopulares[0].activoSymbol}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                En cartera de {adminPortfolioStats.activosMasPopulares[0].cantidadUsuarios} usuarios.
+              </Typography>
+            </>
+          ) : (
+            <Typography variant="h5" className={styles.cardValue}>-</Typography>
+          )}
         </Paper>
       </Grid>
     </>
