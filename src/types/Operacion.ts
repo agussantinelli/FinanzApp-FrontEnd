@@ -6,6 +6,7 @@ export enum TipoOperacion {
 export interface CreateOperacionDTO {
     personaId: string; // Guid
     activoId: string; // Guid
+    portafolioId: string; // Guid
     tipo: TipoOperacion;
     cantidad: number;
     precioUnitario: number;
@@ -25,4 +26,29 @@ export interface OperacionResponseDTO {
     moneda: string;
     fecha: string;
     personaNombre: string;
+}
+
+export interface OperacionQueryFilter {
+    activoId?: string;
+    sectorId?: string;
+    personaId?: string;
+    // rol?: RolUsuario; // Avoid circular dependency if possible, or use number
+    rol?: number;
+    soloHoy?: boolean;
+}
+
+export interface OperacionDetalleDTO {
+    id: string;
+    tipo: string;
+    cantidad: number;
+    precioUnitario: number;
+    moneda: string;
+    fecha: string;
+
+    activoNombre: string;
+    activoSymbol: string;
+    sectorNombre: string;
+    usuarioNombre: string;
+    usuarioRol: string;
+    portafolioNombre: string;
 }

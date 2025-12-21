@@ -13,8 +13,10 @@ import PageHeader from "@/components/ui/PageHeader";
 
 import { searchActivos } from "@/services/ActivosService";
 import { createOperacion } from "@/services/OperacionesService";
+import { getMisPortafolios } from "@/services/PortafolioService";
 import { ActivoDTO } from "@/types/Activo";
 import { TipoOperacion, CreateOperacionDTO } from "@/types/Operacion";
+import { PortafolioDTO } from "@/types/Portafolio";
 import { debounce } from "@mui/material/utils";
 
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -29,6 +31,10 @@ export default function RegistrarOperacionPage() {
     const [mode, setMode] = useState<"actual" | "historica">("actual");
     const [asset, setAsset] = useState<ActivoDTO | null>(null);
     const [options, setOptions] = useState<ActivoDTO[]>([]);
+
+    // Portfolio State
+    const [portfolios, setPortfolios] = useState<PortafolioDTO[]>([]);
+    const [portfolioId, setPortfolioId] = useState<string>("");
 
     // Form States
     const [tipo, setTipo] = useState<TipoOperacion>(TipoOperacion.Compra);
@@ -45,6 +51,18 @@ export default function RegistrarOperacionPage() {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    // Fetch Portfolios
+    useEffect(() => {
+        getMisPortafolios()
+            .then(data => {
+                setPortfolios(data);
+                if (data.length > 0) {
+                    setPortfolioId(data[0].id);
+                }
+            })
+            .catch(console.error);
+    }, []);
 
     // Asset Search Logic
     const handleSearch = useMemo(
@@ -64,7 +82,7 @@ export default function RegistrarOperacionPage() {
     useEffect(() => {
         if (mode === "actual") {
             setFecha(getLocalISOString());
-
+            // Updated to be just a suggestion, user can edit
             if (asset?.precioActual) {
                 setPrecio(asset.precioActual.toString());
             }
@@ -72,7 +90,7 @@ export default function RegistrarOperacionPage() {
     }, [mode, asset]);
 
     const handleSubmit = async () => {
-        if (!user || !asset || !cantidad || !precio || !fecha) {
+        if (!user || !asset || !cantidad || !precio || !fecha || !portfolioId) {
             setError("Completa todos los campos obligatorios.");
             return;
         }
@@ -84,6 +102,7 @@ export default function RegistrarOperacionPage() {
             const dto: CreateOperacionDTO = {
                 personaId: user.id,
                 activoId: asset.id,
+                portafolioId: portfolioId,
                 tipo: tipo,
                 cantidad: Number(cantidad),
                 precioUnitario: Number(precio),
@@ -167,6 +186,20 @@ export default function RegistrarOperacionPage() {
                                             </li>
                                         )}
                                     />
+
+                                    <FormControl fullWidth>
+                                        <InputLabel>Portafolio Destino</InputLabel>
+                                        <Select
+                                            value={portfolioId}
+                                            label="Portafolio Destino"
+                                            onChange={(e) => setPortfolioId(e.target.value)}
+                                        >
+                                            {portfolios.map((p) => (
+                                                <MenuItem key={p.id} value={p.id}>{p.nombre}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+
                                     <FormControl fullWidth>
                                         <InputLabel>Tipo de Operación</InputLabel>
                                         <Select
@@ -253,7 +286,7 @@ export default function RegistrarOperacionPage() {
                                     variant="contained"
                                     size="large"
                                     onClick={handleSubmit}
-                                    disabled={loading || !asset || !cantidad || !precio}
+                                    disabled={loading || !asset || !cantidad || !precio || !portfolioId}
                                     sx={{ px: 4 }}
                                 >
                                     {loading ? "Registrando..." : "Confirmar Operación"}
