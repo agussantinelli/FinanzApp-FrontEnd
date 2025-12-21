@@ -25,8 +25,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 
-import { getMisPortafolios, getPortafolioValuado } from "@/services/PortafolioService";
-import { PortafolioDTO, PortafolioValuadoDTO } from "@/types/Portafolio";
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 import styles from "./styles/Portfolio.module.css";
 import { formatARS, formatPercentage } from "@/utils/format";
 
@@ -34,37 +33,7 @@ export default function PortfolioPage() {
   const router = useRouter();
   const { user } = useAuth();
 
-  const [portfolios, setPortfolios] = React.useState<PortafolioDTO[]>([]);
-  const [selectedId, setSelectedId] = React.useState<string>("");
-  const [valuacion, setValuacion] = React.useState<PortafolioValuadoDTO | null>(null);
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    getMisPortafolios()
-      .then((data) => {
-        setPortfolios(data);
-        if (data.length > 0) {
-          const firstId = data[0].id;
-          setSelectedId(firstId);
-          return getPortafolioValuado(firstId);
-        }
-        return null;
-      })
-      .then((val) => {
-        if (val) setValuacion(val);
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
-
-  const handlePortfolioChange = (newId: string) => {
-    setSelectedId(newId);
-    setLoading(true);
-    getPortafolioValuado(newId)
-      .then(setValuacion)
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  };
+  const { portfolios, selectedId, valuacion, loading, handlePortfolioChange } = usePortfolioData();
 
   if (loading && !valuacion && portfolios.length === 0) {
     return (
