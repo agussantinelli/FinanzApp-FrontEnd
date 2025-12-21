@@ -12,6 +12,8 @@ export interface ActivoEnPortafolioDTO {
     precioActual: number;
     valorizadoPesos: number;
     porcentajeCartera: number;
+    moneda: string;
+    tipoActivo: string;
 }
 
 export interface PortafolioValuadoDTO {

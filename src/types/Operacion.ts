@@ -19,6 +19,7 @@ export interface OperacionResponseDTO {
     id: string; // Guid
     activoSymbol: string;
     activoNombre: string;
+    activoTipo: string;
     tipo: string; // "Compra" | "Venta" string description
     cantidad: number;
     precioUnitario: number;
