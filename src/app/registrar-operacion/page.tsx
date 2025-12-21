@@ -223,8 +223,7 @@ export default function RegistrarOperacionPage() {
                                         fullWidth
                                         value={precio}
                                         onChange={(e) => setPrecio(e.target.value)}
-                                        disabled={mode === "actual" && !!asset?.precioActual}
-                                        helperText={mode === "actual" ? "Precio de mercado actual (puede variar levemente)" : "Precio histórico por unidad"}
+                                        helperText={mode === "actual" ? "Precio de mercado actual (editable)" : "Precio histórico por unidad"}
                                         InputProps={{
                                             startAdornment: <InputAdornment position="start">$</InputAdornment>,
                                         }}
