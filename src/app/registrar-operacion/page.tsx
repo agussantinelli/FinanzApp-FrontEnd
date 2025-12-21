@@ -137,7 +137,7 @@ export default function RegistrarOperacionPage() {
                         <Stack spacing={4}>
                             {/* SECTION 1: ASSET & TYPE */}
                             <Box>
-                                <Typography variant="h6" color="primary" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <Typography variant="h6" color="primary" sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
                                     <ShoppingCartIcon fontSize="small" /> 1. Datos de la Operación
                                 </Typography>
                                 <Stack spacing={3}>
@@ -183,7 +183,7 @@ export default function RegistrarOperacionPage() {
 
                             {/* SECTION 2: DATE */}
                             <Box>
-                                <Typography variant="h6" color="primary" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <Typography variant="h6" color="primary" sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
                                     <CalendarTodayIcon fontSize="small" /> 2. Fecha y Hora
                                 </Typography>
                                 <Stack spacing={3}>
@@ -202,7 +202,7 @@ export default function RegistrarOperacionPage() {
 
                             {/* SECTION 3: VALUES */}
                             <Box>
-                                <Typography variant="h6" color="primary" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <Typography variant="h6" color="primary" sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
                                     <AttachMoneyIcon fontSize="small" /> 3. Valores
                                 </Typography>
                                 <Stack spacing={3}>
