@@ -95,6 +95,14 @@ export default function RegistrarOperacionPage() {
             return;
         }
 
+        const qty = Number(cantidad);
+        const price = Number(precio);
+
+        if (qty <= 0 || price <= 0) {
+            setError("La cantidad y el precio deben ser mayores a 0.");
+            return;
+        }
+
         setLoading(true);
         setError(null);
 
@@ -104,17 +112,18 @@ export default function RegistrarOperacionPage() {
                 activoId: asset.id,
                 portafolioId: portfolioId,
                 tipo: tipo,
-                cantidad: Number(cantidad),
-                precioUnitario: Number(precio),
+                cantidad: qty,
+                precioUnitario: price,
                 monedaOperacion: asset.moneda || "ARS",
                 fechaOperacion: new Date(fecha).toISOString(),
             };
 
             await createOperacion(dto);
             router.push("/portfolio");
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
-            setError("Error al registrar la operación. Inténtalo de nuevo.");
+            const msg = err.response?.data?.message || "Error al registrar la operación. Verificá los datos.";
+            setError(msg);
         } finally {
             setLoading(false);
         }

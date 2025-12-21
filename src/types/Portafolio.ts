@@ -10,6 +10,7 @@ export interface ActivoEnPortafolioDTO {
     cantidad: number;
     precioPromedioCompra: number;
     precioActual: number;
+    valorizadoPesos: number;
     porcentajeCartera: number;
 }
 
@@ -21,5 +22,7 @@ export interface PortafolioValuadoDTO {
     gananciaPesos: number;
     variacionPorcentajePesos: number;
     totalDolares: number;
+    gananciaDolares: number;
+    variacionPorcentajeDolares: number;
     activos: ActivoEnPortafolioDTO[];
 }
