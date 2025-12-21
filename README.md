@@ -127,14 +127,20 @@
 │   │   ├── auth/                # Módulos de Login y Registro
 │   │   ├── dashboard/           # Home del Inversor (Resumen)
 │   │   ├── expert/              # Dashboard para Expertos Financieros
+│   │   ├── movimientos/         # Historial de transacciones
+│   │   ├── noticias/            # Sección de novedades financieras
 │   │   ├── portfolio/           # Visualización y análisis patrimonial
+│   │   ├── recomendaciones/     # Señales de expertos y comunidad
 │   │   ├── registrar-operacion/ # Formulario de Compra/Venta
+│   │   ├── reportes/            # Análisis de mercado y tendencias
 │   │   └── page.tsx             # Landing Page pública
 │   ├── app-theme/               # Tema y configuración de Material UI
 │   ├── components/              # Componentes React Reutilizables
 │   │   ├── auth/                # Componentes de seguridad (RoleGuard)
 │   │   ├── cards/               # Tarjetas de UI (Activos, Noticias)
 │   │   ├── charts/              # Gráficos (Chart.js / Recharts)
+│   │   ├── portfolio/           # Componentes específicos del Portafolio
+│   │   ├── sections/            # Secciones de Landing/Dashboard
 │   │   └── ui/                  # Componentes base
 │   ├── config/                  # Configuración global
 │   ├── hooks/                   # Custom Hooks (Lógica de negocio encapsulada)
