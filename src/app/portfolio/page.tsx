@@ -174,15 +174,10 @@ export default function PortfolioPage() {
                 </TableHead>
                 <TableBody>
                   {valuacion?.activos?.map(a => {
-                    // Safe access if backend hasn't updated yet (default to ARS)
                     const currency = a.moneda || "ARS";
-                    // Logic: If Cedear, usually it's quoted in ARS but underlying is USD. 
-                    // However, we display what the backend says. 
-                    // If user sends "USD", we format USD.
                     const isUSD = currency === 'USD' || currency === 'USDT' || currency === 'USDC';
                     const fmtPrice = (val: number) => isUSD ? formatUSD(val) : formatARS(val);
 
-                    // Implicit Exchange Rate (CCL/MEP mixture) derived from Totals
                     const ccl = (valuacion.totalDolares && valuacion.totalPesos)
                       ? valuacion.totalPesos / valuacion.totalDolares
                       : 0;
@@ -199,7 +194,6 @@ export default function PortfolioPage() {
                       priceUSD = ccl > 0 ? priceARS / ccl : 0;
                     }
 
-                    // Normalize Totals (Explicit computation: Price * Quantity)
                     const totalARS = priceARS * a.cantidad;
                     const totalUSD = priceUSD * a.cantidad;
 
