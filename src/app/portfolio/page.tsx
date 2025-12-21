@@ -29,6 +29,7 @@ import { usePortfolioData } from "@/hooks/usePortfolioData";
 import styles from "./styles/Portfolio.module.css";
 import { formatARS, formatPercentage } from "@/utils/format";
 import AddIcon from '@mui/icons-material/Add';
+import PortfolioCompositionChart from "@/components/portfolio/PortfolioCompositionChart";
 
 export default function PortfolioPage() {
   const router = useRouter();
@@ -144,6 +145,11 @@ export default function PortfolioPage() {
               </Typography>
               <Typography variant="body2" color="text.secondary">Instrumentos distintos.</Typography>
             </Paper>
+          </Grid>
+
+          {/* COMPOSITION CHART */}
+          <Grid size={{ xs: 12, md: 8 }}>
+            <PortfolioCompositionChart activos={valuacion?.activos || []} />
           </Grid>
 
           {/* TABLE */}

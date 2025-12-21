@@ -35,10 +35,10 @@ export default function PortfolioCompositionChart({ activos }: Props) {
     ];
 
     const data = {
-        labels: activos.map(a => a.symbol),
+        labels: activos.map(a => `${a.symbol} (${formatPercentage(a.porcentajeCartera)}%)`),
         datasets: [
             {
-                data: activos.map(a => a.porcentajeCartera),
+                data: activos.map(a => a.valorizadoPesos),
                 backgroundColor: colors.slice(0, activos.length),
                 borderColor: theme.palette.background.paper,
                 borderWidth: 2,
@@ -72,7 +72,7 @@ export default function PortfolioCompositionChart({ activos }: Props) {
                 callbacks: {
                     label: (context) => {
                         const val = context.raw as number;
-                        return ` ${formatPercentage(val)}%`;
+                        return ` ${formatARS(val)}`;
                     }
                 }
             },
