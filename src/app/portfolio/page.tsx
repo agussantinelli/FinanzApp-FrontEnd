@@ -164,8 +164,10 @@ export default function PortfolioPage() {
                     <TableCell>Moneda</TableCell>
                     <TableCell align="right">Cantidad</TableCell>
                     <TableCell align="right">PPC</TableCell>
-                    <TableCell align="right">Precio Actual</TableCell>
+                    <TableCell align="right">Precio (ARS)</TableCell>
+                    <TableCell align="right">Precio (USD)</TableCell>
                     <TableCell align="right">Total (ARS)</TableCell>
+                    <TableCell align="right">Total (USD)</TableCell>
                     <TableCell align="right">% Cartera</TableCell>
                     <TableCell align="right">Resultado</TableCell>
                   </TableRow>
@@ -180,8 +182,26 @@ export default function PortfolioPage() {
                     const isUSD = currency === 'USD' || currency === 'USDT' || currency === 'USDC';
                     const fmtPrice = (val: number) => isUSD ? formatUSD(val) : formatARS(val);
 
-                    // Caution: "Total (ARS)" implies standardized value.
-                    // If backend sends "ValorizadoPesos", it is definitely ARS.
+                    // Implicit Exchange Rate (CCL/MEP mixture) derived from Totals
+                    const ccl = (valuacion.totalDolares && valuacion.totalPesos)
+                      ? valuacion.totalPesos / valuacion.totalDolares
+                      : 0;
+
+                    // Normalize Prices
+                    let priceARS = 0;
+                    let priceUSD = 0;
+
+                    if (isUSD) {
+                      priceUSD = a.precioActual;
+                      priceARS = ccl > 0 ? priceUSD * ccl : 0;
+                    } else {
+                      priceARS = a.precioActual;
+                      priceUSD = ccl > 0 ? priceARS / ccl : 0;
+                    }
+
+                    // Normalize Totals
+                    const totalARS = a.valorizadoPesos;
+                    const totalUSD = ccl > 0 ? totalARS / ccl : 0;
 
                     const varPct = a.precioPromedioCompra > 0 ? ((a.precioActual - a.precioPromedioCompra) / a.precioPromedioCompra * 100) : 0;
                     return (
@@ -197,8 +217,14 @@ export default function PortfolioPage() {
                         </TableCell>
                         <TableCell align="right">{a.cantidad}</TableCell>
                         <TableCell align="right">{fmtPrice(a.precioPromedioCompra)}</TableCell>
-                        <TableCell align="right">{fmtPrice(a.precioActual)}</TableCell>
-                        <TableCell align="right">{formatARS(a.valorizadoPesos)}</TableCell>
+
+                        {/* Comparison Columns */}
+                        <TableCell align="right" sx={{ color: 'text.secondary' }}>{formatARS(priceARS)}</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: isUSD ? 'bold' : 'normal' }}>{formatUSD(priceUSD)}</TableCell>
+
+                        <TableCell align="right" sx={{ fontWeight: 'bold' }}>{formatARS(totalARS)}</TableCell>
+                        <TableCell align="right" sx={{ color: 'text.secondary' }}>{formatUSD(totalUSD)}</TableCell>
+
                         <TableCell align="right">{formatPercentage(a.porcentajeCartera)}%</TableCell>
                         <TableCell align="right" sx={{ color: varPct >= 0 ? 'success.main' : 'error.main' }}>
                           {varPct > 0 ? "+" : ""}{formatPercentage(varPct)}%
