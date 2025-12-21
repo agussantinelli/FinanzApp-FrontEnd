@@ -43,6 +43,36 @@ export default function PortfolioPage() {
     );
   }
 
+  if (!loading && portfolios.length === 0) {
+    return (
+      <RoleGuard>
+        <Box className={styles.container}>
+          <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: "60vh" }}>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Paper className={styles.card} sx={{ textAlign: 'center', py: 6, px: 4 }}>
+                <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold' }}>
+                  Tu portafolio está vacío
+                </Typography>
+                <Typography variant="body1" color="text.secondary" paragraph>
+                  Actualmente no tienes ningún portafolio activo ni posiciones registradas.
+                  Comienza operando para ver tus inversiones aquí.
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => router.push('/registrar-operacion')}
+                  sx={{ mt: 2 }}
+                >
+                  Registrar Operación
+                </Button>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Box>
+      </RoleGuard>
+    );
+  }
+
   return (
     <RoleGuard>
       <Box className={styles.container}>
