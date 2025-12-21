@@ -115,37 +115,37 @@
     </tbody>
 </table>
 
-<h3>📁 Estructura Principal del Proyecto</h3>
+<h3>📁 Estructura del Proyecto</h3>
 
-<ul>
-    <li><code>src/app/</code>
-        <ul>
-            <li><code>page.tsx</code>: Landing pública.</li>
-            <li><code>auth/</code>: Módulos de Login y Registro.</li>
-            <li><code>dashboard/</code>: Panel principal del Inversor.</li>
-            <li><code>portfolio/</code>: Visualización y análisis patrimonial.</li>
-            <li><code>activos/</code>: Buscador y detalles de instrumentos.</li>
-            <li><code>registrar-operacion/</code>: Formulario de compra/venta.</li>
-            <li><code>recomendaciones/</code>: Módulo de señales de expertos.</li>
-            <li><code>expert/</code>: Dashboard para expertos financieros.</li>
-            <li><code>admin/</code>: Panel de control de la plataforma.</li>
-            <li><code>reportes/</code> & <code>noticias/</code>: Información de mercado.</li>
-        </ul>
-    </li>
-    <li><code>src/hooks/</code>: Lógica de negocio encapsulada (e.g., <code>usePortfolioData</code>, <code>useAuth</code>, <code>useMisRecomendaciones</code>).</li>
-    <li><code>src/services/</code>: Comunicación con API Backend (Axios + DTOs).</li>
-    <li><code>src/components/</code>:
-        <ul>
-            <li><code>portfolio/</code>: Gráficos y tablas específicos del portafolio.</li>
-            <li><code>sections/</code>: Bloques visuales de la Landing/Dashboard.</li>
-            <li><code>auth/</code>: Componentes de seguridad (<code>RoleGuard</code>).</li>
-        </ul>
-    </li>
-    <li><code>src/types/</code>: Definiciones de TypeScript alineadas con el Backend.</li>
-    <li><code>src/lib/</code>: Utilidades y configuraciones base (e.g., cache simple).</li>
-    <li><code>src/config/</code>: Configuración de entorno y clientes HTTP.</li>
-    <li><code>src/app-theme/</code>: Configuración del tema Material UI.</li>
-</ul>
+<pre><code>FinanzApp-FrontEnd/
+├── public/                      # Archivos estáticos accesibles públicamente
+├── src/                         # Código fuente principal
+│   ├── app/                     # App Router (Next.js 14+)
+│   │   ├── access-denied/       # Página de acceso denegado
+│   │   ├── activos/             # Buscador y detalles de Activos
+│   │   ├── admin/               # Panel de Administración (Guard: Admin)
+│   │   ├── auth/                # Módulos de Login y Registro
+│   │   ├── dashboard/           # Home del Inversor (Resumen)
+│   │   ├── expert/              # Dashboard para Expertos Financieros
+│   │   ├── portfolio/           # Visualización y análisis patrimonial
+│   │   ├── registrar-operacion/ # Formulario de Compra/Venta
+│   │   └── page.tsx             # Landing Page pública
+│   ├── app-theme/               # Tema y configuración de Material UI
+│   ├── components/              # Componentes React Reutilizables
+│   │   ├── auth/                # Componentes de seguridad (RoleGuard)
+│   │   ├── cards/               # Tarjetas de UI (Activos, Noticias)
+│   │   ├── charts/              # Gráficos (Chart.js / Recharts)
+│   │   └── ui/                  # Componentes base
+│   ├── config/                  # Configuración global
+│   ├── hooks/                   # Custom Hooks (Lógica de negocio encapsulada)
+│   ├── lib/                     # Utilidades Core (Cliente HTTP, Caché)
+│   ├── services/                # Comunicación con API Backend (Axios + DTOs)
+│   ├── types/                   # Definiciones TypeScript (Interfaces)
+│   └── utils/                   # Helpers de formateo y strings
+├── .env.local                   # Variables de entorno
+├── next.config.ts               # Configuración del framework
+└── package.json                 # Dependencias y scripts
+</code></pre>
 
 
 <h3> Empezar (Setup Local)</h3>
