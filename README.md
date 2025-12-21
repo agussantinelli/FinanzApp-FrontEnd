@@ -258,6 +258,54 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
 
 <hr>
 
+<h2>👥 Roles y Seguridad</h2>
+
+<p>La aplicación implementa un sistema de control de acceso basado en roles (RBAC) asegurado por <code>RoleGuard</code>.</p>
+
+<h3>Flujos de Navegación por Rol</h3>
+
+<ul>
+    <li><strong>Inversor (Rol Default)</strong>
+        <ul>
+            <li><strong>Inicio:</strong> Redirige a <code>/dashboard</code>.</li>
+            <li><strong>Permisos:</strong>
+                <ul>
+                    <li>Ver su propio portafolio y valuación en tiempo real.</li>
+                    <li>Registrar operaciones de compra/venta.</li>
+                    <li>Consultar cotizaciones de mercado.</li>
+                </ul>
+            </li>
+            <li><strong>Restricciones:</strong> No tiene acceso a paneles de métricas globales.</li>
+        </ul>
+    </li>
+    <li><strong>Administrador (Admin)</strong>
+        <ul>
+            <li><strong>Inicio:</strong> Redirige a <code>/admin</code>.</li>
+            <li><strong>Permisos:</strong>
+                <ul>
+                    <li>Acceso total a métricas de negocio (Usuarios, Volumen Operado).</li>
+                    <li>Gestión de la plataforma.</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li><strong>Experto Financiero</strong>
+        <ul>
+            <li><strong>Inicio:</strong> Redirige a <code>/expert</code>.</li>
+            <li><strong>Permisos:</strong>
+                <ul>
+                    <li>Emitir recomendaciones de inversión (Señales de compra/venta).</li>
+                    <li>Gestionar su track record de sugerencias.</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<p><strong>Seguridad Check:</strong> Si un usuario intenta acceder a una ruta no autorizada (ej. Inversor entrando a <code>/admin</code>), el sistema lo intercepta y redirige automáticamente a <code>/access-denied</code>.</p>
+
+<hr>
+
 <h2>📌 Estado actual de implementación (Frontend)</h2>
 
 <ul>
