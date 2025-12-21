@@ -332,6 +332,21 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
 
 <hr>
 
+<h3>👨‍💻 Tips de Desarrollo</h3>
+
+<ul>
+    <li>
+        <strong>Documentación API (Swagger):</strong>
+        <p>Con el backend corriendo, accedé a <a href="https://localhost:7088/swagger" target="_blank">https://localhost:7088/swagger</a> para ver todos los endpoints disponibles, probar requests y ver los schemas de los DTOs.</p>
+    </li>
+    <li>
+        <strong>Errores de Conexión (SSL):</strong>
+        <p>Si ves errores tipo <code>Network Error</code> al intentar loguearte, probá abrir la URL del backend en otra pestaña y aceptar el certificado SSL autofirmado de desarrollo ("Continuar a localhost (no seguro)").</p>
+    </li>
+</ul>
+
+<hr>
+
 <h2>⚖️ Licencia</h2>
 
 <p>MIT – ver archivo <code>LICENSE</code>.</p>
