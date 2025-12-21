@@ -27,7 +27,7 @@ import { RoleGuard } from "@/components/auth/RoleGuard";
 
 import { usePortfolioData } from "@/hooks/usePortfolioData";
 import styles from "./styles/Portfolio.module.css";
-import { formatARS, formatPercentage } from "@/utils/format";
+import { formatARS, formatPercentage, formatUSD } from "@/utils/format";
 import AddIcon from '@mui/icons-material/Add';
 import PortfolioCompositionChart from "@/components/portfolio/PortfolioCompositionChart";
 
@@ -161,6 +161,7 @@ export default function PortfolioPage() {
                 <TableHead>
                   <TableRow>
                     <TableCell>Ticker</TableCell>
+                    <TableCell>Moneda</TableCell>
                     <TableCell align="right">Cantidad</TableCell>
                     <TableCell align="right">PPC</TableCell>
                     <TableCell align="right">Precio Actual</TableCell>
@@ -171,15 +172,33 @@ export default function PortfolioPage() {
                 </TableHead>
                 <TableBody>
                   {valuacion?.activos?.map(a => {
-                    const totalVal = a.cantidad * a.precioActual;
+                    // Safe access if backend hasn't updated yet (default to ARS)
+                    const currency = a.moneda || "ARS";
+                    // Logic: If Cedear, usually it's quoted in ARS but underlying is USD. 
+                    // However, we display what the backend says. 
+                    // If user sends "USD", we format USD.
+                    const isUSD = currency === 'USD' || currency === 'USDT' || currency === 'USDC';
+                    const fmtPrice = (val: number) => isUSD ? formatUSD(val) : formatARS(val);
+
+                    // Caution: "Total (ARS)" implies standardized value.
+                    // If backend sends "ValorizadoPesos", it is definitely ARS.
+
                     const varPct = a.precioPromedioCompra > 0 ? ((a.precioActual - a.precioPromedioCompra) / a.precioPromedioCompra * 100) : 0;
                     return (
                       <TableRow key={a.activoId}>
-                        <TableCell sx={{ fontWeight: 'bold' }}>{a.symbol}</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold' }}>
+                          {a.symbol}
+                          {a.tipoActivo === "Cedear" && (
+                            <Chip label="CEDEAR" size="small" sx={{ ml: 1, fontSize: '0.65rem', height: 20 }} variant="outlined" color="primary" />
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <Chip label={currency} size="small" variant="outlined" sx={{ fontSize: '0.7rem', height: 24, minWidth: 45 }} color={isUSD ? "success" : "default"} />
+                        </TableCell>
                         <TableCell align="right">{a.cantidad}</TableCell>
-                        <TableCell align="right">{formatARS(a.precioPromedioCompra)}</TableCell>
-                        <TableCell align="right">{formatARS(a.precioActual)}</TableCell>
-                        <TableCell align="right">{formatARS(totalVal)}</TableCell>
+                        <TableCell align="right">{fmtPrice(a.precioPromedioCompra)}</TableCell>
+                        <TableCell align="right">{fmtPrice(a.precioActual)}</TableCell>
+                        <TableCell align="right">{formatARS(a.valorizadoPesos)}</TableCell>
                         <TableCell align="right">{formatPercentage(a.porcentajeCartera)}%</TableCell>
                         <TableCell align="right" sx={{ color: varPct >= 0 ? 'success.main' : 'error.main' }}>
                           {varPct > 0 ? "+" : ""}{formatPercentage(varPct)}%
