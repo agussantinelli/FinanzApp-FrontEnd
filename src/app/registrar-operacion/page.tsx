@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import {
-    Box, Paper, Typography, Container, Grid, TextField, Button,
+    Box, Paper, Typography, Container, TextField, Button,
     ToggleButton, ToggleButtonGroup, Autocomplete, InputAdornment,
-    FormControl, InputLabel, Select, MenuItem, CircularProgress,
-    Stack, Chip, Alert
+    FormControl, InputLabel, Select, MenuItem, Stack, Alert
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
@@ -64,9 +63,6 @@ export default function RegistrarOperacionPage() {
     // Dynamic Updates based on Mode/Asset
     useEffect(() => {
         if (mode === "actual") {
-            // Keep date updated to "now" if user hasn't manually selected yet (or force it)
-            // But usually just force "now" behavior on submit or display "Now"
-            // For UX, let's update it once when mode switches or just keep it editable but defaulted to now
             setFecha(getLocalISOString());
 
             if (asset?.precioActual) {
@@ -138,116 +134,120 @@ export default function RegistrarOperacionPage() {
                             </ToggleButtonGroup>
                         </Box>
 
-                        {/* 2. Form Grid */}
-                        <Grid container spacing={3}>
-                            {/* Asset Search */}
-                            <Grid item xs={12}>
-                                <Autocomplete
-                                    options={options}
-                                    getOptionLabel={(option) => option.symbol}
-                                    filterOptions={(x) => x}
-                                    value={asset}
-                                    onChange={(_, newValue) => setAsset(newValue)}
-                                    onInputChange={(_, newInputValue) => handleSearch(newInputValue)}
-                                    noOptionsText="Escribe para buscar..."
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Buscar Activo (Ticker o Nombre)"
-                                            placeholder="Ej: AAPL, BTC, GGAL"
-                                            fullWidth
-                                            helperText={asset ? asset.nombre : "Busca el activo que operaste"}
-                                        />
-                                    )}
-                                    renderOption={(props, option) => (
-                                        <li {...props} key={option.id}>
-                                            <Box>
-                                                <Typography variant="body2" fontWeight="bold">{option.symbol}</Typography>
-                                                <Typography variant="caption" color="text.secondary" ml={1}>{option.nombre}</Typography>
-                                            </Box>
-                                        </li>
-                                    )}
-                                />
-                            </Grid>
+                        <Stack spacing={4}>
+                            {/* SECTION 1: ASSET & TYPE */}
+                            <Box>
+                                <Typography variant="h6" color="primary" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <ShoppingCartIcon fontSize="small" /> 1. Datos de la Operación
+                                </Typography>
+                                <Stack spacing={3}>
+                                    <Autocomplete
+                                        options={options}
+                                        getOptionLabel={(option) => option.symbol}
+                                        filterOptions={(x) => x}
+                                        value={asset}
+                                        onChange={(_, newValue) => setAsset(newValue)}
+                                        onInputChange={(_, newInputValue) => handleSearch(newInputValue)}
+                                        noOptionsText="Escribe para buscar..."
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label="Buscar Activo (Ticker o Nombre)"
+                                                placeholder="Ej: AAPL, BTC, GGAL"
+                                                fullWidth
+                                                helperText={asset ? asset.nombre : "Busca el activo que operaste"}
+                                            />
+                                        )}
+                                        renderOption={(props, option) => (
+                                            <li {...props} key={option.id}>
+                                                <Box>
+                                                    <Typography variant="body2" fontWeight="bold">{option.symbol}</Typography>
+                                                    <Typography variant="caption" color="text.secondary" ml={1}>{option.nombre}</Typography>
+                                                </Box>
+                                            </li>
+                                        )}
+                                    />
+                                    <FormControl fullWidth>
+                                        <InputLabel>Tipo de Operación</InputLabel>
+                                        <Select
+                                            value={tipo}
+                                            label="Tipo de Operación"
+                                            onChange={(e) => setTipo(e.target.value as TipoOperacion)}
+                                        >
+                                            <MenuItem value={TipoOperacion.Compra}>Compra</MenuItem>
+                                            <MenuItem value={TipoOperacion.Venta}>Venta</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Stack>
+                            </Box>
 
-                            {/* Type (Buy/Sell) */}
-                            <Grid item xs={12} sm={6}>
-                                <FormControl fullWidth>
-                                    <InputLabel>Tipo de Operación</InputLabel>
-                                    <Select
-                                        value={tipo}
-                                        label="Tipo de Operación"
-                                        onChange={(e) => setTipo(e.target.value as TipoOperacion)}
-                                    >
-                                        <MenuItem value={TipoOperacion.Compra}>Compra</MenuItem>
-                                        <MenuItem value={TipoOperacion.Venta}>Venta</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Grid>
+                            {/* SECTION 2: DATE */}
+                            <Box>
+                                <Typography variant="h6" color="primary" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <CalendarTodayIcon fontSize="small" /> 2. Fecha y Hora
+                                </Typography>
+                                <Stack spacing={3}>
+                                    <TextField
+                                        label="Fecha y Hora"
+                                        type="datetime-local"
+                                        fullWidth
+                                        value={fecha}
+                                        onChange={(e) => setFecha(e.target.value)}
+                                        disabled={mode === "actual"}
+                                        InputLabelProps={{ shrink: true }}
+                                        helperText={mode === "actual" ? "La fecha se registra automáticamente al confirmar." : "Selecciona cuándo ocurrió la operación."}
+                                    />
+                                </Stack>
+                            </Box>
 
-                            {/* Date */}
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="Fecha y Hora"
-                                    type="datetime-local"
-                                    fullWidth
-                                    value={fecha}
-                                    onChange={(e) => setFecha(e.target.value)}
-                                    disabled={mode === "actual"}
-                                    InputLabelProps={{ shrink: true }}
-                                />
-                            </Grid>
+                            {/* SECTION 3: VALUES */}
+                            <Box>
+                                <Typography variant="h6" color="primary" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <AttachMoneyIcon fontSize="small" /> 3. Valores
+                                </Typography>
+                                <Stack spacing={3}>
+                                    <TextField
+                                        label="Cantidad Nominal"
+                                        type="number"
+                                        fullWidth
+                                        value={cantidad}
+                                        onChange={(e) => setCantidad(e.target.value)}
+                                        placeholder="Ej: 10"
+                                        InputProps={{
+                                            startAdornment: <InputAdornment position="start">#</InputAdornment>,
+                                        }}
+                                    />
+                                    <TextField
+                                        label="Precio Unitario"
+                                        type="number"
+                                        fullWidth
+                                        value={precio}
+                                        onChange={(e) => setPrecio(e.target.value)}
+                                        disabled={mode === "actual" && !!asset?.precioActual}
+                                        helperText={mode === "actual" ? "Precio de mercado actual (puede variar levemente)" : "Precio histórico por unidad"}
+                                        InputProps={{
+                                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                        }}
+                                    />
+                                </Stack>
+                            </Box>
 
-                            {/* Quantity */}
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="Cantidad"
-                                    type="number"
-                                    fullWidth
-                                    value={cantidad}
-                                    onChange={(e) => setCantidad(e.target.value)}
-                                    InputProps={{
-                                        startAdornment: <InputAdornment position="start"><ShoppingCartIcon fontSize="small" /></InputAdornment>,
-                                    }}
-                                />
-                            </Grid>
-
-                            {/* Price */}
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="Precio Unitario"
-                                    type="number"
-                                    fullWidth
-                                    value={precio}
-                                    onChange={(e) => setPrecio(e.target.value)}
-                                    disabled={mode === "actual" && !!asset?.precioActual} // Auto-filled if actual
-                                    helperText={mode === "actual" ? "Precio de mercado actual" : "Precio al momento de operar"}
-                                    InputProps={{
-                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                    }}
-                                />
-                            </Grid>
-
-                            {/* Total Summary */}
-                            <Grid item xs={12}>
-                                <Paper variant="outlined" sx={{ p: 2, bgcolor: 'background.default', textAlign: 'center' }}>
-                                    <Typography variant="body2" color="text.secondary">Total Operación Estimado</Typography>
-                                    <Typography variant="h4" color="primary.main" fontWeight="bold">
-                                        $ {totalEstimado.toLocaleString("es-AR")}
-                                    </Typography>
-                                    {asset && <Typography variant="caption">{asset.moneda || "ARS"}</Typography>}
-                                </Paper>
-                            </Grid>
+                            {/* SECTION 4: SUMMARY */}
+                            <Paper variant="outlined" sx={{ p: 3, bgcolor: 'background.default', textAlign: 'center', borderColor: 'primary.main', borderWidth: 1 }}>
+                                <Typography variant="subtitle2" color="text.secondary" gutterBottom>TOTAL ESTIMADO</Typography>
+                                <Typography variant="h3" color="primary.main" fontWeight="bold">
+                                    $ {totalEstimado.toLocaleString("es-AR")}
+                                </Typography>
+                                {asset && <Typography variant="caption" sx={{ display: 'block', mt: 1 }}>Moneda: {asset.moneda || "ARS"}</Typography>}
+                            </Paper>
 
                             {error && (
-                                <Grid item xs={12}>
-                                    <Alert severity="error">{error}</Alert>
-                                </Grid>
+                                <Alert severity="error">{error}</Alert>
                             )}
 
-                            {/* Actions */}
-                            <Grid item xs={12} display="flex" justifyContent="flex-end" gap={2}>
-                                <Button variant="text" onClick={() => router.back()}>
+                            {/* ACTIONS */}
+                            <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{ mt: 2 }}>
+                                <Button variant="text" size="large" onClick={() => router.back()}>
                                     Cancelar
                                 </Button>
                                 <Button
@@ -255,12 +255,12 @@ export default function RegistrarOperacionPage() {
                                     size="large"
                                     onClick={handleSubmit}
                                     disabled={loading || !asset || !cantidad || !precio}
+                                    sx={{ px: 4 }}
                                 >
                                     {loading ? "Registrando..." : "Confirmar Operación"}
                                 </Button>
-                            </Grid>
-
-                        </Grid>
+                            </Stack>
+                        </Stack>
                     </Paper>
                 </Container>
             </Box>
