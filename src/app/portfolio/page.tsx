@@ -219,11 +219,11 @@ export default function PortfolioPage() {
                         <TableCell align="right">{fmtPrice(a.precioPromedioCompra)}</TableCell>
 
                         {/* Comparison Columns */}
-                        <TableCell align="right" sx={{ color: 'text.secondary' }}>{formatARS(priceARS)}</TableCell>
-                        <TableCell align="right" sx={{ fontWeight: isUSD ? 'bold' : 'normal' }}>{formatUSD(priceUSD)}</TableCell>
+                        <TableCell align="right" sx={{ color: isUSD ? 'text.secondary' : 'text.primary', fontWeight: isUSD ? 'normal' : 'bold' }}>{formatARS(priceARS)}</TableCell>
+                        <TableCell align="right" sx={{ color: isUSD ? 'text.primary' : 'text.secondary', fontWeight: isUSD ? 'bold' : 'normal' }}>{formatUSD(priceUSD)}</TableCell>
 
-                        <TableCell align="right" sx={{ fontWeight: 'bold' }}>{formatARS(totalARS)}</TableCell>
-                        <TableCell align="right" sx={{ color: 'text.secondary' }}>{formatUSD(totalUSD)}</TableCell>
+                        <TableCell align="right" sx={{ color: isUSD ? 'text.secondary' : 'text.primary', fontWeight: isUSD ? 'normal' : 'bold' }}>{formatARS(totalARS)}</TableCell>
+                        <TableCell align="right" sx={{ color: isUSD ? 'text.primary' : 'text.secondary', fontWeight: isUSD ? 'bold' : 'normal' }}>{formatUSD(totalUSD)}</TableCell>
 
                         <TableCell align="right">{formatPercentage(a.porcentajeCartera)}%</TableCell>
                         <TableCell align="right" sx={{ color: varPct >= 0 ? 'success.main' : 'error.main' }}>
