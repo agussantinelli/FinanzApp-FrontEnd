@@ -10,7 +10,7 @@ export interface ActivoEnPortafolioDTO {
     cantidad: number;
     precioPromedioCompra: number;
     precioActual: number;
-    valorizadoPesos: number;
+    valorizadoNativo: number;
     porcentajeCartera: number;
     moneda: string;
     tipoActivo: string;

@@ -11,7 +11,7 @@ import {
 import { Doughnut } from 'react-chartjs-2';
 import { Box, Paper, Typography, useTheme } from '@mui/material';
 import { ActivoEnPortafolioDTO } from '@/types/Portafolio';
-import { formatARS, formatPercentage } from '@/utils/format';
+import { formatARS, formatPercentage, formatUSD } from '@/utils/format';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -38,7 +38,7 @@ export default function PortfolioCompositionChart({ activos }: Props) {
         labels: activos.map(a => `${a.symbol} (${formatPercentage(a.porcentajeCartera)}%)`),
         datasets: [
             {
-                data: activos.map(a => a.valorizadoPesos),
+                data: activos.map(a => a.valorizadoNativo),
                 backgroundColor: colors.slice(0, activos.length),
                 borderColor: theme.palette.background.paper,
                 borderWidth: 2,
@@ -71,8 +71,12 @@ export default function PortfolioCompositionChart({ activos }: Props) {
                 bodyFont: { size: 13 },
                 callbacks: {
                     label: (context) => {
+                        const idx = context.dataIndex;
+                        const asset = activos[idx];
                         const val = context.raw as number;
-                        return ` ${formatARS(val)}`;
+                        const currency = asset.moneda || "ARS";
+                        const isUSD = currency === 'USD';
+                        return ` ${isUSD ? formatUSD(val) : formatARS(val)}`;
                     }
                 }
             },
