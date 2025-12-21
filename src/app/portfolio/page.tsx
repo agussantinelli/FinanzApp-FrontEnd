@@ -199,9 +199,9 @@ export default function PortfolioPage() {
                       priceUSD = ccl > 0 ? priceARS / ccl : 0;
                     }
 
-                    // Normalize Totals
-                    const totalARS = a.valorizadoPesos;
-                    const totalUSD = ccl > 0 ? totalARS / ccl : 0;
+                    // Normalize Totals (Explicit computation: Price * Quantity)
+                    const totalARS = priceARS * a.cantidad;
+                    const totalUSD = priceUSD * a.cantidad;
 
                     const varPct = a.precioPromedioCompra > 0 ? ((a.precioActual - a.precioPromedioCompra) / a.precioPromedioCompra * 100) : 0;
                     return (
