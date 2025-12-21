@@ -121,24 +121,27 @@
     <li><code>src/app/</code>
         <ul>
             <li><code>page.tsx</code>: Landing pública.</li>
-            <li><code>auth/</code>: Rutas de autenticación (Login, Registro).</li>
-            <li><code>dashboard/</code>, <code>admin/</code>, <code>expert/</code>: Paneles por rol.</li>
-            <li><code>activos/</code>: Listado y detalle de activos con filtros avanzados.</li>
-            <li><code>portafolio/</code>: Vista consolidada de posiciones.</li>
-            <li><code>reportes/</code>: Gráficos y métricas del mercado.</li>
-            <li><code>noticias/</code>: Feed de noticias financieras.</li>
+            <li><code>auth/</code>: Módulos de Login y Registro.</li>
+            <li><code>dashboard/</code>: Panel principal del Inversor.</li>
+            <li><code>portfolio/</code>: Visualización y análisis patrimonial.</li>
+            <li><code>activos/</code>: Buscador y detalles de instrumentos.</li>
+            <li><code>registrar-operacion/</code>: Formulario de compra/venta.</li>
+            <li><code>recomendaciones/</code>: Módulo de señales de expertos.</li>
+            <li><code>expert/</code>: Dashboard para expertos financieros.</li>
+            <li><code>admin/</code>: Panel de control de la plataforma.</li>
+            <li><code>reportes/</code> & <code>noticias/</code>: Información de mercado.</li>
         </ul>
     </li>
-    <li><code>src/hooks/</code>: Custom Hooks para lógica de negocio (e.g., <code>useActivosFilters</code>, <code>useRegister</code>, <code>usePortfolioData</code>).</li>
-    <li><code>src/services/</code>: Servicios HTTP (Axios) para consumir la API del backend.</li>
+    <li><code>src/hooks/</code>: Lógica de negocio encapsulada (e.g., <code>usePortfolioData</code>, <code>useAuth</code>, <code>useMisRecomendaciones</code>).</li>
+    <li><code>src/services/</code>: Comunicación con API Backend (Axios + DTOs).</li>
     <li><code>src/components/</code>:
         <ul>
-            <li><code>sections/</code>: Bloques lógicos de UI (e.g., cotizaciones por sector).</li>
-            <li><code>auth/</code>: Guards y componentes de seguridad (e.g., <code>RoleGuard</code>).</li>
-            <li>Componentes reutilizables (Navbar, Cards, Gráficos).</li>
+            <li><code>portfolio/</code>: Gráficos y tablas específicos del portafolio.</li>
+            <li><code>sections/</code>: Bloques visuales de la Landing/Dashboard.</li>
+            <li><code>auth/</code>: Componentes de seguridad (<code>RoleGuard</code>).</li>
         </ul>
     </li>
-    <li><code>src/types/</code>: DTOs e interfaces TypeScript (modelos de dominio).</li>
+    <li><code>src/types/</code>: Definiciones de TypeScript alineadas con el Backend.</li>
     <li><code>src/lib/</code>: Utilidades y configuraciones base (e.g., cache simple).</li>
     <li><code>src/config/</code>: Configuración de entorno y clientes HTTP.</li>
     <li><code>src/app-theme/</code>: Configuración del tema Material UI.</li>
