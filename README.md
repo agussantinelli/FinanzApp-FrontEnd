@@ -144,7 +144,8 @@
     <li><code>src/app-theme/</code>: Configuración del tema Material UI.</li>
 </ul>
 
-<h3>🚀 Empezar (Setup Local)</h3>
+
+<h3> Empezar (Setup Local)</h3>
 
 <p>Este es un proyecto <a href="https://nextjs.org">Next.js</a> inicializado con <code>create-next-app</code>.</p>
 
@@ -192,15 +193,13 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
     </li>
     <li>Las llamadas posteriores usan el cliente configurado en <code>Http.ts</code>, que adjunta:
         <pre><code>Authorization: Bearer &lt;fa_token&gt;</code></pre>
-        en los endpoints protegidos (por ejemplo, <code>/api/stocks/duals</code>, <code>/api/crypto/top</code>, etc.).
+        en los endpoints protegidos.
     </li>
 </ol>
 
-<p>La aplicación distingue actualmente entre los roles <strong>Inversor</strong> y <strong>Admin</strong>. El navbar y el acceso a ciertos paneles se adaptan dinámicamente según el rol del usuario autenticado.</p>
-
 <hr>
 
-<h2>📊 Dashboards</h2>
+<h2>📊 Módulos Principales</h2>
 
 <h3>👤 Dashboard de Inversor</h3>
 
@@ -210,145 +209,72 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
     <li>Bienvenida personalizada (nombre + rol).</li>
     <li>Resumen rápido del portafolio (valor estimado, resultado diario, etc.).</li>
     <li>Accesos rápidos a secciones clave (activos, reportes, noticias).</li>
-    <li>Datos de cotizaciones de dólar, CEDEARs, acciones y cripto consumidos desde el backend.</li>
+    <li>Datos de cotizaciones en tiempo real consumidos desde el backend.</li>
 </ul>
 
-<h3>📂 Portafolio</h3>
+<h3>📂 Portafolio Inteligente (Multimoneda)</h3>
 
-<p>Ruta principal: <code>/portafolio</code></p>
+<p>Ruta principal: <code>/portfolio</code></p>
 
 <ul>
-    <li>Vista pensada como <strong>“panel patrimonial”</strong> del inversor.</li>
-    <li>Cards de resumen (valor total, exposición a activos de riesgo, cantidad de instrumentos).</li>
-    <li>Distribución básica por tipo de activo (CEDEAR, acción local, bono, cripto).</li>
-    <li>Tabla demo de posiciones con:
+    <li><strong>Vista Consolidada:</strong> Visualización del patrimonio total en ARS y USD.</li>
+    <li><strong>Valuación Dinámica:</strong>
         <ul>
-            <li>Ticker, nombre, tipo.</li>
-            <li>Cantidad, precio actual, valor total estimado.</li>
-            <li>Variación diaria y variación total en %.</li>
+            <li>Conversión automática de activos usando cotización <strong>CCL Implícito</strong> de la cartera.</li>
+            <li>Columnas comparativas: <code>Precio (ARS)</code> vs <code>Precio (USD)</code> y <code>Total (ARS)</code> vs <code>Total (USD)</code>.</li>
+            <li>Detección automática de moneda origen (Pesos, Dólares, USDT/C).</li>
         </ul>
     </li>
-    <li>Actualmente los datos están <strong>hardcodeados</strong> a modo de maqueta para el TPI.</li>
+    <li><strong>Gráfico de Composición:</strong> Doughnut chart interactivo con distribución porcentual y visualización de valores nativos.</li>
+    <li><strong>Soporte para CEDEARs:</strong> Etiquetas visuales específicas y tratamiento fiscal unificado.</li>
+    <li>Acceso directo a "Registrar Operación" para mantener la cartera actualizada.</li>
 </ul>
 
-<h3>🛠️ Dashboard de Administrador</h3>
+<h3>🛒 Operaciones y Mercado</h3>
 
-<p>Ruta principal: <code>/admin</code></p>
+<p>Ruta principal: <code>/registrar-operacion</code></p>
 
 <ul>
-    <li>Cards con métricas globales (hardcodeadas en la primera versión):
+    <li>Motor de búsqueda de activos integrado (Acciones, Bonos, CEDEARs, Cripto).</li>
+    <li>Formulario de alta de operaciones (Compra/Venta) con validación en tiempo real:
         <ul>
-            <li>Cantidad de usuarios registrados / activos.</li>
-            <li>Número de operaciones registradas.</li>
-            <li>Volumen aproximado operado.</li>
+            <li>Validación de stock disponible al vender.</li>
+            <li>Precios de referencia automáticos según mercado.</li>
+            <li>Selección de portafolio destino.</li>
         </ul>
     </li>
-    <li>Sección para monitorear el estado general de la plataforma (a futuro: logs, health checks, etc.).</li>
-    <li>Accesible únicamente para usuarios con rol <code>Admin</code> (controlado desde el backend y el frontend).</li>
+    <li>Historial completo de transacciones.</li>
 </ul>
 
-<h3>🧠 Dashboard de Experto (maqueta)</h3>
+<h3>🛠️ Panel de Administración y Expertos</h3>
 
-<p>Ruta principal: <code>/expert</code></p>
+<p>Rutas: <code>/admin</code> y <code>/expert</code></p>
 
 <ul>
-    <li>Pantalla pensada para usuarios con rol <strong>Experto</strong> (rol preconfigurado desde el backend).</li>
-    <li>Resumen de:
-        <ul>
-            <li>Cantidad de recomendaciones emitidas.</li>
-            <li>Activos distintos cubiertos por el experto.</li>
-            <li>Performance promedio de las recomendaciones.</li>
-        </ul>
-    </li>
-    <li>Lista demo de recomendaciones recientes con:
-        <ul>
-            <li>Ticker, tipo de activo, precio de entrada, target y stop loss.</li>
-            <li>Horizonte temporal y estado (activa/cerrada).</li>
-        </ul>
-    </li>
-    <li>Actualmente la carga de recomendaciones es solo conceptual (sin alta real todavía).</li>
+    <li>Dashboards específicos por rol protegidos por <code>RoleGuard</code>.</li>
+    <li>Gestión de usuarios y métricas globales de la plataforma.</li>
+    <li>Módulo (beta) para carga de señales de inversión por parte de expertos.</li>
 </ul>
-
-<hr>
-
-<h2>👥 Roles y flujos de navegación</h2>
-
-<p>El frontend respeta la información de rol provista por el JWT:</p>
-
-<ul>
-    <li><strong>Inversor</strong>
-        <ul>
-            <li>Inicio post-login: <code>/dashboard</code>.</li>
-            <li>Acceso a: <code>/dashboard</code>, <code>/portafolio</code>, módulos de activos, noticias y reportes.</li>
-            <li>Navbar:
-                <ul>
-                    <li>El logo / nombre de la app redirige al <strong>panel principal</strong> si el usuario está logueado.</li>
-                    <li>Opción <strong>“Mi portafolio”</strong> disponible desde navegación.</li>
-                    <li>Opción “Mi panel” centralizada dentro del menú de usuario.</li>
-                </ul>
-            </li>
-        </ul>
-    </li>
-    <li><strong>Admin</strong>
-        <ul>
-            <li>Inicio post-login: <code>/admin</code>.</li>
-            <li>Puede seguir usando el <code>/dashboard</code> de inversor a modo de vista personal.</li>
-            <li>Navbar muestra claramente el rol <code>Admin</code> y enlaces hacia el panel de administración.</li>
-        </ul>
-    </li>
-    <li><strong>Experto</strong> (rol preconfigurado)
-        <ul>
-            <li>Inicio post-login: <code>/expert</code> (definido por helper <code>getHomePathForRole</code> en el frontend).</li>
-            <li>En el futuro, podrá:
-                <ul>
-                    <li>Cargar recomendaciones para diferentes activos.</li>
-                    <li>Visualizar la performance de sus ideas de inversión.</li>
-                    <li>Ver estadísticas de impacto sobre los inversores que siguen sus señales.</li>
-                </ul>
-            </li>
-        </ul>
-    </li>
-</ul>
-
-<p>Cuando un usuario intenta acceder a una ruta que no le corresponde, se lo redirige a una pantalla de <strong>access denied</strong> (<code>/access-denied</code>), donde se le informa que no tiene permisos para esa sección.</p>
 
 <hr>
 
 <h2>📌 Estado actual de implementación (Frontend)</h2>
 
 <ul>
-    <li><strong>Implementado</strong>
+    <li><strong>Completado (V1.0)</strong>
         <ul>
-            <li>Autenticación JWT (login / register) integrada con el backend.</li>
-            <li>Gestión de sesión en frontend:
-                <ul>
-                    <li>Almacenamiento de <code>fa_token</code> + <code>fa_user</code> en <code>localStorage</code>.</li>
-                    <li>Notificación global vía evento <code>fa-auth-changed</code> para actualizar Navbar, etc.</li>
-                </ul>
-            </li>
-            <li>Navbar responsivo:
-                <ul>
-                    <li>Navegación pública y privada.</li>
-                    <li>Menú de usuario con acceso a perfil, panel y logout.</li>
-                </ul>
-            </li>
-            <li>Dashboards:
-                <ul>
-                    <li><code>/dashboard</code> (inversor) – maqueta completa con cards y atajos.</li>
-                    <li><code>/admin</code> – maqueta de métricas globales para rol Admin.</li>
-                    <li><code>/expert</code> – maqueta inicial de panel de experto.</li>
-                </ul>
-            </li>
-            <li><code>/portafolio</code> – vista de portafolio consolidado con datos demo.</li>
-            <li>Enrutamiento de roles con helper <code>getHomePathForRole</code>.</li>
+            <li>✅ Autenticación Full (JWT, Persistencia, Logout).</li>
+            <li>✅ Flow de Inversión Completo: Buscar Activo -> Registrar Operación -> Ver en Portafolio.</li>
+            <li>✅ Lógica Multimoneda: Manejo robusto de pares ARS/USD en tablas y gráficos.</li>
+            <li>✅ Dashboards Responsivos: UI adaptada a Móvil/Tablet/Desktop con Material UI.</li>
+            <li>✅ Integración Backend: Consumo de endpoints reales para Valuación, Operaciones y Cotizaciones.</li>
         </ul>
     </li>
-    <li><strong>En progreso / futuro</strong>
+    <li><strong>En Roadmap</strong>
         <ul>
-            <li>Persistencia real de operaciones y posiciones en la base de datos.</li>
-            <li>Cálculo de patrimonio y P&amp;L a partir de series temporales.</li>
-            <li>Alta y gestión real de recomendaciones del rol Experto.</li>
-            <li>Reportes exportables (PDF/Excel) desde el frontend.</li>
+            <li>Reportes exportables (PDF/Excel).</li>
+            <li>Notificaciones en tiempo real (WebSockets) para cambios de precio.</li>
+            <li>Expansión del módulo de "Comunidad" y "Noticias".</li>
         </ul>
     </li>
 </ul>
@@ -358,11 +284,3 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
 <h2>⚖️ Licencia</h2>
 
 <p>MIT – ver archivo <code>LICENSE</code>.</p>
-
-<hr>
-
-<h3>📝 Notas sobre la Arquitectura</h3>
-
-<p>Este repo es estrictamente el <strong>Frontend</strong>. Toda la lógica de negocio, agregación de datos de APIs externas y la persistencia de datos reside en el repositorio <a href="https://github.com/agussantinelli/FinanzApp-BackEnd.git">FinanzApp-BackEnd</a>.</p>
-
-<p>A medida que se consolida la API (incluyendo autenticación JWT, roles y rutas protegidas), se irán agregando ejemplos de requests, flujos completos de login/registro y secciones avanzadas de reportes dentro del frontend.</p>
