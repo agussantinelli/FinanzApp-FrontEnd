@@ -90,8 +90,23 @@ export default function RegistrarOperacionPage() {
     }, [mode, asset]);
 
     const handleSubmit = async () => {
-        if (!user || !asset || !cantidad || !precio || !fecha || !portfolioId) {
-            setError("Completa todos los campos obligatorios.");
+        console.log("HandleSubmit Triggered");
+
+        // Granular validation for easier debugging
+        if (!user) {
+            setError("Error: Usuario no identificado. Recarga la página.");
+            return;
+        }
+        if (!asset) {
+            setError("Debes seleccionar un activo.");
+            return;
+        }
+        if (!portfolioId) {
+            setError("Debes seleccionar un portafolio destino.");
+            return;
+        }
+        if (!cantidad || !precio || !fecha) {
+            setError("Completa cantidad, precio y fecha.");
             return;
         }
 
@@ -118,10 +133,12 @@ export default function RegistrarOperacionPage() {
                 fechaOperacion: new Date(fecha).toISOString(),
             };
 
+            console.log("Sending DTO:", dto);
+
             await createOperacion(dto);
             router.push("/portfolio");
         } catch (err: any) {
-            console.error(err);
+            console.error("Create error:", err);
             const msg = err.response?.data?.message || "Error al registrar la operación. Verificá los datos.";
             setError(msg);
         } finally {
@@ -295,7 +312,7 @@ export default function RegistrarOperacionPage() {
                                     variant="contained"
                                     size="large"
                                     onClick={handleSubmit}
-                                    disabled={loading || !asset || !cantidad || !precio || !portfolioId}
+                                    disabled={loading}
                                     sx={{ px: 4 }}
                                 >
                                     {loading ? "Registrando..." : "Confirmar Operación"}
