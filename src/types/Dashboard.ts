@@ -17,3 +17,10 @@ export interface AdminStatsDTO {
     totalActivos: number;
     recomendacionesPendientes: number;
 }
+
+export interface AdminPortfolioStatsDTO {
+    totalCapitalPesos: number;
+    totalCapitalDolares: number;
+    activosMasPopulares: { activoSymbol: string; cantidadUsuarios: number }[];
+    distribucionPorSector: { sectorNombre: string; porcentaje: number }[];
+}
