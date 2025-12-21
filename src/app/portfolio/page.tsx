@@ -28,6 +28,7 @@ import { RoleGuard } from "@/components/auth/RoleGuard";
 import { usePortfolioData } from "@/hooks/usePortfolioData";
 import styles from "./styles/Portfolio.module.css";
 import { formatARS, formatPercentage } from "@/utils/format";
+import AddIcon from '@mui/icons-material/Add';
 
 export default function PortfolioPage() {
   const router = useRouter();
@@ -88,6 +89,15 @@ export default function PortfolioPage() {
                   </Typography>
                 </Box>
                 <Stack direction="row" spacing={2} alignItems="center">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<AddIcon />}
+                    onClick={() => router.push('/registrar-operacion')}
+                    sx={{ whiteSpace: 'nowrap' }}
+                  >
+                    Registrar Operación
+                  </Button>
                   {portfolios.length > 1 && (
                     <FormControl size="small" sx={{ minWidth: 150 }}>
                       <InputLabel>Portafolio</InputLabel>
@@ -173,7 +183,20 @@ export default function PortfolioPage() {
                   })}
                   {(!valuacion?.activos || valuacion.activos.length === 0) && (
                     <TableRow>
-                      <TableCell colSpan={7} align="center">No hay activos en este portafolio.</TableCell>
+                      <TableCell colSpan={7} align="center" sx={{ py: 6 }}>
+                        <Typography variant="body1" color="text.secondary" gutterBottom>
+                          Aún no tienes activos en este portafolio.
+                        </Typography>
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          startIcon={<AddIcon />}
+                          onClick={() => router.push('/registrar-operacion')}
+                          sx={{ mt: 1 }}
+                        >
+                          Registrar Primera Operación
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   )}
                 </TableBody>
