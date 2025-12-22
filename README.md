@@ -16,10 +16,13 @@
     <img src="https://img.shields.io/badge/React-19.2.0-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React Badge"/>
     <img src="https://img.shields.io/badge/Next.js-16.0.7-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js Badge"/>
     <img src="https://img.shields.io/badge/TypeScript-5-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript Badge"/>
+    <img src="https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white" alt="Chart.js Badge"/>
+    <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white" alt="Axios Badge"/>
+    <img src="https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white" alt="Zod Badge"/>
+    <img src="https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white" alt="ESLint Badge"/>
     <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel Badge"/>
     <img src="https://img.shields.io/badge/Material%20UI-7.3.4-007FFF?style=for-the-badge&logo=mui&logoColor=white" alt="MUI Badge"/>
     <img src="https://img.shields.io/badge/JWT%20Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT Badge"/>
-    <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge&logo=license&logoColor=white" alt="License Badge"/>
     <a href="https://drive.google.com/drive/folders/1b5H8fDgOKmrxfY4RXfi4oYA3CvXy4ot6?usp=drive_link" target="_blank">
         <img src="https://img.shields.io/badge/📂%20Documentación%20Proyecto-4285F4?style=for-the-badge&logo=googledrive&logoColor=white" alt="Carpeta TPI Drive Badge"/>
     </a>
