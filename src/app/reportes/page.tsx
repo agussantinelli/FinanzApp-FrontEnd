@@ -12,11 +12,13 @@ import { usePortfolioData } from "@/hooks/usePortfolioData";
 import { CurrencyToggle } from "@/components/common/CurrencyToggle";
 import Link from "next/link";
 import { Button } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 export default function Reportes() {
   const { user, isAuthenticated } = useAuth();
   const { valuacion, loading } = usePortfolioData();
   const [currency, setCurrency] = useState<'ARS' | 'USD'>('USD');
+  const router = useRouter();
 
   return (
     <main className={styles.container}>
@@ -42,17 +44,24 @@ export default function Reportes() {
                 </Box>
               ) : (
                 valuacion?.activos && valuacion.activos.length > 0 ? (
-                  <PortfolioCompositionChart
-                    activos={valuacion.activos}
-                    totalPesos={valuacion.totalPesos}
-                    totalDolares={valuacion.totalDolares}
-                    currency={currency}
-                  />
+                  <Box
+                    onClick={() => router.push('/portfolio')}
+                    sx={{ cursor: 'pointer', transition: 'transform 0.2s', '&:hover': { transform: 'scale(1.01)' } }}
+                  >
+                    <PortfolioCompositionChart
+                      activos={valuacion.activos}
+                      totalPesos={valuacion.totalPesos}
+                      totalDolares={valuacion.totalDolares}
+                      currency={currency}
+                    />
+                  </Box>
                 ) : (
                   <Paper className={styles.gradientCard} sx={{ p: 3, textAlign: 'center' }}>
-                    <Typography variant="body1" gutterBottom>No tienes activos en tu portafolio para mostrar.</Typography>
-                    <Button component={Link} href="/registrar-operacion" variant="outlined" size="small">
-                      Registrar Operación
+                    <Typography variant="body1" gutterBottom>
+                      Tu portafolio está vacío.
+                    </Typography>
+                    <Button component={Link} href="/portfolio" variant="outlined" size="small">
+                      Ir a mi Portafolio
                     </Button>
                   </Paper>
                 )
@@ -68,8 +77,10 @@ export default function Reportes() {
           </Grid>
 
           <Grid size={{ xs: 12, md: 4 }}>
+            <Box mb={2}>
+            </Box>
             <Box className={styles.gradientCard}>
-              <Typography variant="h6">Resumen rápido</Typography>
+              <Typography variant="h6"> Planes Futuros</Typography>
               <Typography variant="body2" color="text.secondary">
                 Próximamente: Patrimonio total, distribución por clase y alertas personalizadas.
               </Typography>
