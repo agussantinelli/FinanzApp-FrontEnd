@@ -32,3 +32,20 @@ export function formatQuantity(n?: number | null) {
         maximumFractionDigits: 6,
     });
 }
+
+export function formatDateTime(dateInput?: string | Date | null) {
+    if (!dateInput) return "—";
+
+    const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
+
+    if (Number.isNaN(date.getTime())) return "—";
+
+    return date.toLocaleString("es-AR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+    });
+}
