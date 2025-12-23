@@ -38,7 +38,7 @@ export default function PortfolioPage() {
   const { user } = useAuth();
 
   const { portfolios, selectedId, valuacion, loading, handlePortfolioChange } = usePortfolioData();
-  const [currency, setCurrency] = React.useState<'ARS' | 'USD'>('ARS');
+  const [currency, setCurrency] = React.useState<'ARS' | 'USD'>('USD');
 
   const handleCurrencyChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -243,19 +243,17 @@ export default function PortfolioPage() {
                     <TableCell>Moneda</TableCell>
                     <TableCell align="right">Cantidad</TableCell>
                     <TableCell align="right">PPC</TableCell>
-                    <TableCell align="right">Precio (ARS)</TableCell>
-                    <TableCell align="right">Precio (USD)</TableCell>
-                    <TableCell align="right">Total (ARS)</TableCell>
-                    <TableCell align="right">Total (USD)</TableCell>
+                    <TableCell align="right">Precio ({currency})</TableCell>
+                    <TableCell align="right">Total ({currency})</TableCell>
                     <TableCell align="right">% Cartera</TableCell>
                     <TableCell align="right">Resultado</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {valuacion?.activos?.map(a => {
-                    const currency = a.moneda || "ARS";
-                    const isUSD = currency === 'USD' || currency === 'USDT' || currency === 'USDC';
-                    const fmtPrice = (val: number) => isUSD ? formatUSD(val) : formatARS(val);
+                    const assetCurrency = a.moneda || "ARS";
+                    const isAssetUSD = assetCurrency === 'USD' || assetCurrency === 'USDT' || assetCurrency === 'USDC';
+                    const fmtPrice = (val: number) => isAssetUSD ? formatUSD(val) : formatARS(val);
 
                     const ccl = (valuacion.totalDolares && valuacion.totalPesos)
                       ? valuacion.totalPesos / valuacion.totalDolares
@@ -265,7 +263,7 @@ export default function PortfolioPage() {
                     let priceARS = 0;
                     let priceUSD = 0;
 
-                    if (isUSD) {
+                    if (isAssetUSD) {
                       priceUSD = a.precioActual;
                       priceARS = ccl > 0 ? priceUSD * ccl : 0;
                     } else {
@@ -275,6 +273,10 @@ export default function PortfolioPage() {
 
                     const totalARS = priceARS * a.cantidad;
                     const totalUSD = priceUSD * a.cantidad;
+
+                    const priceToShow = currency === 'ARS' ? priceARS : priceUSD;
+                    const totalToShow = currency === 'ARS' ? totalARS : totalUSD;
+                    const formatFn = currency === 'ARS' ? formatARS : formatUSD;
 
                     const varPct = a.precioPromedioCompra > 0 ? ((a.precioActual - a.precioPromedioCompra) / a.precioPromedioCompra * 100) : 0;
                     return (
@@ -286,17 +288,14 @@ export default function PortfolioPage() {
                           )}
                         </TableCell>
                         <TableCell>
-                          <Chip label={currency} size="small" variant="outlined" sx={{ fontSize: '0.7rem', height: 24, minWidth: 45 }} color={isUSD ? "success" : "default"} />
+                          <Chip label={assetCurrency} size="small" variant="outlined" sx={{ fontSize: '0.7rem', height: 24, minWidth: 45 }} color={isAssetUSD ? "success" : "default"} />
                         </TableCell>
                         <TableCell align="right">{a.cantidad}</TableCell>
                         <TableCell align="right">{fmtPrice(a.precioPromedioCompra)}</TableCell>
 
                         {/* Comparison Columns */}
-                        <TableCell align="right" sx={{ color: isUSD ? 'text.secondary' : 'text.primary', fontWeight: isUSD ? 'normal' : 'bold' }}>{formatARS(priceARS)}</TableCell>
-                        <TableCell align="right" sx={{ color: isUSD ? 'text.primary' : 'text.secondary', fontWeight: isUSD ? 'bold' : 'normal' }}>{formatUSD(priceUSD)}</TableCell>
-
-                        <TableCell align="right" sx={{ color: isUSD ? 'text.secondary' : 'text.primary', fontWeight: isUSD ? 'normal' : 'bold' }}>{formatARS(totalARS)}</TableCell>
-                        <TableCell align="right" sx={{ color: isUSD ? 'text.primary' : 'text.secondary', fontWeight: isUSD ? 'bold' : 'normal' }}>{formatUSD(totalUSD)}</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: 'bold' }}>{formatFn(priceToShow)}</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: 'bold' }}>{formatFn(totalToShow)}</TableCell>
 
                         <TableCell align="right">{formatPercentage(a.porcentajeCartera)}%</TableCell>
                         <TableCell align="right" sx={{ color: varPct >= 0 ? 'success.main' : 'error.main' }}>
