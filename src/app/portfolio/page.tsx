@@ -191,13 +191,13 @@ export default function PortfolioPage() {
                   <TableRow>
                     <TableCell sx={{ fontSize: '1rem', fontWeight: 600 }}>Ticker</TableCell>
                     <TableCell sx={{ fontSize: '1rem', fontWeight: 600 }}>Moneda</TableCell>
-                    <TableCell align="right" sx={{ fontSize: '1rem', fontWeight: 600 }}>Cantidad</TableCell>
-                    <TableCell align="right" sx={{ fontSize: '1rem', fontWeight: 600 }}>PPC ({currency})</TableCell>
-                    <TableCell align="right" sx={{ fontSize: '1rem', fontWeight: 600 }}>Costo Total ({currency})</TableCell>
-                    <TableCell align="right" sx={{ fontSize: '1rem', fontWeight: 600 }}>Precio Actual ({currency})</TableCell>
-                    <TableCell align="right" sx={{ fontSize: '1rem', fontWeight: 600 }}>Valor Actual ({currency})</TableCell>
-                    <TableCell align="right" sx={{ fontSize: '1rem', fontWeight: 600 }}>% Cartera</TableCell>
-                    <TableCell align="right" sx={{ fontSize: '1rem', fontWeight: 600 }}>Rendimiento</TableCell>
+                    <TableCell align="left" sx={{ fontSize: '1rem', fontWeight: 600 }}>Cantidad</TableCell>
+                    <TableCell align="left" sx={{ fontSize: '1rem', fontWeight: 600 }}>PPC ({currency})</TableCell>
+                    <TableCell align="left" sx={{ fontSize: '1rem', fontWeight: 600 }}>Costo Total ({currency})</TableCell>
+                    <TableCell align="left" sx={{ fontSize: '1rem', fontWeight: 600 }}>Precio Actual ({currency})</TableCell>
+                    <TableCell align="left" sx={{ fontSize: '1rem', fontWeight: 600 }}>Valor Actual ({currency})</TableCell>
+                    <TableCell align="left" sx={{ fontSize: '1rem', fontWeight: 600 }}>% Cartera</TableCell>
+                    <TableCell align="left" sx={{ fontSize: '1rem', fontWeight: 600 }}>Rendimiento</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -254,22 +254,22 @@ export default function PortfolioPage() {
                         <TableCell sx={{ fontSize: '1rem' }}>
                           <Chip label={assetCurrency} size="small" variant="outlined" sx={{ fontSize: '0.75rem', height: 24, minWidth: 45 }} color={isAssetUSD ? "success" : "default"} />
                         </TableCell>
-                        <TableCell align="right" sx={{ fontSize: '1rem' }}>{formatQuantity(a.cantidad)}</TableCell>
+                        <TableCell align="left" sx={{ fontSize: '1rem' }}>{formatQuantity(a.cantidad)}</TableCell>
 
                         {/* PPC */}
-                        <TableCell align="right" sx={{ fontSize: '1rem' }}>{formatFn(ppcToShow)}</TableCell>
+                        <TableCell align="left" sx={{ fontSize: '1rem' }}>{formatFn(ppcToShow)}</TableCell>
 
                         {/* Costo Total */}
-                        <TableCell align="right" sx={{ fontSize: '1rem' }}>{formatFn(totalCostToShow)}</TableCell>
+                        <TableCell align="left" sx={{ fontSize: '1rem' }}>{formatFn(totalCostToShow)}</TableCell>
 
                         {/* Precio Actual */}
-                        <TableCell align="right" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>{formatFn(priceToShow)}</TableCell>
+                        <TableCell align="left" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>{formatFn(priceToShow)}</TableCell>
 
                         {/* Valor Actual */}
-                        <TableCell align="right" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>{formatFn(totalToShow)}</TableCell>
+                        <TableCell align="left" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>{formatFn(totalToShow)}</TableCell>
 
-                        <TableCell align="right" sx={{ fontSize: '1rem' }}>{formatPercentage(a.porcentajeCartera)}%</TableCell>
-                        <TableCell align="right" sx={{ color: varPct >= 0 ? 'success.main' : 'error.main', fontSize: '1rem', fontWeight: 500 }}>
+                        <TableCell align="left" sx={{ fontSize: '1rem' }}>{formatPercentage(a.porcentajeCartera)}%</TableCell>
+                        <TableCell align="left" sx={{ color: varPct >= 0 ? 'success.main' : 'error.main', fontSize: '1rem', fontWeight: 500 }}>
                           {varPct > 0 ? "+" : ""}{formatPercentage(varPct)}%
                         </TableCell>
                       </TableRow>
