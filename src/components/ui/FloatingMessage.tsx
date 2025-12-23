@@ -17,9 +17,24 @@ export default function FloatingMessage({ open, message, severity, onClose }: Fl
             autoHideDuration={6000}
             onClose={onClose}
             anchorOrigin={{ vertical: "top", horizontal: "center" }}
-            sx={{ mt: 10 }} // Pushes below navbar
+            sx={{
+                mt: 10,
+                width: '95%',
+                maxWidth: '1600px', // Prevent it from being too wide on ultra-wide screens, but effectively full width on laptops
+                left: '50%',
+                transform: 'translateX(-50%)'
+            }}
         >
-            <Alert onClose={onClose} severity={severity} sx={{ width: "100%", boxShadow: 3 }}>
+            <Alert
+                onClose={onClose}
+                severity={severity}
+                sx={{
+                    width: "100%",
+                    boxShadow: 3,
+                    fontSize: '1rem', // Slightly larger text for better readability on wide alerts
+                    alignItems: 'center'
+                }}
+            >
                 {message}
             </Alert>
         </Snackbar>
