@@ -51,7 +51,7 @@ export default function MyOperationsPage() {
     return (
         <RoleGuard>
             <Box className={styles.container}>
-                <Container maxWidth="lg">
+                <Container maxWidth="xl">
                     <Stack direction={{ xs: 'column', md: 'row' }} alignItems={{ xs: 'stretch', md: 'center' }} spacing={2} className={styles.header} justifyContent="space-between">
                         <Stack direction="row" alignItems="center" spacing={2}>
                             <Button startIcon={<ArrowBackIcon />} onClick={() => router.back()}>
@@ -121,16 +121,13 @@ export default function MyOperationsPage() {
                                                     Fecha
                                                 </TableSortLabel>
                                             </TableCell>
-                                            <TableCell>
-                                                <TableSortLabel
-                                                    active={orderBy === 'tipo'}
-                                                    direction={orderBy === 'tipo' ? order : 'asc'}
-                                                    onClick={() => handleRequestSort('tipo')}
-                                                >
-                                                    Tipo
-                                                </TableSortLabel>
+                                            <TableCell align="left">
+                                                Tipo
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell align="left">
+                                                Moneda
+                                            </TableCell>
+                                            <TableCell align="left">
                                                 <TableSortLabel
                                                     active={orderBy === 'activoSymbol'}
                                                     direction={orderBy === 'activoSymbol' ? order : 'asc'}
@@ -188,6 +185,9 @@ export default function MyOperationsPage() {
                                                         />
                                                     </TableCell>
                                                     <TableCell align="left">
+                                                        <Typography variant="body2">{op.moneda}</Typography>
+                                                    </TableCell>
+                                                    <TableCell align="left">
                                                         <Typography fontWeight="bold">{op.activoSymbol}</Typography>
                                                         <Typography variant="caption" color="text.secondary">{op.activoNombre}</Typography>
                                                     </TableCell>
@@ -210,6 +210,6 @@ export default function MyOperationsPage() {
                     </Paper>
                 </Container>
             </Box>
-        </RoleGuard>
+        </RoleGuard >
     );
 }
