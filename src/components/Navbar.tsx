@@ -33,15 +33,18 @@ import { useAuth } from "@/hooks/useAuth";
 
 import styles from "./styles/Navbar.module.css";
 
-const commonItems = [
+const unauthItems = [
   { label: "Inicio", href: "/" },
   { label: "Activos", href: "/activos" },
-];
-
-const moreItems = [
   { label: "Noticias", href: "/noticias" },
   { label: "Reportes", href: "/reportes" },
 ];
+
+const authMoreItems = [
+  { label: "Noticias", href: "/noticias" },
+  { label: "Reportes", href: "/reportes" },
+];
+
 
 
 export default function Navbar() {
@@ -60,24 +63,28 @@ export default function Navbar() {
     setMounted(true);
   }, []);
 
+  const defaultPanelHref = getHomePathForRole(user?.rol ?? null);
+
   const { desktopItems, mobileItems } = React.useMemo(() => {
     if (!mounted || !isAuthenticated) {
-      const allPublic = [...commonItems, ...moreItems];
-      return { desktopItems: allPublic, mobileItems: allPublic };
+      return { desktopItems: unauthItems, mobileItems: unauthItems };
     }
 
-    const authList = [
+    // Auth items structure
+    const mainItems = [
+      { label: "Inicio", href: "/" },
+      { label: "Dashboard", href: defaultPanelHref },
+      { label: "Portafolio", href: "/portfolio" },
+      { label: "Activos", href: "/activos" },
       { label: "Recomendaciones", href: "/recomendaciones" },
-      { label: "Mi portafolio", href: "/portfolio" },
     ];
 
     return {
-      desktopItems: [...commonItems, ...authList],
-      mobileItems: [...commonItems, ...authList, ...moreItems],
+      desktopItems: mainItems,
+      // For mobile drawer, we might want to flatten everything or keep same structure
+      mobileItems: [...mainItems, ...authMoreItems],
     };
-  }, [isAuthenticated, mounted]);
-
-  const defaultPanelHref = getHomePathForRole(user?.rol ?? null);
+  }, [isAuthenticated, mounted, defaultPanelHref]);
 
   const handleLogout = () => {
     setLogoutMessage("Has cerrado sesión correctamente. ¡Hasta pronto!");
@@ -105,6 +112,7 @@ export default function Navbar() {
 
   const toggle = (v: boolean) => () => setOpen(v);
 
+  // Logo links to Dashboard if logged in, else Home
   const logoHref = (mounted && isAuthenticated) ? defaultPanelHref : "/";
 
   const roleLabel =
@@ -173,7 +181,7 @@ export default function Navbar() {
                     'aria-labelledby': 'basic-button',
                   }}
                 >
-                  {moreItems.map((item) => (
+                  {authMoreItems.map((item) => (
                     <MenuItem
                       key={item.href}
                       component={Link}

@@ -14,9 +14,21 @@ import CryptoSection from "@/components/sections/CryptoSection";
 import AccionesARGYSection from "@/components/sections/AccionesARGYSection";
 import MarketHoursCard from "@/components/sections/MarketHoursCard";
 
+import { useAuth } from "@/hooks/useAuth";
+import { getHomePathForRole } from "@/services/AuthService";
+import { useEffect, useState } from "react";
+
 import styles from "./styles/Home.module.css";
 
 export default function HomePage() {
+  const { isAuthenticated, user } = useAuth();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const dashboardHref = getHomePathForRole(user?.rol ?? null);
   return (
     <Container maxWidth="lg" className={styles.container}>
       <Box className={styles.headerBox}>
@@ -29,16 +41,27 @@ export default function HomePage() {
         </Typography>
 
         <div className={styles.buttonStack}>
-          <Button
-            component={Link}
-            href="/auth/login"
-            variant="contained"
-            color="primary"
-            size="large"
-          >
-            Empezar ahora
-          </Button>
-          <Button
+          {mounted && isAuthenticated ? (
+            <Button
+              component={Link}
+              href={dashboardHref}
+              variant="contained"
+              color="primary"
+              size="large"
+            >
+              Ir al panel
+            </Button>
+          ) : (
+            <Button
+              component={Link}
+              href="/auth/login"
+              variant="contained"
+              color="primary"
+              size="large"
+            >
+              Empezar ahora
+            </Button>
+          )}          <Button
             component={Link}
             href="/activos"
             variant="outlined"
