@@ -15,19 +15,34 @@ import {
     CircularProgress,
     Chip,
     Stack,
-    Button
+    Button,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    TableSortLabel
 } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRouter } from "next/navigation";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { formatARS, formatUSD, formatQuantity, formatDateTime } from "@/utils/format";
-import { useMyOperations } from "@/hooks/useMyOperations";
+import { useMyOperations, Order, FilterType } from "@/hooks/useMyOperations";
+import { OperacionResponseDTO } from "@/types/Operacion";
 
 import styles from "./styles/MyOperations.module.css";
 
 export default function MyOperationsPage() {
     const router = useRouter();
-    const { operaciones, loading, user } = useMyOperations();
+    const {
+        operaciones,
+        loading,
+        user,
+        orderBy,
+        order,
+        filterType,
+        setFilterType,
+        handleRequestSort
+    } = useMyOperations();
 
     if (!user) return null;
 
@@ -35,17 +50,34 @@ export default function MyOperationsPage() {
         <RoleGuard>
             <Box className={styles.container}>
                 <Container maxWidth="lg">
-                    <Stack direction="row" alignItems="center" spacing={2} className={styles.header}>
-                        <Button startIcon={<ArrowBackIcon />} onClick={() => router.back()}>
-                            Volver
-                        </Button>
-                        <Box>
-                            <Typography variant="h4" className={styles.headerTitle}>
-                                Mis Operaciones
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Historial completo de tus movimientos
-                            </Typography>
+                    <Stack direction={{ xs: 'column', md: 'row' }} alignItems={{ xs: 'stretch', md: 'center' }} spacing={2} className={styles.header} justifyContent="space-between">
+                        <Stack direction="row" alignItems="center" spacing={2}>
+                            <Button startIcon={<ArrowBackIcon />} onClick={() => router.back()}>
+                                Volver
+                            </Button>
+                            <Box>
+                                <Typography variant="h4" className={styles.headerTitle}>
+                                    Mis Operaciones
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                    Historial completo de tus movimientos
+                                </Typography>
+                            </Box>
+                        </Stack>
+
+                        <Box sx={{ minWidth: 200 }}>
+                            <FormControl fullWidth size="small">
+                                <InputLabel>Tipo de Operación</InputLabel>
+                                <Select
+                                    value={filterType}
+                                    label="Tipo de Operación"
+                                    onChange={(e) => setFilterType(e.target.value as FilterType)}
+                                >
+                                    <MenuItem value="TODAS">Todas</MenuItem>
+                                    <MenuItem value="Compra">Compras</MenuItem>
+                                    <MenuItem value="Venta">Ventas</MenuItem>
+                                </Select>
+                            </FormControl>
                         </Box>
                     </Stack>
 
@@ -65,12 +97,60 @@ export default function MyOperationsPage() {
                                 <Table>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>Fecha</TableCell>
-                                            <TableCell>Tipo</TableCell>
-                                            <TableCell>Activo</TableCell>
-                                            <TableCell align="right">Cantidad</TableCell>
-                                            <TableCell align="right">Precio</TableCell>
-                                            <TableCell align="right">Total</TableCell>
+                                            <TableCell>
+                                                <TableSortLabel
+                                                    active={orderBy === 'fecha'}
+                                                    direction={orderBy === 'fecha' ? order : 'asc'}
+                                                    onClick={() => handleRequestSort('fecha')}
+                                                >
+                                                    Fecha
+                                                </TableSortLabel>
+                                            </TableCell>
+                                            <TableCell>
+                                                <TableSortLabel
+                                                    active={orderBy === 'tipo'}
+                                                    direction={orderBy === 'tipo' ? order : 'asc'}
+                                                    onClick={() => handleRequestSort('tipo')}
+                                                >
+                                                    Tipo
+                                                </TableSortLabel>
+                                            </TableCell>
+                                            <TableCell>
+                                                <TableSortLabel
+                                                    active={orderBy === 'activoSymbol'}
+                                                    direction={orderBy === 'activoSymbol' ? order : 'asc'}
+                                                    onClick={() => handleRequestSort('activoSymbol')}
+                                                >
+                                                    Activo
+                                                </TableSortLabel>
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <TableSortLabel
+                                                    active={orderBy === 'cantidad'}
+                                                    direction={orderBy === 'cantidad' ? order : 'asc'}
+                                                    onClick={() => handleRequestSort('cantidad')}
+                                                >
+                                                    Cantidad
+                                                </TableSortLabel>
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <TableSortLabel
+                                                    active={orderBy === 'precioUnitario'}
+                                                    direction={orderBy === 'precioUnitario' ? order : 'asc'}
+                                                    onClick={() => handleRequestSort('precioUnitario')}
+                                                >
+                                                    Precio
+                                                </TableSortLabel>
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                <TableSortLabel
+                                                    active={orderBy === 'totalOperado'}
+                                                    direction={orderBy === 'totalOperado' ? order : 'asc'}
+                                                    onClick={() => handleRequestSort('totalOperado')}
+                                                >
+                                                    Total
+                                                </TableSortLabel>
+                                            </TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
