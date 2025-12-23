@@ -20,7 +20,7 @@ import { RecomendacionDTO } from "@/types/Recomendacion";
 import { getExpertoStats } from "@/services/DashboardService";
 import { ExpertoStatsDTO } from "@/types/Dashboard";
 import styles from "./styles/Expert.module.css";
-import { formatARS } from "@/utils/format";
+import { formatARS, formatUSD, formatPercentage } from "@/utils/format";
 
 
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
@@ -120,6 +120,9 @@ export default function ExpertPage() {
                       <Typography variant="h5" fontWeight="bold">
                         {valuacion ? formatARS(valuacion.totalPesos) : "$ -"}
                       </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {valuacion ? formatUSD(valuacion.totalDolares) : "USD -"}
+                      </Typography>
                     </Box>
                   </Stack>
                 </Grid>
@@ -134,13 +137,21 @@ export default function ExpertPage() {
                       {(valuacion?.gananciaPesos ?? 0) >= 0 ? <TrendingUpIcon /> : <TrendingDownIcon />}
                     </Box>
                     <Box>
-                      <Typography variant="body2" color="text.secondary">Ganancia Total</Typography>
+                      <Stack direction="row" alignItems="baseline" spacing={1}>
+                        <Typography variant="body2" color="text.secondary">Ganancia Total</Typography>
+                        <Typography variant="caption" fontWeight="bold" color={(valuacion?.variacionPorcentajePesos ?? 0) >= 0 ? 'success.dark' : 'error.dark'}>
+                          ({valuacion ? formatPercentage(valuacion.variacionPorcentajePesos) : "-"}%)
+                        </Typography>
+                      </Stack>
                       <Typography
                         variant="h5"
                         fontWeight="bold"
                         color={(valuacion?.gananciaPesos ?? 0) >= 0 ? 'success.main' : 'error.main'}
                       >
                         {valuacion ? formatARS(valuacion.gananciaPesos) : "$ -"}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {valuacion ? formatUSD(valuacion.gananciaDolares) : "USD -"}
                       </Typography>
                     </Box>
                   </Stack>
