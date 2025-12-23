@@ -39,6 +39,10 @@ function RegistrarOperacionContent() {
         totalEstimado
     } = useRegistrarOperacion();
 
+    const availableAsset = (tipo === TipoOperacion.Venta && asset && detailedPortfolio)
+        ? detailedPortfolio.activos.find(a => a.symbol === asset.symbol)
+        : null;
+
     return (
         <RoleGuard>
             <Box sx={{ py: 4, minHeight: '80vh' }}>
@@ -161,11 +165,38 @@ function RegistrarOperacionContent() {
                                         placeholder="Ej: 10"
                                         InputProps={{
                                             startAdornment: <InputAdornment position="start">#</InputAdornment>,
+                                            endAdornment: (availableAsset && availableAsset.cantidad > 0) ? (
+                                                <InputAdornment position="end">
+                                                    <Button
+                                                        variant="text"
+                                                        size="small"
+                                                        onClick={() => setCantidad(availableAsset.cantidad.toString())}
+                                                        sx={{
+                                                            color: 'success.main',
+                                                            minWidth: 'auto',
+                                                            fontWeight: 'bold',
+                                                            fontSize: '0.75rem',
+                                                            p: 0.5,
+                                                            textTransform: 'uppercase'
+                                                        }}
+                                                    >
+                                                        MAX
+                                                    </Button>
+                                                </InputAdornment>
+                                            ) : null
                                         }}
                                         helperText={
-                                            tipo === TipoOperacion.Venta && asset && detailedPortfolio ? (
-                                                `Disponible: ${detailedPortfolio.activos.find(a => a.symbol === asset.symbol)?.cantidad || 0}`
-                                            ) : null
+                                            availableAsset ? (
+                                                <Stack direction="row" spacing={1} component="span" sx={{ mt: 0.5 }}>
+                                                    <Typography variant="caption" component="span" fontWeight="bold">
+                                                        Disp: {availableAsset.cantidad}
+                                                    </Typography>
+                                                    <Typography variant="caption" component="span" color="text.secondary">•</Typography>
+                                                    <Typography variant="caption" component="span">
+                                                        PPC: ${availableAsset.precioPromedioCompra.toLocaleString("es-AR", { maximumFractionDigits: 2 })}
+                                                    </Typography>
+                                                </Stack>
+                                            ) : (tipo === TipoOperacion.Venta && asset ? "No tienes este activo en el portafolio seleccionado." : null)
                                         }
                                     />
                                     <TextField
