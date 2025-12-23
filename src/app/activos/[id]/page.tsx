@@ -62,13 +62,15 @@ export default function ActivoDetalle() {
     const { isAuthenticated } = useAuth();
     const { activo, activeRecommendations, loading } = useActivoDetail(id);
 
-    const handleOperation = () => {
+    const handleOperation = (tipo: "COMPRA" | "VENTA") => {
         const user = getCurrentUser();
         if (!user) {
             router.push("/auth/login");
             return;
         }
-        console.log("Operación autorizada para:", user.email);
+        if (activo) {
+            router.push(`/registrar-operacion?activoId=${activo.id}&tipo=${tipo}`);
+        }
     };
 
     if (loading) {
@@ -325,7 +327,7 @@ export default function ActivoDetalle() {
                                     size="large"
                                     startIcon={<TrendingUpIcon />}
                                     className={styles.primaryActionButton}
-                                    onClick={handleOperation}
+                                    onClick={() => handleOperation("COMPRA")}
                                     sx={{
                                         bgcolor: "success.main",
                                         "&:hover": { bgcolor: "success.dark" },
@@ -338,7 +340,7 @@ export default function ActivoDetalle() {
                                     size="large"
                                     startIcon={<AttachMoneyIcon />}
                                     className={styles.secondaryActionButton}
-                                    onClick={handleOperation}
+                                    onClick={() => handleOperation("VENTA")}
                                 >
                                     Vender
                                 </Button>

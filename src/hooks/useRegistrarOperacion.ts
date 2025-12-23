@@ -1,10 +1,10 @@
 
 import { useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { debounce } from "@mui/material/utils";
 
 import { useAuth } from "@/hooks/useAuth";
-import { searchActivos } from "@/services/ActivosService";
+import { searchActivos, getActivoById } from "@/services/ActivosService";
 import { createOperacion } from "@/services/OperacionesService";
 import { getMisPortafolios, getPortafolioValuado } from "@/services/PortafolioService";
 import { ActivoDTO } from "@/types/Activo";
@@ -13,6 +13,7 @@ import { PortafolioDTO, PortafolioValuadoDTO } from "@/types/Portafolio";
 
 export function useRegistrarOperacion() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const { user } = useAuth();
 
     const [mode, setMode] = useState<"actual" | "historica">("actual");
@@ -39,6 +40,24 @@ export function useRegistrarOperacion() {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    // Initial Load: Check for URL Params
+    useEffect(() => {
+        const activoIdParam = searchParams.get('activoId');
+        const tipoParam = searchParams.get('tipo');
+
+        if (activoIdParam) {
+            getActivoById(activoIdParam)
+                .then(data => setAsset(data))
+                .catch(err => console.error("Error fetching asset from param:", err));
+        }
+
+        if (tipoParam === "VENTA") {
+            setTipo(TipoOperacion.Venta);
+        } else if (tipoParam === "COMPRA") {
+            setTipo(TipoOperacion.Compra);
+        }
+    }, [searchParams]);
 
     // Fetch Portfolios
     useEffect(() => {
