@@ -24,6 +24,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import FloatingMessage from "@/components/ui/FloatingMessage";
 
 import {
   getHomePathForRole,
@@ -45,6 +46,7 @@ export default function Navbar() {
   const [userMenuAnchor, setUserMenuAnchor] =
     React.useState<null | HTMLElement>(null);
   const [mounted, setMounted] = React.useState(false);
+  const [logoutMessage, setLogoutMessage] = React.useState<string | null>(null);
 
   const router = useRouter();
 
@@ -64,8 +66,11 @@ export default function Navbar() {
   const defaultPanelHref = getHomePathForRole(user?.rol ?? null);
 
   const handleLogout = () => {
-    logout();
+    setLogoutMessage("Has cerrado sesión correctamente. ¡Hasta pronto!");
     setUserMenuAnchor(null);
+    setTimeout(() => {
+      logout();
+    }, 1000);
   };
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -293,6 +298,13 @@ export default function Navbar() {
           )}
         </Box>
       </Drawer>
+
+      <FloatingMessage
+        open={!!logoutMessage}
+        message={logoutMessage}
+        severity="success"
+        onClose={() => setLogoutMessage(null)}
+      />
     </>
   );
 }
