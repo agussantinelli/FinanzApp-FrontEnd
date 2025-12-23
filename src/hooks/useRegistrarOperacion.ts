@@ -1,3 +1,4 @@
+"use client";
 
 import { useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -192,6 +193,8 @@ export function useRegistrarOperacion() {
 
     const totalEstimado = (Number(precio) || 0) * (Number(cantidad) || 0);
 
+    const clearError = () => setError(null);
+
     return {
         mode, setMode,
         asset, setAsset,
@@ -202,6 +205,7 @@ export function useRegistrarOperacion() {
         precio, setPrecio,
         fecha, setFecha,
         loading, error,
+        clearError,
         handleSubmit,
         totalEstimado
     };

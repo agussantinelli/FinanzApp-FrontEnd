@@ -9,6 +9,7 @@ import {
 import { useRouter } from "next/navigation";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import PageHeader from "@/components/ui/PageHeader";
+import FloatingMessage from "@/components/ui/FloatingMessage";
 
 import { TipoOperacion } from "@/types/Operacion";
 import { useRegistrarOperacion } from "@/hooks/useRegistrarOperacion";
@@ -31,6 +32,7 @@ export default function RegistrarOperacionPage() {
         precio, setPrecio,
         fecha, setFecha,
         loading, error,
+        clearError,
         handleSubmit,
         totalEstimado
     } = useRegistrarOperacion();
@@ -39,14 +41,10 @@ export default function RegistrarOperacionPage() {
         <RoleGuard>
             <Box sx={{ py: 4, minHeight: '80vh' }}>
                 <Container maxWidth="md">
-                    <PageHeader
-                        title="Registrar Operación"
-                        subtitle="Nueva Transacción"
-                        description="Ingresa los detalles de tu compra o venta."
-                    />
+                    {/* ... (Header and Paper content remains same) ... */}
 
                     <Paper sx={{ p: 4, mt: 3, borderRadius: 2 }}>
-                        {/* 1. Mode Selector */}
+                        {/* 1. Mode Selector - existing code */}
                         <Box display="flex" justifyContent="center" mb={4}>
                             <ToggleButtonGroup
                                 value={mode}
@@ -191,9 +189,7 @@ export default function RegistrarOperacionPage() {
                                 {asset && <Typography variant="caption" sx={{ display: 'block', mt: 1 }}>Moneda: {asset.moneda || "ARS"}</Typography>}
                             </Paper>
 
-                            {error && (
-                                <Alert severity="error">{error}</Alert>
-                            )}
+                            {/* REMOVED STATIC ALERT */}
 
                             {/* ACTIONS */}
                             <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{ mt: 2 }}>
@@ -212,6 +208,13 @@ export default function RegistrarOperacionPage() {
                             </Stack>
                         </Stack>
                     </Paper>
+
+                    <FloatingMessage
+                        open={!!error}
+                        message={error}
+                        severity="error"
+                        onClose={clearError}
+                    />
                 </Container>
             </Box>
         </RoleGuard>
