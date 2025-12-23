@@ -21,12 +21,9 @@ import {
   CircularProgress,
   FormControl,
   InputLabel,
-  ToggleButton,
-  ToggleButtonGroup,
   TableSortLabel
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 
 import { usePortfolioData } from "@/hooks/usePortfolioData";
@@ -41,8 +38,6 @@ import { usePortfolioSort, Order, OrderBy } from "@/hooks/usePortfolioSort";
 
 export default function PortfolioPage() {
   const router = useRouter();
-  const { user } = useAuth();
-
   const { portfolios, selectedId, valuacion, loading, handlePortfolioChange } = usePortfolioData();
   const [currency, setCurrency] = React.useState<'ARS' | 'USD'>('USD');
 
