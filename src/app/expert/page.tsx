@@ -118,7 +118,7 @@ export default function ExpertPage() {
                     <Box>
                       <Typography variant="body2" color="text.secondary">Valor Total</Typography>
                       <Typography variant="h5" fontWeight="bold">
-                        {valuacion ? formatARS(valuacion.totalValorizado) : "$ -"}
+                        {valuacion ? formatARS(valuacion.totalPesos) : "$ -"}
                       </Typography>
                     </Box>
                   </Stack>
@@ -128,19 +128,19 @@ export default function ExpertPage() {
                     <Box sx={{
                       p: 1.5,
                       borderRadius: 2,
-                      bgcolor: (valuacion?.gananciaTotal ?? 0) >= 0 ? 'success.light' : 'error.light',
-                      color: (valuacion?.gananciaTotal ?? 0) >= 0 ? 'success.dark' : 'error.dark'
+                      bgcolor: (valuacion?.gananciaPesos ?? 0) >= 0 ? 'success.light' : 'error.light',
+                      color: (valuacion?.gananciaPesos ?? 0) >= 0 ? 'success.dark' : 'error.dark'
                     }}>
-                      {(valuacion?.gananciaTotal ?? 0) >= 0 ? <TrendingUpIcon /> : <TrendingDownIcon />}
+                      {(valuacion?.gananciaPesos ?? 0) >= 0 ? <TrendingUpIcon /> : <TrendingDownIcon />}
                     </Box>
                     <Box>
                       <Typography variant="body2" color="text.secondary">Ganancia Total</Typography>
                       <Typography
                         variant="h5"
                         fontWeight="bold"
-                        color={(valuacion?.gananciaTotal ?? 0) >= 0 ? 'success.main' : 'error.main'}
+                        color={(valuacion?.gananciaPesos ?? 0) >= 0 ? 'success.main' : 'error.main'}
                       >
-                        {valuacion ? formatARS(valuacion.gananciaTotal) : "$ -"}
+                        {valuacion ? formatARS(valuacion.gananciaPesos) : "$ -"}
                       </Typography>
                     </Box>
                   </Stack>
