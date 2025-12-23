@@ -23,13 +23,22 @@ import styles from "./styles/Expert.module.css";
 import { formatARS } from "@/utils/format";
 
 
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import { usePortfolioData } from "@/hooks/usePortfolioData";
+
 export default function ExpertPage() {
   const router = useRouter();
   const { user } = useAuth();
   const [loading, setLoading] = React.useState(true);
   const [stats, setStats] = React.useState<ExpertoStatsDTO | null>(null);
 
+  // Portfolio Data Integration
+  const { valuacion, refresh } = usePortfolioData();
+
   React.useEffect(() => {
+    refresh(); // Fetch portfolio data
     if (user?.rol === RolUsuario.Experto) {
       getExpertoStats()
         .then(data => {
@@ -40,7 +49,7 @@ export default function ExpertPage() {
     } else {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, refresh]);
 
   return (
     <RoleGuard allowedRoles={[RolUsuario.Experto]}>
@@ -67,18 +76,24 @@ export default function ExpertPage() {
                     />
                   </Stack>
                   <Typography variant="body2" color="text.secondary">
-                    Hola {user?.nombre}, acá gestionás tus recomendaciones y
-                    análisis para los inversores de FinanzApp.
+                    Hola {user?.nombre}, gestioná tus recomendaciones y monitoreá tu portafolio.
                   </Typography>
                 </Box>
 
                 <Stack direction="row" spacing={1.5}>
                   <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => router.push('/recomendaciones/crear')}
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    Nueva Recomendación
+                  </Button>
+                  <Button
                     component={Link}
                     href="/recomendaciones/me"
                     variant="outlined"
                     color="inherit"
-                    size="small"
                     className={styles.actionButton}
                   >
                     Mis Recomendaciones
@@ -88,10 +103,76 @@ export default function ExpertPage() {
             </Paper>
           </Grid>
 
+          {/* Portfolio Summary Section */}
+          <Grid size={{ xs: 12, md: 8 }}>
+            <Paper className={styles.summaryCard}>
+              <Typography variant="caption" color="text.secondary">
+                Resumen de Portafolio
+              </Typography>
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <Stack direction="row" spacing={2} alignItems="center">
+                    <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: 'primary.main', color: 'white' }}>
+                      <AttachMoneyIcon />
+                    </Box>
+                    <Box>
+                      <Typography variant="body2" color="text.secondary">Valor Total</Typography>
+                      <Typography variant="h5" fontWeight="bold">
+                        {valuacion ? formatARS(valuacion.totalValorizado) : "$ -"}
+                      </Typography>
+                    </Box>
+                  </Stack>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <Stack direction="row" spacing={2} alignItems="center">
+                    <Box sx={{
+                      p: 1.5,
+                      borderRadius: 2,
+                      bgcolor: (valuacion?.gananciaTotal ?? 0) >= 0 ? 'success.light' : 'error.light',
+                      color: (valuacion?.gananciaTotal ?? 0) >= 0 ? 'success.dark' : 'error.dark'
+                    }}>
+                      {(valuacion?.gananciaTotal ?? 0) >= 0 ? <TrendingUpIcon /> : <TrendingDownIcon />}
+                    </Box>
+                    <Box>
+                      <Typography variant="body2" color="text.secondary">Ganancia Total</Typography>
+                      <Typography
+                        variant="h5"
+                        fontWeight="bold"
+                        color={(valuacion?.gananciaTotal ?? 0) >= 0 ? 'success.main' : 'error.main'}
+                      >
+                        {valuacion ? formatARS(valuacion.gananciaTotal) : "$ -"}
+                      </Typography>
+                    </Box>
+                  </Stack>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Grid>
+
+          {/* Ranking Card */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <Paper className={styles.highlightInfoCard} sx={{ height: '100%' }}>
+              <Typography variant="caption" color="text.secondary">
+                Ranking Global
+              </Typography>
+              <Typography
+                variant="h3"
+                className={`${styles.bigNumber} ${styles.neonGreenText}`}
+                sx={{ mt: 2, textAlign: 'center' }}
+              >
+                #{stats?.ranking ?? "-"}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 1, textAlign: 'center' }}>
+                Tu posición entre expertos.
+              </Typography>
+            </Paper>
+          </Grid>
+
+          {/* Recommendations Stats */}
           <Grid size={{ xs: 12 }}>
             <Paper className={styles.summaryCard}>
               <Typography variant="caption" color="text.secondary">
-                Resumen de recomendaciones del sistema
+                Estadísticas de Recomendaciones
               </Typography>
               <Stack
                 direction={{ xs: "column", md: "row" }}
@@ -109,13 +190,13 @@ export default function ExpertPage() {
                     color="text.secondary"
                     sx={{ mt: 0.5 }}
                   >
-                    recomendaciones totales emitidas por vos.
+                    recomendaciones totales emitidas.
                   </Typography>
                 </Box>
 
                 <Stack
                   direction={{ xs: "column", sm: "row" }}
-                  spacing={3}
+                  spacing={4}
                   sx={{ mt: { xs: 2, md: 0 } }}
                 >
                   <Box>
@@ -125,10 +206,10 @@ export default function ExpertPage() {
                     >
                       Activas
                     </Typography>
-                    <Typography variant="h6" className={styles.bigNumber}>
+                    <Typography variant="h5" className={styles.bigNumber}>
                       {stats?.recomendacionesActivas ?? 0}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="caption" color="text.secondary">
                       recomendaciones vigentes.
                     </Typography>
                   </Box>
@@ -138,71 +219,17 @@ export default function ExpertPage() {
                       variant="subtitle2"
                       className={styles.subtitleBold}
                     >
-                      Activos cubiertos
+                      Efectividad
                     </Typography>
-                    <Typography variant="h6" className={styles.bigNumber}>
-                      -
+                    <Typography variant="h5" className={styles.bigNumber} color="primary">
+                      {/* Placeholder for future specific accuracy metric if available */}
+                      - %
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      activos distintos referidos.
+                    <Typography variant="caption" color="text.secondary">
+                      tasa de acierto.
                     </Typography>
                   </Box>
                 </Stack>
-              </Stack>
-            </Paper>
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Paper className={styles.infoCard}>
-              <Typography variant="caption" color="text.secondary">
-                Alcance entre inversores
-              </Typography>
-              <Typography variant="h4" className={`${styles.bigNumber} ${styles.marginTop}`} sx={{ mt: 0.5 }}>
-                -
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                inversores siguen tus recomendaciones.
-              </Typography>
-            </Paper>
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Paper className={styles.highlightInfoCard}>
-              <Typography variant="caption" color="text.secondary">
-                Ranking Global
-              </Typography>
-              <Typography
-                variant="h4"
-                className={`${styles.bigNumber} ${styles.neonGreenText}`}
-                sx={{ mt: 0.5 }}
-              >
-                #{stats?.ranking ?? "-"}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                Tu posición entre expertos de la plataforma.
-              </Typography>
-            </Paper>
-          </Grid>
-
-          <Grid size={{ xs: 12 }}>
-            <Paper className={styles.roadmapPaper}>
-              <Typography variant="h6" className={styles.sectionTitle}>
-                Próximos pasos para el módulo de experto
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                Acciones rápidas para gestionar tu perfil:
-              </Typography>
-
-              <Divider sx={{ my: 1.5 }} />
-
-              <Stack spacing={1.1}>
-                <Button
-                  variant="contained"
-                  fullWidth
-                  onClick={() => router.push('/recomendaciones/crear')}
-                >
-                  Crear Nueva Recomendación
-                </Button>
               </Stack>
             </Paper>
           </Grid>
