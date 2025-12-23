@@ -228,26 +228,34 @@ export default function ActivoDetalle() {
 
                             <Divider sx={{ my: 3 }} />
 
-                            <Grid container spacing={3}>
-                                <Grid size={{ xs: 6, sm: 4 }}>
-                                    <Typography variant="caption" color="text.secondary" fontWeight="bold">MONEDA</Typography>
-                                    <Typography variant="h6">{activo.moneda}</Typography>
+                            <Grid container spacing={2}>
+                                <Grid size={{ xs: 6 }}>
+                                    <div className={styles.infoCard}>
+                                        <Typography className={styles.infoLabel}>MONEDA</Typography>
+                                        <Typography className={styles.infoValue}>{activo.moneda}</Typography>
+                                    </div>
                                 </Grid>
-                                <Grid size={{ xs: 6, sm: 4 }}>
-                                    <Typography variant="caption" color="text.secondary" fontWeight="bold">ORIGEN</Typography>
-                                    <Typography variant="h6">{activo.esLocal ? "Local" : "Internacional"}</Typography>
+                                <Grid size={{ xs: 6 }}>
+                                    <div className={styles.infoCard}>
+                                        <Typography className={styles.infoLabel}>ORIGEN</Typography>
+                                        <Typography className={styles.infoValue}>{activo.esLocal ? "Local" : "Internacional"}</Typography>
+                                    </div>
                                 </Grid>
-                                <Grid size={{ xs: 6, sm: 4 }}>
-                                    <Typography variant="caption" color="text.secondary" fontWeight="bold">SECTOR</Typography>
-                                    <Typography variant="h6">{activo.sector || "-"}</Typography>
+                                <Grid size={{ xs: 6 }}>
+                                    <div className={styles.infoCard}>
+                                        <Typography className={styles.infoLabel}>SECTOR</Typography>
+                                        <Typography className={styles.infoValue}>{activo.sector || "-"}</Typography>
+                                    </div>
                                 </Grid>
-                                <Grid size={{ xs: 6, sm: 4 }}>
-                                    <Typography variant="caption" color="text.secondary" fontWeight="bold">MARKET CAP</Typography>
-                                    <Typography variant="h6">
-                                        {activo.marketCap
-                                            ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: "compact", maximumFractionDigits: 1 }).format(activo.marketCap)
-                                            : "-"}
-                                    </Typography>
+                                <Grid size={{ xs: 6 }}>
+                                    <div className={styles.infoCard}>
+                                        <Typography className={styles.infoLabel}>MARKET CAP</Typography>
+                                        <Typography className={styles.infoValue}>
+                                            {activo.marketCap
+                                                ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: "compact", maximumFractionDigits: 1 }).format(activo.marketCap)
+                                                : "-"}
+                                        </Typography>
+                                    </div>
                                 </Grid>
                             </Grid>
                         </Paper>
