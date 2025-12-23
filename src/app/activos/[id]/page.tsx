@@ -27,6 +27,7 @@ import { useActivoDetail } from "@/hooks/useActivoDetail";
 import { useAuth } from "@/hooks/useAuth";
 import { usePortfolioData } from "@/hooks/usePortfolioData";
 import FloatingMessage from "@/components/ui/FloatingMessage";
+import AssetOperationsHistory from "@/components/operaciones/AssetOperationsHistory";
 import styles from "./styles/ActivoDetail.module.css";
 
 import { formatPercentage } from "@/utils/format";
@@ -55,10 +56,6 @@ const getAccionColor = (accion: AccionRecomendada) => {
         default: return "default";
     }
 };
-
-// ... existing imports
-
-// ... existing imports
 
 export default function ActivoDetalle() {
     const params = useParams();
@@ -322,6 +319,10 @@ export default function ActivoDetalle() {
                                     ))}
                                 </Stack>
                             </Paper>
+                        )}
+
+                        {isAuthenticated && activo && (
+                            <AssetOperationsHistory activoId={activo.id} symbol={activo.symbol} />
                         )}
 
                     </Grid>

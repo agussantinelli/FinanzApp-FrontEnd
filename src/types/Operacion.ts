@@ -27,6 +27,9 @@ export interface OperacionResponseDTO {
     moneda: string;
     fecha: string;
     personaNombre: string;
+    personaApellido?: string;
+    personaEmail?: string;
+    activoId?: number; // Added since it is used in filtering
 }
 
 export interface OperacionQueryFilter {
