@@ -1,0 +1,55 @@
+.container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    min-height: 80vh;
+}
+
+.paper {
+    padding: 2rem;
+    margin-top: 1.5rem;
+    border-radius: 8px;
+}
+
+.modeSelector {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.sectionTitle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.maxButton {
+    color: var(--mui-palette-success-main);
+    min-width: auto;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 4px;
+    text-transform: uppercase;
+}
+
+.summaryPaper {
+    padding: 1.5rem;
+    background-color: var(--mui-palette-background-default);
+    text-align: center;
+    border: 1px solid var(--mui-palette-primary-main);
+}
+
+.totalAmount {
+    color: var(--mui-palette-primary-main);
+    font-weight: 700;
+}
+
+.actionStack {
+    margin-top: 1rem;
+}
+
+.actionButton {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}

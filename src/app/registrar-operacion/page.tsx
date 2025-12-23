@@ -20,6 +20,8 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
+import styles from "./styles/RegistrarOperacion.module.css";
+
 function RegistrarOperacionContent() {
     const router = useRouter();
 
@@ -45,13 +47,13 @@ function RegistrarOperacionContent() {
 
     return (
         <RoleGuard>
-            <Box sx={{ py: 4, minHeight: '80vh' }}>
+            <Box className={styles.container}>
                 <Container maxWidth="md">
                     {/* ... (Header and Paper content remains same) ... */}
 
-                    <Paper sx={{ p: 4, mt: 3, borderRadius: 2 }}>
+                    <Paper className={styles.paper}>
                         {/* 1. Mode Selector - existing code */}
-                        <Box display="flex" justifyContent="center" mb={4}>
+                        <Box className={styles.modeSelector}>
                             <ToggleButtonGroup
                                 value={mode}
                                 exclusive
@@ -73,7 +75,7 @@ function RegistrarOperacionContent() {
                         <Stack spacing={4}>
                             {/* SECTION 1: ASSET & TYPE */}
                             <Box>
-                                <Typography variant="h6" color="primary" sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <Typography variant="h6" color="primary" className={styles.sectionTitle}>
                                     <ShoppingCartIcon fontSize="small" /> 1. Datos de la Operación
                                 </Typography>
                                 <Stack spacing={3}>
@@ -133,7 +135,7 @@ function RegistrarOperacionContent() {
 
                             {/* SECTION 2: DATE */}
                             <Box>
-                                <Typography variant="h6" color="primary" sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <Typography variant="h6" color="primary" className={styles.sectionTitle}>
                                     <CalendarTodayIcon fontSize="small" /> 2. Fecha y Hora
                                 </Typography>
                                 <Stack spacing={3}>
@@ -152,7 +154,7 @@ function RegistrarOperacionContent() {
 
                             {/* SECTION 3: VALUES */}
                             <Box>
-                                <Typography variant="h6" color="primary" sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <Typography variant="h6" color="primary" className={styles.sectionTitle}>
                                     <AttachMoneyIcon fontSize="small" /> 3. Valores
                                 </Typography>
                                 <Stack spacing={3}>
@@ -171,14 +173,7 @@ function RegistrarOperacionContent() {
                                                         variant="text"
                                                         size="small"
                                                         onClick={() => setCantidad(availableAsset.cantidad.toString())}
-                                                        sx={{
-                                                            color: 'success.main',
-                                                            minWidth: 'auto',
-                                                            fontWeight: 'bold',
-                                                            fontSize: '0.75rem',
-                                                            p: 0.5,
-                                                            textTransform: 'uppercase'
-                                                        }}
+                                                        className={styles.maxButton}
                                                     >
                                                         MAX
                                                     </Button>
@@ -214,9 +209,9 @@ function RegistrarOperacionContent() {
                             </Box>
 
                             {/* SECTION 4: SUMMARY */}
-                            <Paper variant="outlined" sx={{ p: 3, bgcolor: 'background.default', textAlign: 'center', borderColor: 'primary.main', borderWidth: 1 }}>
+                            <Paper variant="outlined" className={styles.summaryPaper}>
                                 <Typography variant="subtitle2" color="text.secondary" gutterBottom>TOTAL ESTIMADO</Typography>
-                                <Typography variant="h3" color="primary.main" fontWeight="bold">
+                                <Typography variant="h3" className={styles.totalAmount}>
                                     $ {totalEstimado.toLocaleString("es-AR")}
                                 </Typography>
                                 {asset && <Typography variant="caption" sx={{ display: 'block', mt: 1 }}>Moneda: {asset.moneda || "ARS"}</Typography>}
@@ -225,7 +220,7 @@ function RegistrarOperacionContent() {
                             {/* REMOVED STATIC ALERT */}
 
                             {/* ACTIONS */}
-                            <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{ mt: 2 }}>
+                            <Stack direction="row" justifyContent="flex-end" spacing={2} className={styles.actionStack}>
                                 <Button variant="text" size="large" onClick={() => router.back()}>
                                     Cancelar
                                 </Button>
@@ -234,7 +229,7 @@ function RegistrarOperacionContent() {
                                     size="large"
                                     onClick={handleSubmit}
                                     disabled={loading}
-                                    sx={{ px: 4 }}
+                                    className={styles.actionButton}
                                 >
                                     {loading ? "Registrando..." : "Confirmar Operación"}
                                 </Button>
