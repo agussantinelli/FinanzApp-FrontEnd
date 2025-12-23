@@ -214,6 +214,8 @@ export function useRegister() {
 
         // Handlers
         handleSubmit,
-        clearFieldError
+        clearFieldError,
+        clearApiError: () => setApiError(null),
+        clearSuccessSubmit: () => setSuccessSubmit(null),
     };
 }

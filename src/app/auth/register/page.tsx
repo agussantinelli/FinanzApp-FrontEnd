@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { useRegister } from "@/hooks/useRegister";
-import { FormStatus } from "@/components/FormStatus";
+import FloatingMessage from "@/components/ui/FloatingMessage";
 import styles from "./styles/Register.module.css";
 
 
@@ -48,7 +48,9 @@ export default function RegisterPage() {
 
     // Handlers
     handleSubmit,
-    clearFieldError
+    clearFieldError,
+    clearApiError,
+    clearSuccessSubmit
   } = useRegister();
 
   if (loadingGeo) {
@@ -282,9 +284,17 @@ export default function RegisterPage() {
                 helperText={fieldErrors.password2}
               />
 
-              <FormStatus
-                successMessage={successSubmit}
-                errorMessage={apiError}
+              <FloatingMessage
+                open={!!apiError}
+                message={apiError}
+                severity="error"
+                onClose={clearApiError}
+              />
+              <FloatingMessage
+                open={!!successSubmit}
+                message={successSubmit}
+                severity="success"
+                onClose={clearSuccessSubmit}
               />
 
               <Button
