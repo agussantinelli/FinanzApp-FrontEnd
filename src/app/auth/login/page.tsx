@@ -11,71 +11,22 @@ import {
   Stack,
 } from "@mui/material";
 import Link from "next/link";
-import { login, getHomePathForRole } from "@/services/AuthService";
-import { useRouter } from "next/navigation";
+import { useLogin } from "@/hooks/useLogin";
 import FloatingMessage from "@/components/ui/FloatingMessage";
-
-type LoginErrors = {
-  email?: string;
-  password?: string;
-};
 
 import styles from "./styles/Login.module.css";
 
 export default function LoginPage() {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
-
-  const [fieldErrors, setFieldErrors] = React.useState<LoginErrors>({});
-  const [serverError, setServerError] = React.useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = React.useState<string | null>(null);
-
-  const router = useRouter();
-
-  const validate = (): boolean => {
-
-    const errors: LoginErrors = {};
-    const emailTrim = email.trim();
-
-    if (!emailTrim) {
-      errors.email = "El email es obligatorio.";
-    } else if (!/^\S+@\S+\.\S+$/.test(emailTrim)) {
-      errors.email = "El email no tiene un formato válido.";
-    }
-
-    if (!password) {
-      errors.password = "La contraseña es obligatoria.";
-    }
-
-    setFieldErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setServerError(null);
-    setSuccessMessage(null);
-
-    if (!validate()) return;
-
-    try {
-      setLoading(true);
-      const resp = await login({ email, password });
-      const destino = getHomePathForRole(resp.rol);
-
-      setSuccessMessage("Inicio de sesión correcto. Redirigiendo…");
-
-      setTimeout(() => {
-        router.push(destino);
-      }, 800);
-    } catch (err) {
-      console.error("Error login:", err);
-      setServerError("Email o contraseña incorrectos.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    email, setEmail,
+    password, setPassword,
+    loading,
+    fieldErrors,
+    serverError, setServerError,
+    successMessage, setSuccessMessage,
+    handleSubmit,
+    clearFieldError
+  } = useLogin();
 
   return (
     <Box className={styles.container}>
@@ -100,9 +51,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
-                  if (fieldErrors.email) {
-                    setFieldErrors((prev) => ({ ...prev, email: undefined }));
-                  }
+                  clearFieldError('email');
                 }}
                 autoComplete="email"
                 error={!!fieldErrors.email}
@@ -117,12 +66,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
-                  if (fieldErrors.password) {
-                    setFieldErrors((prev) => ({
-                      ...prev,
-                      password: undefined,
-                    }));
-                  }
+                  clearFieldError('password');
                 }}
                 autoComplete="current-password"
                 error={!!fieldErrors.password}
