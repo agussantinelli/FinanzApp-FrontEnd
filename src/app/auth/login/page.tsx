@@ -13,7 +13,7 @@ import {
 import Link from "next/link";
 import { login, getHomePathForRole } from "@/services/AuthService";
 import { useRouter } from "next/navigation";
-import { FormStatus } from "@/components/FormStatus";
+import FloatingMessage from "@/components/ui/FloatingMessage";
 
 type LoginErrors = {
   email?: string;
@@ -129,11 +129,6 @@ export default function LoginPage() {
                 helperText={fieldErrors.password}
               />
 
-              <FormStatus
-                errorMessage={serverError}
-                successMessage={successMessage}
-              />
-
               <Button
                 type="submit"
                 variant="contained"
@@ -145,6 +140,19 @@ export default function LoginPage() {
               </Button>
             </div>
           </Box>
+
+          <FloatingMessage
+            open={!!serverError}
+            message={serverError}
+            severity="error"
+            onClose={() => setServerError(null)}
+          />
+          <FloatingMessage
+            open={!!successMessage}
+            message={successMessage}
+            severity="success"
+            onClose={() => setSuccessMessage(null)}
+          />
 
           <Box className={styles.footer}>
             <Typography variant="body2" color="text.secondary">
