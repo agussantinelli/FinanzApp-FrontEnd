@@ -17,6 +17,7 @@ export default function FloatingMessage({ open, message, severity, onClose }: Fl
             autoHideDuration={6000}
             onClose={onClose}
             anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            sx={{ mt: 10 }} // Pushes below navbar
         >
             <Alert onClose={onClose} severity={severity} sx={{ width: "100%", boxShadow: 3 }}>
                 {message}
