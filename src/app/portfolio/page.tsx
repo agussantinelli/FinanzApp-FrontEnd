@@ -110,10 +110,42 @@ export default function PortfolioPage() {
                     size="small"
                     sx={{ height: 32 }}
                   >
-                    <ToggleButton value="ARS" aria-label="ARS" sx={{ fontSize: '0.75rem' }}>
+                    <ToggleButton
+                      value="ARS"
+                      aria-label="ARS"
+                      sx={{
+                        fontSize: '0.75rem',
+                        color: 'success.main',
+                        borderColor: 'success.main',
+                        '&.Mui-selected': {
+                          color: 'white',
+                          backgroundColor: 'success.main',
+                          borderColor: 'success.main',
+                          '&:hover': {
+                            backgroundColor: 'success.dark',
+                          }
+                        }
+                      }}
+                    >
                       ARS
                     </ToggleButton>
-                    <ToggleButton value="USD" aria-label="USD" sx={{ fontSize: '0.75rem' }}>
+                    <ToggleButton
+                      value="USD"
+                      aria-label="USD"
+                      sx={{
+                        fontSize: '0.75rem',
+                        color: 'success.main',
+                        borderColor: 'success.main',
+                        '&.Mui-selected': {
+                          color: 'white',
+                          backgroundColor: 'success.main',
+                          borderColor: 'success.main',
+                          '&:hover': {
+                            backgroundColor: 'success.dark',
+                          }
+                        }
+                      }}
+                    >
                       USD
                     </ToggleButton>
                   </ToggleButtonGroup>
