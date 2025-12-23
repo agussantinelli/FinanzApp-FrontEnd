@@ -1,0 +1,135 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
+import {
+    Box,
+    Paper,
+    Typography,
+    Container,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    CircularProgress,
+    Chip,
+    Stack,
+    Button
+} from "@mui/material";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+import { RoleGuard } from "@/components/auth/RoleGuard";
+import { getOperacionesByPersona } from "@/services/OperacionesService";
+import { OperacionResponseDTO } from "@/types/Operacion";
+import { formatARS, formatUSD, formatQuantity } from "@/utils/format";
+
+export default function MyOperationsPage() {
+    const router = useRouter();
+    const { user } = useAuth();
+    const [operaciones, setOperaciones] = useState<OperacionResponseDTO[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (user?.id) {
+            getOperacionesByPersona(user.id)
+                .then(data => {
+                    // Sort by date desc
+                    const sorted = data.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+                    setOperaciones(sorted);
+                })
+                .catch(console.error)
+                .finally(() => setLoading(false));
+        }
+    }, [user]);
+
+    if (!user) return null;
+
+    return (
+        <RoleGuard>
+            <Box sx={{ py: 4, minHeight: '80vh' }}>
+                <Container maxWidth="lg">
+                    <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 4 }}>
+                        <Button startIcon={<ArrowBackIcon />} onClick={() => router.back()}>
+                            Volver
+                        </Button>
+                        <Box>
+                            <Typography variant="h4" fontWeight="bold">
+                                Mis Operaciones
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                Historial completo de tus movimientos
+                            </Typography>
+                        </Box>
+                    </Stack>
+
+                    <Paper sx={{ p: 2, borderRadius: 2 }}>
+                        {loading ? (
+                            <Box display="flex" justifyContent="center" p={4}>
+                                <CircularProgress />
+                            </Box>
+                        ) : operaciones.length === 0 ? (
+                            <Box textAlign="center" py={6}>
+                                <Typography variant="h6" color="text.secondary">
+                                    No tienes operaciones registradas.
+                                </Typography>
+                            </Box>
+                        ) : (
+                            <TableContainer>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Fecha</TableCell>
+                                            <TableCell>Tipo</TableCell>
+                                            <TableCell>Activo</TableCell>
+                                            <TableCell align="right">Cantidad</TableCell>
+                                            <TableCell align="right">Precio</TableCell>
+                                            <TableCell align="right">Total</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {operaciones.map((op) => {
+                                            const isCompra = op.tipo === "Compra";
+                                            const isARS = op.moneda === "ARS";
+                                            const formatMoney = isARS ? formatARS : formatUSD;
+
+                                            return (
+                                                <TableRow key={op.id} hover>
+                                                    <TableCell>
+                                                        {new Date(op.fecha).toLocaleDateString()} {new Date(op.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Chip
+                                                            label={op.tipo}
+                                                            color={isCompra ? "success" : "error"}
+                                                            size="small"
+                                                            variant="outlined"
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography fontWeight="bold">{op.activoSymbol}</Typography>
+                                                        <Typography variant="caption" color="text.secondary">{op.activoNombre}</Typography>
+                                                    </TableCell>
+                                                    <TableCell align="right">
+                                                        {formatQuantity(op.cantidad)}
+                                                    </TableCell>
+                                                    <TableCell align="right">
+                                                        {formatMoney(op.precioUnitario)}
+                                                    </TableCell>
+                                                    <TableCell align="right" sx={{ fontWeight: 'bold' }}>
+                                                        {formatMoney(op.totalOperado)}
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        )}
+                    </Paper>
+                </Container>
+            </Box>
+        </RoleGuard>
+    );
+}

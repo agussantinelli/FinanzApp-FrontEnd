@@ -30,6 +30,7 @@ import { usePortfolioData } from "@/hooks/usePortfolioData";
 import styles from "./styles/Portfolio.module.css";
 import { formatARS, formatPercentage, formatUSD, formatQuantity } from "@/utils/format";
 import AddIcon from '@mui/icons-material/Add';
+import HistoryIcon from '@mui/icons-material/History';
 import { CurrencyToggle } from "@/components/common/CurrencyToggle";
 import PortfolioCompositionChart from "@/components/portfolio/PortfolioCompositionChart";
 
@@ -104,6 +105,14 @@ export default function PortfolioPage() {
                 </Box>
                 <Stack direction="row" spacing={2} alignItems="center">
                   <CurrencyToggle currency={currency} onCurrencyChange={setCurrency} />
+                  <Button
+                    variant="outlined"
+                    startIcon={<HistoryIcon />}
+                    onClick={() => router.push('/operaciones/me')}
+                    sx={{ whiteSpace: 'nowrap' }}
+                  >
+                    Mis Operaciones
+                  </Button>
                   <Button
                     variant="contained"
                     color="primary"

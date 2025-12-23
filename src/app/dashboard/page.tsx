@@ -362,10 +362,10 @@ export default function DashboardPage() {
                   <Divider flexItem className={styles.divider} />
                   <Stack direction="row" justifyContent="space-between" alignItems="center">
                     <Box>
-                      <Typography variant="subtitle2" className={styles.subtitle}>Mis Movimientos</Typography>
+                      <Typography variant="subtitle2" className={styles.subtitle}>Mis Operaciones</Typography>
                       <Typography variant="body2" color="text.secondary">Historial de operaciones.</Typography>
                     </Box>
-                    <Button component={Link} href="/movimientos" size="small" variant="outlined" className={styles.actionButton}>Ver</Button>
+                    <Button component={Link} href="/operaciones/me" size="small" variant="outlined" className={styles.actionButton}>Ver</Button>
                   </Stack>
                   <Divider flexItem className={styles.divider} />
                   <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -411,6 +411,14 @@ export default function DashboardPage() {
                     </Box>
                     <Button component={Link} href="/noticias" size="small" variant="outlined" className={styles.actionButton}>Leer</Button>
                   </Stack>
+                  <Divider flexItem className={styles.divider} />
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Box>
+                      <Typography variant="subtitle2" className={styles.subtitle}>Mis Operaciones</Typography>
+                      <Typography variant="body2" color="text.secondary">Historial de operaciones.</Typography>
+                    </Box>
+                    <Button component={Link} href="/operaciones/me" size="small" variant="outlined" className={styles.actionButton}>Ver</Button>
+                  </Stack>
                 </Stack>
               </Paper>
             </Grid>
@@ -446,6 +454,14 @@ export default function DashboardPage() {
                       <Typography variant="body2" color="text.secondary">Supervisar contenido.</Typography>
                     </Box>
                     <Button component={Link} href="/recomendaciones" size="small" variant="outlined" className={styles.actionButton}>Ir</Button>
+                  </Stack>
+                  <Divider flexItem className={styles.divider} />
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Box>
+                      <Typography variant="subtitle2" className={styles.subtitle}>Mis Operaciones</Typography>
+                      <Typography variant="body2" color="text.secondary">Historial personal.</Typography>
+                    </Box>
+                    <Button component={Link} href="/operaciones/me" size="small" variant="outlined" className={styles.actionButton}>Ver</Button>
                   </Stack>
                 </Stack>
               </Paper>
