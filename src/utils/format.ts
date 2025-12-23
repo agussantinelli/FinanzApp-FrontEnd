@@ -26,9 +26,9 @@ export function formatPercentage(n?: number | null) {
 }
 
 export function formatQuantity(n?: number | null) {
-    if (typeof n !== "number" || Number.isNaN(n)) return "0";
-    if (Number.isInteger(n)) return n.toLocaleString("es-AR");
+    if (typeof n !== "number" || Number.isNaN(n)) return "0,00";
     return n.toLocaleString("es-AR", {
-        maximumFractionDigits: 8,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 6,
     });
 }
