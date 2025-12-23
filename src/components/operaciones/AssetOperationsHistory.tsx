@@ -44,7 +44,18 @@ export default function AssetOperationsHistory({ activoId, symbol }: AssetOperat
                     data = await getOperacionesByActivo(activoId.toString());
                 } else {
                     const allMyOps = await getOperacionesByPersona(user.id);
-                    data = allMyOps.filter(op => op.activoId === activoId.toString());
+                    console.log("[DEBUG] AssetOperationsHistory - ActivoID Prop:", activoId);
+                    console.log("[DEBUG] AssetOperationsHistory - All Ops:", allMyOps);
+
+                    data = allMyOps.filter(op => {
+                        // Filter by ID if available, otherwise by Symbol (Ticker) which is safer
+                        if (op.activoId && activoId) {
+                            return op.activoId.toString().toLowerCase() === activoId.toString().toLowerCase();
+                        }
+                        // Fallback to symbol match
+                        return op.activoSymbol?.toLowerCase() === symbol.toLowerCase();
+                    });
+                    console.log("[DEBUG] AssetOperationsHistory - Filtered Data:", data);
                 }
 
                 data.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
