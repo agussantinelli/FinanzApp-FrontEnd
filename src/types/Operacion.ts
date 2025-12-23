@@ -29,7 +29,7 @@ export interface OperacionResponseDTO {
     personaNombre: string;
     personaApellido?: string;
     personaEmail?: string;
-    activoId?: number; // Added since it is used in filtering
+    activoId?: string; // Guid
 }
 
 export interface OperacionQueryFilter {

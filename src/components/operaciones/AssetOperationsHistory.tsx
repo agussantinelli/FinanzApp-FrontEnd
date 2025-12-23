@@ -41,17 +41,12 @@ export default function AssetOperationsHistory({ activoId, symbol }: AssetOperat
                 let data: OperacionResponseDTO[] = [];
 
                 if (isAdmin) {
-                    // Admin sees EVERYONE's operations for this asset
                     data = await getOperacionesByActivo(activoId.toString());
                 } else {
-                    // Regular user sees ONLY their operations for this asset
-                    // Fetch all my operations and filter by asset
-                    // (Ideally backend should support filtering by both, but this works)
                     const allMyOps = await getOperacionesByPersona(user.id);
-                    data = allMyOps.filter(op => op.activoId === Number(activoId));
+                    data = allMyOps.filter(op => op.activoId === activoId.toString());
                 }
 
-                // Sort by date desc
                 data.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
                 setOperations(data);
             } catch (error) {
