@@ -34,6 +34,8 @@ export const useCrearRecomendacion = () => {
     // UI States
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [apiError, setApiError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
 
     useEffect(() => {
         getSectores().then(setAvailableSectores).catch(console.error);
@@ -95,6 +97,8 @@ export const useCrearRecomendacion = () => {
     const handleSubmit = async () => {
         if (!validate()) return;
         setLoading(true);
+        setApiError(null);
+        setSuccess(null);
 
         try {
             const dto: CrearRecomendacionDTO = {
@@ -115,10 +119,14 @@ export const useCrearRecomendacion = () => {
             };
 
             await createRecomendacion(dto);
-            router.push("/recomendaciones");
-        } catch (error) {
+            setSuccess("Recomendación publicada con éxito.");
+            setTimeout(() => {
+                router.push("/recomendaciones");
+            }, 1000);
+        } catch (error: any) {
             console.error(error);
-            // Could add a global alert here
+            const msg = error.response?.data?.message || "Error al crear la recomendación.";
+            setApiError(msg);
         } finally {
             setLoading(false);
         }
@@ -136,11 +144,14 @@ export const useCrearRecomendacion = () => {
         assetRows,
         loading,
         errors,
+        apiError, success,
 
         // Handlers
         handleAddRow,
         handleRemoveRow,
         updateRow,
-        handleSubmit
+        handleSubmit,
+        clearApiError: () => setApiError(null),
+        clearSuccess: () => setSuccess(null),
     };
 };

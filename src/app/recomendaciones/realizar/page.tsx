@@ -23,6 +23,7 @@ import { debounce } from "@mui/material/utils";
 
 import styles from "./styles/RealizarRecomendacion.module.css";
 import { useCrearRecomendacion } from "@/hooks/useCrearRecomendacion";
+import FloatingMessage from "@/components/ui/FloatingMessage";
 
 interface AssetSearchProps {
     value: ActivoDTO | null;
@@ -95,7 +96,8 @@ export default function CrearRecomendacionPage() {
         handleAddRow,
         handleRemoveRow,
         updateRow,
-        handleSubmit
+        handleSubmit,
+        apiError, success, clearApiError, clearSuccess
     } = useCrearRecomendacion();
 
     return (
@@ -327,7 +329,20 @@ export default function CrearRecomendacionPage() {
                         </Button>
                     </Box>
                 </Paper>
+
+                <FloatingMessage
+                    open={!!apiError}
+                    message={apiError}
+                    severity="error"
+                    onClose={clearApiError}
+                />
+                <FloatingMessage
+                    open={!!success}
+                    message={success}
+                    severity="success"
+                    onClose={clearSuccess}
+                />
             </main>
-        </RoleGuard>
+        </RoleGuard >
     );
 }
