@@ -33,8 +33,8 @@ function RegistrarOperacionContent() {
         cantidad, setCantidad,
         precio, setPrecio,
         fecha, setFecha,
-        loading, error,
-        clearError,
+        loading, error, success,
+        clearError, clearSuccess,
         handleSubmit,
         totalEstimado
     } = useRegistrarOperacion();
@@ -216,6 +216,12 @@ function RegistrarOperacionContent() {
                         message={error}
                         severity="error"
                         onClose={clearError}
+                    />
+                    <FloatingMessage
+                        open={!!success}
+                        message={success}
+                        severity="success"
+                        onClose={clearSuccess}
                     />
                 </Container>
             </Box>

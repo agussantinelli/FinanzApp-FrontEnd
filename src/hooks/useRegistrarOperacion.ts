@@ -41,6 +41,7 @@ export function useRegistrarOperacion() {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
 
     // Initial Load: Check for URL Params
     useEffect(() => {
@@ -181,7 +182,11 @@ export function useRegistrarOperacion() {
             };
 
             await createOperacion(dto);
-            router.push("/portfolio");
+            setSuccess("Operación registrada correctamente. Redirigiendo...");
+
+            setTimeout(() => {
+                router.push("/portfolio");
+            }, 1000);
         } catch (err: any) {
             console.error("Create error:", err);
             const msg = err.response?.data?.message || "Error al registrar la operación. Verificá los datos.";
@@ -204,8 +209,9 @@ export function useRegistrarOperacion() {
         cantidad, setCantidad,
         precio, setPrecio,
         fecha, setFecha,
-        loading, error,
+        loading, error, success,
         clearError,
+        clearSuccess: () => setSuccess(null),
         handleSubmit,
         totalEstimado
     };
