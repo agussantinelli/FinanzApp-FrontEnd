@@ -253,17 +253,7 @@ export default function Navbar() {
                     Perfil
                   </MenuItem>
 
-                  <MenuItem
-                    onClick={() => {
-                      handleCloseUserMenu();
-                      router.push(defaultPanelHref);
-                    }}
-                  >
-                    <ListItemIcon>
-                      <DashboardIcon fontSize="small" />
-                    </ListItemIcon>
-                    Ir al panel
-                  </MenuItem>
+
 
                   <Divider />
 
