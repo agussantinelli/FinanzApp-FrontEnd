@@ -19,7 +19,9 @@ import {
   MenuItem,
   CircularProgress,
   FormControl,
-  InputLabel
+  InputLabel,
+  ToggleButton,
+  ToggleButtonGroup
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
@@ -36,6 +38,16 @@ export default function PortfolioPage() {
   const { user } = useAuth();
 
   const { portfolios, selectedId, valuacion, loading, handlePortfolioChange } = usePortfolioData();
+  const [currency, setCurrency] = React.useState<'ARS' | 'USD'>('ARS');
+
+  const handleCurrencyChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newCurrency: 'ARS' | 'USD' | null,
+  ) => {
+    if (newCurrency !== null) {
+      setCurrency(newCurrency);
+    }
+  };
 
   if (loading && !valuacion && portfolios.length === 0) {
     return (
@@ -90,6 +102,21 @@ export default function PortfolioPage() {
                   </Typography>
                 </Box>
                 <Stack direction="row" spacing={2} alignItems="center">
+                  <ToggleButtonGroup
+                    value={currency}
+                    exclusive
+                    onChange={handleCurrencyChange}
+                    aria-label="currency"
+                    size="small"
+                    sx={{ height: 32 }}
+                  >
+                    <ToggleButton value="ARS" aria-label="ARS" sx={{ fontSize: '0.75rem' }}>
+                      ARS
+                    </ToggleButton>
+                    <ToggleButton value="USD" aria-label="USD" sx={{ fontSize: '0.75rem' }}>
+                      USD
+                    </ToggleButton>
+                  </ToggleButtonGroup>
                   <Button
                     variant="contained"
                     color="primary"
@@ -115,24 +142,39 @@ export default function PortfolioPage() {
           {/* CARDS */}
           <Grid size={{ xs: 12, md: 4 }}>
             <Paper className={`${styles.card} ${styles.highlightCard}`}>
-              <Typography variant="caption" color="text.secondary">Valor Total</Typography>
+              <Typography variant="caption" color="text.secondary">Valor Total ({currency})</Typography>
               <Typography variant="h4" className={styles.cardValue}>
-                {formatARS(valuacion?.totalPesos ?? 0)}
+                {valuacion
+                  ? (currency === 'ARS' ? formatARS(valuacion.totalPesos) : formatUSD(valuacion.totalDolares))
+                  : (currency === 'ARS' ? "$ -" : "USD -")
+                }
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                USD {valuacion?.totalDolares?.toLocaleString("es-AR") ?? "0"}
+                {currency === 'ARS'
+                  ? `USD ${valuacion?.totalDolares?.toLocaleString("es-AR") ?? "0"}`
+                  : `ARS ${valuacion?.totalPesos?.toLocaleString("es-AR") ?? "0"}`
+                }
               </Typography>
             </Paper>
           </Grid>
 
           <Grid size={{ xs: 12, md: 4 }}>
             <Paper className={styles.card}>
-              <Typography variant="caption" color="text.secondary">Ganancia/Pérdida (ARS)</Typography>
-              <Typography variant="h4" className={`${styles.cardValue} ${(valuacion?.gananciaPesos ?? 0) >= 0 ? styles.positiveChange : styles.negativeChange}`}>
-                {valuacion?.gananciaPesos ? (valuacion.gananciaPesos > 0 ? "+" : "") + formatARS(valuacion.gananciaPesos) : "-"}
+              <Typography variant="caption" color="text.secondary">Ganancia/Pérdida ({currency})</Typography>
+              <Typography variant="h4" className={`${styles.cardValue} ${(currency === 'ARS' ? (valuacion?.gananciaPesos ?? 0) : (valuacion?.gananciaDolares ?? 0)) >= 0 ? styles.positiveChange : styles.negativeChange}`}>
+                {valuacion
+                  ? (
+                    currency === 'ARS'
+                      ? (valuacion.gananciaPesos > 0 ? "+" : "") + formatARS(valuacion.gananciaPesos)
+                      : (valuacion.gananciaDolares > 0 ? "+" : "") + formatUSD(valuacion.gananciaDolares)
+                  )
+                  : "-"
+                }
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Variación total: {valuacion?.variacionPorcentajePesos ? formatPercentage(valuacion.variacionPorcentajePesos) : "0"}%
+                Variación total: {valuacion
+                  ? formatPercentage(currency === 'ARS' ? valuacion.variacionPorcentajePesos : valuacion.variacionPorcentajeDolares)
+                  : "0"}%
               </Typography>
             </Paper>
           </Grid>

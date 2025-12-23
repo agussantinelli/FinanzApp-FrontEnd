@@ -20,7 +20,7 @@ import { RecomendacionDTO } from "@/types/Recomendacion";
 import { getExpertoStats } from "@/services/DashboardService";
 import { ExpertoStatsDTO } from "@/types/Dashboard";
 import styles from "./styles/Expert.module.css";
-import { formatARS, formatUSD, formatPercentage } from "@/utils/format";
+import { formatARS, formatPercentage, formatUSD } from "@/utils/format";
 
 
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
