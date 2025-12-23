@@ -104,6 +104,22 @@ export function useRegistrarOperacion() {
         }
     }, [mode, asset]);
 
+    // Real-time Sell Validation
+    useEffect(() => {
+        if (tipo === TipoOperacion.Venta && asset && detailedPortfolio) {
+            const hasAsset = detailedPortfolio.activos.some(a => a.symbol === asset.symbol);
+            if (!hasAsset) {
+                setError(`No tienes ${asset.symbol} en este portafolio para vender.`);
+            } else {
+                // Clear error if it was this specific error
+                setError(prev => prev?.includes("en este portafolio") ? null : prev);
+            }
+        } else {
+            // Clear error if switching to Compra
+            setError(prev => prev?.includes("en este portafolio") ? null : prev);
+        }
+    }, [tipo, asset, detailedPortfolio]);
+
     const handleSubmit = async () => {
         console.log("HandleSubmit Triggered");
 
