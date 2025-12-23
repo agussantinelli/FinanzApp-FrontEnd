@@ -20,6 +20,8 @@ import { RolUsuario } from "@/types/Usuario";
 import { getInversorStats, getExpertoStats, getAdminStats, getAdminPortfolioStats } from "@/services/DashboardService";
 import { InversorStatsDTO, ExpertoStatsDTO, AdminStatsDTO, AdminPortfolioStatsDTO } from "@/types/Dashboard";
 
+import { usePortfolioData } from "@/hooks/usePortfolioData";
+import { formatARS, formatPercentage, formatUSD } from "@/utils/format";
 import styles from "./styles/Dashboard.module.css";
 
 export default function DashboardPage() {
@@ -63,68 +65,94 @@ export default function DashboardPage() {
     fetchStats();
   }, [user]);
 
-  const renderInversorDashboard = () => (
-    <>
-      <Grid size={{ xs: 12, md: 3 }}>
-        <Paper className={`${styles.card} ${styles.highlightCard}`}>
-          <Typography variant="caption" color="text.secondary">
-            Valor estimado del portafolio
-          </Typography>
-          <Typography variant="h5" className={styles.cardValue}>
-            $ {inversorStats?.valorTotal?.toLocaleString() ?? "-"}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            Posiciones en CEDEARs, acciones y cripto.
-          </Typography>
-        </Paper>
-      </Grid>
+  /* Hook Integration */
+  const { valuacion } = usePortfolioData();
 
-      <Grid size={{ xs: 12, md: 3 }}>
-        <Paper className={styles.card}>
-          <Typography variant="caption" color="text.secondary">
-            Resultado diario (P&L)
-          </Typography>
-          <Typography
-            variant="h5"
-            className={`${styles.cardValue} ${styles.neonGreenText}`}
-          >
-            {inversorStats?.rendimientoDiario != null ? `${inversorStats.rendimientoDiario} %` : "-"}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            Variación diaria de tu cartera.
-          </Typography>
-        </Paper>
-      </Grid>
+  const renderInversorDashboard = () => {
+    // Calculate crypto exposure manually from fresh data if available, else fallback to stats
+    let cryptoExposure = inversorStats?.exposicionCripto ?? 0;
+    if (valuacion?.activos) {
+      const totalVal = valuacion.totalDolares || 1; // avoid div 0
+      const cryptoVal = valuacion.activos
+        .filter(a => a.tipoActivo === 'Criptomoneda' || a.tipoActivo === 'Cripto' || a.moneda === 'USDT' || a.moneda === 'USDC')
+        .reduce((acc: number, a: any) => {
+          // Approximation: if asset is USD based, use its value directly as USD part
+          // But we need consistent valuation. 
+          // Better: use porcentajeCartera sum if reliable, or just use stats.
+          return acc + a.porcentajeCartera;
+        }, 0);
+      cryptoExposure = cryptoVal;
+    }
 
-      <Grid size={{ xs: 12, md: 3 }}>
-        <Paper className={styles.card}>
-          <Typography variant="caption" color="text.secondary">
-            Cantidad de activos
-          </Typography>
-          <Typography variant="h5" className={styles.cardValue}>
-            {inversorStats?.cantidadActivos ?? 0}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            Instrumentos distintos en cartera.
-          </Typography>
-        </Paper>
-      </Grid>
+    return (
+      <>
+        <Grid size={{ xs: 12, md: 3 }}>
+          <Paper className={`${styles.card} ${styles.highlightCard}`}>
+            <Typography variant="caption" color="text.secondary">
+              Valor estimado (USD)
+            </Typography>
+            <Typography variant="h5" className={styles.cardValue}>
+              {valuacion ? formatUSD(valuacion.totalDolares) : (inversorStats?.valorTotal ? `$ ${inversorStats.valorTotal}` : "-")}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              {valuacion ? formatARS(valuacion.totalPesos) : "ARS -"}
+            </Typography>
+          </Paper>
+        </Grid>
 
-      <Grid size={{ xs: 12, md: 3 }}>
-        <Paper className={styles.card}>
-          <Typography variant="caption" color="text.secondary">
-            Exposición en cripto
-          </Typography>
-          <Typography variant="h5" className={styles.cardValue}>
-            {inversorStats?.exposicionCripto ?? 0} %
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            Porcentaje de portafolio en criptomonedas.
-          </Typography>
-        </Paper>
-      </Grid>
-    </>
-  );
+        <Grid size={{ xs: 12, md: 3 }}>
+          <Paper className={styles.card}>
+            <Typography variant="caption" color="text.secondary">
+              Resultado diario (USD)
+            </Typography>
+            <Stack direction="row" alignItems="baseline" spacing={1}>
+              <Typography
+                variant="h5"
+                className={`${styles.cardValue} ${(valuacion?.variacionPorcentajeDolares ?? 0) >= 0 ? styles.positiveChange : styles.negativeChange}`}
+                sx={{ color: (valuacion?.variacionPorcentajeDolares ?? 0) >= 0 ? 'success.main' : 'error.main' }}
+              >
+                {valuacion ? formatPercentage(valuacion.variacionPorcentajeDolares) : "-"}%
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                ({valuacion ? formatUSD(valuacion.gananciaDolares) : "-"})
+              </Typography>
+            </Stack>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              Variación en moneda dura.
+            </Typography>
+          </Paper>
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 3 }}>
+          <Paper className={styles.card}>
+            <Typography variant="caption" color="text.secondary">
+              Cantidad de activos
+            </Typography>
+            <Typography variant="h5" className={styles.cardValue}>
+              {valuacion?.activos ? valuacion.activos.length : (inversorStats?.cantidadActivos ?? 0)}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              Instrumentos distintos en cartera.
+            </Typography>
+          </Paper>
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 3 }}>
+          <Paper className={styles.card}>
+            <Typography variant="caption" color="text.secondary">
+              Exposición en cripto
+            </Typography>
+            <Typography variant="h5" className={styles.cardValue}>
+              {formatPercentage(cryptoExposure)} %
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              Porcentaje de portafolio.
+            </Typography>
+          </Paper>
+        </Grid>
+      </>
+    );
+  };
 
   const renderExpertoDashboard = () => (
     <>

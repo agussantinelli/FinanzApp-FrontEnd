@@ -150,9 +150,14 @@ export default function ExpertPage() {
                       >
                         {valuacion ? formatARS(valuacion.gananciaPesos) : "$ -"}
                       </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {valuacion ? formatUSD(valuacion.gananciaDolares) : "USD -"}
-                      </Typography>
+                      <Stack direction="row" spacing={1} alignItems="baseline">
+                        <Typography variant="caption" color="text.secondary">
+                          {valuacion ? formatUSD(valuacion.gananciaDolares) : "USD -"}
+                        </Typography>
+                        <Typography variant="caption" color={(valuacion?.variacionPorcentajeDolares ?? 0) >= 0 ? 'success.main' : 'error.main'}>
+                          ({valuacion ? formatPercentage(valuacion.variacionPorcentajeDolares) : "-"}%)
+                        </Typography>
+                      </Stack>
                     </Box>
                   </Stack>
                 </Grid>
