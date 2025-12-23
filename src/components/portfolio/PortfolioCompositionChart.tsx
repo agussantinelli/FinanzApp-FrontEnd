@@ -116,7 +116,7 @@ export default function PortfolioCompositionChart({ activos, totalPesos, totalDo
             variant="outlined"
             sx={{
                 p: 3,
-                height: 350,
+                height: 500, // Increased from 350
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -128,7 +128,7 @@ export default function PortfolioCompositionChart({ activos, totalPesos, totalDo
                 Composición
             </Typography>
 
-            <Box sx={{ position: 'relative', width: '100%', height: '100%', maxHeight: 250 }}>
+            <Box sx={{ position: 'relative', width: '100%', height: '100%', maxHeight: 400 }}> {/* Increased from 250 */}
                 {activos.length > 0 ? (
                     <Doughnut data={data} options={options} />
                 ) : (
