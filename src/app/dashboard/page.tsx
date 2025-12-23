@@ -285,52 +285,110 @@ export default function DashboardPage() {
           {!loading && user?.rol === RolUsuario.Experto && renderExpertoDashboard()}
           {!loading && user?.rol === RolUsuario.Admin && renderAdminDashboard()}
 
-          {/* Common Shortcuts Section (Always visible or conditional?) */}
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Paper className={styles.sectionPaper}>
-              <Typography variant="h6" className={styles.sectionTitle}>
-                Atajos rápidos
-              </Typography>
-              <Stack spacing={1.2}>
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                  <Box>
-                    <Typography variant="subtitle2" className={styles.subtitle}>Mercado</Typography>
-                    <Typography variant="body2" color="text.secondary">Cotizaciones en tiempo real.</Typography>
-                  </Box>
-                  <Button component={Link} href="/cedears" size="small" variant="outlined" className={styles.actionButton}>CEDEARs</Button>
+          {/* Inversor Shortcuts */}
+          {user?.rol === RolUsuario.Inversor && (
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Paper className={styles.sectionPaper}>
+                <Typography variant="h6" className={styles.sectionTitle}>
+                  Atajos rápidos
+                </Typography>
+                <Stack spacing={2}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Box>
+                      <Typography variant="subtitle2" className={styles.subtitle}>Mi Portafolio</Typography>
+                      <Typography variant="body2" color="text.secondary">Ver rendimiento y activos.</Typography>
+                    </Box>
+                    <Button component={Link} href="/portfolio" size="small" variant="outlined" className={styles.actionButton}>Ir</Button>
+                  </Stack>
+                  <Divider flexItem className={styles.divider} />
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Box>
+                      <Typography variant="subtitle2" className={styles.subtitle}>Mis Movimientos</Typography>
+                      <Typography variant="body2" color="text.secondary">Historial de operaciones.</Typography>
+                    </Box>
+                    <Button component={Link} href="/movimientos" size="small" variant="outlined" className={styles.actionButton}>Ver</Button>
+                  </Stack>
+                  <Divider flexItem className={styles.divider} />
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Box>
+                      <Typography variant="subtitle2" className={styles.subtitle}>Mercado</Typography>
+                      <Typography variant="body2" color="text.secondary">Explorar activos.</Typography>
+                    </Box>
+                    <Button component={Link} href="/activos" size="small" variant="outlined" className={styles.actionButton}>Explorar</Button>
+                  </Stack>
                 </Stack>
-                <Divider flexItem className={styles.divider} />
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                  <Box>
-                    <Typography variant="subtitle2" className={styles.subtitle}>Criptomonedas</Typography>
-                  </Box>
-                  <Button component={Link} href="/crypto" size="small" variant="outlined" className={styles.actionButton}>Ver</Button>
-                </Stack>
-              </Stack>
-            </Paper>
-          </Grid>
+              </Paper>
+            </Grid>
+          )}
 
-          {/* Expert Specific Actions? */}
+          {/* Experto Shortcuts */}
           {user?.rol === RolUsuario.Experto && (
             <Grid size={{ xs: 12, md: 6 }}>
               <Paper className={styles.sectionPaper}>
-                <Typography variant="h6" className={styles.sectionTitle}>Gestión</Typography>
-                <Button
-                  variant="contained"
-                  fullWidth
-                  sx={{ mt: 2 }}
-                  onClick={() => router.push('/recomendaciones/crear')}
-                >
-                  Nueva Recomendación
-                </Button>
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  sx={{ mt: 1 }}
-                  onClick={() => router.push('/recomendaciones/me')}
-                >
-                  Mis Recomendaciones
-                </Button>
+                <Typography variant="h6" className={styles.sectionTitle}>
+                  Gestión Rápida
+                </Typography>
+                <Stack spacing={2}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Box>
+                      <Typography variant="subtitle2" className={styles.subtitle}>Nueva Recomendación</Typography>
+                      <Typography variant="body2" color="text.secondary">Publicar análisis.</Typography>
+                    </Box>
+                    <Button component={Link} href="/recomendaciones/realizar" size="small" variant="contained" className={styles.actionButton}>Crear</Button>
+                  </Stack>
+                  <Divider flexItem className={styles.divider} />
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Box>
+                      <Typography variant="subtitle2" className={styles.subtitle}>Mis Recomendaciones</Typography>
+                      <Typography variant="body2" color="text.secondary">Gestionar activas.</Typography>
+                    </Box>
+                    <Button component={Link} href="/recomendaciones/me" size="small" variant="outlined" className={styles.actionButton}>Ver</Button>
+                  </Stack>
+                  <Divider flexItem className={styles.divider} />
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Box>
+                      <Typography variant="subtitle2" className={styles.subtitle}>Noticias</Typography>
+                      <Typography variant="body2" color="text.secondary">Actualidad financiera.</Typography>
+                    </Box>
+                    <Button component={Link} href="/noticias" size="small" variant="outlined" className={styles.actionButton}>Leer</Button>
+                  </Stack>
+                </Stack>
+              </Paper>
+            </Grid>
+          )}
+
+          {/* Admin Shortcuts */}
+          {user?.rol === RolUsuario.Admin && (
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Paper className={styles.sectionPaper}>
+                <Typography variant="h6" className={styles.sectionTitle}>
+                  Atajos de Administración
+                </Typography>
+                <Stack spacing={2}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Box>
+                      <Typography variant="subtitle2" className={styles.subtitle}>Panel Admin</Typography>
+                      <Typography variant="body2" color="text.secondary">Usuarios y operaciones.</Typography>
+                    </Box>
+                    <Button component={Link} href="/admin" size="small" variant="outlined" className={styles.actionButton}>Panel</Button>
+                  </Stack>
+                  <Divider flexItem className={styles.divider} />
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Box>
+                      <Typography variant="subtitle2" className={styles.subtitle}>Reportes</Typography>
+                      <Typography variant="body2" color="text.secondary">Métricas del sistema.</Typography>
+                    </Box>
+                    <Button component={Link} href="/reportes" size="small" variant="outlined" className={styles.actionButton}>Ver</Button>
+                  </Stack>
+                  <Divider flexItem className={styles.divider} />
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Box>
+                      <Typography variant="subtitle2" className={styles.subtitle}>Recomendaciones</Typography>
+                      <Typography variant="body2" color="text.secondary">Supervisar contenido.</Typography>
+                    </Box>
+                    <Button component={Link} href="/recomendaciones" size="small" variant="outlined" className={styles.actionButton}>Ir</Button>
+                  </Stack>
+                </Stack>
               </Paper>
             </Grid>
           )}
