@@ -149,7 +149,11 @@ export default function PortfolioPage() {
 
           {/* COMPOSITION CHART */}
           <Grid size={{ xs: 12, md: 8 }}>
-            <PortfolioCompositionChart activos={valuacion?.activos || []} />
+            <PortfolioCompositionChart
+              activos={valuacion?.activos || []}
+              totalPesos={valuacion?.totalPesos}
+              totalDolares={valuacion?.totalDolares}
+            />
           </Grid>
 
           {/* TABLE */}

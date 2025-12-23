@@ -17,10 +17,27 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Props {
     activos: ActivoEnPortafolioDTO[];
+    totalPesos?: number;
+    totalDolares?: number;
 }
 
-export default function PortfolioCompositionChart({ activos }: Props) {
+export default function PortfolioCompositionChart({ activos, totalPesos, totalDolares }: Props) {
     const theme = useTheme();
+
+    // Calculate Implied Exchange Rate (CCL)
+    const ccl = (totalPesos && totalDolares) ? totalPesos / totalDolares : 1;
+
+    // Normalize Data to USD
+    const normalizedData = activos.map(a => {
+        const currency = a.moneda || "ARS";
+        const isUSD = currency === 'USD' || currency === 'USDT' || currency === 'USDC';
+
+        if (isUSD) {
+            return a.valorizadoNativo;
+        } else {
+            return ccl > 0 ? a.valorizadoNativo / ccl : 0;
+        }
+    });
 
     // Color Palette - Premium Gradients/Shades
     const colors = [
@@ -38,7 +55,7 @@ export default function PortfolioCompositionChart({ activos }: Props) {
         labels: activos.map(a => `${a.symbol} (${formatPercentage(a.porcentajeCartera)}%)`),
         datasets: [
             {
-                data: activos.map(a => a.valorizadoNativo),
+                data: normalizedData,
                 backgroundColor: colors.slice(0, activos.length),
                 borderColor: theme.palette.background.paper,
                 borderWidth: 2,
@@ -71,12 +88,9 @@ export default function PortfolioCompositionChart({ activos }: Props) {
                 bodyFont: { size: 13 },
                 callbacks: {
                     label: (context) => {
-                        const idx = context.dataIndex;
-                        const asset = activos[idx];
+                        // We show the normalized USD value for consistency
                         const val = context.raw as number;
-                        const currency = asset.moneda || "ARS";
-                        const isUSD = currency === 'USD';
-                        return ` ${isUSD ? formatUSD(val) : formatARS(val)}`;
+                        return ` ${formatUSD(val)}`;
                     }
                 }
             },
