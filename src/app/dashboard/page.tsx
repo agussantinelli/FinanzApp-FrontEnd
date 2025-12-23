@@ -24,6 +24,8 @@ import { usePortfolioData } from "@/hooks/usePortfolioData";
 import { formatARS, formatPercentage, formatUSD } from "@/utils/format";
 import styles from "./styles/Dashboard.module.css";
 
+import { CurrencyToggle } from "@/components/common/CurrencyToggle";
+
 export default function DashboardPage() {
   const router = useRouter();
   const { user } = useAuth();
@@ -33,6 +35,9 @@ export default function DashboardPage() {
   const [adminStats, setAdminStats] = useState<AdminStatsDTO | null>(null);
   const [adminPortfolioStats, setAdminPortfolioStats] = useState<AdminPortfolioStatsDTO | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // Currency Toggle State (Default USD)
+  const [currency, setCurrency] = React.useState<'ARS' | 'USD'>('USD');
 
   useEffect(() => {
     if (!user) return;
@@ -72,30 +77,44 @@ export default function DashboardPage() {
     // Calculate crypto exposure manually from fresh data if available, else fallback to stats
     let cryptoExposure = inversorStats?.exposicionCripto ?? 0;
     if (valuacion?.activos) {
-      const totalVal = valuacion.totalDolares || 1; // avoid div 0
       const cryptoVal = valuacion.activos
         .filter(a => a.tipoActivo === 'Criptomoneda' || a.tipoActivo === 'Cripto' || a.moneda === 'USDT' || a.moneda === 'USDC')
-        .reduce((acc: number, a: any) => {
-          // Approximation: if asset is USD based, use its value directly as USD part
-          // But we need consistent valuation. 
-          // Better: use porcentajeCartera sum if reliable, or just use stats.
-          return acc + a.porcentajeCartera;
-        }, 0);
+        .reduce((acc: number, a: any) => acc + a.porcentajeCartera, 0);
       cryptoExposure = cryptoVal;
     }
+
+    // Dynamic values based on currency
+    const totalValue = valuacion
+      ? (currency === 'ARS' ? valuacion.totalPesos : valuacion.totalDolares)
+      : (inversorStats?.valorTotal ?? 0); // Fallback to stats if hook not ready (stats are likely ARS, need caution)
+
+    // Note: inversorStats.valorTotal is usually in ARS or default. 
+    // Ideally we rely on valuacion for currency switching.
+    // If currency is USD but we use inversorStats (ARS), it's wrong.
+    // So prefer valuacion always if available.
+
+    const dailyGain = valuacion
+      ? (currency === 'ARS' ? valuacion.gananciaPesos : valuacion.gananciaDolares)
+      : 0;
+
+    const dailyChangePct = valuacion
+      ? (currency === 'ARS' ? valuacion.variacionPorcentajePesos : valuacion.variacionPorcentajeDolares)
+      : (inversorStats?.rendimientoDiario ?? 0);
+
+    const formatFn = currency === 'ARS' ? formatARS : formatUSD;
 
     return (
       <>
         <Grid size={{ xs: 12, md: 3 }}>
           <Paper className={`${styles.card} ${styles.highlightCard}`}>
             <Typography variant="caption" color="text.secondary">
-              Valor estimado (USD)
+              Valor estimado ({currency})
             </Typography>
             <Typography variant="h5" className={styles.cardValue}>
-              {valuacion ? formatUSD(valuacion.totalDolares) : (inversorStats?.valorTotal ? `$ ${inversorStats.valorTotal}` : "-")}
+              {valuacion ? formatFn(totalValue) : (currency === 'ARS' && inversorStats?.valorTotal ? `$ ${inversorStats.valorTotal.toLocaleString()}` : "-")}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-              {valuacion ? formatARS(valuacion.totalPesos) : "ARS -"}
+              Posiciones en CEDEARs, acciones y cripto.
             </Typography>
           </Paper>
         </Grid>
@@ -103,22 +122,22 @@ export default function DashboardPage() {
         <Grid size={{ xs: 12, md: 3 }}>
           <Paper className={styles.card}>
             <Typography variant="caption" color="text.secondary">
-              Resultado diario (USD)
+              Resultado diario ({currency})
             </Typography>
             <Stack direction="row" alignItems="baseline" spacing={1}>
               <Typography
                 variant="h5"
-                className={`${styles.cardValue} ${(valuacion?.variacionPorcentajeDolares ?? 0) >= 0 ? styles.positiveChange : styles.negativeChange}`}
-                sx={{ color: (valuacion?.variacionPorcentajeDolares ?? 0) >= 0 ? 'success.main' : 'error.main' }}
+                className={`${styles.cardValue} ${(dailyChangePct ?? 0) >= 0 ? styles.positiveChange : styles.negativeChange}`}
+                sx={{ color: (dailyChangePct ?? 0) >= 0 ? 'success.main' : 'error.main' }}
               >
-                {valuacion ? formatPercentage(valuacion.variacionPorcentajeDolares) : "-"}%
+                {formatPercentage(dailyChangePct ?? 0)}%
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                ({valuacion ? formatUSD(valuacion.gananciaDolares) : "-"})
+                ({formatFn(dailyGain)})
               </Typography>
             </Stack>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-              Variación en moneda dura.
+              Variación diaria de tu cartera.
             </Typography>
           </Paper>
         </Grid>
@@ -227,12 +246,18 @@ export default function DashboardPage() {
 
       <Grid size={{ xs: 12, md: 6 }}>
         <Paper className={`${styles.card} ${styles.highlightCard}`}>
-          <Typography variant="caption" color="text.secondary">Capital Bajo Gestión (ARS)</Typography>
+          <Typography variant="caption" color="text.secondary">Capital Bajo Gestión ({currency})</Typography>
           <Typography variant="h4" className={styles.cardValue} sx={{ mt: 1 }}>
-            $ {adminPortfolioStats?.totalCapitalPesos?.toLocaleString("es-AR") ?? "-"}
+            {currency === 'ARS'
+              ? `$ ${adminPortfolioStats?.totalCapitalPesos?.toLocaleString("es-AR") ?? "-"}`
+              : `USD ${adminPortfolioStats?.totalCapitalDolares?.toLocaleString("es-AR") ?? "-"}`
+            }
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Equivalente a USD {adminPortfolioStats?.totalCapitalDolares?.toLocaleString("es-AR") ?? "-"}
+            {currency === 'ARS'
+              ? `Equivalente a USD ${adminPortfolioStats?.totalCapitalDolares?.toLocaleString("es-AR") ?? "-"}`
+              : `Equivalente a ARS ${adminPortfolioStats?.totalCapitalPesos?.toLocaleString("es-AR") ?? "-"}`
+            }
           </Typography>
         </Paper>
       </Grid>
@@ -287,7 +312,10 @@ export default function DashboardPage() {
                   </Typography>
                 </Box>
 
-                <Stack direction="row" spacing={1.5}>
+                <Stack direction="row" spacing={1.5} alignItems="center">
+                  {/* Currency Toggle for All Roles */}
+                  <CurrencyToggle currency={currency} onCurrencyChange={setCurrency} />
+
                   <Button
                     component={Link}
                     href="/perfil"
@@ -312,6 +340,9 @@ export default function DashboardPage() {
           {!loading && user?.rol === RolUsuario.Inversor && renderInversorDashboard()}
           {!loading && user?.rol === RolUsuario.Experto && renderExpertoDashboard()}
           {!loading && user?.rol === RolUsuario.Admin && renderAdminDashboard()}
+
+          {/* Shortcuts for each role (omitted/unchanged for brevity if already correct) */}
+          {/* We assume the rest of the file content (shortcuts) remains below... */}
 
           {/* Inversor Shortcuts */}
           {user?.rol === RolUsuario.Inversor && (

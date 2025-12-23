@@ -31,6 +31,7 @@ import { usePortfolioData } from "@/hooks/usePortfolioData";
 import styles from "./styles/Portfolio.module.css";
 import { formatARS, formatPercentage, formatUSD } from "@/utils/format";
 import AddIcon from '@mui/icons-material/Add';
+import { CurrencyToggle } from "@/components/common/CurrencyToggle";
 import PortfolioCompositionChart from "@/components/portfolio/PortfolioCompositionChart";
 
 export default function PortfolioPage() {
@@ -40,14 +41,7 @@ export default function PortfolioPage() {
   const { portfolios, selectedId, valuacion, loading, handlePortfolioChange } = usePortfolioData();
   const [currency, setCurrency] = React.useState<'ARS' | 'USD'>('USD');
 
-  const handleCurrencyChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newCurrency: 'ARS' | 'USD' | null,
-  ) => {
-    if (newCurrency !== null) {
-      setCurrency(newCurrency);
-    }
-  };
+
 
   if (loading && !valuacion && portfolios.length === 0) {
     return (
@@ -102,53 +96,7 @@ export default function PortfolioPage() {
                   </Typography>
                 </Box>
                 <Stack direction="row" spacing={2} alignItems="center">
-                  <ToggleButtonGroup
-                    value={currency}
-                    exclusive
-                    onChange={handleCurrencyChange}
-                    aria-label="currency"
-                    size="small"
-                    sx={{ height: 32 }}
-                  >
-                    <ToggleButton
-                      value="ARS"
-                      aria-label="ARS"
-                      sx={{
-                        fontSize: '0.75rem',
-                        color: 'success.main',
-                        borderColor: 'success.main',
-                        '&.Mui-selected': {
-                          color: 'white',
-                          backgroundColor: 'success.main',
-                          borderColor: 'success.main',
-                          '&:hover': {
-                            backgroundColor: 'success.dark',
-                          }
-                        }
-                      }}
-                    >
-                      ARS
-                    </ToggleButton>
-                    <ToggleButton
-                      value="USD"
-                      aria-label="USD"
-                      sx={{
-                        fontSize: '0.75rem',
-                        color: 'success.main',
-                        borderColor: 'success.main',
-                        '&.Mui-selected': {
-                          color: 'white',
-                          backgroundColor: 'success.main',
-                          borderColor: 'success.main',
-                          '&:hover': {
-                            backgroundColor: 'success.dark',
-                          }
-                        }
-                      }}
-                    >
-                      USD
-                    </ToggleButton>
-                  </ToggleButtonGroup>
+                  <CurrencyToggle currency={currency} onCurrencyChange={setCurrency} />
                   <Button
                     variant="contained"
                     color="primary"
