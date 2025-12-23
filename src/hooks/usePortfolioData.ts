@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useAuth } from "@/hooks/useAuth";
 import { getMisPortafolios, getPortafolioValuado } from "@/services/PortafolioService";
 import { PortafolioDTO, PortafolioValuadoDTO } from "@/types/Portafolio";
 
@@ -8,19 +9,21 @@ export function usePortfolioData() {
     const [valuacion, setValuacion] = useState<PortafolioValuadoDTO | null>(null);
     const [loading, setLoading] = useState(true);
 
+    const { isAuthenticated } = useAuth();
+
     const refresh = useCallback(() => {
+        if (!isAuthenticated) {
+            setLoading(false);
+            setPortfolios([]);
+            setValuacion(null);
+            return;
+        }
+
         setLoading(true);
         getMisPortafolios()
             .then((data) => {
                 setPortfolios(data);
                 if (data.length > 0) {
-                    // Use currently selected ID if valid, otherwise default to first
-                    // We need to check if the selectedId (from state closure) is still in the new list?
-                    // For simplicity, if we have a selectedId, reuse it.
-                    // Note: selectedId here is from the closure when refresh was created.
-
-                    // To avoid stale closure issues with selectedId if we didn't add it to deps, 
-                    // we can use a functional update approach or ref, but adding to deps is fine.
                     const targetId = (selectedId && data.some(p => p.id === selectedId)) ? selectedId : data[0].id;
 
                     if (targetId !== selectedId) {
@@ -41,7 +44,7 @@ export function usePortfolioData() {
                 console.error(err);
                 setLoading(false);
             });
-    }, [selectedId]);
+    }, [selectedId, isAuthenticated]);
 
     useEffect(() => {
         refresh();
