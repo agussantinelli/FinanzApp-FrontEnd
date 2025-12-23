@@ -20,7 +20,7 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRouter } from "next/navigation";
 import { RoleGuard } from "@/components/auth/RoleGuard";
-import { formatARS, formatUSD, formatQuantity } from "@/utils/format";
+import { formatARS, formatUSD, formatQuantity, formatDateTime } from "@/utils/format";
 import { useMyOperations } from "@/hooks/useMyOperations";
 
 import styles from "./styles/MyOperations.module.css";
@@ -82,7 +82,7 @@ export default function MyOperationsPage() {
                                             return (
                                                 <TableRow key={op.id} hover>
                                                     <TableCell>
-                                                        {new Date(op.fecha).toLocaleDateString()} {new Date(op.fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                        {formatDateTime(op.fecha)}
                                                     </TableCell>
                                                     <TableCell>
                                                         <Chip
