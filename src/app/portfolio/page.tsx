@@ -242,18 +242,19 @@ export default function PortfolioPage() {
                     <TableCell>Ticker</TableCell>
                     <TableCell>Moneda</TableCell>
                     <TableCell align="right">Cantidad</TableCell>
-                    <TableCell align="right">PPC</TableCell>
-                    <TableCell align="right">Precio ({currency})</TableCell>
-                    <TableCell align="right">Total ({currency})</TableCell>
+                    <TableCell align="right">PPC ({currency})</TableCell>
+                    <TableCell align="right">Costo Total ({currency})</TableCell>
+                    <TableCell align="right">Precio Actual ({currency})</TableCell>
+                    <TableCell align="right">Valor Actual ({currency})</TableCell>
                     <TableCell align="right">% Cartera</TableCell>
-                    <TableCell align="right">Resultado</TableCell>
+                    <TableCell align="right">Rendimiento</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {valuacion?.activos?.map(a => {
                     const assetCurrency = a.moneda || "ARS";
                     const isAssetUSD = assetCurrency === 'USD' || assetCurrency === 'USDT' || assetCurrency === 'USDC';
-                    const fmtPrice = (val: number) => isAssetUSD ? formatUSD(val) : formatARS(val);
+                    // const fmtPrice = (val: number) => isAssetUSD ? formatUSD(val) : formatARS(val); // Unused
 
                     const ccl = (valuacion.totalDolares && valuacion.totalPesos)
                       ? valuacion.totalPesos / valuacion.totalDolares
@@ -286,6 +287,9 @@ export default function PortfolioPage() {
                     const totalToShow = currency === 'ARS' ? totalARS : totalUSD;
                     const ppcToShow = currency === 'ARS' ? ppcARS : ppcUSD;
 
+                    // New Calculation: Total Purchase Cost (Costo Total)
+                    const totalCostToShow = ppcToShow * a.cantidad;
+
                     const formatFn = currency === 'ARS' ? formatARS : formatUSD;
 
                     const varPct = a.precioPromedioCompra > 0 ? ((a.precioActual - a.precioPromedioCompra) / a.precioPromedioCompra * 100) : 0;
@@ -301,10 +305,17 @@ export default function PortfolioPage() {
                           <Chip label={assetCurrency} size="small" variant="outlined" sx={{ fontSize: '0.7rem', height: 24, minWidth: 45 }} color={isAssetUSD ? "success" : "default"} />
                         </TableCell>
                         <TableCell align="right">{a.cantidad}</TableCell>
+
+                        {/* PPC */}
                         <TableCell align="right">{formatFn(ppcToShow)}</TableCell>
 
-                        {/* Comparison Columns */}
+                        {/* Costo Total */}
+                        <TableCell align="right">{formatFn(totalCostToShow)}</TableCell>
+
+                        {/* Precio Actual */}
                         <TableCell align="right" sx={{ fontWeight: 'bold' }}>{formatFn(priceToShow)}</TableCell>
+
+                        {/* Valor Actual */}
                         <TableCell align="right" sx={{ fontWeight: 'bold' }}>{formatFn(totalToShow)}</TableCell>
 
                         <TableCell align="right">{formatPercentage(a.porcentajeCartera)}%</TableCell>
@@ -316,7 +327,7 @@ export default function PortfolioPage() {
                   })}
                   {(!valuacion?.activos || valuacion.activos.length === 0) && (
                     <TableRow>
-                      <TableCell colSpan={7} align="center" sx={{ py: 6 }}>
+                      <TableCell colSpan={9} align="center" sx={{ py: 6 }}>
                         <Typography variant="body1" color="text.secondary" gutterBottom>
                           Aún no tienes activos en este portafolio.
                         </Typography>
