@@ -262,13 +262,21 @@ export default function PortfolioPage() {
                     // Normalize Prices
                     let priceARS = 0;
                     let priceUSD = 0;
+                    let ppcARS = 0;
+                    let ppcUSD = 0;
 
                     if (isAssetUSD) {
                       priceUSD = a.precioActual;
                       priceARS = ccl > 0 ? priceUSD * ccl : 0;
+
+                      ppcUSD = a.precioPromedioCompra;
+                      ppcARS = ccl > 0 ? ppcUSD * ccl : 0;
                     } else {
                       priceARS = a.precioActual;
                       priceUSD = ccl > 0 ? priceARS / ccl : 0;
+
+                      ppcARS = a.precioPromedioCompra;
+                      ppcUSD = ccl > 0 ? ppcARS / ccl : 0;
                     }
 
                     const totalARS = priceARS * a.cantidad;
@@ -276,6 +284,8 @@ export default function PortfolioPage() {
 
                     const priceToShow = currency === 'ARS' ? priceARS : priceUSD;
                     const totalToShow = currency === 'ARS' ? totalARS : totalUSD;
+                    const ppcToShow = currency === 'ARS' ? ppcARS : ppcUSD;
+
                     const formatFn = currency === 'ARS' ? formatARS : formatUSD;
 
                     const varPct = a.precioPromedioCompra > 0 ? ((a.precioActual - a.precioPromedioCompra) / a.precioPromedioCompra * 100) : 0;
@@ -291,7 +301,7 @@ export default function PortfolioPage() {
                           <Chip label={assetCurrency} size="small" variant="outlined" sx={{ fontSize: '0.7rem', height: 24, minWidth: 45 }} color={isAssetUSD ? "success" : "default"} />
                         </TableCell>
                         <TableCell align="right">{a.cantidad}</TableCell>
-                        <TableCell align="right">{fmtPrice(a.precioPromedioCompra)}</TableCell>
+                        <TableCell align="right">{formatFn(ppcToShow)}</TableCell>
 
                         {/* Comparison Columns */}
                         <TableCell align="right" sx={{ fontWeight: 'bold' }}>{formatFn(priceToShow)}</TableCell>
