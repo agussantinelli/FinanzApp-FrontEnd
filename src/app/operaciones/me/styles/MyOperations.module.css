@@ -1,0 +1,33 @@
+.container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    min-height: 80vh;
+}
+
+.header {
+    margin-bottom: 2rem;
+}
+
+.headerTitle {
+    font-weight: 700;
+}
+
+.tablePaper {
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.noDataContainer {
+    text-align: center;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+.boldCell {
+    font-weight: 700 !important;
+}
+
+.actionButton {
+    white-space: nowrap;
+}

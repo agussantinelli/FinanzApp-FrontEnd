@@ -25,6 +25,8 @@ import { getOperacionesByPersona } from "@/services/OperacionesService";
 import { OperacionResponseDTO } from "@/types/Operacion";
 import { formatARS, formatUSD, formatQuantity } from "@/utils/format";
 
+import styles from "./styles/MyOperations.module.css";
+
 export default function MyOperationsPage() {
     const router = useRouter();
     const { user } = useAuth();
@@ -48,14 +50,14 @@ export default function MyOperationsPage() {
 
     return (
         <RoleGuard>
-            <Box sx={{ py: 4, minHeight: '80vh' }}>
+            <Box className={styles.container}>
                 <Container maxWidth="lg">
-                    <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 4 }}>
+                    <Stack direction="row" alignItems="center" spacing={2} className={styles.header}>
                         <Button startIcon={<ArrowBackIcon />} onClick={() => router.back()}>
                             Volver
                         </Button>
                         <Box>
-                            <Typography variant="h4" fontWeight="bold">
+                            <Typography variant="h4" className={styles.headerTitle}>
                                 Mis Operaciones
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
@@ -64,13 +66,13 @@ export default function MyOperationsPage() {
                         </Box>
                     </Stack>
 
-                    <Paper sx={{ p: 2, borderRadius: 2 }}>
+                    <Paper className={styles.tablePaper}>
                         {loading ? (
                             <Box display="flex" justifyContent="center" p={4}>
                                 <CircularProgress />
                             </Box>
                         ) : operaciones.length === 0 ? (
-                            <Box textAlign="center" py={6}>
+                            <Box className={styles.noDataContainer}>
                                 <Typography variant="h6" color="text.secondary">
                                     No tienes operaciones registradas.
                                 </Typography>
@@ -117,7 +119,7 @@ export default function MyOperationsPage() {
                                                     <TableCell align="right">
                                                         {formatMoney(op.precioUnitario)}
                                                     </TableCell>
-                                                    <TableCell align="right" sx={{ fontWeight: 'bold' }}>
+                                                    <TableCell align="right" className={styles.boldCell}>
                                                         {formatMoney(op.totalOperado)}
                                                     </TableCell>
                                                 </TableRow>
