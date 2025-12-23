@@ -19,32 +19,15 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
 import { RoleGuard } from "@/components/auth/RoleGuard";
-import { getOperacionesByPersona } from "@/services/OperacionesService";
-import { OperacionResponseDTO } from "@/types/Operacion";
 import { formatARS, formatUSD, formatQuantity } from "@/utils/format";
+import { useMyOperations } from "@/hooks/useMyOperations";
 
 import styles from "./styles/MyOperations.module.css";
 
 export default function MyOperationsPage() {
     const router = useRouter();
-    const { user } = useAuth();
-    const [operaciones, setOperaciones] = useState<OperacionResponseDTO[]>([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        if (user?.id) {
-            getOperacionesByPersona(user.id)
-                .then(data => {
-                    // Sort by date desc
-                    const sorted = data.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
-                    setOperaciones(sorted);
-                })
-                .catch(console.error)
-                .finally(() => setLoading(false));
-        }
-    }, [user]);
+    const { operaciones, loading, user } = useMyOperations();
 
     if (!user) return null;
 
