@@ -33,17 +33,23 @@ import { useAuth } from "@/hooks/useAuth";
 
 import styles from "./styles/Navbar.module.css";
 
-const baseNavItems = [
+const commonItems = [
   { label: "Inicio", href: "/" },
   { label: "Activos", href: "/activos" },
+];
+
+const moreItems = [
   { label: "Noticias", href: "/noticias" },
   { label: "Reportes", href: "/reportes" },
 ];
+
 
 export default function Navbar() {
   const [open, setOpen] = React.useState(false);
   const { user, logout, isAuthenticated } = useAuth();
   const [userMenuAnchor, setUserMenuAnchor] =
+    React.useState<null | HTMLElement>(null);
+  const [moreMenuAnchor, setMoreMenuAnchor] =
     React.useState<null | HTMLElement>(null);
   const [mounted, setMounted] = React.useState(false);
   const [logoutMessage, setLogoutMessage] = React.useState<string | null>(null);
@@ -54,13 +60,21 @@ export default function Navbar() {
     setMounted(true);
   }, []);
 
-  const navItems = React.useMemo(() => {
-    if (!mounted || !isAuthenticated) return baseNavItems;
-    return [
-      ...baseNavItems,
+  const { desktopItems, mobileItems } = React.useMemo(() => {
+    if (!mounted || !isAuthenticated) {
+      const allPublic = [...commonItems, ...moreItems];
+      return { desktopItems: allPublic, mobileItems: allPublic };
+    }
+
+    const authList = [
       { label: "Recomendaciones", href: "/recomendaciones" },
       { label: "Mi portafolio", href: "/portfolio" },
     ];
+
+    return {
+      desktopItems: [...commonItems, ...authList],
+      mobileItems: [...commonItems, ...authList, ...moreItems],
+    };
   }, [isAuthenticated, mounted]);
 
   const defaultPanelHref = getHomePathForRole(user?.rol ?? null);
@@ -79,6 +93,14 @@ export default function Navbar() {
 
   const handleCloseUserMenu = () => {
     setUserMenuAnchor(null);
+  };
+
+  const handleOpenMoreMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setMoreMenuAnchor(event.currentTarget);
+  };
+
+  const handleCloseMoreMenu = () => {
+    setMoreMenuAnchor(null);
   };
 
   const toggle = (v: boolean) => () => setOpen(v);
@@ -121,7 +143,7 @@ export default function Navbar() {
 
           {/* Desktop nav */}
           <Box className={styles.desktopNav}>
-            {navItems.map((item) => (
+            {desktopItems.map((item) => (
               <Button
                 key={item.href}
                 component={Link}
@@ -132,6 +154,38 @@ export default function Navbar() {
                 {item.label}
               </Button>
             ))}
+
+            {showAuthContent && (
+              <>
+                <Button
+                  color="inherit"
+                  onClick={handleOpenMoreMenu}
+                  endIcon={<ArrowDropDownIcon />}
+                  className={styles.navButton}
+                >
+                  Más
+                </Button>
+                <Menu
+                  anchorEl={moreMenuAnchor}
+                  open={Boolean(moreMenuAnchor)}
+                  onClose={handleCloseMoreMenu}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}
+                >
+                  {moreItems.map((item) => (
+                    <MenuItem
+                      key={item.href}
+                      component={Link}
+                      href={item.href}
+                      onClick={handleCloseMoreMenu}
+                    >
+                      {item.label}
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </>
+            )}
 
             <Divider
               orientation="vertical"
@@ -259,7 +313,7 @@ export default function Navbar() {
           </Box>
 
           <List>
-            {navItems.map((item) => (
+            {mobileItems.map((item) => (
               <ListItem key={item.href} disablePadding>
                 <ListItemButton component={Link} href={item.href}>
                   <ListItemText primary={item.label} />
