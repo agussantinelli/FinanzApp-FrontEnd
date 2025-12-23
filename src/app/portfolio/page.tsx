@@ -227,6 +227,7 @@ export default function PortfolioPage() {
               activos={valuacion?.activos || []}
               totalPesos={valuacion?.totalPesos}
               totalDolares={valuacion?.totalDolares}
+              currency={currency}
             />
           </Grid>
 

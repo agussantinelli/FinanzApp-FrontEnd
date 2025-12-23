@@ -19,23 +19,28 @@ interface Props {
     activos: ActivoEnPortafolioDTO[];
     totalPesos?: number;
     totalDolares?: number;
+    currency: 'ARS' | 'USD';
 }
 
-export default function PortfolioCompositionChart({ activos, totalPesos, totalDolares }: Props) {
+export default function PortfolioCompositionChart({ activos, totalPesos, totalDolares, currency }: Props) {
     const theme = useTheme();
 
     // Calculate Implied Exchange Rate (CCL)
     const ccl = (totalPesos && totalDolares) ? totalPesos / totalDolares : 1;
 
-    // Normalize Data to USD
+    // Normalize Data based on selected currency
     const normalizedData = activos.map(a => {
-        const currency = a.moneda || "ARS";
-        const isUSD = currency === 'USD' || currency === 'USDT' || currency === 'USDC';
+        const assetCurrency = a.moneda || "ARS";
+        const isAssetUSD = assetCurrency === 'USD' || assetCurrency === 'USDT' || assetCurrency === 'USDC';
 
-        if (isUSD) {
-            return a.valorizadoNativo;
-        } else {
+        if (currency === 'USD') {
+            // Target is USD
+            if (isAssetUSD) return a.valorizadoNativo;
             return ccl > 0 ? a.valorizadoNativo / ccl : 0;
+        } else {
+            // Target is ARS
+            if (!isAssetUSD) return a.valorizadoNativo;
+            return a.valorizadoNativo * ccl;
         }
     });
 
