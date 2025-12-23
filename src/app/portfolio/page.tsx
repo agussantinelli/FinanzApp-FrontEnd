@@ -29,7 +29,7 @@ import { RoleGuard } from "@/components/auth/RoleGuard";
 
 import { usePortfolioData } from "@/hooks/usePortfolioData";
 import styles from "./styles/Portfolio.module.css";
-import { formatARS, formatPercentage, formatUSD } from "@/utils/format";
+import { formatARS, formatPercentage, formatUSD, formatQuantity } from "@/utils/format";
 import AddIcon from '@mui/icons-material/Add';
 import { CurrencyToggle } from "@/components/common/CurrencyToggle";
 import PortfolioCompositionChart from "@/components/portfolio/PortfolioCompositionChart";
@@ -254,7 +254,7 @@ export default function PortfolioPage() {
                         <TableCell sx={{ fontSize: '1rem' }}>
                           <Chip label={assetCurrency} size="small" variant="outlined" sx={{ fontSize: '0.75rem', height: 24, minWidth: 45 }} color={isAssetUSD ? "success" : "default"} />
                         </TableCell>
-                        <TableCell align="right" sx={{ fontSize: '1rem' }}>{a.cantidad}</TableCell>
+                        <TableCell align="right" sx={{ fontSize: '1rem' }}>{formatQuantity(a.cantidad)}</TableCell>
 
                         {/* PPC */}
                         <TableCell align="right" sx={{ fontSize: '1rem' }}>{formatFn(ppcToShow)}</TableCell>
