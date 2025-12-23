@@ -7,6 +7,7 @@ import { OperacionResponseDTO } from "@/types/Operacion";
 
 export type Order = 'asc' | 'desc';
 export type FilterType = 'TODAS' | 'Compra' | 'Venta';
+export type CurrencyFilterType = 'TODAS' | 'ARS' | 'USD';
 
 export function useMyOperations() {
     const { user } = useAuth();
@@ -17,6 +18,7 @@ export function useMyOperations() {
     const [orderBy, setOrderBy] = useState<keyof OperacionResponseDTO>('fecha');
     const [order, setOrder] = useState<Order>('desc');
     const [filterType, setFilterType] = useState<FilterType>('TODAS');
+    const [filterCurrency, setFilterCurrency] = useState<CurrencyFilterType>('TODAS');
 
     useEffect(() => {
         if (user?.id) {
@@ -35,12 +37,17 @@ export function useMyOperations() {
     const processedOperations = useMemo(() => {
         let result = [...operaciones];
 
-        // 1. Filter
+        // 1. Filter Type
         if (filterType !== 'TODAS') {
             result = result.filter(op => op.tipo === filterType);
         }
 
-        // 2. Sort
+        // 2. Filter Currency
+        if (filterCurrency !== 'TODAS') {
+            result = result.filter(op => op.moneda === filterCurrency);
+        }
+
+        // 3. Sort
         result.sort((a, b) => {
             let aValue = a[orderBy];
             let bValue = b[orderBy];
@@ -83,6 +90,8 @@ export function useMyOperations() {
         order,
         filterType,
         setFilterType,
+        filterCurrency,
+        setFilterCurrency,
         handleRequestSort
     };
 }

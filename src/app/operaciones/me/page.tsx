@@ -26,7 +26,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useRouter } from "next/navigation";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { formatARS, formatUSD, formatQuantity, formatDateTime } from "@/utils/format";
-import { useMyOperations, Order, FilterType } from "@/hooks/useMyOperations";
+import { useMyOperations, Order, FilterType, CurrencyFilterType } from "@/hooks/useMyOperations";
 import { OperacionResponseDTO } from "@/types/Operacion";
 
 import styles from "./styles/MyOperations.module.css";
@@ -41,6 +41,8 @@ export default function MyOperationsPage() {
         order,
         filterType,
         setFilterType,
+        filterCurrency,
+        setFilterCurrency,
         handleRequestSort
     } = useMyOperations();
 
@@ -65,17 +67,30 @@ export default function MyOperationsPage() {
                             </Box>
                         </Stack>
 
-                        <Box sx={{ minWidth: 200 }}>
+                        <Box sx={{ minWidth: 200, display: 'flex', gap: 2 }}>
                             <FormControl fullWidth size="small">
-                                <InputLabel>Tipo de Operación</InputLabel>
+                                <InputLabel>Tipo</InputLabel>
                                 <Select
                                     value={filterType}
-                                    label="Tipo de Operación"
+                                    label="Tipo"
                                     onChange={(e) => setFilterType(e.target.value as FilterType)}
                                 >
                                     <MenuItem value="TODAS">Todas</MenuItem>
                                     <MenuItem value="Compra">Compras</MenuItem>
                                     <MenuItem value="Venta">Ventas</MenuItem>
+                                </Select>
+                            </FormControl>
+
+                            <FormControl fullWidth size="small">
+                                <InputLabel>Moneda</InputLabel>
+                                <Select
+                                    value={filterCurrency}
+                                    label="Moneda"
+                                    onChange={(e) => setFilterCurrency(e.target.value as CurrencyFilterType)}
+                                >
+                                    <MenuItem value="TODAS">Todas</MenuItem>
+                                    <MenuItem value="ARS">Pesos</MenuItem>
+                                    <MenuItem value="USD">Dólares</MenuItem>
                                 </Select>
                             </FormControl>
                         </Box>
