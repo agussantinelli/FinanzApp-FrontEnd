@@ -129,12 +129,13 @@
 │   ├── app/                     # App Router (Next.js 16+)
 │   │   ├── access-denied/       # Página de acceso denegado
 │   │   ├── activos/             # Buscador y detalles de Activos
-│   │   ├── admin/               # Panel de Administración (Guard: Admin)
 │   │   ├── auth/                # Módulos de Login y Registro
-│   │   ├── dashboard/           # Home del Inversor (Resumen)
-│   │   ├── expert/              # Dashboard para Expertos Financieros
+│   │   ├── dashboard-admin/     # Panel de Administración (Guard: Admin)
+│   │   ├── dashboard-experto/   # Dashboard para Expertos Financieros
+│   │   ├── dashboard-inversor/  # Home del Inversor (Resumen)
 │   │   ├── movimientos/         # Historial de transacciones
 │   │   ├── noticias/            # Sección de novedades financieras
+│   │   ├── operaciones/         # Mis Operaciones / Historial
 │   │   ├── portfolio/           # Visualización y análisis patrimonial
 │   │   ├── recomendaciones/     # Señales de expertos y comunidad
 │   │   ├── registrar-operacion/ # Formulario de Compra/Venta
@@ -145,6 +146,8 @@
 │   │   ├── auth/                # Componentes de seguridad (RoleGuard)
 │   │   ├── cards/               # Tarjetas de UI (Activos, Noticias)
 │   │   ├── charts/              # Gráficos (Chart.js / Recharts)
+│   │   ├── common/              # Componentes comunes (CurrencyToggle, etc.)
+│   │   ├── operaciones/         # Componentes de historial/operativa
 │   │   ├── portfolio/           # Componentes específicos del Portafolio
 │   │   ├── sections/            # Secciones de Landing/Dashboard
 │   │   └── ui/                  # Componentes base
@@ -218,7 +221,7 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
 
 <h3>👤 Dashboard de Inversor</h3>
 
-<p>Ruta principal: <code>/dashboard</code></p>
+<p>Ruta principal: <code>/dashboard-inversor</code></p>
 
 <ul>
     <li>Bienvenida personalizada (nombre + rol).</li>
@@ -263,7 +266,7 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
 
 <h3>🛠️ Panel de Administración y Expertos</h3>
 
-<p>Rutas: <code>/admin</code> y <code>/expert</code></p>
+<p>Rutas: <code>/dashboard-admin</code> y <code>/dashboard-experto</code></p>
 
 <ul>
     <li>Dashboards específicos por rol protegidos por <code>RoleGuard</code>.</li>
@@ -282,7 +285,7 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
 <ul>
     <li><strong>Inversor (Rol Default)</strong>
         <ul>
-            <li><strong>Inicio:</strong> Redirige a <code>/dashboard</code>.</li>
+            <li><strong>Inicio:</strong> Redirige a <code>/dashboard-inversor</code>.</li>
             <li><strong>Permisos:</strong>
                 <ul>
                     <li>Ver su propio portafolio y valuación en tiempo real.</li>
@@ -295,7 +298,7 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
     </li>
     <li><strong>Administrador (Admin)</strong>
         <ul>
-            <li><strong>Inicio:</strong> Redirige a <code>/admin</code>.</li>
+            <li><strong>Inicio:</strong> Redirige a <code>/dashboard-admin</code>.</li>
             <li><strong>Permisos:</strong>
                 <ul>
                     <li>Acceso total a métricas de negocio (Usuarios, Volumen Operado).</li>
@@ -306,7 +309,7 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
     </li>
     <li><strong>Experto Financiero</strong>
         <ul>
-            <li><strong>Inicio:</strong> Redirige a <code>/expert</code>.</li>
+            <li><strong>Inicio:</strong> Redirige a <code>/dashboard-experto</code>.</li>
             <li><strong>Permisos:</strong>
                 <ul>
                     <li>Emitir recomendaciones de inversión (Señales de compra/venta).</li>
@@ -317,7 +320,7 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
     </li>
 </ul>
 
-<p><strong>Seguridad Check:</strong> Si un usuario intenta acceder a una ruta no autorizada (ej. Inversor entrando a <code>/admin</code>), el sistema lo intercepta y redirige automáticamente a <code>/access-denied</code>.</p>
+<p><strong>Seguridad Check:</strong> Si un usuario intenta acceder a una ruta no autorizada (ej. Inversor entrando a <code>/dashboard-admin</code>), el sistema lo intercepta y redirige automáticamente a <code>/access-denied</code>.</p>
 
 <hr>
 
