@@ -90,7 +90,7 @@ export default function PortfolioPage() {
             <Paper className={styles.headerPaper}>
               <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems="center" spacing={2}>
                 <Box>
-                  <Typography variant="h4" className={styles.headerTitle}>Mi Portafolio</Typography>
+                  <Typography variant="h4" className={styles.headerTitle} sx={{ fontWeight: 700 }}>Resumen de Portafolio</Typography>
                   <Typography variant="body2" color="text.secondary">
                     {valuacion?.descripcion || "Resumen de tus inversiones."}
                   </Typography>
@@ -182,20 +182,22 @@ export default function PortfolioPage() {
           {/* TABLE */}
           <Grid size={{ xs: 12 }}>
             <Paper className={styles.tablePaper}>
-              <Typography variant="h6" className={styles.sectionTitle} gutterBottom>Composición</Typography>
+              <Typography variant="h6" className={styles.sectionTitle} gutterBottom sx={{ fontSize: '1.2rem', fontWeight: 600 }}>
+                Detalle de Activos
+              </Typography>
               <Divider sx={{ mb: 2 }} />
-              <Table size="small">
+              <Table size="medium">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Ticker</TableCell>
-                    <TableCell>Moneda</TableCell>
-                    <TableCell align="right">Cantidad</TableCell>
-                    <TableCell align="right">PPC ({currency})</TableCell>
-                    <TableCell align="right">Costo Total ({currency})</TableCell>
-                    <TableCell align="right">Precio Actual ({currency})</TableCell>
-                    <TableCell align="right">Valor Actual ({currency})</TableCell>
-                    <TableCell align="right">% Cartera</TableCell>
-                    <TableCell align="right">Rendimiento</TableCell>
+                    <TableCell sx={{ fontSize: '1rem', fontWeight: 600 }}>Ticker</TableCell>
+                    <TableCell sx={{ fontSize: '1rem', fontWeight: 600 }}>Moneda</TableCell>
+                    <TableCell align="right" sx={{ fontSize: '1rem', fontWeight: 600 }}>Cantidad</TableCell>
+                    <TableCell align="right" sx={{ fontSize: '1rem', fontWeight: 600 }}>PPC ({currency})</TableCell>
+                    <TableCell align="right" sx={{ fontSize: '1rem', fontWeight: 600 }}>Costo Total ({currency})</TableCell>
+                    <TableCell align="right" sx={{ fontSize: '1rem', fontWeight: 600 }}>Precio Actual ({currency})</TableCell>
+                    <TableCell align="right" sx={{ fontSize: '1rem', fontWeight: 600 }}>Valor Actual ({currency})</TableCell>
+                    <TableCell align="right" sx={{ fontSize: '1rem', fontWeight: 600 }}>% Cartera</TableCell>
+                    <TableCell align="right" sx={{ fontSize: '1rem', fontWeight: 600 }}>Rendimiento</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -243,31 +245,31 @@ export default function PortfolioPage() {
                     const varPct = a.precioPromedioCompra > 0 ? ((a.precioActual - a.precioPromedioCompra) / a.precioPromedioCompra * 100) : 0;
                     return (
                       <TableRow key={a.activoId}>
-                        <TableCell sx={{ fontWeight: 'bold' }}>
+                        <TableCell sx={{ fontWeight: 'bold', fontSize: '1rem' }}>
                           {a.symbol}
                           {a.tipoActivo === "Cedear" && (
                             <Chip label="CEDEAR" size="small" sx={{ ml: 1, fontSize: '0.65rem', height: 20 }} variant="outlined" color="primary" />
                           )}
                         </TableCell>
-                        <TableCell>
-                          <Chip label={assetCurrency} size="small" variant="outlined" sx={{ fontSize: '0.7rem', height: 24, minWidth: 45 }} color={isAssetUSD ? "success" : "default"} />
+                        <TableCell sx={{ fontSize: '1rem' }}>
+                          <Chip label={assetCurrency} size="small" variant="outlined" sx={{ fontSize: '0.75rem', height: 24, minWidth: 45 }} color={isAssetUSD ? "success" : "default"} />
                         </TableCell>
-                        <TableCell align="right">{a.cantidad}</TableCell>
+                        <TableCell align="right" sx={{ fontSize: '1rem' }}>{a.cantidad}</TableCell>
 
                         {/* PPC */}
-                        <TableCell align="right">{formatFn(ppcToShow)}</TableCell>
+                        <TableCell align="right" sx={{ fontSize: '1rem' }}>{formatFn(ppcToShow)}</TableCell>
 
                         {/* Costo Total */}
-                        <TableCell align="right">{formatFn(totalCostToShow)}</TableCell>
+                        <TableCell align="right" sx={{ fontSize: '1rem' }}>{formatFn(totalCostToShow)}</TableCell>
 
                         {/* Precio Actual */}
-                        <TableCell align="right" sx={{ fontWeight: 'bold' }}>{formatFn(priceToShow)}</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>{formatFn(priceToShow)}</TableCell>
 
                         {/* Valor Actual */}
-                        <TableCell align="right" sx={{ fontWeight: 'bold' }}>{formatFn(totalToShow)}</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>{formatFn(totalToShow)}</TableCell>
 
-                        <TableCell align="right">{formatPercentage(a.porcentajeCartera)}%</TableCell>
-                        <TableCell align="right" sx={{ color: varPct >= 0 ? 'success.main' : 'error.main' }}>
+                        <TableCell align="right" sx={{ fontSize: '1rem' }}>{formatPercentage(a.porcentajeCartera)}%</TableCell>
+                        <TableCell align="right" sx={{ color: varPct >= 0 ? 'success.main' : 'error.main', fontSize: '1rem', fontWeight: 500 }}>
                           {varPct > 0 ? "+" : ""}{formatPercentage(varPct)}%
                         </TableCell>
                       </TableRow>
