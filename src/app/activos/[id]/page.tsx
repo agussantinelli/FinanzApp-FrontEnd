@@ -25,6 +25,8 @@ import Link from "next/link";
 
 import { useActivoDetail } from "@/hooks/useActivoDetail";
 import { useAuth } from "@/hooks/useAuth";
+import { usePortfolioData } from "@/hooks/usePortfolioData";
+import FloatingMessage from "@/components/ui/FloatingMessage";
 import styles from "./styles/ActivoDetail.module.css";
 
 import { formatPercentage } from "@/utils/format";
@@ -54,6 +56,10 @@ const getAccionColor = (accion: AccionRecomendada) => {
     }
 };
 
+// ... existing imports
+
+// ... existing imports
+
 export default function ActivoDetalle() {
     const params = useParams();
     const router = useRouter();
@@ -61,6 +67,8 @@ export default function ActivoDetalle() {
 
     const { isAuthenticated } = useAuth();
     const { activo, activeRecommendations, loading } = useActivoDetail(id);
+    const { valuacion } = usePortfolioData();
+    const [error, setError] = useState<string | null>(null);
 
     const handleOperation = (tipo: "COMPRA" | "VENTA") => {
         const user = getCurrentUser();
@@ -68,10 +76,20 @@ export default function ActivoDetalle() {
             router.push("/auth/login");
             return;
         }
+
+        if (tipo === "VENTA" && activo && valuacion) {
+            const hasAsset = valuacion.activos.some(a => a.symbol === activo.symbol);
+            if (!hasAsset) {
+                setError(`No tienes ${activo.symbol} para vender.`);
+                return;
+            }
+        }
+
         if (activo) {
             router.push(`/registrar-operacion?activoId=${activo.id}&tipo=${tipo}`);
         }
     };
+
 
     if (loading) {
         return (
@@ -349,6 +367,13 @@ export default function ActivoDetalle() {
                     </Grid>
                 </Grid>
             </Container>
+
+            <FloatingMessage
+                open={!!error}
+                message={error}
+                severity="error"
+                onClose={() => setError(null)}
+            />
         </Box>
     );
 }
