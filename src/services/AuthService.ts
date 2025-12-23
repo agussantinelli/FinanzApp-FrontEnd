@@ -103,9 +103,9 @@ export async function register(
 export function getHomePathForRole(rol: string | null | undefined): string {
   const r = rol?.toLowerCase();
 
-  if (r === "admin") return "/admin";
-  if (r === "experto") return "/expert";
+  if (r === "admin") return "/dashboard-admin";
+  if (r === "experto") return "/dashboard-experto";
 
   // por defecto, inversor o cualquier otro
-  return "/dashboard";
+  return "/dashboard-inversor";
 }

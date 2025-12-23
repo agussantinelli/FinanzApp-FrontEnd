@@ -44,9 +44,6 @@ export default function AssetOperationsHistory({ activoId, symbol }: AssetOperat
                     data = await getOperacionesByActivo(activoId.toString());
                 } else {
                     const allMyOps = await getOperacionesByPersona(user.id);
-                    console.log("[DEBUG] AssetOperationsHistory - ActivoID Prop:", activoId);
-                    console.log("[DEBUG] AssetOperationsHistory - All Ops:", allMyOps);
-
                     data = allMyOps.filter(op => {
                         // Filter by ID if available, otherwise by Symbol (Ticker) which is safer
                         if (op.activoId && activoId) {
@@ -55,7 +52,6 @@ export default function AssetOperationsHistory({ activoId, symbol }: AssetOperat
                         // Fallback to symbol match
                         return op.activoSymbol?.toLowerCase() === symbol.toLowerCase();
                     });
-                    console.log("[DEBUG] AssetOperationsHistory - Filtered Data:", data);
                 }
 
                 data.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
@@ -127,7 +123,7 @@ export default function AssetOperationsHistory({ activoId, symbol }: AssetOperat
                                     </TableCell>
                                     {isAdmin && (
                                         <TableCell>
-                                            <Typography variant="body2">{op.personaNombre || op.personaApellido ? `${op.personaNombre} ${op.personaApellido}` : 'Usuario'}</Typography>
+                                            <Typography variant="body2">{[op.personaNombre, op.personaApellido].filter(Boolean).join(" ") || 'Usuario'}</Typography>
                                             <Typography variant="caption" color="text.secondary">{op.personaEmail}</Typography>
                                         </TableCell>
                                     )}

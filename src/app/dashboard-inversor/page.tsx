@@ -437,7 +437,7 @@ export default function DashboardPage() {
                       <Typography variant="subtitle2" className={styles.subtitle}>Panel Admin</Typography>
                       <Typography variant="body2" color="text.secondary">Usuarios y operaciones.</Typography>
                     </Box>
-                    <Button component={Link} href="/admin" size="small" variant="outlined" className={styles.actionButton}>Panel</Button>
+                    <Button component={Link} href="/dashboard-admin" size="small" variant="outlined" className={styles.actionButton}>Panel</Button>
                   </Stack>
                   <Divider flexItem className={styles.divider} />
                   <Stack direction="row" justifyContent="space-between" alignItems="center">
