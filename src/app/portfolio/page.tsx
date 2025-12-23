@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import {
   Box,
   Paper,
@@ -273,7 +274,9 @@ export default function PortfolioPage() {
                     return (
                       <TableRow key={a.activoId}>
                         <TableCell sx={{ fontWeight: 'bold', fontSize: '1rem' }}>
-                          {a.symbol}
+                          <Link href={`/activos/${a.activoId}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                            {a.symbol}
+                          </Link>
                           {a.tipoActivo === "Cedear" && (
                             <Chip label="CEDEAR" size="small" sx={{ ml: 1, fontSize: '0.65rem', height: 20 }} variant="outlined" color="primary" />
                           )}
