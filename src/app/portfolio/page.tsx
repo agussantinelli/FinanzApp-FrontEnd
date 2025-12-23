@@ -21,7 +21,8 @@ import {
   FormControl,
   InputLabel,
   ToggleButton,
-  ToggleButtonGroup
+  ToggleButtonGroup,
+  TableSortLabel
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
@@ -34,6 +35,10 @@ import AddIcon from '@mui/icons-material/Add';
 import { CurrencyToggle } from "@/components/common/CurrencyToggle";
 import PortfolioCompositionChart from "@/components/portfolio/PortfolioCompositionChart";
 
+// Helper for dynamic formatting
+type Order = 'asc' | 'desc';
+type OrderBy = 'symbol' | 'moneda' | 'cantidad' | 'ppc' | 'totalCost' | 'price' | 'currentValue' | 'percentage' | 'performance';
+
 export default function PortfolioPage() {
   const router = useRouter();
   const { user } = useAuth();
@@ -41,6 +46,96 @@ export default function PortfolioPage() {
   const { portfolios, selectedId, valuacion, loading, handlePortfolioChange } = usePortfolioData();
   const [currency, setCurrency] = React.useState<'ARS' | 'USD'>('USD');
 
+  // Sorting State
+  const [order, setOrder] = React.useState<Order>('desc');
+  const [orderBy, setOrderBy] = React.useState<OrderBy>('currentValue');
+
+  const handleRequestSort = (property: OrderBy) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
+  const sortedActivos = React.useMemo(() => {
+    if (!valuacion?.activos) return [];
+
+    const ccl = (valuacion.totalDolares && valuacion.totalPesos)
+      ? valuacion.totalPesos / valuacion.totalDolares
+      : 0;
+
+    return [...valuacion.activos].sort((a, b) => {
+      let valA: number | string = 0;
+      let valB: number | string = 0;
+
+      // Helper to get normalized prices for sorting
+      const getValues = (asset: typeof a) => {
+        const assetCurrency = asset.moneda || "ARS";
+        const isAssetUSD = assetCurrency === 'USD' || assetCurrency === 'USDT' || assetCurrency === 'USDC';
+
+        let price = 0;
+        let ppc = 0;
+
+        if (currency === 'ARS') {
+          price = isAssetUSD ? (ccl > 0 ? asset.precioActual * ccl : 0) : asset.precioActual;
+          ppc = isAssetUSD ? (ccl > 0 ? asset.precioPromedioCompra * ccl : 0) : asset.precioPromedioCompra;
+        } else {
+          price = !isAssetUSD ? (ccl > 0 ? asset.precioActual / ccl : 0) : asset.precioActual;
+          ppc = !isAssetUSD ? (ccl > 0 ? asset.precioPromedioCompra / ccl : 0) : asset.precioPromedioCompra;
+        }
+        return { price, ppc };
+      };
+
+      const { price: priceA, ppc: ppcA } = getValues(a);
+      const { price: priceB, ppc: ppcB } = getValues(b);
+
+      switch (orderBy) {
+        case 'symbol':
+          valA = a.symbol;
+          valB = b.symbol;
+          break;
+        case 'moneda':
+          valA = a.moneda;
+          valB = b.moneda;
+          break;
+        case 'cantidad':
+          valA = a.cantidad;
+          valB = b.cantidad;
+          break;
+        case 'ppc':
+          valA = ppcA;
+          valB = ppcB;
+          break;
+        case 'totalCost':
+          valA = ppcA * a.cantidad;
+          valB = ppcB * b.cantidad;
+          break;
+        case 'price':
+          valA = priceA;
+          valB = priceB;
+          break;
+        case 'currentValue':
+          valA = priceA * a.cantidad;
+          valB = priceB * b.cantidad;
+          break;
+        case 'percentage':
+          valA = a.porcentajeCartera;
+          valB = b.porcentajeCartera;
+          break;
+        case 'performance':
+          valA = a.precioPromedioCompra > 0 ? ((a.precioActual - a.precioPromedioCompra) / a.precioPromedioCompra) : -999;
+          valB = b.precioPromedioCompra > 0 ? ((b.precioActual - b.precioPromedioCompra) / b.precioPromedioCompra) : -999;
+          break;
+      }
+
+      if (valB < valA) {
+        return order === 'desc' ? -1 : 1;
+      }
+      if (valB > valA) {
+        return order === 'desc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }, [valuacion, order, orderBy, currency]);
 
 
   if (loading && !valuacion && portfolios.length === 0) {
@@ -189,24 +284,40 @@ export default function PortfolioPage() {
               <Table size="medium">
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{ fontSize: '1rem', fontWeight: 600 }}>Ticker</TableCell>
-                    <TableCell sx={{ fontSize: '1rem', fontWeight: 600 }}>Moneda</TableCell>
-                    <TableCell align="left" sx={{ fontSize: '1rem', fontWeight: 600 }}>Cantidad</TableCell>
-                    <TableCell align="left" sx={{ fontSize: '1rem', fontWeight: 600 }}>PPC ({currency})</TableCell>
-                    <TableCell align="left" sx={{ fontSize: '1rem', fontWeight: 600 }}>Costo Total ({currency})</TableCell>
-                    <TableCell align="left" sx={{ fontSize: '1rem', fontWeight: 600 }}>Precio Actual ({currency})</TableCell>
-                    <TableCell align="left" sx={{ fontSize: '1rem', fontWeight: 600 }}>Valor Actual ({currency})</TableCell>
-                    <TableCell align="left" sx={{ fontSize: '1rem', fontWeight: 600 }}>% Cartera</TableCell>
-                    <TableCell align="left" sx={{ fontSize: '1rem', fontWeight: 600 }}>Rendimiento</TableCell>
+                    {[
+                      { id: 'symbol', label: 'Ticker', align: 'left' },
+                      { id: 'moneda', label: 'Moneda', align: 'left' },
+                      { id: 'cantidad', label: 'Cantidad', align: 'left' },
+                      { id: 'ppc', label: `PPC (${currency})`, align: 'left' },
+                      { id: 'totalCost', label: `Costo Total (${currency})`, align: 'left' },
+                      { id: 'price', label: `Precio Actual (${currency})`, align: 'left' },
+                      { id: 'currentValue', label: `Valor Actual (${currency})`, align: 'left' },
+                      { id: 'percentage', label: '% Cartera', align: 'left' },
+                      { id: 'performance', label: 'Rendimiento', align: 'left' },
+                    ].map((headCell) => (
+                      <TableCell
+                        key={headCell.id}
+                        align={headCell.align as any}
+                        sx={{ fontSize: '1rem', fontWeight: 600 }}
+                        sortDirection={orderBy === headCell.id ? order : false}
+                      >
+                        <TableSortLabel
+                          active={orderBy === headCell.id}
+                          direction={orderBy === headCell.id ? order : 'asc'}
+                          onClick={() => handleRequestSort(headCell.id as OrderBy)}
+                        >
+                          {headCell.label}
+                        </TableSortLabel>
+                      </TableCell>
+                    ))}
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {valuacion?.activos?.map(a => {
+                  {sortedActivos.map(a => {
                     const assetCurrency = a.moneda || "ARS";
                     const isAssetUSD = assetCurrency === 'USD' || assetCurrency === 'USDT' || assetCurrency === 'USDC';
-                    // const fmtPrice = (val: number) => isAssetUSD ? formatUSD(val) : formatARS(val); // Unused
 
-                    const ccl = (valuacion.totalDolares && valuacion.totalPesos)
+                    const ccl = (valuacion?.totalDolares && valuacion?.totalPesos)
                       ? valuacion.totalPesos / valuacion.totalDolares
                       : 0;
 
