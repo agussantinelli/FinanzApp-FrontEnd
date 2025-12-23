@@ -13,10 +13,10 @@ import PageHeader from "@/components/ui/PageHeader";
 
 import { searchActivos } from "@/services/ActivosService";
 import { createOperacion } from "@/services/OperacionesService";
-import { getMisPortafolios } from "@/services/PortafolioService";
+import { getMisPortafolios, getPortafolioValuado } from "@/services/PortafolioService";
 import { ActivoDTO } from "@/types/Activo";
 import { TipoOperacion, CreateOperacionDTO } from "@/types/Operacion";
-import { PortafolioDTO } from "@/types/Portafolio";
+import { PortafolioDTO, PortafolioValuadoDTO } from "@/types/Portafolio";
 import { debounce } from "@mui/material/utils";
 
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -35,6 +35,7 @@ export default function RegistrarOperacionPage() {
     // Portfolio State
     const [portfolios, setPortfolios] = useState<PortafolioDTO[]>([]);
     const [portfolioId, setPortfolioId] = useState<string>("");
+    const [detailedPortfolio, setDetailedPortfolio] = useState<PortafolioValuadoDTO | null>(null);
 
     // Form States
     const [tipo, setTipo] = useState<TipoOperacion>(TipoOperacion.Compra);
@@ -63,6 +64,14 @@ export default function RegistrarOperacionPage() {
             })
             .catch(console.error);
     }, []);
+
+    // Fetch Detailed Portfolio when ID changes
+    useEffect(() => {
+        if (!portfolioId) return;
+        getPortafolioValuado(portfolioId)
+            .then(data => setDetailedPortfolio(data))
+            .catch(err => console.error("Error fetching detailed portfolio:", err));
+    }, [portfolioId]);
 
     // Asset Search Logic
     const handleSearch = useMemo(
@@ -116,6 +125,21 @@ export default function RegistrarOperacionPage() {
         if (qty <= 0 || price <= 0) {
             setError("La cantidad y el precio deben ser mayores a 0.");
             return;
+        }
+
+        // SELL VALIDATION
+        if (tipo === TipoOperacion.Venta) {
+            if (!detailedPortfolio) {
+                setError("No se pudo verificar el saldo del portafolio. Intenta nuevamente.");
+                return;
+            }
+            const existingAsset = detailedPortfolio.activos.find(a => a.symbol === asset.symbol);
+            const availableQty = existingAsset ? existingAsset.cantidad : 0;
+
+            if (qty > availableQty) {
+                setError(`Saldo insuficiente. Tienes ${availableQty} ${asset.symbol} disponibles para vender.`);
+                return;
+            }
         }
 
         setLoading(true);
@@ -275,6 +299,11 @@ export default function RegistrarOperacionPage() {
                                         InputProps={{
                                             startAdornment: <InputAdornment position="start">#</InputAdornment>,
                                         }}
+                                        helperText={
+                                            tipo === TipoOperacion.Venta && asset && detailedPortfolio ? (
+                                                `Disponible: ${detailedPortfolio.activos.find(a => a.symbol === asset.symbol)?.cantidad || 0}`
+                                            ) : null
+                                        }
                                     />
                                     <TextField
                                         label="Precio Unitario"
