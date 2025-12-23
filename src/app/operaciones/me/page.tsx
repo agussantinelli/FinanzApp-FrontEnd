@@ -139,7 +139,7 @@ export default function MyOperationsPage() {
                                                     Activo
                                                 </TableSortLabel>
                                             </TableCell>
-                                            <TableCell align="right">
+                                            <TableCell align="left">
                                                 <TableSortLabel
                                                     active={orderBy === 'cantidad'}
                                                     direction={orderBy === 'cantidad' ? order : 'asc'}
@@ -148,7 +148,7 @@ export default function MyOperationsPage() {
                                                     Cantidad
                                                 </TableSortLabel>
                                             </TableCell>
-                                            <TableCell align="right">
+                                            <TableCell align="left">
                                                 <TableSortLabel
                                                     active={orderBy === 'precioUnitario'}
                                                     direction={orderBy === 'precioUnitario' ? order : 'asc'}
@@ -157,7 +157,7 @@ export default function MyOperationsPage() {
                                                     Precio
                                                 </TableSortLabel>
                                             </TableCell>
-                                            <TableCell align="right">
+                                            <TableCell align="left">
                                                 <TableSortLabel
                                                     active={orderBy === 'totalOperado'}
                                                     direction={orderBy === 'totalOperado' ? order : 'asc'}
@@ -187,17 +187,17 @@ export default function MyOperationsPage() {
                                                             variant="outlined"
                                                         />
                                                     </TableCell>
-                                                    <TableCell>
+                                                    <TableCell align="left">
                                                         <Typography fontWeight="bold">{op.activoSymbol}</Typography>
                                                         <Typography variant="caption" color="text.secondary">{op.activoNombre}</Typography>
                                                     </TableCell>
-                                                    <TableCell align="right">
+                                                    <TableCell align="left">
                                                         {formatQuantity(op.cantidad)}
                                                     </TableCell>
-                                                    <TableCell align="right">
+                                                    <TableCell align="left">
                                                         {formatMoney(op.precioUnitario)}
                                                     </TableCell>
-                                                    <TableCell align="right" className={styles.boldCell}>
+                                                    <TableCell align="left" className={styles.boldCell}>
                                                         {formatMoney(op.totalOperado)}
                                                     </TableCell>
                                                 </TableRow>

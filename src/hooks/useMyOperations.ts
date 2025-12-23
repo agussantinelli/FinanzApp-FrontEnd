@@ -61,15 +61,6 @@ export function useMyOperations() {
             result = result.filter(op => op.tipo === filterType);
         }
 
-        // 2. Filter Currency & Convert
-        // Note: The user requested "pasar todos a USD o toda a ARS segun filtre".
-        // Instead of hiding, we will convert values if a specific currency is selected.
-        // However, standard "filtering" usually implies hiding.
-        // Given the request: "que muestres las transacciones como fueron... pero que puedas pasar todo a USD o ARS"
-        // We will keep ALL items but map their values if a target currency is set.
-        // BUT, the hook returns `OperacionResponseDTO[]`. Modifying the object structure in place might be risky if types match.
-        // Let's return a NEW mapped array with converted values, pretending they are in that currency for display purposes.
-
         if (filterCurrency !== 'TODAS' && dolarBlue) {
             result = result.map(op => {
                 // If operation Moneda matches Filter, keep it number-wise (or maybe ensure strict equality)
