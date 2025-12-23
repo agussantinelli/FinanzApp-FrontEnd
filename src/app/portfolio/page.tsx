@@ -182,7 +182,7 @@ export default function PortfolioPage() {
           {/* TABLE */}
           <Grid size={{ xs: 12 }}>
             <Paper className={styles.tablePaper}>
-              <Typography variant="h6" className={styles.sectionTitle} gutterBottom sx={{ fontSize: '1.2rem', fontWeight: 600 }}>
+              <Typography variant="h6" className={styles.sectionTitle} gutterBottom sx={{ fontSize: '1.5rem', fontWeight: 700 }}>
                 Detalle de Activos
               </Typography>
               <Divider sx={{ mb: 2 }} />

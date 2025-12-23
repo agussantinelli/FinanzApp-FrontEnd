@@ -125,8 +125,8 @@ export default function PortfolioCompositionChart({ activos, totalPesos, totalDo
                 position: 'relative' // For overlay
             }}
         >
-            <Typography variant="h6" gutterBottom align="left" width="100%" sx={{ fontWeight: 600, mb: 2, fontSize: '1.2rem' }}>
-                Distribución de activos
+            <Typography variant="h6" gutterBottom align="left" width="100%" sx={{ fontWeight: 700, mb: 2, fontSize: '1.5rem' }}>
+                Distribución de Activos
             </Typography>
 
             <Box sx={{ position: 'relative', width: '100%', height: '100%', maxHeight: 350 }}> {/* Reduced from 400 */}
