@@ -1,15 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import {
     Box, Paper, Typography, Container, TextField, Button,
     ToggleButton, ToggleButtonGroup, Autocomplete, InputAdornment,
-    FormControl, InputLabel, Select, MenuItem, Stack, Alert
+    FormControl, InputLabel, Select, MenuItem, Stack
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import PageHeader from "@/components/ui/PageHeader";
 import FloatingMessage from "@/components/ui/FloatingMessage";
+import NeonLoader from "@/components/ui/NeonLoader";
 
 import { TipoOperacion } from "@/types/Operacion";
 import { useRegistrarOperacion } from "@/hooks/useRegistrarOperacion";
@@ -19,8 +20,9 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
-export default function RegistrarOperacionPage() {
+function RegistrarOperacionContent() {
     const router = useRouter();
+
 
     const {
         mode, setMode,
@@ -218,5 +220,13 @@ export default function RegistrarOperacionPage() {
                 </Container>
             </Box>
         </RoleGuard>
+    );
+}
+
+export default function RegistrarOperacionPage() {
+    return (
+        <Suspense fallback={<NeonLoader />}>
+            <RegistrarOperacionContent />
+        </Suspense>
     );
 }
