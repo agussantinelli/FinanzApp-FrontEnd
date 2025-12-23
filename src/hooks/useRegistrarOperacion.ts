@@ -102,6 +102,8 @@ export function useRegistrarOperacion() {
                 setPrecio(asset.precioActual.toString());
             }
         }
+        // Clear portfolio-specific errors when asset changes
+        setError(prev => prev?.includes("en este portafolio") ? null : prev);
     }, [mode, asset]);
 
     // Real-time Sell Validation
@@ -110,13 +112,11 @@ export function useRegistrarOperacion() {
             const hasAsset = detailedPortfolio.activos.some(a => a.symbol === asset.symbol);
             if (!hasAsset) {
                 setError(`No tienes ${asset.symbol} en este portafolio para vender.`);
+                setTipo(TipoOperacion.Compra);
             } else {
-                // Clear error if it was this specific error
+                // Clear error if it was this specific error and check passes
                 setError(prev => prev?.includes("en este portafolio") ? null : prev);
             }
-        } else {
-            // Clear error if switching to Compra
-            setError(prev => prev?.includes("en este portafolio") ? null : prev);
         }
     }, [tipo, asset, detailedPortfolio]);
 
