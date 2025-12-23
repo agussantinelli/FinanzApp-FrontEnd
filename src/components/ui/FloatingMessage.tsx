@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Snackbar, Alert, AlertColor } from "@mui/material";
 
