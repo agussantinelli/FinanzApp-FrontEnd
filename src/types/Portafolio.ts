@@ -26,5 +26,6 @@ export interface PortafolioValuadoDTO {
     totalDolares: number;
     gananciaDolares: number;
     variacionPorcentajeDolares: number;
+    loSigo: boolean;
     activos: ActivoEnPortafolioDTO[];
 }
