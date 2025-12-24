@@ -33,7 +33,6 @@ import AddIcon from '@mui/icons-material/Add';
 import HistoryIcon from '@mui/icons-material/History';
 import { CurrencyToggle } from "@/components/common/CurrencyToggle";
 import PortfolioCompositionChart from "@/components/portfolio/PortfolioCompositionChart";
-
 // Helper for dynamic formatting
 import { usePortfolioSort, Order, OrderBy } from "@/hooks/usePortfolioSort";
 
@@ -333,6 +332,6 @@ export default function PortfolioPage() {
           </Grid>
         </Grid>
       </Box>
-    </RoleGuard>
+    </RoleGuard >
   );
 }
