@@ -27,6 +27,9 @@ export const colors = {
         orange: "#FFAA00",
         green: "#39ff14", // Same as primary but explicit for palette
         yellow: "#FFFF00",
+        gold: "#FFD700",
+        orangeRed: "#FF4500",
+        violet: "#EE82EE",
         blue: "#0088FF",
     }
 };
