@@ -65,7 +65,17 @@ export default function UsuariosTab() {
                                     </Stack>
                                 </TableCell>
                                 <TableCell>
-                                    <Chip label={row.rol} size="small" color={row.rol === 'Admin' ? 'secondary' : 'default'} variant="outlined" />
+                                    <Chip
+                                        label={row.rol}
+                                        size="small"
+                                        color={
+                                            row.rol.includes('Admin') ? 'error' :
+                                                row.rol.includes('Experto') ? 'warning' :
+                                                    'info'
+                                        }
+                                        variant="filled" // Changed to filled for better color visibility
+                                        sx={{ fontWeight: 'bold' }}
+                                    />
                                 </TableCell>
                                 <TableCell>{new Date(row.fechaAlta).toLocaleDateString()}</TableCell>
                                 <TableCell>
