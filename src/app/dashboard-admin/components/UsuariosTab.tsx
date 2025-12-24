@@ -127,8 +127,7 @@ export default function UsuariosTab() {
                                             <ArrowDownwardIcon fontSize="small" color={row.rol === 'Inversor' ? 'disabled' : 'warning'} />
                                         </IconButton>
                                         <Box sx={{ mx: 1, borderLeft: '1px solid #444' }} />
-                                        {/* Edit/Delete placeholders */}
-                                        <IconButton size="small"><EditIcon fontSize="small" /></IconButton>
+                                        {/* Edit button removed as requested */}
                                         <IconButton size="small" color="error"><DeleteIcon fontSize="small" /></IconButton>
                                     </Stack>
                                 </TableCell>
