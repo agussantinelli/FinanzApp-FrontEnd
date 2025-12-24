@@ -12,16 +12,4 @@ export interface ExpertoStatsDTO {
     efectividad: string; // "85%" or "-"
 }
 
-export interface AdminStatsDTO {
-    totalUsuarios: number;
-    nuevosUsuariosMes: number;
-    totalActivos: number;
-    recomendacionesPendientes: number;
-}
 
-export interface AdminPortfolioStatsDTO {
-    totalCapitalPesos: number;
-    totalCapitalDolares: number;
-    activosMasPopulares: { activoSymbol: string; cantidadUsuarios: number }[];
-    distribucionPorSector: { sectorNombre: string; porcentaje: number }[];
-}
