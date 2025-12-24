@@ -17,3 +17,8 @@ export async function updatePortafolio(id: string, nombre: string, descripcion: 
     await http.put(`${ENDPOINT}/${id}`, { nombre, descripcion });
     return true;
 }
+
+export async function toggleSeguirPortafolio(id: string): Promise<{ siguiendo: boolean, message: string }> {
+    const { data } = await http.post<{ siguiendo: boolean, message: string }>(`${ENDPOINT}/${id}/seguir`);
+    return data;
+}
