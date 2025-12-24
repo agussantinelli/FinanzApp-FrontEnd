@@ -24,7 +24,8 @@ export enum EstadoRecomendacion {
     Pendiente = 0,
     Aceptada = 1,
     Rechazada = 2,
-    Eliminada = 3
+    Eliminada = 3,
+    Cerrada = 4
 }
 
 
@@ -73,6 +74,8 @@ export interface RecomendacionResumenDTO {
     autorNombre: string;
     cantidadActivos: number;
     estado: number; // Enum
+    esDestacada: boolean;
+    esAcertada?: boolean; // null=pendiente/n/a, true=acertada, false=fallida
 }
 
 export interface CrearRecomendacionDTO {

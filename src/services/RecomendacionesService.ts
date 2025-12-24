@@ -17,6 +17,23 @@ export const deleteRecomendacion = async (id: string): Promise<void> => {
     await http.delete(`${ENDPOINT}/${id}`);
 };
 
+export const destacarRecomendacion = async (id: string): Promise<void> => {
+    await http.patch(`${ENDPOINT}/${id}/destacar`);
+};
+
+export const resolverRecomendacion = async (id: string, esAcertada: boolean): Promise<void> => {
+    await http.patch(`${ENDPOINT}/${id}/resolucion`, { esAcertada });
+};
+
+
+export const getRecomendacionesAdmin = async (estado?: number): Promise<RecomendacionResumenDTO[]> => {
+    const params: any = {};
+    if (estado !== undefined) params.estado = estado;
+
+    const { data } = await http.get<RecomendacionResumenDTO[]>(`${ENDPOINT}/admin/filtro`, { params });
+    return data;
+};
+
 // Usuario Logueado
 export const getRecomendaciones = async (soloActivas: boolean = true): Promise<RecomendacionResumenDTO[]> => {
     const { data } = await http.get<RecomendacionResumenDTO[]>(ENDPOINT, {
