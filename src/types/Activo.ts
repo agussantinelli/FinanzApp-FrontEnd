@@ -20,6 +20,14 @@ export interface ActivoCreateDTO {
     symbol: string;
     nombre: string;
     tipo: number; // byte
+    monedaBase: string; // "USD" | "ARS"
+    esLocal: boolean;
+}
+
+export interface ActivoUpdateDTO {
+    symbol: string;
+    nombre: string;
+    tipo: number; // byte
     monedaBase: string;
     esLocal: boolean;
 }
