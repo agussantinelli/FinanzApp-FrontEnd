@@ -5,8 +5,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useAdminUsers } from '@/hooks/useAdminUsers';
 import styles from '../styles/Admin.module.css';
 
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+
 export default function UsuariosTab() {
-    const { users, loading } = useAdminUsers();
+    const { users, loading, changeRole } = useAdminUsers();
 
     if (loading) return <Skeleton variant="rectangular" height={400} />;
 
@@ -66,8 +69,17 @@ export default function UsuariosTab() {
                                 </TableCell>
                                 <TableCell>{new Date(row.fechaAlta).toLocaleDateString()}</TableCell>
                                 <TableCell>
-                                    <IconButton size="small"><EditIcon fontSize="small" /></IconButton>
-                                    <IconButton size="small" color="error"><DeleteIcon fontSize="small" /></IconButton>
+                                    <Stack direction="row">
+                                        <IconButton size="small" onClick={() => changeRole(row, 'up')} disabled={row.rol === 'Admin'} title="Ascender">
+                                            <ArrowUpwardIcon fontSize="small" color={row.rol === 'Admin' ? 'disabled' : 'success'} />
+                                        </IconButton>
+                                        <IconButton size="small" onClick={() => changeRole(row, 'down')} disabled={row.rol === 'Inversor'} title="Descender">
+                                            <ArrowDownwardIcon fontSize="small" color={row.rol === 'Inversor' ? 'disabled' : 'warning'} />
+                                        </IconButton>
+                                        <Box sx={{ mx: 1, borderLeft: '1px solid #444' }} />
+                                        <IconButton size="small"><EditIcon fontSize="small" /></IconButton>
+                                        <IconButton size="small" color="error"><DeleteIcon fontSize="small" /></IconButton>
+                                    </Stack>
                                 </TableCell>
                             </TableRow>
                         ))}

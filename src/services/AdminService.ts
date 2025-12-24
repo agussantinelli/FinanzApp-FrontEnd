@@ -29,3 +29,21 @@ export const getAllOperations = async (): Promise<OperacionResponseDTO[]> => {
     const { data } = await http.get<OperacionResponseDTO[]>('/api/operaciones');
     return data;
 };
+
+export const updateUser = async (id: string, data: UserDTO, newRole: string): Promise<void> => {
+    // Map UserDTO to UserUpdateRequest
+    // Note: This assumes the backend endpoint is PUT /api/personas/{id} and accepts PersonaUpdateDTO
+    // We need to carefully map fields.
+    const updateRequest = {
+        nombre: data.nombre,
+        apellido: data.apellido,
+        fechaNac: data.fechaNacimiento, // UserDTO has fechaNacimiento, DTO expects fechaNac
+        rol: newRole,
+        esResidenteArgentina: data.esResidenteArgentina,
+        localidadResidenciaId: data.localidadResidenciaId || null,
+        paisResidenciaId: data.paisResidenciaId || 0, // Fallback if required
+        paisNacionalidadId: data.nacionalidadId
+    };
+
+    await http.put(`/api/personas/${id}`, updateRequest);
+};
