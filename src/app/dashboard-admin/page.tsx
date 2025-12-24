@@ -29,7 +29,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useAdminData } from "@/hooks/useAdminData";
 import { usePortfolioData } from "@/hooks/usePortfolioData";
 import { RoleGuard } from "@/components/auth/RoleGuard";
-import { AdminDashboardStats } from "@/types/Admin";
+import { AdminStatsDTO } from "@/types/Admin";
 import { UserDTO, RolUsuario } from "@/types/Usuario";
 import { OperacionResponseDTO } from "@/types/Operacion";
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -80,6 +80,7 @@ export default function AdminDashboardPage() {
   const [tabValue, setTabValue] = React.useState(0);
   const {
     stats,
+    portfolioStats,
     users,
     operations,
     activos,
@@ -213,40 +214,42 @@ export default function AdminDashboardPage() {
               {stats ? (
                 <Grid container spacing={3}>
                   {/* KPI Cards */}
-                  {/* KPI Cards */}
                   <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <Paper className={styles.card}>
                       <Typography className={styles.kpiLabel}>Total Usuarios</Typography>
                       <Typography variant="h4" className={styles.kpiValue}>{stats.totalUsuarios}</Typography>
                       <Typography variant="body2" color="success.main" className={styles.kpiChange}>
-                        +{stats.usuariosHoy} hoy
+                        +{stats.nuevosUsuariosMes} este mes
                       </Typography>
                     </Paper>
                   </Grid>
+
                   <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <Paper className={styles.card}>
-                      <Typography className={styles.kpiLabel}>Operaciones</Typography>
-                      <Typography variant="h4" className={styles.kpiValue}>{stats.totalOperaciones}</Typography>
-                      <Typography variant="body2" color="success.main" className={styles.kpiChange}>
-                        +{stats.operacionesHoy} hoy
+                      <Typography className={styles.kpiLabel}>Recomendaciones</Typography>
+                      <Typography variant="h4" className={styles.kpiValue}>{stats.recomendacionesPendientes}</Typography>
+                      <Typography variant="body2" color="warning.main" className={styles.kpiChange}>
+                        Pendientes de revisión
                       </Typography>
                     </Paper>
                   </Grid>
+
                   <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <Paper className={`${styles.card} ${styles.highlightCard}`}>
-                      <Typography className={styles.kpiLabel} style={{ color: '#fff' }}>Volumen Diario</Typography>
-                      <Typography variant="h5" className={styles.kpiValue}>${stats.volumenHoyArs.toLocaleString()}</Typography>
+                      <Typography className={styles.kpiLabel} style={{ color: '#fff' }}>Valor en Custodia</Typography>
+                      <Typography variant="h5" className={styles.kpiValue}>${portfolioStats?.valorGlobalPesos?.toLocaleString() ?? '-'}</Typography>
                       <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, fontSize: '0.8rem' }}>
-                        USD {stats.volumenHoyUsd.toLocaleString()}
+                        USD {portfolioStats?.valorGlobalDolares?.toLocaleString() ?? '-'}
                       </Typography>
                     </Paper>
                   </Grid>
+
                   <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                     <Paper className={styles.card}>
-                      <Typography className={styles.kpiLabel}>Activos Listados</Typography>
-                      <Typography variant="h4" className={styles.kpiValue}>{stats.totalActivos}</Typography>
+                      <Typography className={styles.kpiLabel}>Efectividad Global</Typography>
+                      <Typography variant="h4" className={styles.kpiValue}>{stats.efectividadGlobal}</Typography>
                       <Typography variant="body2" color="text.secondary" className={styles.kpiChange}>
-                        En plataforma
+                        Total Activos: {stats.totalActivos}
                       </Typography>
                     </Paper>
                   </Grid>
