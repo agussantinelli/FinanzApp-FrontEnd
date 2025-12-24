@@ -13,6 +13,9 @@ import PersonIcon from '@mui/icons-material/Person';
 import { colors } from '@/app-theme/design-tokens';
 import { RecomendacionResumenDTO, Riesgo, AccionRecomendada, Horizonte, EstadoRecomendacion } from '@/types/Recomendacion';
 import CircleIcon from '@mui/icons-material/Circle';
+import StarIcon from '@mui/icons-material/Star';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 interface Props {
     item: RecomendacionResumenDTO;
@@ -65,6 +68,8 @@ const getEstadoConfig = (e: number) => {
             return { label: "Rechazada", color: "error", icon: <RemoveIcon fontSize="small" /> };
         case EstadoRecomendacion.Eliminada:
             return { label: "Eliminada", color: "default", icon: <CircleIcon fontSize="small" /> };
+        case EstadoRecomendacion.Cerrada:
+            return { label: "Cerrada", color: "default", icon: <AccessTimeIcon fontSize="small" /> };
         default:
             return { label: "Desconocido", color: "default", icon: <CircleIcon fontSize="small" /> };
     }
@@ -80,8 +85,35 @@ export default function RecomendacionCard({ item, showStatus = false }: Props) {
 
 
 
+    // Acertada Logic
+    let resolutionConfig = null;
+    if (item.estado === EstadoRecomendacion.Cerrada && item.esAcertada !== null && item.esAcertada !== undefined) {
+        if (item.esAcertada) {
+            resolutionConfig = { label: "Acertada", color: "success", icon: <CheckCircleIcon /> };
+        } else {
+            resolutionConfig = { label: "Fallida", color: "error", icon: <CancelIcon /> };
+        }
+    }
+
     return (
-        <Card variant="outlined" sx={{ height: '100%', display: 'flex', flexDirection: 'column', position: 'relative', transition: 'transform 0.2s, box-shadow 0.2s', '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 4px 20px rgba(0,0,0,0.4)', borderColor: 'primary.main', cursor: 'pointer' } }}>
+        <Card
+            variant="outlined"
+            sx={{
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                position: 'relative',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 4px 20px rgba(0,0,0,0.4)', borderColor: 'primary.main', cursor: 'pointer' },
+                borderColor: item.esDestacada ? colors.neon.gold : undefined,
+                boxShadow: item.esDestacada ? `0 0 10px ${colors.neon.gold}40` : undefined
+            }}
+        >
+            {item.esDestacada && (
+                <Box sx={{ position: 'absolute', top: 0, right: 0, p: 0.5, backgroundColor: colors.neon.gold, borderBottomLeftRadius: 8, color: 'black', zIndex: 5 }}>
+                    <StarIcon fontSize="small" />
+                </Box>
+            )}
             <Link href={`/recomendaciones/${createSlug(item.titulo)}`} style={{ textDecoration: 'none', color: 'inherit', height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                     <CardContent sx={{ flex: 1 }}>
@@ -97,8 +129,19 @@ export default function RecomendacionCard({ item, showStatus = false }: Props) {
                                     <PersonIcon fontSize="inherit" /> {item.autorNombre}
                                 </Typography>
                             </Box>
-                            <Box display="flex" gap={1}>
-                                {showStatus && estadoConfig && (
+
+                            <Box display="flex" gap={1} flexWrap="wrap">
+                                {resolutionConfig && (
+                                    <Chip
+                                        label={resolutionConfig.label}
+                                        color={resolutionConfig.color as any}
+                                        size="small"
+                                        icon={resolutionConfig.icon}
+                                        variant="filled"
+                                        sx={{ fontWeight: 'bold' }}
+                                    />
+                                )}
+                                {showStatus && estadoConfig && !resolutionConfig && (
                                     <Chip
                                         label={estadoConfig.label}
                                         color={estadoConfig.color as any}
