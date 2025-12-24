@@ -109,6 +109,10 @@ export function useMyOperations() {
                 bValue = bValue.toLowerCase();
             }
 
+            if (bValue === undefined && aValue === undefined) return 0;
+            if (bValue === undefined) return 1;
+            if (aValue === undefined) return -1;
+
             if (bValue < aValue) {
                 return order === 'desc' ? -1 : 1;
             }
