@@ -30,10 +30,8 @@ export function useAdminRecommendations() {
     };
 
     const resolver = async (id: string, acierto: boolean) => {
-        if (confirm(`¿Marcar recomendación como ${acierto ? 'ACERTADA' : 'FALLIDA'}? Esto la cerrará.`)) {
-            await resolverRecomendacion(id, acierto);
-            loadRecommendations();
-        }
+        await resolverRecomendacion(id, acierto);
+        loadRecommendations();
     };
 
     return {
