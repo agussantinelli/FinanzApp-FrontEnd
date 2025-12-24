@@ -300,8 +300,7 @@ export default function ExpertPage() {
                           Efectividad
                         </Typography>
                         <Typography variant="h5" className={styles.bigNumber} color="primary">
-                          {/* Placeholder for future specific accuracy metric if available */}
-                          - %
+                          {stats?.efectividad ?? "-"}
                         </Typography>
                         <Typography variant="caption" color="text.secondary">
                           tasa de acierto.

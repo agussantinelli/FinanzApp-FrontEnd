@@ -9,6 +9,7 @@ export interface ExpertoStatsDTO {
     totalRecomendaciones: number;
     recomendacionesActivas: number;
     ranking: number;
+    efectividad: string; // "85%" or "-"
 }
 
 export interface AdminStatsDTO {
