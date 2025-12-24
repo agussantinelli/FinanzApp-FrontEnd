@@ -292,6 +292,7 @@ export default function AdminDashboardPage() {
                       <TableCell>Email</TableCell>
                       <TableCell align="center">Operaciones</TableCell>
                       <TableCell align="center">Recomendaciones</TableCell>
+                      <TableCell align="center">Portafolios</TableCell>
                       <TableCell>Rol</TableCell>
                       <TableCell>Fecha Registro</TableCell>
                       <TableCell align="right">Acciones</TableCell>
@@ -320,6 +321,11 @@ export default function AdminDashboardPage() {
                               </Typography>
                             )}
                           </Stack>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography variant="body2" fontWeight={row.cantidadPortafoliosDestacados > 0 ? "bold" : "regular"}>
+                            {row.cantidadPortafoliosDestacados}
+                          </Typography>
                         </TableCell>
                         <TableCell>
                           <Chip label={row.rol} size="small" color={row.rol === 'Admin' ? 'secondary' : 'default'} variant="outlined" />
