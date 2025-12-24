@@ -290,6 +290,8 @@ export default function AdminDashboardPage() {
                       <TableCell>ID</TableCell>
                       <TableCell>Usuario</TableCell>
                       <TableCell>Email</TableCell>
+                      <TableCell align="center">Operaciones</TableCell>
+                      <TableCell align="center">Recomendaciones</TableCell>
                       <TableCell>Rol</TableCell>
                       <TableCell>Fecha Registro</TableCell>
                       <TableCell align="right">Acciones</TableCell>
@@ -306,6 +308,19 @@ export default function AdminDashboardPage() {
                           </Stack>
                         </TableCell>
                         <TableCell>{row.email}</TableCell>
+                        <TableCell align="center">
+                          <Typography variant="body2" fontWeight="bold">{row.cantidadOperaciones}</Typography>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Stack alignItems="center">
+                            <Typography variant="body2">{row.cantidadRecomendaciones}</Typography>
+                            {row.cantidadRecomendaciones > 0 && (
+                              <Typography variant="caption" color="success.main" fontSize={10}>
+                                ({row.cantidadRecomendacionesAcertadas} OK)
+                              </Typography>
+                            )}
+                          </Stack>
+                        </TableCell>
                         <TableCell>
                           <Chip label={row.rol} size="small" color={row.rol === 'Admin' ? 'secondary' : 'default'} variant="outlined" />
                         </TableCell>
