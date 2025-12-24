@@ -42,8 +42,8 @@ export default function RecomendacionesTab() {
                                 <TableCell>Título</TableCell>
                                 <TableCell>Autor</TableCell>
                                 <TableCell>Estado</TableCell>
-                                <TableCell align="center">Destacada</TableCell>
-                                <TableCell align="right">Acciones</TableCell>
+                                <TableCell>Destacada</TableCell>
+                                <TableCell>Acciones</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -71,12 +71,12 @@ export default function RecomendacionesTab() {
                                             />
                                         )}
                                     </TableCell>
-                                    <TableCell align="center">
+                                    <TableCell>
                                         <IconButton onClick={() => toggleDestacar(row.id)} color={row.esDestacada ? "warning" : "default"}>
                                             {row.esDestacada ? <StarIcon /> : <StarBorderIcon />}
                                         </IconButton>
                                     </TableCell>
-                                    <TableCell align="right">
+                                    <TableCell>
                                         {row.estado !== EstadoRecomendacion.Cerrada && (
                                             <>
                                                 <IconButton size="small" title="Marcar Acertada" onClick={() => resolver(row.id, true)} color="success"><CheckIcon /></IconButton>

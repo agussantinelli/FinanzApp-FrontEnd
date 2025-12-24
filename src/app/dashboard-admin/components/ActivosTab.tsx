@@ -23,7 +23,7 @@ export default function ActivosTab() {
                             <TableCell>Nombre</TableCell>
                             <TableCell>Tipo</TableCell>
                             <TableCell>Moneda</TableCell>
-                            <TableCell align="right">Acciones</TableCell>
+                            <TableCell>Acciones</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -35,7 +35,7 @@ export default function ActivosTab() {
                                 <TableCell>{row.nombre}</TableCell>
                                 <TableCell>{row.tipo}</TableCell>
                                 <TableCell><Chip label={row.moneda} size="small" variant="outlined" /></TableCell>
-                                <TableCell align="right">
+                                <TableCell>
                                     <IconButton size="small"><EditIcon fontSize="small" /></IconButton>
                                     <IconButton size="small" color="error"><DeleteIcon fontSize="small" /></IconButton>
                                 </TableCell>

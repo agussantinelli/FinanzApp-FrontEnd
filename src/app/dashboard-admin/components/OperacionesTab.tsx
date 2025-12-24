@@ -18,9 +18,9 @@ export default function OperacionesTab() {
                             <TableCell>Usuario</TableCell>
                             <TableCell>Tipo</TableCell>
                             <TableCell>Activo</TableCell>
-                            <TableCell align="right">Cantidad</TableCell>
-                            <TableCell align="right">Precio</TableCell>
-                            <TableCell align="right">Total</TableCell>
+                            <TableCell>Cantidad</TableCell>
+                            <TableCell>Precio</TableCell>
+                            <TableCell>Total</TableCell>
                             <TableCell>Fecha</TableCell>
                         </TableRow>
                     </TableHead>
@@ -44,9 +44,9 @@ export default function OperacionesTab() {
                                         <Typography variant="caption" color="text.secondary">{row.activoNombre}</Typography>
                                     </Stack>
                                 </TableCell>
-                                <TableCell align="right">{row.cantidad}</TableCell>
-                                <TableCell align="right">${row.precioUnitario}</TableCell>
-                                <TableCell align="right" sx={{ fontWeight: 600 }}>${row.totalOperado.toLocaleString()}</TableCell>
+                                <TableCell>{row.cantidad}</TableCell>
+                                <TableCell>${row.precioUnitario}</TableCell>
+                                <TableCell sx={{ fontWeight: 600 }}>${row.totalOperado.toLocaleString()}</TableCell>
                                 <TableCell>{new Date(row.fecha).toLocaleString()}</TableCell>
                             </TableRow>
                         ))}

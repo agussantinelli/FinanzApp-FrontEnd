@@ -19,12 +19,12 @@ export default function UsuariosTab() {
                             <TableCell>ID</TableCell>
                             <TableCell>Usuario</TableCell>
                             <TableCell>Email</TableCell>
-                            <TableCell align="center">Operaciones</TableCell>
-                            <TableCell align="center">Recomendaciones</TableCell>
-                            <TableCell align="center">Portafolios</TableCell>
+                            <TableCell>Operaciones</TableCell>
+                            <TableCell>Recomendaciones</TableCell>
+                            <TableCell>Portafolios</TableCell>
                             <TableCell>Rol</TableCell>
                             <TableCell>Fecha Registro</TableCell>
-                            <TableCell align="right">Acciones</TableCell>
+                            <TableCell>Acciones</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -38,11 +38,11 @@ export default function UsuariosTab() {
                                     </Stack>
                                 </TableCell>
                                 <TableCell>{row.email}</TableCell>
-                                <TableCell align="center">
+                                <TableCell>
                                     <Typography variant="body2" fontWeight="bold">{row.cantidadOperaciones}</Typography>
                                 </TableCell>
-                                <TableCell align="center">
-                                    <Stack alignItems="center">
+                                <TableCell>
+                                    <Stack alignItems="flex-start">
                                         <Typography variant="body2">{row.cantidadRecomendaciones}</Typography>
                                         {row.cantidadRecomendaciones > 0 && (
                                             <Typography variant="caption" color="success.main" fontSize={10}>
@@ -51,7 +51,7 @@ export default function UsuariosTab() {
                                         )}
                                     </Stack>
                                 </TableCell>
-                                <TableCell align="center">
+                                <TableCell>
                                     <Typography variant="body2" fontWeight={row.cantidadPortafoliosDestacados > 0 ? "bold" : "regular"}>
                                         {row.cantidadPortafoliosDestacados}
                                     </Typography>
@@ -60,7 +60,7 @@ export default function UsuariosTab() {
                                     <Chip label={row.rol} size="small" color={row.rol === 'Admin' ? 'secondary' : 'default'} variant="outlined" />
                                 </TableCell>
                                 <TableCell>{new Date(row.fechaAlta).toLocaleDateString()}</TableCell>
-                                <TableCell align="right">
+                                <TableCell>
                                     <IconButton size="small"><EditIcon fontSize="small" /></IconButton>
                                     <IconButton size="small" color="error"><DeleteIcon fontSize="small" /></IconButton>
                                 </TableCell>
