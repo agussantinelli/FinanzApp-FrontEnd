@@ -36,7 +36,7 @@ export default function ExpertPage() {
   const [stats, setStats] = React.useState<ExpertoStatsDTO | null>(null);
 
   // Portfolio Data Integration
-  const { valuacion, refresh } = usePortfolioData();
+  const { valuacion, refresh, loading: portfolioLoading } = usePortfolioData();
 
   React.useEffect(() => {
     refresh(); // Fetch portfolio data
@@ -104,7 +104,7 @@ export default function ExpertPage() {
             </Paper>
           </Grid>
 
-          {loading ? (
+          {loading || portfolioLoading ? (
             <Grid size={{ xs: 12 }} display="flex" justifyContent="center" alignItems="center" sx={{ minHeight: '50vh' }}>
               <CircularProgress />
             </Grid>

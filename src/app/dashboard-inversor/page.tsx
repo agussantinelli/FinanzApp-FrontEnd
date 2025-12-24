@@ -71,7 +71,7 @@ export default function DashboardPage() {
   }, [user]);
 
   /* Hook Integration */
-  const { valuacion } = usePortfolioData();
+  const { valuacion, loading: portfolioLoading } = usePortfolioData();
 
   const renderInversorDashboard = () => {
     // Calculate crypto exposure manually from fresh data if available, else fallback to stats
@@ -331,7 +331,7 @@ export default function DashboardPage() {
             </Paper>
           </Grid>
 
-          {loading ? (
+          {loading || portfolioLoading ? (
             <Grid size={{ xs: 12 }} display="flex" justifyContent="center" alignItems="center" sx={{ minHeight: '50vh' }}>
               <CircularProgress />
             </Grid>
