@@ -47,3 +47,11 @@ export const updateUser = async (id: string, data: UserDTO, newRole: string): Pr
 
     await http.put(`/api/personas/${id}`, updateRequest);
 };
+
+export const promoteToExperto = async (id: string): Promise<void> => {
+    await http.patch(`/api/personas/${id}/rol/experto`, {});
+};
+
+export const demoteToInversor = async (id: string): Promise<void> => {
+    await http.patch(`/api/personas/${id}/rol/inversor`, {});
+};

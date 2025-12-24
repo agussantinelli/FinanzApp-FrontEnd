@@ -23,30 +23,25 @@ export function useAdminUsers() {
     }, [loadUsers]);
 
     const changeRole = async (user: UserDTO, direction: 'up' | 'down') => {
-        const roles = ['Inversor', 'Experto', 'Admin'];
-        const currentIndex = roles.indexOf(user.rol);
-        if (currentIndex === -1) return;
+        setLoading(true);
+        try {
+            const { promoteToExperto, demoteToInversor } = await import('@/services/AdminService');
 
-        let newIndex = currentIndex;
-        if (direction === 'up' && currentIndex < roles.length - 1) {
-            newIndex++;
-        } else if (direction === 'down' && currentIndex > 0) {
-            newIndex--;
-        }
-
-        if (newIndex !== currentIndex) {
-            setLoading(true);
-            try {
-                // We need to import updateUser from AdminService
-                const { updateUser } = await import('@/services/AdminService');
-                await updateUser(user.id, user, roles[newIndex]);
-                await loadUsers(); // Reload list
-            } catch (error) {
-                console.error("Error changing role", error);
-                alert("Error al cambiar el rol. Verifica los datos del usuario.");
-            } finally {
-                setLoading(false);
+            if (direction === 'up' && user.rol === 'Inversor') {
+                await promoteToExperto(user.id);
+            } else if (direction === 'down' && user.rol === 'Experto') {
+                await demoteToInversor(user.id);
+            } else {
+                console.warn("Change role not supported for this transition", user.rol, direction);
+                return;
             }
+
+            await loadUsers(); // Reload list
+        } catch (error) {
+            console.error("Error changing role", error);
+            alert("Error al cambiar el rol. Intente nuevamente.");
+        } finally {
+            setLoading(false);
         }
     };
 
