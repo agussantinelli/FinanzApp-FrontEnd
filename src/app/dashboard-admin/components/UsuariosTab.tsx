@@ -104,27 +104,27 @@ export default function UsuariosTab() {
                                             size="small"
                                             onClick={() => handleOpenConfirm(
                                                 "Ascender Usuario",
-                                                `¿Estás seguro de ascender a ${row.nombre}?`,
+                                                `¿Estás seguro de ascender a ${row.nombre} a Experto?`,
                                                 async () => await changeRole(row, 'up'),
                                                 "success"
                                             )}
-                                            disabled={row.rol === 'Admin'}
-                                            title="Ascender"
+                                            disabled={row.rol !== 'Inversor'}
+                                            title="Ascender a Experto"
                                         >
-                                            <ArrowUpwardIcon fontSize="small" color={row.rol === 'Admin' ? 'disabled' : 'success'} />
+                                            <ArrowUpwardIcon fontSize="small" color={row.rol === 'Inversor' ? 'success' : 'disabled'} />
                                         </IconButton>
                                         <IconButton
                                             size="small"
                                             onClick={() => handleOpenConfirm(
                                                 "Descender Usuario",
-                                                `¿Estás seguro de descender a ${row.nombre}?`,
+                                                `¿Estás seguro de descender a ${row.nombre} a Inversor?`,
                                                 async () => await changeRole(row, 'down'),
-                                                "warning"
+                                                "error"
                                             )}
-                                            disabled={row.rol === 'Inversor'}
-                                            title="Descender"
+                                            disabled={!row.rol.includes('Experto')}
+                                            title="Descender a Inversor"
                                         >
-                                            <ArrowDownwardIcon fontSize="small" color={row.rol === 'Inversor' ? 'disabled' : 'warning'} />
+                                            <ArrowDownwardIcon fontSize="small" color={row.rol.includes('Experto') ? 'error' : 'disabled'} />
                                         </IconButton>
                                         <Box sx={{ mx: 1, borderLeft: '1px solid #444' }} />
                                         {/* Edit button removed as requested */}
