@@ -1,0 +1,49 @@
+import React from 'react';
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, IconButton, Skeleton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useAdminAssets } from '@/hooks/useAdminAssets';
+import styles from '../styles/Admin.module.css';
+
+export default function ActivosTab() {
+    const { activos, loading } = useAdminAssets();
+
+    if (loading) return <Skeleton variant="rectangular" height={400} />;
+
+    return (
+        <Box sx={{ py: 3 }}>
+            <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
+                <Button variant="contained" color="primary">Agregar Nuevo Activo</Button>
+            </Box>
+            <TableContainer component={Paper} className={styles.tableContainer}>
+                <Table>
+                    <TableHead className={styles.tableHead}>
+                        <TableRow>
+                            <TableCell>Símbolo</TableCell>
+                            <TableCell>Nombre</TableCell>
+                            <TableCell>Tipo</TableCell>
+                            <TableCell>Moneda</TableCell>
+                            <TableCell align="right">Acciones</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {activos.map((row) => (
+                            <TableRow key={row.id} hover>
+                                <TableCell>
+                                    <Chip label={row.symbol} size="small" className={styles.chipSymbol} />
+                                </TableCell>
+                                <TableCell>{row.nombre}</TableCell>
+                                <TableCell>{row.tipo}</TableCell>
+                                <TableCell><Chip label={row.moneda} size="small" variant="outlined" /></TableCell>
+                                <TableCell align="right">
+                                    <IconButton size="small"><EditIcon fontSize="small" /></IconButton>
+                                    <IconButton size="small" color="error"><DeleteIcon fontSize="small" /></IconButton>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Box>
+    );
+}
