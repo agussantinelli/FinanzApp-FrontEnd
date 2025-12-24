@@ -1,12 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, IconButton, Skeleton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAdminAssets } from '@/hooks/useAdminAssets';
+import { ConfirmDialog } from '@/components/common/ConfirmDialog';
 import styles from '../styles/Admin.module.css';
 
 export default function ActivosTab() {
-    const { activos, loading } = useAdminAssets();
+    const { activos, loading, removeAsset } = useAdminAssets();
+
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [selectedId, setSelectedId] = useState<string | null>(null);
+
+    const handleDeleteClick = (id: string) => {
+        setSelectedId(id);
+        setConfirmOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (selectedId && removeAsset) {
+            await removeAsset(selectedId);
+        }
+        setConfirmOpen(false);
+    };
 
     if (loading) return <Skeleton variant="rectangular" height={400} />;
 
@@ -37,13 +53,30 @@ export default function ActivosTab() {
                                 <TableCell><Chip label={row.moneda} size="small" variant="outlined" /></TableCell>
                                 <TableCell>
                                     <IconButton size="small"><EditIcon fontSize="small" /></IconButton>
-                                    <IconButton size="small" color="error"><DeleteIcon fontSize="small" /></IconButton>
+                                    <IconButton
+                                        size="small"
+                                        color="error"
+                                        onClick={() => handleDeleteClick(row.id)}
+                                        title="Eliminar Activo"
+                                    >
+                                        <DeleteIcon fontSize="small" />
+                                    </IconButton>
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
+
+            <ConfirmDialog
+                open={confirmOpen}
+                title="Eliminar Activo"
+                content="¿Estás seguro de que deseas eliminar este activo? Esta acción no se puede deshacer."
+                onClose={() => setConfirmOpen(false)}
+                onConfirm={handleConfirmDelete}
+                confirmText="Eliminar"
+                confirmColor="error"
+            />
         </Box>
     );
 }

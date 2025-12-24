@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { ActivoDTO } from '@/types/Activo';
-import { getActivosNoMoneda } from '@/services/ActivosService';
+import { getActivosNoMoneda, createActivo, updateActivo, deleteActivo } from '@/services/ActivosService';
 
 export function useAdminAssets() {
     const [activos, setActivos] = useState<ActivoDTO[]>([]);
@@ -22,5 +22,41 @@ export function useAdminAssets() {
         loadActivos();
     }, [loadActivos]);
 
-    return { activos, loading, loadActivos };
+    const addAsset = async (dto: any) => { // Using any for now or ActivoCreateDTO if imported
+        setLoading(true);
+        try {
+            await createActivo(dto);
+            await loadActivos();
+        } catch (error) {
+            console.error('Error creating asset:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const updateAsset = async (id: string, dto: any) => {
+        setLoading(true);
+        try {
+            await updateActivo(id, dto);
+            await loadActivos();
+        } catch (error) {
+            console.error('Error updating asset:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const removeAsset = async (id: string) => {
+        setLoading(true);
+        try {
+            await deleteActivo(id);
+            await loadActivos();
+        } catch (error) {
+            console.error('Error deleting asset:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return { activos, loading, loadActivos, addAsset, updateAsset, removeAsset };
 }
