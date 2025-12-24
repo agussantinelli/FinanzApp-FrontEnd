@@ -6,9 +6,9 @@ import { ActivoDTO } from '@/types/Activo';
 import {
     getDashboardStats,
     getAdminPortfolioStats,
-    getUsers,
     getAllOperations,
 } from '@/services/AdminService';
+import { getPersonas } from '@/services/PersonaService';
 import { getActivosNoMoneda } from '@/services/ActivosService';
 
 export function useAdminData() {
@@ -25,7 +25,7 @@ export function useAdminData() {
             const [statsData, portStatsData, usersData, opsData, activosData] = await Promise.all([
                 getDashboardStats(),
                 getAdminPortfolioStats(),
-                getUsers(),
+                getPersonas(),
                 getAllOperations(),
                 getActivosNoMoneda(),
             ]);

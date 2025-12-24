@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { UserDTO } from '@/types/Usuario';
-import { getUsers } from '@/services/AdminService';
+import { getPersonas } from '@/services/PersonaService';
 
 export function useAdminUsers() {
     const [users, setUsers] = useState<UserDTO[]>([]);
@@ -9,7 +9,7 @@ export function useAdminUsers() {
     const loadUsers = useCallback(async () => {
         setLoading(true);
         try {
-            const data = await getUsers();
+            const data = await getPersonas();
             setUsers(data);
         } catch (error) {
             console.error('Error loading users:', error);
@@ -25,7 +25,7 @@ export function useAdminUsers() {
     const changeRole = async (user: UserDTO, direction: 'up' | 'down') => {
         setLoading(true);
         try {
-            const { promoteToExperto, demoteToInversor } = await import('@/services/AdminService');
+            const { promoteToExperto, demoteToInversor } = await import('@/services/PersonaService');
 
             if (direction === 'up' && user.rol === 'Inversor') {
                 await promoteToExperto(user.id);
