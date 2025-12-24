@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, FormControl, InputLabel, Select, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Chip, IconButton, CircularProgress } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
@@ -6,6 +6,7 @@ import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { EstadoRecomendacion } from '@/types/Recomendacion';
 import { useAdminRecommendations } from '@/hooks/useAdminRecommendations';
+import { ConfirmDialog } from '@/components/common/ConfirmDialog';
 import styles from '../styles/Admin.module.css';
 
 export default function RecomendacionesTab() {
@@ -17,6 +18,21 @@ export default function RecomendacionesTab() {
         toggleDestacar,
         resolver
     } = useAdminRecommendations();
+
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [resolutionState, setResolutionState] = useState<{ id: string, acerto: boolean } | null>(null);
+
+    const handleResolveClick = (id: string, acerto: boolean) => {
+        setResolutionState({ id, acerto });
+        setConfirmOpen(true);
+    };
+
+    const handleConfirmResolve = async () => {
+        if (resolutionState) {
+            await resolver(resolutionState.id, resolutionState.acerto);
+        }
+        setConfirmOpen(false);
+    };
 
     return (
         <Box sx={{ py: 3 }}>
@@ -79,8 +95,8 @@ export default function RecomendacionesTab() {
                                     <TableCell>
                                         {row.estado !== EstadoRecomendacion.Cerrada && (
                                             <>
-                                                <IconButton size="small" title="Marcar Acertada" onClick={() => resolver(row.id, true)} color="success"><CheckIcon /></IconButton>
-                                                <IconButton size="small" title="Marcar Fallida" onClick={() => resolver(row.id, false)} color="error"><CloseIcon /></IconButton>
+                                                <IconButton size="small" title="Marcar Acertada" onClick={() => handleResolveClick(row.id, true)} color="success"><CheckIcon /></IconButton>
+                                                <IconButton size="small" title="Marcar Fallida" onClick={() => handleResolveClick(row.id, false)} color="error"><CloseIcon /></IconButton>
                                             </>
                                         )}
 
@@ -96,6 +112,16 @@ export default function RecomendacionesTab() {
                     </Table>
                 </TableContainer>
             )}
+
+            <ConfirmDialog
+                open={confirmOpen}
+                title="Resolver Recomendación"
+                content={`¿Confirmas que esta recomendación fue ${resolutionState?.acerto ? 'ACERTADA' : 'FALLIDA'}? Esta acción cerrará la recomendación.`}
+                onConfirm={handleConfirmResolve}
+                onClose={() => setConfirmOpen(false)}
+                confirmText="Confirmar"
+                confirmColor={resolutionState?.acerto ? "success" : "error"}
+            />
         </Box>
     );
 }
