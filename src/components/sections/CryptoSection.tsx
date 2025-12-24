@@ -54,7 +54,7 @@ export default function CryptoSection() {
           disabled={loading}
           className={styles.refreshButton}
         >
-          {loading ? "Actualizando..." : "ACTUALIZAR"}
+          {loading ? "Actualizando..." : "Actualizar"}
         </Button>
       </div>
 
