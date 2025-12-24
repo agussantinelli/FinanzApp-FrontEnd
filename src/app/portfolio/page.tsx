@@ -19,6 +19,7 @@ import {
   Select,
   MenuItem,
   CircularProgress,
+  Skeleton,
   FormControl,
   InputLabel,
   TableSortLabel
@@ -52,9 +53,59 @@ export default function PortfolioPage() {
 
   if (loading) {
     return (
-      <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: '80vh' }}>
-        <CircularProgress />
-      </Grid>
+      <RoleGuard>
+        <Box className={styles.container}>
+          <Grid container spacing={3}>
+            {/* Header Skeleton */}
+            <Grid size={{ xs: 12 }}>
+              <Paper className={styles.headerPaper}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
+                  <Box sx={{ width: '40%' }}>
+                    <Skeleton height={50} width="60%" />
+                    <Skeleton width="40%" />
+                  </Box>
+                  <Box sx={{ width: '40%', display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
+                    <Skeleton variant="rounded" width={100} height={40} />
+                    <Skeleton variant="rounded" width={150} height={40} />
+                  </Box>
+                </Stack>
+              </Paper>
+            </Grid>
+            {/* Cards Skeleton */}
+            {[1, 2, 3].map((i) => (
+              <Grid key={i} size={{ xs: 12, md: 4 }}>
+                <Paper className={styles.card}>
+                  <Skeleton width="40%" />
+                  <Skeleton height={60} width="70%" />
+                  <Skeleton width="90%" />
+                </Paper>
+              </Grid>
+            ))}
+            {/* Chart Skeleton */}
+            <Grid size={{ xs: 12 }}>
+              <Paper className={styles.card} sx={{ height: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Skeleton variant="circular" width={250} height={250} />
+                <Box sx={{ ml: 4, width: '30%' }}>
+                  <Skeleton height={30} width="80%" sx={{ mb: 1 }} />
+                  <Skeleton height={30} width="60%" sx={{ mb: 1 }} />
+                  <Skeleton height={30} width="70%" sx={{ mb: 1 }} />
+                </Box>
+              </Paper>
+            </Grid>
+            {/* Table Skeleton */}
+            <Grid size={{ xs: 12 }}>
+              <Paper className={styles.tablePaper}>
+                <Skeleton height={40} width="30%" sx={{ mb: 2 }} />
+                <Stack spacing={2}>
+                  {[1, 2, 3, 4, 5].map((row) => (
+                    <Skeleton key={row} height={50} variant="rectangular" sx={{ borderRadius: 1 }} />
+                  ))}
+                </Stack>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Box>
+      </RoleGuard>
     );
   }
 

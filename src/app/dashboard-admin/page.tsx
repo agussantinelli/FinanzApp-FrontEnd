@@ -20,12 +20,14 @@ import {
   TableRow,
   Avatar,
   IconButton,
-  CircularProgress
+  CircularProgress,
+  Skeleton
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdminData } from "@/hooks/useAdminData";
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { AdminDashboardStats } from "@/types/Admin";
 import { UserDTO, RolUsuario } from "@/types/Usuario";
@@ -84,6 +86,8 @@ export default function AdminDashboardPage() {
     loading: loadingData,
     loadData
   } = useAdminData();
+
+  const { valuacion, loading: portfolioLoading } = usePortfolioData();
 
   // Recommendations State
   const [recommendations, setRecommendations] = React.useState<RecomendacionResumenDTO[]>([]);
@@ -170,8 +174,37 @@ export default function AdminDashboardPage() {
         </Box>
 
         {loadingData && !stats ? (
-          <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: '50vh' }}>
-            <CircularProgress />
+          <Grid container spacing={3}>
+            {/* KPI Cards Skeleton */}
+            {[1, 2, 3, 4].map((i) => (
+              <Grid key={i} size={{ xs: 12, sm: 6, md: 3 }}>
+                <Paper className={styles.kpiPaper}>
+                  <Typography variant="caption"><Skeleton width="60%" /></Typography>
+                  <Skeleton height={40} width="40%" sx={{ my: 1 }} />
+                  <Skeleton width="30%" />
+                </Paper>
+              </Grid>
+            ))}
+
+            {/* Sections Skeleton */}
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Paper className={styles.sectionPaper}>
+                <Typography variant="h6"><Skeleton width="50%" /></Typography>
+                <Divider className={styles.divider} />
+                <Skeleton variant="rectangular" height={150} />
+              </Paper>
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Paper className={styles.sectionPaper}>
+                <Typography variant="h6"><Skeleton width="40%" /></Typography>
+                <Divider className={styles.divider} />
+                <Stack spacing={1}>
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <Skeleton key={i} width="90%" />
+                  ))}
+                </Stack>
+              </Paper>
+            </Grid>
           </Grid>
         ) : (
           <>

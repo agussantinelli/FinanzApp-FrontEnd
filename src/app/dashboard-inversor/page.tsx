@@ -11,6 +11,7 @@ import {
   Chip,
   Divider,
   CircularProgress,
+  Skeleton,
 } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -332,9 +333,37 @@ export default function DashboardPage() {
           </Grid>
 
           {loading || portfolioLoading ? (
-            <Grid size={{ xs: 12 }} display="flex" justifyContent="center" alignItems="center" sx={{ minHeight: '50vh' }}>
-              <CircularProgress />
-            </Grid>
+            // Skeleton Loading State
+            <>
+              <Grid size={{ xs: 12, md: 3 }}>
+                <Paper className={`${styles.card} ${styles.highlightCard}`}>
+                  <Typography variant="caption"><Skeleton width="60%" /></Typography>
+                  <Typography variant="h5" sx={{ mt: 1 }}><Skeleton width="80%" /></Typography>
+                  <Typography variant="body2" sx={{ mt: 1 }}><Skeleton width="100%" /></Typography>
+                </Paper>
+              </Grid>
+              <Grid size={{ xs: 12, md: 3 }}>
+                <Paper className={styles.card}>
+                  <Typography variant="caption"><Skeleton width="60%" /></Typography>
+                  <Typography variant="h5" sx={{ mt: 1 }}><Skeleton width="50%" /></Typography>
+                  <Typography variant="body2" sx={{ mt: 1 }}><Skeleton width="90%" /></Typography>
+                </Paper>
+              </Grid>
+              <Grid size={{ xs: 12, md: 3 }}>
+                <Paper className={styles.card}>
+                  <Typography variant="caption"><Skeleton width="60%" /></Typography>
+                  <Typography variant="h5" sx={{ mt: 1 }}><Skeleton width="30%" /></Typography>
+                  <Typography variant="body2" sx={{ mt: 1 }}><Skeleton width="70%" /></Typography>
+                </Paper>
+              </Grid>
+              <Grid size={{ xs: 12, md: 3 }}>
+                <Paper className={styles.card}>
+                  <Typography variant="caption"><Skeleton width="60%" /></Typography>
+                  <Typography variant="h5" sx={{ mt: 1 }}><Skeleton width="40%" /></Typography>
+                  <Typography variant="body2" sx={{ mt: 1 }}><Skeleton width="80%" /></Typography>
+                </Paper>
+              </Grid>
+            </>
           ) : (
             <>
               {user?.rol === RolUsuario.Inversor && renderInversorDashboard()}

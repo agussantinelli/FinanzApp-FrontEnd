@@ -11,6 +11,7 @@ import {
   Button,
   Divider,
   CircularProgress,
+  Skeleton,
 } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -105,9 +106,63 @@ export default function ExpertPage() {
           </Grid>
 
           {loading || portfolioLoading ? (
-            <Grid size={{ xs: 12 }} display="flex" justifyContent="center" alignItems="center" sx={{ minHeight: '50vh' }}>
-              <CircularProgress />
-            </Grid>
+            <>
+              {/* Portfolio Summary Skeleton */}
+              <Grid size={{ xs: 12, md: 8 }}>
+                <Paper className={styles.summaryCard}>
+                  <Typography variant="caption"><Skeleton width="30%" /></Typography>
+                  <Grid container spacing={2} sx={{ mt: 1 }}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                      <Stack direction="row" spacing={2} alignItems="center">
+                        <Skeleton variant="rounded" width={50} height={50} />
+                        <Box sx={{ width: '100%' }}>
+                          <Skeleton width="40%" />
+                          <Skeleton width="60%" height={40} />
+                          <Skeleton width="30%" />
+                        </Box>
+                      </Stack>
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                      <Stack direction="row" spacing={2} alignItems="center">
+                        <Skeleton variant="rounded" width={50} height={50} />
+                        <Box sx={{ width: '100%' }}>
+                          <Skeleton width="40%" />
+                          <Skeleton width="60%" height={40} />
+                          <Skeleton width="30%" />
+                        </Box>
+                      </Stack>
+                    </Grid>
+                  </Grid>
+                </Paper>
+              </Grid>
+
+              {/* Ranking Skeleton */}
+              <Grid size={{ xs: 12, md: 4 }}>
+                <Paper className={styles.highlightInfoCard} sx={{ height: '100%' }}>
+                  <Typography variant="caption"><Skeleton width="40%" /></Typography>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+                    <Skeleton width="50%" height={80} />
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Skeleton width="80%" />
+                  </Box>
+                </Paper>
+              </Grid>
+
+              {/* Stats Skeleton */}
+              <Grid size={{ xs: 12 }}>
+                <Paper className={styles.summaryCard}>
+                  <Typography variant="caption"><Skeleton width="30%" /></Typography>
+                  <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" spacing={2} sx={{ mt: 2 }}>
+                    <Box sx={{ width: '20%' }}><Skeleton height={60} width="80%" /><Skeleton width="100%" /></Box>
+                    <Stack direction="row" spacing={4} sx={{ width: '40%' }}>
+                      <Box sx={{ width: '50%' }}><Skeleton width="60%" /><Skeleton height={50} width="80%" /><Skeleton width="100%" /></Box>
+                      <Box sx={{ width: '50%' }}><Skeleton width="60%" /><Skeleton height={50} width="80%" /><Skeleton width="100%" /></Box>
+                    </Stack>
+                  </Stack>
+                </Paper>
+              </Grid>
+            </>
           ) : (
             <>
               {/* Portfolio Summary Section */}
