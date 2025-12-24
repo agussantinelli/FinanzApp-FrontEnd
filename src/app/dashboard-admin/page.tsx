@@ -309,7 +309,7 @@ export default function AdminDashboardPage() {
                         <TableCell>
                           <Chip label={row.rol} size="small" color={row.rol === 'Admin' ? 'secondary' : 'default'} variant="outlined" />
                         </TableCell>
-                        <TableCell>{new Date(row.fechaRegistro).toLocaleDateString()}</TableCell>
+                        <TableCell>{new Date(row.fechaAlta).toLocaleDateString()}</TableCell>
                         <TableCell align="right">
                           <IconButton size="small"><EditIcon fontSize="small" /></IconButton>
                           <IconButton size="small" color="error"><DeleteIcon fontSize="small" /></IconButton>

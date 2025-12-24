@@ -7,11 +7,27 @@ export enum RolUsuario {
 export interface UserDTO {
     id: string; // UUID
     nombre: string;
+    apellido: string;
     email: string;
     rol: string;
-    fechaRegistro: string;
-    ultimoLogin?: string;
-    cantidadOperaciones?: number;
+    fechaAlta: string; // Renamed from fechaRegistro
+    fechaNacimiento: string;
+
+    // Location
+    esResidenteArgentina: boolean;
+    nacionalidadId: number;
+    nacionalidadNombre?: string;
+    paisResidenciaId?: number;
+    paisResidenciaNombre?: string;
+    localidadResidenciaId?: number;
+    localidadResidenciaNombre?: string;
+    provinciaResidenciaNombre?: string;
+
+    // Stats
+    cantidadOperaciones: number;
+    cantidadRecomendaciones: number;
+    cantidadRecomendacionesAcertadas: number;
+    cantidadPortafoliosDestacados: number;
 }
 
 export interface AuthenticatedUser {
@@ -47,4 +63,15 @@ export interface UserRegisterRequest {
     paisResidenciaId: number | null;
     localidadResidenciaId: number | null;
     esResidenteArgentina: boolean;
+}
+
+export interface UserUpdateRequest {
+    nombre: string;
+    apellido: string;
+    fechaNac: string;
+    rol: string;
+    esResidenteArgentina: boolean;
+    localidadResidenciaId: number | null;
+    paisResidenciaId: number;
+    paisNacionalidadId: number;
 }
