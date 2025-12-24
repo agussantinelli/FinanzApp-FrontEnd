@@ -1,11 +1,16 @@
 import { http } from "@/lib/http";
-import { UserDTO } from "@/types/Usuario";
+import { UserDTO, UserUpdateRequest } from "@/types/Usuario";
 
 const ENDPOINT = "/api/personas";
 
-export const getAllPersonas = async (): Promise<UserDTO[]> => {
-    const { data } = await http.get<UserDTO[]>(ENDPOINT);
-    return data;
+export const getPersonas = async (): Promise<UserDTO[]> => {
+    try {
+        const { data } = await http.get<UserDTO[]>(ENDPOINT);
+        return data;
+    } catch (e) {
+        console.warn("Error fetching users", e);
+        return [];
+    }
 };
 
 export const getInversores = async (): Promise<UserDTO[]> => {
@@ -18,6 +23,14 @@ export const getPersonaById = async (id: string): Promise<UserDTO> => {
     return data;
 };
 
-export const promoverAExperto = async (id: string): Promise<void> => {
-    await http.patch(`${ENDPOINT}/${id}/promover-experto`);
+export const updatePersona = async (id: string, data: UserUpdateRequest | any): Promise<void> => {
+    await http.put(`${ENDPOINT}/${id}`, data);
+};
+
+export const promoteToExperto = async (id: string): Promise<void> => {
+    await http.patch(`${ENDPOINT}/${id}/rol/experto`, {});
+};
+
+export const demoteToInversor = async (id: string): Promise<void> => {
+    await http.patch(`${ENDPOINT}/${id}/rol/inversor`, {});
 };
