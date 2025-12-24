@@ -4,29 +4,28 @@ import { AdminStatsDTO, AdminPortfolioStatsDTO } from "@/types/Admin";
 import { http } from "@/lib/http";
 
 export const getDashboardStats = async (): Promise<AdminStatsDTO> => {
-    const { data } = await http.get<AdminStatsDTO>('/api/dashboard/admin');
+    const { data } = await http.get<AdminStatsDTO>('/api/dashboard/admin/stats');
     return data;
 };
 
 export const getAdminPortfolioStats = async (): Promise<AdminPortfolioStatsDTO> => {
-    const { data } = await http.get<AdminPortfolioStatsDTO>('/api/dashboard/admin/portfolio');
+    const { data } = await http.get<AdminPortfolioStatsDTO>('/api/dashboard/admin/portafolios/stats');
     return data;
 };
 
 export const getUsers = async (): Promise<UserDTO[]> => {
-    // Keeping mock for users list if not requested to change, but user said "saca lo hardcodeado".
-    // I'll check if there's an endpoint for users locally implied.
-    // Usually /api/usuarios
+    // Correct endpoint from docs: /api/personas
     try {
-        const { data } = await http.get<UserDTO[]>('/api/usuarios');
+        const { data } = await http.get<UserDTO[]>('/api/personas');
         return data;
-    } catch {
-        console.warn("Using mock for users as fallback/dev");
-        return []; // Fallback empty or let it fail? User said saca lo hardcodeado.
+    } catch (e) {
+        console.warn("Error fetching users, falling back to empty list", e);
+        return [];
     }
 };
 
 export const getAllOperations = async (): Promise<OperacionResponseDTO[]> => {
-    const { data } = await http.get<OperacionResponseDTO[]>('/api/operaciones/all');
+    // Correct endpoint from docs: /api/operaciones
+    const { data } = await http.get<OperacionResponseDTO[]>('/api/operaciones');
     return data;
 };
