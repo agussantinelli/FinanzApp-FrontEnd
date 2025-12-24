@@ -9,6 +9,17 @@ export async function createActivo(dto: ActivoCreateDTO): Promise<ActivoDTO> {
     return res.data;
 }
 
+export async function updateActivo(id: string, dto: ActivoCreateDTO): Promise<ActivoDTO> {
+    const res = await http.put<ActivoDTO>(`/api/activos/${id}`, dto);
+    cacheActivos([res.data]);
+    return res.data;
+}
+
+export async function deleteActivo(id: string): Promise<void> {
+    // Logical deletion as per requirement
+    await http.delete(`/api/activos/${id}`);
+}
+
 export async function getActivos(tipo?: string): Promise<ActivoDTO[]> {
     const params = tipo && tipo !== "Todos" ? { tipo } : {};
     const res = await http.get<ActivoDTO[]>("/api/activos", { params });
