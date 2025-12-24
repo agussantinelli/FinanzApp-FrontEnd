@@ -136,6 +136,7 @@
 │   │   ├── movimientos/         # Historial de transacciones
 │   │   ├── noticias/            # Sección de novedades financieras
 │   │   ├── operaciones/         # Mis Operaciones / Historial
+│   │   ├── perfil/              # Perfil de Usuario (Solo Lectura)
 │   │   ├── portfolio/           # Visualización y análisis patrimonial
 │   │   ├── recomendaciones/     # Señales de expertos y comunidad
 │   │   ├── registrar-operacion/ # Formulario de Compra/Venta
