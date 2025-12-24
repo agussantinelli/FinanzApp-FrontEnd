@@ -124,197 +124,203 @@ export default function AdminDashboardPage() {
           </Tabs>
         </Box>
 
-        {/* DASHBOARD TAB */}
-        <CustomTabPanel value={tabValue} index={0}>
-          {loadingData && !stats ? (
+        {loadingData && !stats ? (
+          <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: '50vh' }}>
             <CircularProgress />
-          ) : stats ? (
-            <Grid container spacing={3}>
-              {/* KPI Cards */}
-              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                <Paper className={styles.kpiPaper}>
-                  <Typography variant="caption" color="text.secondary">Total Usuarios</Typography>
-                  <Typography variant="h4" className={styles.kpiValue}>{stats.totalUsuarios}</Typography>
-                  <Typography variant="body2" color="success.main" className={styles.kpiChange}>
-                    +{stats.usuariosHoy} hoy
-                  </Typography>
-                </Paper>
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                <Paper className={styles.kpiPaper}>
-                  <Typography variant="caption" color="text.secondary">Operaciones Totales</Typography>
-                  <Typography variant="h4" className={styles.kpiValue}>{stats.totalOperaciones}</Typography>
-                  <Typography variant="body2" color="success.main" className={styles.kpiChange}>
-                    +{stats.operacionesHoy} hoy
-                  </Typography>
-                </Paper>
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                <Paper className={styles.kpiPaper}>
-                  <Typography variant="caption" color="text.secondary">Volumen (ARS)</Typography>
-                  <Typography variant="h5" className={styles.kpiValue}>${stats.volumenHoyArs.toLocaleString()}</Typography>
-                  <Typography variant="body2" color="text.secondary" mt={1}>Hoy</Typography>
-                </Paper>
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                <Paper className={styles.kpiPaper}>
-                  <Typography variant="caption" color="text.secondary">Total Activos</Typography>
-                  <Typography variant="h4" className={styles.kpiValue}>{stats.totalActivos}</Typography>
-                  <Typography variant="body2" color="text.secondary" mt={1}>En sistema</Typography>
-                </Paper>
-              </Grid>
+          </Grid>
+        ) : (
+          <>
+            {/* DASHBOARD TAB */}
+            <CustomTabPanel value={tabValue} index={0}>
+              {stats ? (
+                <Grid container spacing={3}>
+                  {/* KPI Cards */}
+                  <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                    <Paper className={styles.kpiPaper}>
+                      <Typography variant="caption" color="text.secondary">Total Usuarios</Typography>
+                      <Typography variant="h4" className={styles.kpiValue}>{stats.totalUsuarios}</Typography>
+                      <Typography variant="body2" color="success.main" className={styles.kpiChange}>
+                        +{stats.usuariosHoy} hoy
+                      </Typography>
+                    </Paper>
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                    <Paper className={styles.kpiPaper}>
+                      <Typography variant="caption" color="text.secondary">Operaciones Totales</Typography>
+                      <Typography variant="h4" className={styles.kpiValue}>{stats.totalOperaciones}</Typography>
+                      <Typography variant="body2" color="success.main" className={styles.kpiChange}>
+                        +{stats.operacionesHoy} hoy
+                      </Typography>
+                    </Paper>
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                    <Paper className={styles.kpiPaper}>
+                      <Typography variant="caption" color="text.secondary">Volumen (ARS)</Typography>
+                      <Typography variant="h5" className={styles.kpiValue}>${stats.volumenHoyArs.toLocaleString()}</Typography>
+                      <Typography variant="body2" color="text.secondary" mt={1}>Hoy</Typography>
+                    </Paper>
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                    <Paper className={styles.kpiPaper}>
+                      <Typography variant="caption" color="text.secondary">Total Activos</Typography>
+                      <Typography variant="h4" className={styles.kpiValue}>{stats.totalActivos}</Typography>
+                      <Typography variant="body2" color="text.secondary" mt={1}>En sistema</Typography>
+                    </Paper>
+                  </Grid>
 
-              {/* Recent Activity Placeholders */}
-              <Grid size={{ xs: 12, md: 6 }}>
-                <Paper className={styles.sectionPaper}>
-                  <Typography variant="h6" className={styles.sectionTitle}>Distribución de Usuarios</Typography>
-                  <Divider className={styles.divider} />
-                  <Typography color="text.secondary" variant="body2">
-                    Gráfico de distribución por rol o fecha de registro (Próximamente chart.js)
-                  </Typography>
-                </Paper>
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <Paper className={styles.sectionPaper}>
-                  <Typography variant="h6" className={styles.sectionTitle}>Últimos Registros</Typography>
-                  <Divider className={styles.divider} />
-                  <Stack spacing={1}>
-                    {users.slice(0, 5).map(u => (
-                      <Typography key={u.id} variant="body2">• {u.nombre} ({u.email}) se unió recientemente.</Typography>
+                  {/* Recent Activity Placeholders */}
+                  <Grid size={{ xs: 12, md: 6 }}>
+                    <Paper className={styles.sectionPaper}>
+                      <Typography variant="h6" className={styles.sectionTitle}>Distribución de Usuarios</Typography>
+                      <Divider className={styles.divider} />
+                      <Typography color="text.secondary" variant="body2">
+                        Gráfico de distribución por rol o fecha de registro (Próximamente chart.js)
+                      </Typography>
+                    </Paper>
+                  </Grid>
+                  <Grid size={{ xs: 12, md: 6 }}>
+                    <Paper className={styles.sectionPaper}>
+                      <Typography variant="h6" className={styles.sectionTitle}>Últimos Registros</Typography>
+                      <Divider className={styles.divider} />
+                      <Stack spacing={1}>
+                        {users.slice(0, 5).map(u => (
+                          <Typography key={u.id} variant="body2">• {u.nombre} ({u.email}) se unió recientemente.</Typography>
+                        ))}
+                      </Stack>
+                    </Paper>
+                  </Grid>
+                </Grid>
+              ) : (
+                <Typography>No se pudieron cargar las estadísticas.</Typography>
+              )}
+            </CustomTabPanel>
+
+            {/* USUARIOS TAB */}
+            <CustomTabPanel value={tabValue} index={1}>
+              <TableContainer component={Paper} className={styles.tableContainer}>
+                <Table>
+                  <TableHead className={styles.tableHead}>
+                    <TableRow>
+                      <TableCell>ID</TableCell>
+                      <TableCell>Usuario</TableCell>
+                      <TableCell>Email</TableCell>
+                      <TableCell>Rol</TableCell>
+                      <TableCell>Fecha Registro</TableCell>
+                      <TableCell align="right">Acciones</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {users.map((row) => (
+                      <TableRow key={row.id} hover>
+                        <TableCell>#{row.id}</TableCell>
+                        <TableCell>
+                          <Stack direction="row" spacing={2} alignItems="center">
+                            <Avatar sx={{ width: 24, height: 24 }}>{row.nombre[0]}</Avatar>
+                            <Typography variant="body2" fontWeight={600}>{row.nombre}</Typography>
+                          </Stack>
+                        </TableCell>
+                        <TableCell>{row.email}</TableCell>
+                        <TableCell>
+                          <Chip label={row.rol} size="small" color={row.rol === 'Admin' ? 'secondary' : 'default'} variant="outlined" />
+                        </TableCell>
+                        <TableCell>{new Date(row.fechaRegistro).toLocaleDateString()}</TableCell>
+                        <TableCell align="right">
+                          <IconButton size="small"><EditIcon fontSize="small" /></IconButton>
+                          <IconButton size="small" color="error"><DeleteIcon fontSize="small" /></IconButton>
+                        </TableCell>
+                      </TableRow>
                     ))}
-                  </Stack>
-                </Paper>
-              </Grid>
-            </Grid>
-          ) : (
-            <Typography>No se pudieron cargar las estadísticas.</Typography>
-          )}
-        </CustomTabPanel>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CustomTabPanel>
 
-        {/* USUARIOS TAB */}
-        <CustomTabPanel value={tabValue} index={1}>
-          <TableContainer component={Paper} className={styles.tableContainer}>
-            <Table>
-              <TableHead className={styles.tableHead}>
-                <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>Usuario</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Rol</TableCell>
-                  <TableCell>Fecha Registro</TableCell>
-                  <TableCell align="right">Acciones</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {users.map((row) => (
-                  <TableRow key={row.id} hover>
-                    <TableCell>#{row.id}</TableCell>
-                    <TableCell>
-                      <Stack direction="row" spacing={2} alignItems="center">
-                        <Avatar sx={{ width: 24, height: 24 }}>{row.nombre[0]}</Avatar>
-                        <Typography variant="body2" fontWeight={600}>{row.nombre}</Typography>
-                      </Stack>
-                    </TableCell>
-                    <TableCell>{row.email}</TableCell>
-                    <TableCell>
-                      <Chip label={row.rol} size="small" color={row.rol === 'Admin' ? 'secondary' : 'default'} variant="outlined" />
-                    </TableCell>
-                    <TableCell>{new Date(row.fechaRegistro).toLocaleDateString()}</TableCell>
-                    <TableCell align="right">
-                      <IconButton size="small"><EditIcon fontSize="small" /></IconButton>
-                      <IconButton size="small" color="error"><DeleteIcon fontSize="small" /></IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </CustomTabPanel>
+            {/* OPERACIONES TAB */}
+            <CustomTabPanel value={tabValue} index={2}>
+              <TableContainer component={Paper} className={styles.tableContainer}>
+                <Table>
+                  <TableHead className={styles.tableHead}>
+                    <TableRow>
+                      <TableCell>ID Op</TableCell>
+                      <TableCell>Usuario</TableCell>
+                      <TableCell>Tipo</TableCell>
+                      <TableCell>Activo</TableCell>
+                      <TableCell align="right">Cantidad</TableCell>
+                      <TableCell align="right">Precio</TableCell>
+                      <TableCell align="right">Total</TableCell>
+                      <TableCell>Fecha</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {operations.map((row) => (
+                      <TableRow key={row.id} hover>
+                        <TableCell>#{row.id}</TableCell>
+                        <TableCell>{row.personaNombre}</TableCell>
+                        <TableCell>
+                          <Chip
+                            label={row.tipo}
+                            size="small"
+                            color={row.tipo === 'Compra' ? 'success' : 'error'}
+                            variant="soft"
+                            className={styles.chip}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Stack>
+                            <Typography variant="body2" fontWeight={600}>{row.activoSymbol}</Typography>
+                            <Typography variant="caption" color="text.secondary">{row.activoNombre}</Typography>
+                          </Stack>
+                        </TableCell>
+                        <TableCell align="right">{row.cantidad}</TableCell>
+                        <TableCell align="right">${row.precioUnitario}</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: 600 }}>${row.totalOperado.toLocaleString()}</TableCell>
+                        <TableCell>{new Date(row.fecha).toLocaleString()}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CustomTabPanel>
 
-        {/* OPERACIONES TAB */}
-        <CustomTabPanel value={tabValue} index={2}>
-          <TableContainer component={Paper} className={styles.tableContainer}>
-            <Table>
-              <TableHead className={styles.tableHead}>
-                <TableRow>
-                  <TableCell>ID Op</TableCell>
-                  <TableCell>Usuario</TableCell>
-                  <TableCell>Tipo</TableCell>
-                  <TableCell>Activo</TableCell>
-                  <TableCell align="right">Cantidad</TableCell>
-                  <TableCell align="right">Precio</TableCell>
-                  <TableCell align="right">Total</TableCell>
-                  <TableCell>Fecha</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {operations.map((row) => (
-                  <TableRow key={row.id} hover>
-                    <TableCell>#{row.id}</TableCell>
-                    <TableCell>{row.personaNombre}</TableCell>
-                    <TableCell>
-                      <Chip
-                        label={row.tipo}
-                        size="small"
-                        color={row.tipo === 'Compra' ? 'success' : 'error'}
-                        variant="soft"
-                        className={styles.chip}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Stack>
-                        <Typography variant="body2" fontWeight={600}>{row.activoSymbol}</Typography>
-                        <Typography variant="caption" color="text.secondary">{row.activoNombre}</Typography>
-                      </Stack>
-                    </TableCell>
-                    <TableCell align="right">{row.cantidad}</TableCell>
-                    <TableCell align="right">${row.precioUnitario}</TableCell>
-                    <TableCell align="right" sx={{ fontWeight: 600 }}>${row.totalOperado.toLocaleString()}</TableCell>
-                    <TableCell>{new Date(row.fecha).toLocaleString()}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </CustomTabPanel>
+            {/* ACTIVOS TAB */}
+            <CustomTabPanel value={tabValue} index={3}>
+              <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
+                <Button variant="contained" color="primary">Agregar Nuevo Activo</Button>
+              </Box>
+              <TableContainer component={Paper} className={styles.tableContainer}>
+                <Table>
+                  <TableHead className={styles.tableHead}>
+                    <TableRow>
+                      <TableCell>Símbolo</TableCell>
+                      <TableCell>Nombre</TableCell>
+                      <TableCell>Tipo</TableCell>
+                      <TableCell>Moneda</TableCell>
+                      <TableCell align="right">Acciones</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {activos.map((row) => (
+                      <TableRow key={row.id} hover>
+                        <TableCell>
+                          <Chip label={row.symbol} size="small" className={styles.chipSymbol} />
+                        </TableCell>
+                        <TableCell>{row.nombre}</TableCell>
+                        <TableCell>{row.tipo}</TableCell>
+                        <TableCell><Chip label={row.moneda} size="small" variant="outlined" /></TableCell>
+                        <TableCell align="right">
+                          <IconButton size="small"><EditIcon fontSize="small" /></IconButton>
+                          <IconButton size="small" color="error"><DeleteIcon fontSize="small" /></IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CustomTabPanel>
+          </>
+        )}
 
-        {/* ACTIVOS TAB */}
-        <CustomTabPanel value={tabValue} index={3}>
-          <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button variant="contained" color="primary">Agregar Nuevo Activo</Button>
-          </Box>
-          <TableContainer component={Paper} className={styles.tableContainer}>
-            <Table>
-              <TableHead className={styles.tableHead}>
-                <TableRow>
-                  <TableCell>Símbolo</TableCell>
-                  <TableCell>Nombre</TableCell>
-                  <TableCell>Tipo</TableCell>
-                  <TableCell>Moneda</TableCell>
-                  <TableCell align="right">Acciones</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {activos.map((row) => (
-                  <TableRow key={row.id} hover>
-                    <TableCell>
-                      <Chip label={row.symbol} size="small" className={styles.chipSymbol} />
-                    </TableCell>
-                    <TableCell>{row.nombre}</TableCell>
-                    <TableCell>{row.tipo}</TableCell>
-                    <TableCell><Chip label={row.moneda} size="small" variant="outlined" /></TableCell>
-                    <TableCell align="right">
-                      <IconButton size="small"><EditIcon fontSize="small" /></IconButton>
-                      <IconButton size="small" color="error"><DeleteIcon fontSize="small" /></IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </CustomTabPanel>
-
-      </Box>
-    </RoleGuard>
+      </Box >
+    </RoleGuard >
   );
 }

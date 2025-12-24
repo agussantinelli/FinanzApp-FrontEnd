@@ -331,15 +331,17 @@ export default function DashboardPage() {
             </Paper>
           </Grid>
 
-          {loading && (
-            <Grid size={{ xs: 12 }} display="flex" justifyContent="center" py={4}>
+          {loading ? (
+            <Grid size={{ xs: 12 }} display="flex" justifyContent="center" alignItems="center" sx={{ minHeight: '50vh' }}>
               <CircularProgress />
             </Grid>
+          ) : (
+            <>
+              {user?.rol === RolUsuario.Inversor && renderInversorDashboard()}
+              {user?.rol === RolUsuario.Experto && renderExpertoDashboard()}
+              {user?.rol === RolUsuario.Admin && renderAdminDashboard()}
+            </>
           )}
-
-          {!loading && user?.rol === RolUsuario.Inversor && renderInversorDashboard()}
-          {!loading && user?.rol === RolUsuario.Experto && renderExpertoDashboard()}
-          {!loading && user?.rol === RolUsuario.Admin && renderAdminDashboard()}
 
           {/* Shortcuts for each role (omitted/unchanged for brevity if already correct) */}
           {/* We assume the rest of the file content (shortcuts) remains below... */}

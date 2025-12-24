@@ -10,6 +10,7 @@ import {
   Chip,
   Button,
   Divider,
+  CircularProgress,
 } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -103,152 +104,160 @@ export default function ExpertPage() {
             </Paper>
           </Grid>
 
-          {/* Portfolio Summary Section */}
-          <Grid size={{ xs: 12, md: 8 }}>
-            <Paper className={styles.summaryCard}>
-              <Typography variant="caption" color="text.secondary">
-                Resumen de Portafolio
-              </Typography>
-              <Grid container spacing={2} sx={{ mt: 1 }}>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <Stack direction="row" spacing={2} alignItems="center">
-                    <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: 'primary.main', color: 'white' }}>
-                      <AttachMoneyIcon />
-                    </Box>
-                    <Box>
-                      <Typography variant="body2" color="text.secondary">Valor Total</Typography>
-                      <Typography variant="h5" fontWeight="bold">
-                        {valuacion ? formatARS(valuacion.totalPesos) : "$ -"}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {valuacion ? formatUSD(valuacion.totalDolares) : "USD -"}
-                      </Typography>
-                    </Box>
-                  </Stack>
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <Stack direction="row" spacing={2} alignItems="center">
-                    <Box sx={{
-                      p: 1.5,
-                      borderRadius: 2,
-                      bgcolor: (valuacion?.gananciaPesos ?? 0) >= 0 ? 'success.light' : 'error.light',
-                      color: (valuacion?.gananciaPesos ?? 0) >= 0 ? 'success.dark' : 'error.dark'
-                    }}>
-                      {(valuacion?.gananciaPesos ?? 0) >= 0 ? <TrendingUpIcon /> : <TrendingDownIcon />}
-                    </Box>
-                    <Box>
-                      <Stack direction="row" alignItems="baseline" spacing={1}>
-                        <Typography variant="body2" color="text.secondary">Ganancia Total</Typography>
-                        <Typography variant="caption" fontWeight="bold" color={(valuacion?.variacionPorcentajePesos ?? 0) >= 0 ? 'success.dark' : 'error.dark'}>
-                          ({valuacion ? formatPercentage(valuacion.variacionPorcentajePesos) : "-"}%)
-                        </Typography>
+          {loading ? (
+            <Grid size={{ xs: 12 }} display="flex" justifyContent="center" alignItems="center" sx={{ minHeight: '50vh' }}>
+              <CircularProgress />
+            </Grid>
+          ) : (
+            <>
+              {/* Portfolio Summary Section */}
+              <Grid size={{ xs: 12, md: 8 }}>
+                <Paper className={styles.summaryCard}>
+                  <Typography variant="caption" color="text.secondary">
+                    Resumen de Portafolio
+                  </Typography>
+                  <Grid container spacing={2} sx={{ mt: 1 }}>
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                      <Stack direction="row" spacing={2} alignItems="center">
+                        <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: 'primary.main', color: 'white' }}>
+                          <AttachMoneyIcon />
+                        </Box>
+                        <Box>
+                          <Typography variant="body2" color="text.secondary">Valor Total</Typography>
+                          <Typography variant="h5" fontWeight="bold">
+                            {valuacion ? formatARS(valuacion.totalPesos) : "$ -"}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            {valuacion ? formatUSD(valuacion.totalDolares) : "USD -"}
+                          </Typography>
+                        </Box>
                       </Stack>
-                      <Typography
-                        variant="h5"
-                        fontWeight="bold"
-                        color={(valuacion?.gananciaPesos ?? 0) >= 0 ? 'success.main' : 'error.main'}
-                      >
-                        {valuacion ? formatARS(valuacion.gananciaPesos) : "$ -"}
-                      </Typography>
-                      <Stack direction="row" spacing={1} alignItems="baseline">
-                        <Typography variant="caption" color="text.secondary">
-                          {valuacion ? formatUSD(valuacion.gananciaDolares) : "USD -"}
-                        </Typography>
-                        <Typography variant="caption" color={(valuacion?.variacionPorcentajeDolares ?? 0) >= 0 ? 'success.main' : 'error.main'}>
-                          ({valuacion ? formatPercentage(valuacion.variacionPorcentajeDolares) : "-"}%)
-                        </Typography>
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 6 }}>
+                      <Stack direction="row" spacing={2} alignItems="center">
+                        <Box sx={{
+                          p: 1.5,
+                          borderRadius: 2,
+                          bgcolor: (valuacion?.gananciaPesos ?? 0) >= 0 ? 'success.light' : 'error.light',
+                          color: (valuacion?.gananciaPesos ?? 0) >= 0 ? 'success.dark' : 'error.dark'
+                        }}>
+                          {(valuacion?.gananciaPesos ?? 0) >= 0 ? <TrendingUpIcon /> : <TrendingDownIcon />}
+                        </Box>
+                        <Box>
+                          <Stack direction="row" alignItems="baseline" spacing={1}>
+                            <Typography variant="body2" color="text.secondary">Ganancia Total</Typography>
+                            <Typography variant="caption" fontWeight="bold" color={(valuacion?.variacionPorcentajePesos ?? 0) >= 0 ? 'success.dark' : 'error.dark'}>
+                              ({valuacion ? formatPercentage(valuacion.variacionPorcentajePesos) : "-"}%)
+                            </Typography>
+                          </Stack>
+                          <Typography
+                            variant="h5"
+                            fontWeight="bold"
+                            color={(valuacion?.gananciaPesos ?? 0) >= 0 ? 'success.main' : 'error.main'}
+                          >
+                            {valuacion ? formatARS(valuacion.gananciaPesos) : "$ -"}
+                          </Typography>
+                          <Stack direction="row" spacing={1} alignItems="baseline">
+                            <Typography variant="caption" color="text.secondary">
+                              {valuacion ? formatUSD(valuacion.gananciaDolares) : "USD -"}
+                            </Typography>
+                            <Typography variant="caption" color={(valuacion?.variacionPorcentajeDolares ?? 0) >= 0 ? 'success.main' : 'error.main'}>
+                              ({valuacion ? formatPercentage(valuacion.variacionPorcentajeDolares) : "-"}%)
+                            </Typography>
+                          </Stack>
+                        </Box>
                       </Stack>
-                    </Box>
-                  </Stack>
-                </Grid>
+                    </Grid>
+                  </Grid>
+                </Paper>
               </Grid>
-            </Paper>
-          </Grid>
 
-          {/* Ranking Card */}
-          <Grid size={{ xs: 12, md: 4 }}>
-            <Paper className={styles.highlightInfoCard} sx={{ height: '100%' }}>
-              <Typography variant="caption" color="text.secondary">
-                Ranking Global
-              </Typography>
-              <Typography
-                variant="h3"
-                className={`${styles.bigNumber} ${styles.neonGreenText}`}
-                sx={{ mt: 2, textAlign: 'center' }}
-              >
-                #{stats?.ranking ?? "-"}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 1, textAlign: 'center' }}>
-                Tu posición entre expertos.
-              </Typography>
-            </Paper>
-          </Grid>
-
-          {/* Recommendations Stats */}
-          <Grid size={{ xs: 12 }}>
-            <Paper className={styles.summaryCard}>
-              <Typography variant="caption" color="text.secondary">
-                Estadísticas de Recomendaciones
-              </Typography>
-              <Stack
-                direction={{ xs: "column", md: "row" }}
-                justifyContent="space-between"
-                alignItems={{ xs: "flex-start", md: "center" }}
-                spacing={2}
-                sx={{ mt: 1.5 }}
-              >
-                <Box>
-                  <Typography variant="h4" className={styles.bigNumber}>
-                    {stats?.totalRecomendaciones ?? 0}
+              {/* Ranking Card */}
+              <Grid size={{ xs: 12, md: 4 }}>
+                <Paper className={styles.highlightInfoCard} sx={{ height: '100%' }}>
+                  <Typography variant="caption" color="text.secondary">
+                    Ranking Global
                   </Typography>
                   <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ mt: 0.5 }}
+                    variant="h3"
+                    className={`${styles.bigNumber} ${styles.neonGreenText}`}
+                    sx={{ mt: 2, textAlign: 'center' }}
                   >
-                    recomendaciones totales emitidas.
+                    #{stats?.ranking ?? "-"}
                   </Typography>
-                </Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1, textAlign: 'center' }}>
+                    Tu posición entre expertos.
+                  </Typography>
+                </Paper>
+              </Grid>
 
-                <Stack
-                  direction={{ xs: "column", sm: "row" }}
-                  spacing={4}
-                  sx={{ mt: { xs: 2, md: 0 } }}
-                >
-                  <Box>
-                    <Typography
-                      variant="subtitle2"
-                      className={styles.subtitleBold}
-                    >
-                      Activas
-                    </Typography>
-                    <Typography variant="h5" className={styles.bigNumber}>
-                      {stats?.recomendacionesActivas ?? 0}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      recomendaciones vigentes.
-                    </Typography>
-                  </Box>
+              {/* Recommendations Stats */}
+              <Grid size={{ xs: 12 }}>
+                <Paper className={styles.summaryCard}>
+                  <Typography variant="caption" color="text.secondary">
+                    Estadísticas de Recomendaciones
+                  </Typography>
+                  <Stack
+                    direction={{ xs: "column", md: "row" }}
+                    justifyContent="space-between"
+                    alignItems={{ xs: "flex-start", md: "center" }}
+                    spacing={2}
+                    sx={{ mt: 1.5 }}
+                  >
+                    <Box>
+                      <Typography variant="h4" className={styles.bigNumber}>
+                        {stats?.totalRecomendaciones ?? 0}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ mt: 0.5 }}
+                      >
+                        recomendaciones totales emitidas.
+                      </Typography>
+                    </Box>
 
-                  <Box>
-                    <Typography
-                      variant="subtitle2"
-                      className={styles.subtitleBold}
+                    <Stack
+                      direction={{ xs: "column", sm: "row" }}
+                      spacing={4}
+                      sx={{ mt: { xs: 2, md: 0 } }}
                     >
-                      Efectividad
-                    </Typography>
-                    <Typography variant="h5" className={styles.bigNumber} color="primary">
-                      {/* Placeholder for future specific accuracy metric if available */}
-                      - %
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      tasa de acierto.
-                    </Typography>
-                  </Box>
-                </Stack>
-              </Stack>
-            </Paper>
-          </Grid>
+                      <Box>
+                        <Typography
+                          variant="subtitle2"
+                          className={styles.subtitleBold}
+                        >
+                          Activas
+                        </Typography>
+                        <Typography variant="h5" className={styles.bigNumber}>
+                          {stats?.recomendacionesActivas ?? 0}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          recomendaciones vigentes.
+                        </Typography>
+                      </Box>
+
+                      <Box>
+                        <Typography
+                          variant="subtitle2"
+                          className={styles.subtitleBold}
+                        >
+                          Efectividad
+                        </Typography>
+                        <Typography variant="h5" className={styles.bigNumber} color="primary">
+                          {/* Placeholder for future specific accuracy metric if available */}
+                          - %
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          tasa de acierto.
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </Stack>
+                </Paper>
+              </Grid>
+            </>
+          )}
         </Grid>
       </Box>
     </RoleGuard>

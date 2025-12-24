@@ -53,7 +53,7 @@ export default function PortfolioPage() {
 
   if (loading && !valuacion && portfolios.length === 0) {
     return (
-      <Grid container justifyContent="center" sx={{ mt: 5 }}>
+      <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: '80vh' }}>
         <CircularProgress />
       </Grid>
     );
