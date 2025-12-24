@@ -178,7 +178,7 @@ export default function AdminDashboardPage() {
             {/* KPI Cards Skeleton */}
             {[1, 2, 3, 4].map((i) => (
               <Grid key={i} size={{ xs: 12, sm: 6, md: 3 }}>
-                <Paper className={styles.kpiPaper}>
+                <Paper className={styles.card}>
                   <Typography variant="caption"><Skeleton width="60%" /></Typography>
                   <Skeleton height={40} width="40%" sx={{ my: 1 }} />
                   <Skeleton width="30%" />
@@ -213,9 +213,10 @@ export default function AdminDashboardPage() {
               {stats ? (
                 <Grid container spacing={3}>
                   {/* KPI Cards */}
+                  {/* KPI Cards */}
                   <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                    <Paper className={styles.kpiPaper}>
-                      <Typography variant="caption" color="text.secondary">Total Usuarios</Typography>
+                    <Paper className={styles.card}>
+                      <Typography className={styles.kpiLabel}>Total Usuarios</Typography>
                       <Typography variant="h4" className={styles.kpiValue}>{stats.totalUsuarios}</Typography>
                       <Typography variant="body2" color="success.main" className={styles.kpiChange}>
                         +{stats.usuariosHoy} hoy
@@ -223,8 +224,8 @@ export default function AdminDashboardPage() {
                     </Paper>
                   </Grid>
                   <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                    <Paper className={styles.kpiPaper}>
-                      <Typography variant="caption" color="text.secondary">Operaciones Totales</Typography>
+                    <Paper className={styles.card}>
+                      <Typography className={styles.kpiLabel}>Operaciones</Typography>
                       <Typography variant="h4" className={styles.kpiValue}>{stats.totalOperaciones}</Typography>
                       <Typography variant="body2" color="success.main" className={styles.kpiChange}>
                         +{stats.operacionesHoy} hoy
@@ -232,17 +233,21 @@ export default function AdminDashboardPage() {
                     </Paper>
                   </Grid>
                   <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                    <Paper className={styles.kpiPaper}>
-                      <Typography variant="caption" color="text.secondary">Volumen (ARS)</Typography>
+                    <Paper className={`${styles.card} ${styles.highlightCard}`}>
+                      <Typography className={styles.kpiLabel} style={{ color: '#fff' }}>Volumen Diario</Typography>
                       <Typography variant="h5" className={styles.kpiValue}>${stats.volumenHoyArs.toLocaleString()}</Typography>
-                      <Typography variant="body2" color="text.secondary" mt={1}>Hoy</Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, fontSize: '0.8rem' }}>
+                        USD {stats.volumenHoyUsd.toLocaleString()}
+                      </Typography>
                     </Paper>
                   </Grid>
                   <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                    <Paper className={styles.kpiPaper}>
-                      <Typography variant="caption" color="text.secondary">Total Activos</Typography>
+                    <Paper className={styles.card}>
+                      <Typography className={styles.kpiLabel}>Activos Listados</Typography>
                       <Typography variant="h4" className={styles.kpiValue}>{stats.totalActivos}</Typography>
-                      <Typography variant="body2" color="text.secondary" mt={1}>En sistema</Typography>
+                      <Typography variant="body2" color="text.secondary" className={styles.kpiChange}>
+                        En plataforma
+                      </Typography>
                     </Paper>
                   </Grid>
 
