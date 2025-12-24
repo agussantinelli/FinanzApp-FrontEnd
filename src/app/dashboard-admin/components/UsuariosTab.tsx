@@ -52,9 +52,14 @@ export default function UsuariosTab() {
                                     </Stack>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography variant="body2" fontWeight={row.cantidadPortafoliosDestacados > 0 ? "bold" : "regular"}>
-                                        {row.cantidadPortafoliosDestacados}
-                                    </Typography>
+                                    <Stack>
+                                        <Typography variant="body2" fontWeight={row.cantidadPortafoliosDestacados > 0 ? "bold" : "regular"}>
+                                            {row.cantidadPortafoliosDestacados} Destacados
+                                        </Typography>
+                                        <Typography variant="caption" color="text.secondary">
+                                            {row.cantidadPortafoliosPropios} Propios
+                                        </Typography>
+                                    </Stack>
                                 </TableCell>
                                 <TableCell>
                                     <Chip label={row.rol} size="small" color={row.rol === 'Admin' ? 'secondary' : 'default'} variant="outlined" />

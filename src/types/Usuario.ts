@@ -28,6 +28,7 @@ export interface UserDTO {
     cantidadRecomendaciones: number;
     cantidadRecomendacionesAcertadas: number;
     cantidadPortafoliosDestacados: number;
+    cantidadPortafoliosPropios: number;
 }
 
 export interface AuthenticatedUser {
