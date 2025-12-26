@@ -5,6 +5,7 @@ import { Box, Typography, IconButton } from "@mui/material";
 import { RiRobot2Line } from "react-icons/ri";
 import SendIcon from "@mui/icons-material/Send";
 import CloseIcon from "@mui/icons-material/Close";
+import ReactMarkdown from 'react-markdown';
 import styles from "./styles/FinanzAiChat.module.css";
 import { chatWithAi } from "@/services/AiService";
 
@@ -78,7 +79,9 @@ export default function FinanzAiChat() {
                                 className={`${styles.message} ${msg.sender === "user" ? styles.userMessage : styles.aiMessage
                                     }`}
                             >
-                                {msg.text}
+                                <div className={styles.markdownContent}>
+                                    <ReactMarkdown>{msg.text}</ReactMarkdown>
+                                </div>
                             </Box>
                         ))}
                         {loading && (
