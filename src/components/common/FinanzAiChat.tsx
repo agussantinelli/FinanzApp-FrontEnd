@@ -97,13 +97,19 @@ export default function FinanzAiChat() {
                     </Box>
 
                     <form className={styles.inputArea} onSubmit={handleSend}>
-                        <input
-                            type="text"
+                        <textarea
                             className={styles.inputField}
                             placeholder="Escribe tu consulta..."
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && !e.shiftKey) {
+                                    e.preventDefault();
+                                    handleSend();
+                                }
+                            }}
                             disabled={loading}
+                            rows={1}
                         />
                         <button type="submit" className={styles.sendButton} disabled={loading || !inputValue.trim()}>
                             <SendIcon fontSize="small" />
