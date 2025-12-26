@@ -37,6 +37,7 @@ export interface AuthenticatedUser {
     apellido: string;
     email: string;
     rol: RolUsuario | string;
+    expiraUtc?: string;
 }
 
 export interface UserLoginRequest {
