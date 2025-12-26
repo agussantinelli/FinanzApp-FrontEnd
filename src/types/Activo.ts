@@ -3,10 +3,13 @@ export interface ActivoDTO {
     symbol: string;
     nombre: string;
     tipo: string;
+    tipoActivoId: number;
     moneda: string;
     sector: string;
+    sectorId?: string | null;
 
     esLocal: boolean;
+    loSigo: boolean;
     descripcion: string;
 
     precioActual?: number | null;
@@ -19,15 +22,19 @@ export interface ActivoDTO {
 export interface ActivoCreateDTO {
     symbol: string;
     nombre: string;
-    tipo: number; // byte
+    tipoActivoId: number; // byte
     monedaBase: string; // "USD" | "ARS"
     esLocal: boolean;
+    sectorId?: string | null;
+    descripcion: string;
 }
 
 export interface ActivoUpdateDTO {
     symbol: string;
     nombre: string;
-    tipo: number; // byte
+    tipoActivoId: number; // byte
     monedaBase: string;
     esLocal: boolean;
+    sectorId?: string | null;
+    descripcion: string;
 }

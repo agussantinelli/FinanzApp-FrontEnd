@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { ActivoDTO } from '@/types/Activo';
+import { ActivoDTO, ActivoCreateDTO } from '@/types/Activo';
 import { getActivosNoMoneda, createActivo, updateActivo, deleteActivo } from '@/services/ActivosService';
 
 export function useAdminAssets() {
@@ -22,7 +22,7 @@ export function useAdminAssets() {
         loadActivos();
     }, [loadActivos]);
 
-    const addAsset = async (dto: any) => { // Using any for now or ActivoCreateDTO if imported
+    const addAsset = async (dto: ActivoCreateDTO) => {
         setLoading(true);
         try {
             await createActivo(dto);

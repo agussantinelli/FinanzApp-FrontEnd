@@ -2,6 +2,7 @@ export interface PortafolioDTO {
     id: string; // Guid
     nombre: string;
     descripcion: string;
+    esDestacado: boolean;
 }
 
 export interface ActivoEnPortafolioDTO {
