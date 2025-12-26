@@ -9,8 +9,10 @@ import {
     Divider,
     Stack,
     Chip,
-    CircularProgress
+    CircularProgress,
+    Button
 } from "@mui/material";
+import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { getPersonaById } from "@/services/PersonaService";
 import { UserDTO } from "@/types/Usuario";
@@ -60,6 +62,15 @@ export default function ProfilePage() {
                         </Stack>
                     </Box>
                     <Box sx={{ flexGrow: 1 }} />
+                    <Button
+                        component={Link}
+                        href="/perfil/editar"
+                        variant="outlined"
+                        color="inherit"
+                        sx={{ borderColor: 'rgba(255,255,255,0.2)' }}
+                    >
+                        Editar Perfil
+                    </Button>
                 </Stack>
 
                 <Divider sx={{ mb: 4 }} />
