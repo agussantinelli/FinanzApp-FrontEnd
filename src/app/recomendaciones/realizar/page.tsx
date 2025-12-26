@@ -4,7 +4,7 @@ import React, { useMemo, useState } from "react";
 import {
     Typography, Box, TextField, Button, Grid, Paper, Divider,
     MenuItem, Select, InputLabel, FormControl, Autocomplete, IconButton, FormHelperText,
-    InputAdornment
+    InputAdornment, Backdrop
 } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -24,6 +24,7 @@ import { debounce } from "@mui/material/utils";
 import styles from "./styles/RealizarRecomendacion.module.css";
 import { useCrearRecomendacion } from "@/hooks/useCrearRecomendacion";
 import FloatingMessage from "@/components/ui/FloatingMessage";
+import NeonLoader from "@/components/ui/NeonLoader";
 
 interface AssetSearchProps {
     value: ActivoDTO | null;
@@ -342,6 +343,18 @@ export default function CrearRecomendacionPage() {
                     severity="success"
                     onClose={clearSuccess}
                 />
+
+                <Backdrop
+                    sx={{
+                        color: '#fff',
+                        zIndex: (theme) => theme.zIndex.drawer + 1,
+                        flexDirection: 'column',
+                        backgroundColor: 'rgba(0, 0, 0, 0.9)' // Darker background for better neon contrast
+                    }}
+                    open={loading}
+                >
+                    <NeonLoader message="Validando con IA..." size={80} />
+                </Backdrop>
             </main>
         </RoleGuard >
     );
