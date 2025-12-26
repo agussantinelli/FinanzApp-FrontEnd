@@ -35,11 +35,11 @@ export const demoteToInversor = async (id: string): Promise<void> => {
     await http.patch(`${ENDPOINT}/${id}/rol/inversor`, {});
 };
 
-export const uploadUserPhoto = async (id: string, file: File): Promise<void> => {
+export const uploadUserPhoto = async (id: string, file: File): Promise<{ message: string, url: string }> => {
     const formData = new FormData();
-    formData.append('file', file);
-    await http.post(`${ENDPOINT}/${id}/foto`, formData, {
+    formData.append('archivo', file);
+    const { data } = await http.post<{ message: string, url: string }>(`${ENDPOINT}/${id}/foto`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
     });
+    return data;
 };
-

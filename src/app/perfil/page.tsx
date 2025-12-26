@@ -43,13 +43,26 @@ export default function ProfilePage() {
         if (!event.target.files || event.target.files.length === 0 || !user?.id) return;
 
         const file = event.target.files[0];
+
+        // Validation
+        const validExtensions = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+        if (!validExtensions.includes(file.type)) {
+            alert("Solo se permiten archivos JPG, PNG o WEBP.");
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) { // 5MB
+            alert("El archivo no puede superar los 5MB.");
+            return;
+        }
+
         setUploading(true);
 
         try {
-            await uploadUserPhoto(user.id, file);
-            // Refresh profile data to get the new image URL (assuming backend returns it or we just reload)
-            const updatedProfile = await getPersonaById(user.id);
-            setProfile(updatedProfile);
+            const { url } = await uploadUserPhoto(user.id, file);
+
+            // Immediate update with returned URL
+            setProfile(prev => prev ? { ...prev, urlFotoPerfil: url } : null);
         } catch (error) {
             console.error("Error uploading photo:", error);
             alert("Error al subir la foto");
