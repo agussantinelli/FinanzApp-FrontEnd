@@ -22,6 +22,8 @@
     <img src="https://img.shields.io/badge/ESLint-9.17.0-4B32C3?style=for-the-badge&logo=eslint&logoColor=white" alt="ESLint Badge"/>
     <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel Badge"/>
     <img src="https://img.shields.io/badge/Material%20UI-7.3.4-007FFF?style=for-the-badge&logo=mui&logoColor=white" alt="MUI Badge"/>
+    <img src="https://img.shields.io/badge/React_Markdown-9.0.3-000000?style=for-the-badge&logo=markdown&logoColor=white" alt="React Markdown Badge"/>
+    <img src="https://img.shields.io/badge/React_Icons-5.5.0-E91E63?style=for-the-badge&logo=react&logoColor=white" alt="React Icons Badge"/>
     <img src="https://img.shields.io/badge/JWT%20Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT Badge"/>
     <a href="https://drive.google.com/drive/folders/1b5H8fDgOKmrxfY4RXfi4oYA3CvXy4ot6?usp=drive_link" target="_blank">
         <img src="https://img.shields.io/badge/📂%20Documentación%20Proyecto-4285F4?style=for-the-badge&logo=googledrive&logoColor=white" alt="Carpeta TPI Drive Badge"/>
@@ -74,6 +76,7 @@
     <li><strong>Cotizaciones Unificadas:</strong> Acceso centralizado a valores de mercado (Dólar, Crypto, BCBA).</li>
     <li><strong>Valuación Inteligente:</strong> Conversión automática ARS/USD aplicando el tipo de cambio más conveniente (MEP/CCL/Blue).</li>
     <li><strong>Dashboard Patrimonial:</strong> Visualización clara del patrimonio total y distribución por tipo de activo.</li>
+    <li><strong>🤖 FinanzAI:</strong> Asistente financiero inteligente flotante, integrado con IA para responder consultas en tiempo real con formato enriquecido.</li>
 </ul>
 
 <hr>
@@ -112,6 +115,16 @@
             <td><strong>Estilo</strong></td>
             <td>Tema Oscuro + Verde Flúor (<code>#39ff14</code>)</td>
             <td>Estética moderna y legible.</td>
+        </tr>
+        <tr>
+            <td><strong>Markdown</strong></td>
+            <td>React Markdown</td>
+            <td>Renderizado de respuestas ricas (IA).</td>
+        </tr>
+        <tr>
+            <td><strong>Iconos</strong></td>
+            <td>React Icons + MUI Icons</td>
+            <td>Variedad de iconos modernos.</td>
         </tr>
         <tr>
             <td><strong>Fondo</strong></td>
@@ -203,11 +216,11 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
             <li><code>GET /auth/me</code> (información del usuario autenticado)</li>
         </ul>
     </li>
-    <li>El backend devuelve un <strong>token JWT</strong> más datos básicos de la persona (id, nombre, rol, etc.).</li>
+    <li>El backend devuelve un <strong>token JWE (Encrypted JWT)</strong> opaco, asegurando que la información sensible del usuario permanezca protegida.</li>
     <li>El frontend guarda:
         <ul>
-            <li><code>fa_token</code>: token JWT.</li>
-            <li><code>fa_user</code>: datos serializados del usuario autenticado (localStorage).</li>
+            <li><code>fa_token</code>: token JWE para autenticación.</li>
+            <li><code>fa_user</code>: detalles de la sesión (expiración, rol) obtenidos explícitamente del login.</li>
         </ul>
     </li>
     <li>Las llamadas posteriores usan el cliente configurado en <code>Http.ts</code>, que adjunta:
@@ -341,7 +354,7 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
     </li>
     <li><strong>En Roadmap</strong>
         <ul>
-            <li>Reportes exportables (PDF/Excel).</li>
+            <li>✅ Reportes exportables (PDF/Excel).</li>
             <li>Notificaciones en tiempo real (WebSockets) para cambios de precio.</li>
             <li>Expansión del módulo de "Comunidad" y "Noticias".</li>
         </ul>
