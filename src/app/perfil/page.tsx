@@ -12,15 +12,17 @@ import {
     CircularProgress,
     Button
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
-import { getPersonaById } from "@/services/PersonaService";
+import { getPersonaById, uploadUserPhoto } from "@/services/PersonaService";
 import { UserDTO } from "@/types/Usuario";
 
 export default function ProfilePage() {
     const { user, logout } = useAuth();
     const [profile, setProfile] = useState<UserDTO | null>(null);
     const [loadingProfile, setLoadingProfile] = useState(true);
+    const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
         if (user?.id) {
@@ -37,6 +39,25 @@ export default function ProfilePage() {
         }
     }, [user?.id]);
 
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (!event.target.files || event.target.files.length === 0 || !user?.id) return;
+
+        const file = event.target.files[0];
+        setUploading(true);
+
+        try {
+            await uploadUserPhoto(user.id, file);
+            // Refresh profile data to get the new image URL (assuming backend returns it or we just reload)
+            const updatedProfile = await getPersonaById(user.id);
+            setProfile(updatedProfile);
+        } catch (error) {
+            console.error("Error uploading photo:", error);
+            alert("Error al subir la foto");
+        } finally {
+            setUploading(false);
+        }
+    };
+
     if (!user) return <Box sx={{ p: 4 }}>Cargando sesión...</Box>;
     if (loadingProfile) return <Box sx={{ p: 4, display: 'flex', justifyContent: 'center' }}><CircularProgress /></Box>;
     if (!profile) return <Box sx={{ p: 4 }}>No se pudo cargar la información del perfil.</Box>;
@@ -47,11 +68,38 @@ export default function ProfilePage() {
 
                 {/* Header */}
                 <Stack direction={{ xs: "column", sm: "row" }} alignItems="center" spacing={3} sx={{ mb: 4 }}>
-                    <Avatar
-                        sx={{ width: 100, height: 100, fontSize: '2.5rem', bgcolor: 'primary.main' }}
-                    >
-                        {profile.nombre[0]}{profile.apellido[0]}
-                    </Avatar>
+                    <Box sx={{ position: 'relative', width: 100, height: 100 }}>
+                        <Avatar
+                            src={profile.urlFotoPerfil}
+                            sx={{ width: 100, height: 100, fontSize: '2.5rem', bgcolor: 'primary.main' }}
+                        >
+                            {profile.nombre[0]}{profile.apellido[0]}
+                        </Avatar>
+
+                        <Box
+                            component="label"
+                            sx={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                width: '100%',
+                                height: '100%',
+                                bgcolor: 'rgba(0,0,0,0.5)',
+                                color: 'white',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                opacity: 0,
+                                transition: 'opacity 0.2s',
+                                borderRadius: '50%',
+                                cursor: 'pointer',
+                                '&:hover': { opacity: 1 }
+                            }}
+                        >
+                            {uploading ? <CircularProgress size={24} color="inherit" /> : <EditIcon />}
+                            <input type="file" hidden accept="image/*" onChange={handleFileChange} disabled={uploading} />
+                        </Box>
+                    </Box>
                     <Box sx={{ textAlign: { xs: "center", sm: "left" } }}>
                         <Typography variant="h4" fontWeight={700}>
                             {profile.nombre} {profile.apellido}
