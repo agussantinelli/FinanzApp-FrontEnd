@@ -83,9 +83,11 @@ export default function FinanzAiChat() {
                         ))}
                         {loading && (
                             <Box className={`${styles.message} ${styles.aiMessage}`}>
-                                <Typography variant="caption" sx={{ fontStyle: 'italic', opacity: 0.7 }}>
-                                    Escribiendo...
-                                </Typography>
+                                <div className={styles.typingIndicator}>
+                                    <div className={styles.dot}></div>
+                                    <div className={styles.dot}></div>
+                                    <div className={styles.dot}></div>
+                                </div>
                             </Box>
                         )}
                         <div ref={messagesEndRef} />
