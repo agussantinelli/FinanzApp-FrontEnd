@@ -139,7 +139,7 @@ export default function DashboardPage() {
               </Typography>
             </Stack>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-              Variación diaria de tu cartera.
+              Variación total de tu cartera.
             </Typography>
           </Paper>
         </Grid>
