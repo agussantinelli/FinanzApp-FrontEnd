@@ -6,6 +6,7 @@ import { RiRobot2Line } from "react-icons/ri";
 import SendIcon from "@mui/icons-material/Send";
 import CloseIcon from "@mui/icons-material/Close";
 import ReactMarkdown from 'react-markdown';
+import { TypingIndicator } from "@/components/ui/TypingIndicator";
 import styles from "./styles/FinanzAiChat.module.css";
 import { chatWithAi } from "@/services/AiService";
 
@@ -86,11 +87,7 @@ export default function FinanzAiChat() {
                         ))}
                         {loading && (
                             <Box className={`${styles.message} ${styles.aiMessage}`}>
-                                <div className={styles.typingIndicator}>
-                                    <div className={styles.dot}></div>
-                                    <div className={styles.dot}></div>
-                                    <div className={styles.dot}></div>
-                                </div>
+                                <TypingIndicator />
                             </Box>
                         )}
                         <div ref={messagesEndRef} />
