@@ -34,3 +34,12 @@ export const promoteToExperto = async (id: string): Promise<void> => {
 export const demoteToInversor = async (id: string): Promise<void> => {
     await http.patch(`${ENDPOINT}/${id}/rol/inversor`, {});
 };
+
+export const uploadUserPhoto = async (id: string, file: File): Promise<void> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    await http.post(`${ENDPOINT}/${id}/foto`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
+};
+

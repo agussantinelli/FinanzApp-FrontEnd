@@ -39,7 +39,7 @@ export async function getActivosByTipoId(id: number): Promise<ActivoDTO[]> {
 }
 
 export async function getActivosNoMoneda(): Promise<ActivoDTO[]> {
-    const res = await http.get<ActivoDTO[]>("/api/activos/no-moneda");
+    const res = await http.get<ActivoDTO[]>("/api/activos/no-monedas");
     cacheActivos(res.data, true);
     return res.data;
 }
@@ -69,4 +69,8 @@ export async function getActivosByTipoAndSector(tipoId: number, sectorId: string
     const res = await http.get<ActivoDTO[]>(`/api/activos/filtrar/tipo/${tipoId}/sector/${sectorId}`);
     cacheActivos(res.data);
     return res.data;
+}
+
+export async function toggleSeguirActivo(id: string): Promise<void> {
+    await http.post(`/api/activos/${id}/seguir`);
 }

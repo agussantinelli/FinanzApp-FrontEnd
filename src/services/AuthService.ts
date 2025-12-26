@@ -1,6 +1,7 @@
 import { http } from "@/lib/http";
 import { RegisterGeoDataDTO } from "@/types/Geo";
 import { UserLoginRequest, UserRegisterRequest, UserLoginResponseDTO, AuthenticatedUser, RolUsuario } from "@/types/Usuario";
+import { ChangePasswordDTO, ResetPasswordRequestDTO, ResetPasswordConfirmDTO } from "@/types/Auth";
 
 function notifyAuthChanged() {
   if (typeof window === "undefined") return;
@@ -99,6 +100,19 @@ export async function register(
   setAuthSession(response.data);
   return response.data;
 }
+
+export async function changePassword(data: ChangePasswordDTO): Promise<void> {
+  await http.post("/api/auth/change-password", data);
+}
+
+export async function resetPasswordRequest(data: ResetPasswordRequestDTO): Promise<void> {
+  await http.post("/api/auth/reset-password-request", data);
+}
+
+export async function resetPasswordConfirm(data: ResetPasswordConfirmDTO): Promise<void> {
+  await http.post("/api/auth/reset-password-confirm", data);
+}
+
 
 // Ruta home según rol
 export function getHomePathForRole(rol: string | null | undefined): string {

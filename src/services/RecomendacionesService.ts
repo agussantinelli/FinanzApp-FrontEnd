@@ -81,3 +81,9 @@ export const createRecomendacion = async (dto: CrearRecomendacionDTO): Promise<R
     const { data } = await http.post<RecomendacionResumenDTO>(ENDPOINT, dto);
     return data;
 };
+
+export const updateRecomendacion = async (id: string, dto: CrearRecomendacionDTO): Promise<RecomendacionResumenDTO> => {
+    const { data } = await http.put<RecomendacionResumenDTO>(`${ENDPOINT}/${id}`, dto);
+    return data;
+};
+
