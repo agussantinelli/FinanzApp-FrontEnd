@@ -272,7 +272,7 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
 <ul>
     <li>Dashboards específicos por rol protegidos por <code>RoleGuard</code>.</li>
     <li>Gestión de usuarios y métricas globales de la plataforma.</li>
-    <li>Módulo (beta) para carga de señales de inversión por parte de expertos.</li>
+    <li>Módulo para expertos: carga de señales, cálculo de efectividad y ranking global.</li>
 </ul>
 
 <hr>
@@ -335,6 +335,8 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
             <li>✅ Lógica Multimoneda: Manejo robusto de pares ARS/USD en tablas y gráficos.</li>
             <li>✅ Dashboards Responsivos: UI adaptada a Móvil/Tablet/Desktop con Material UI.</li>
             <li>✅ Integración Backend: Consumo de endpoints reales para Valuación, Operaciones y Cotizaciones.</li>
+            <li>✅ Gestión de Recomendaciones: Panel para expertos con estadísticas, ranking y creación de señales.</li>
+            <li>✅ Reportes Visuales: Gráficos de composición de cartera y evolución del dólar.</li>
         </ul>
     </li>
     <li><strong>En Roadmap</strong>
