@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect, useCallback } from "react";
 import { AuthenticatedUser } from "@/types/Usuario";
 import { getCurrentUser, clearAuthSession, verifySession } from "@/services/AuthService";
