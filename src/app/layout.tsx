@@ -4,6 +4,7 @@ import Providers from "@/components/Providers";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ClientBackground from "@/components/ClientBackground";
+import FinanzAiChat from "@/components/common/FinanzAiChat";
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
           </main>
           <Footer />
+          <FinanzAiChat />
         </Providers>
       </body>
     </html>
