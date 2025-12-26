@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     Paper,
@@ -8,15 +8,36 @@ import {
     Avatar,
     Divider,
     Stack,
-    Chip
+    Chip,
+    CircularProgress
 } from "@mui/material";
 import { useAuth } from "@/hooks/useAuth";
-// Removed date-pickers to avoid dependency issues
+import { getPersonaById } from "@/services/PersonaService";
+import { UserDTO } from "@/types/Usuario";
 
 export default function ProfilePage() {
     const { user, logout } = useAuth();
+    const [profile, setProfile] = useState<UserDTO | null>(null);
+    const [loadingProfile, setLoadingProfile] = useState(true);
 
-    if (!user) return <Box sx={{ p: 4 }}>Cargando perfil...</Box>;
+    useEffect(() => {
+        if (user?.id) {
+            getPersonaById(user.id)
+                .then(data => {
+                    setProfile(data);
+                })
+                .catch(err => {
+                    console.error("Error loading profile:", err);
+                })
+                .finally(() => {
+                    setLoadingProfile(false);
+                });
+        }
+    }, [user?.id]);
+
+    if (!user) return <Box sx={{ p: 4 }}>Cargando sesión...</Box>;
+    if (loadingProfile) return <Box sx={{ p: 4, display: 'flex', justifyContent: 'center' }}><CircularProgress /></Box>;
+    if (!profile) return <Box sx={{ p: 4 }}>No se pudo cargar la información del perfil.</Box>;
 
     return (
         <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 1000, margin: "0 auto" }}>
@@ -27,35 +48,37 @@ export default function ProfilePage() {
                     <Avatar
                         sx={{ width: 100, height: 100, fontSize: '2.5rem', bgcolor: 'primary.main' }}
                     >
-                        {user.nombre[0]}{user.apellido[0]}
+                        {profile.nombre[0]}{profile.apellido[0]}
                     </Avatar>
                     <Box sx={{ textAlign: { xs: "center", sm: "left" } }}>
                         <Typography variant="h4" fontWeight={700}>
-                            {user.nombre} {user.apellido}
+                            {profile.nombre} {profile.apellido}
                         </Typography>
                         <Stack direction="row" spacing={1} justifyContent={{ xs: "center", sm: "flex-start" }} alignItems="center" mt={1}>
-                            <Chip label={user.rol} color="secondary" size="small" />
-                            <Typography variant="body2" color="text.secondary">{user.email}</Typography>
+                            <Chip label={profile.rol} color="secondary" size="small" />
+                            <Typography variant="body2" color="text.secondary">{profile.email}</Typography>
                         </Stack>
                     </Box>
                     <Box sx={{ flexGrow: 1 }} />
-                    {/* Edit Button Removed as requested */}
                 </Stack>
 
                 <Divider sx={{ mb: 4 }} />
 
-                {/* Details Layout using Stack instead of Grid to avoid version conflicts */}
                 <Stack direction={{ xs: 'column', md: 'row' }} spacing={4}>
                     <Box sx={{ flex: 1 }}>
                         <Typography variant="h6" gutterBottom color="primary">Información Personal</Typography>
                         <Stack spacing={2}>
                             <Box>
                                 <Typography variant="caption" color="text.secondary">Fecha de Nacimiento</Typography>
-                                <Typography>{new Date((user as any).fechaNacimiento).toLocaleDateString()}</Typography>
+                                <Typography>
+                                    {profile.fechaNacimiento
+                                        ? new Date(profile.fechaNacimiento).toLocaleDateString()
+                                        : "No especificada"}
+                                </Typography>
                             </Box>
                             <Box>
                                 <Typography variant="caption" color="text.secondary">Nacionalidad</Typography>
-                                <Typography>{(user as any).nacionalidadNombre || "No especificada"}</Typography>
+                                <Typography>{profile.nacionalidadNombre || "No especificada"}</Typography>
                             </Box>
                         </Stack>
                     </Box>
@@ -65,18 +88,18 @@ export default function ProfilePage() {
                         <Stack spacing={2}>
                             <Box>
                                 <Typography variant="caption" color="text.secondary">País</Typography>
-                                <Typography>{(user as any).paisResidenciaNombre || "No especificado"}</Typography>
+                                <Typography>{profile.paisResidenciaNombre || "No especificado"}</Typography>
                             </Box>
-                            {(user as any).provinciaResidenciaNombre && (
+                            {profile.provinciaResidenciaNombre && (
                                 <Box>
                                     <Typography variant="caption" color="text.secondary">Provincia</Typography>
-                                    <Typography>{(user as any).provinciaResidenciaNombre}</Typography>
+                                    <Typography>{profile.provinciaResidenciaNombre}</Typography>
                                 </Box>
                             )}
-                            {(user as any).localidadResidenciaNombre && (
+                            {profile.localidadResidenciaNombre && (
                                 <Box>
                                     <Typography variant="caption" color="text.secondary">Localidad</Typography>
-                                    <Typography>{(user as any).localidadResidenciaNombre}</Typography>
+                                    <Typography>{profile.localidadResidenciaNombre}</Typography>
                                 </Box>
                             )}
                         </Stack>
