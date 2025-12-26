@@ -124,7 +124,7 @@ export default function DashboardPage() {
         <Grid size={{ xs: 12, md: 3 }}>
           <Paper className={styles.card}>
             <Typography variant="caption" color="text.secondary">
-              Resultado diario ({currency})
+              Resultado ({currency})
             </Typography>
             <Stack direction="row" alignItems="baseline" spacing={1}>
               <Typography
