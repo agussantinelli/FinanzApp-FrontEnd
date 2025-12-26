@@ -22,6 +22,7 @@ export interface UserDTO {
     localidadResidenciaId?: number;
     localidadResidenciaNombre?: string;
     provinciaResidenciaNombre?: string;
+    urlFotoPerfil?: string;
 
     // Stats
     cantidadOperaciones: number;
