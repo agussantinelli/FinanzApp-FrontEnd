@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { Box, Typography, IconButton } from "@mui/material";
-import SmartToyIcon from "@mui/icons-material/SmartToy";
+import { RiRobot2Line } from "react-icons/ri";
 import SendIcon from "@mui/icons-material/Send";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./styles/FinanzAiChat.module.css";
@@ -64,7 +64,7 @@ export default function FinanzAiChat() {
                 <Box className={styles.chatWindow}>
                     <Box className={styles.header}>
                         <Typography className={styles.headerTitle}>
-                            <SmartToyIcon /> FinanzAI
+                            <RiRobot2Line /> FinanzAI
                         </Typography>
                         <button onClick={toggleChat} className={styles.closeButton}>
                             <CloseIcon fontSize="small" />
@@ -111,7 +111,7 @@ export default function FinanzAiChat() {
                 {isOpen ? (
                     <CloseIcon className={styles.fabIcon} />
                 ) : (
-                    <SmartToyIcon className={styles.fabIcon} />
+                    <RiRobot2Line className={styles.fabIcon} />
                 )}
             </button>
         </Box>
