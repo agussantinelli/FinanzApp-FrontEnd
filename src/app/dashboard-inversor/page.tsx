@@ -19,7 +19,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { RolUsuario } from "@/types/Usuario";
 import { getInversorStats, getExpertoStats, getAdminStats, getAdminPortfolioStats } from "@/services/DashboardService";
-import { InversorStatsDTO, ExpertoStatsDTO, AdminStatsDTO, AdminPortfolioStatsDTO } from "@/types/Dashboard";
+import { InversorStatsDTO, ExpertoStatsDTO } from "@/types/Dashboard";
+import { AdminStatsDTO, AdminPortfolioStatsDTO } from "@/types/Admin";
 
 import { usePortfolioData } from "@/hooks/usePortfolioData";
 import { formatARS, formatPercentage, formatUSD } from "@/utils/format";
@@ -250,14 +251,14 @@ export default function DashboardPage() {
           <Typography variant="caption" color="text.secondary">Capital Bajo Gestión ({currency})</Typography>
           <Typography variant="h4" className={styles.cardValue} sx={{ mt: 1 }}>
             {currency === 'ARS'
-              ? `$ ${adminPortfolioStats?.totalCapitalPesos?.toLocaleString("es-AR") ?? "-"}`
-              : `USD ${adminPortfolioStats?.totalCapitalDolares?.toLocaleString("es-AR") ?? "-"}`
+              ? `$ ${adminPortfolioStats?.valorGlobalPesos?.toLocaleString("es-AR") ?? "-"}`
+              : `USD ${adminPortfolioStats?.valorGlobalDolares?.toLocaleString("es-AR") ?? "-"}`
             }
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {currency === 'ARS'
-              ? `Equivalente a USD ${adminPortfolioStats?.totalCapitalDolares?.toLocaleString("es-AR") ?? "-"}`
-              : `Equivalente a ARS ${adminPortfolioStats?.totalCapitalPesos?.toLocaleString("es-AR") ?? "-"}`
+              ? `Equivalente a USD ${adminPortfolioStats?.valorGlobalDolares?.toLocaleString("es-AR") ?? "-"}`
+              : `Equivalente a ARS ${adminPortfolioStats?.valorGlobalPesos?.toLocaleString("es-AR") ?? "-"}`
             }
           </Typography>
         </Paper>
@@ -268,10 +269,10 @@ export default function DashboardPage() {
           {adminPortfolioStats?.activosMasPopulares && adminPortfolioStats.activosMasPopulares.length > 0 ? (
             <>
               <Typography variant="h4" className={styles.cardValue} sx={{ mt: 1 }}>
-                {adminPortfolioStats.activosMasPopulares[0].activoSymbol}
+                {adminPortfolioStats.activosMasPopulares[0].symbol}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                En cartera de {adminPortfolioStats.activosMasPopulares[0].cantidadUsuarios} usuarios.
+                En cartera de {adminPortfolioStats.activosMasPopulares[0].cantidadInversores} usuarios.
               </Typography>
             </>
           ) : (

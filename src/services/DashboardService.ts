@@ -1,5 +1,6 @@
 import { http } from "@/lib/http";
-import { InversorStatsDTO, ExpertoStatsDTO, AdminStatsDTO, AdminPortfolioStatsDTO } from "@/types/Dashboard";
+import { InversorStatsDTO, ExpertoStatsDTO } from "@/types/Dashboard";
+import { AdminStatsDTO, AdminPortfolioStatsDTO } from "@/types/Admin";
 
 export async function getInversorStats(): Promise<InversorStatsDTO> {
     const { data } = await http.get<InversorStatsDTO>("/api/dashboard/inversor/stats");
