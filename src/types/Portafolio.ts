@@ -30,3 +30,8 @@ export interface PortafolioValuadoDTO {
     loSigo: boolean;
     activos: ActivoEnPortafolioDTO[];
 }
+
+export interface PortafolioCreateDTO {
+    nombre: string;
+    descripcion: string;
+}

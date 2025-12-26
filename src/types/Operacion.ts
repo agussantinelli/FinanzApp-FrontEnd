@@ -56,3 +56,10 @@ export interface OperacionDetalleDTO {
     usuarioRol: string;
     portafolioNombre: string;
 }
+
+export interface UpdateOperacionDTO {
+    cantidad: number;
+    precioUnitario: number;
+    fechaOperacion?: string;
+    comision?: number;
+}
