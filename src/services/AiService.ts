@@ -4,7 +4,7 @@ import { AiChatRequest, AiChatResponse } from "@/types/Ai";
 const ENDPOINT = "/api/ai/chat";
 
 export async function chatWithAi(message: string): Promise<string> {
-    const request: AiChatRequest = { message };
+    const request: AiChatRequest = { prompt: message };
     const { data } = await http.post<AiChatResponse>(ENDPOINT, request);
-    return data.response;
+    return data.respuesta;
 }
