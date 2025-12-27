@@ -13,18 +13,18 @@ import {
     Card,
     CardContent,
     CardActions,
-    Divider
+    Divider,
+    Avatar,
+    Chip
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { RoleGuard } from "@/components/auth/RoleGuard";
-import AddIcon from '@mui/icons-material/Add';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { getMisPortafolios } from "@/services/PortafolioService";
-import { PortafolioDTO } from "@/types/Portafolio"; // Assuming DTO is here
-// If PortafolioDTO is not exported from Portafolio.ts, I might need to check types.
-
-// I'll assume PortafolioDTO has id, nombre, descripcion.
+import StarIcon from '@mui/icons-material/Star';
+import { getCurrentUser } from "@/services/AuthService";
+import { getPortafoliosDestacados } from "@/services/PortafolioService";
+import { PortafolioDTO } from "@/types/Portafolio";
 
 export default function StrategiesPage() {
     const router = useRouter();
@@ -32,8 +32,16 @@ export default function StrategiesPage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getMisPortafolios()
-            .then(data => setPortfolios(data))
+        const user = getCurrentUser();
+        const userFullName = user ? `${user.nombre} ${user.apellido}` : "";
+
+        getPortafoliosDestacados()
+            .then(data => {
+                // Filter out portfolios owned by the current user
+                // Assuming dueñoNombre is formatted as "Nombre Apellido"
+                const filtered = data.filter(p => !p.dueñoNombre || p.dueñoNombre !== userFullName);
+                setPortfolios(filtered);
+            })
             .catch(console.error)
             .finally(() => setLoading(false));
     }, []);
@@ -45,23 +53,13 @@ export default function StrategiesPage() {
                     {/* Header */}
                     <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4}>
                         <Box>
-                            <Typography variant="h4" fontWeight="bold">
-                                Mis Estrategias
+                            <Typography variant="h4" fontWeight="bold" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                Estrategias Destacadas <StarIcon color="warning" />
                             </Typography>
                             <Typography variant="body1" color="text.secondary">
-                                Administra tus diferentes portafolios de inversión
+                                Descubre y sigue las estrategias de inversión más exitosas de la comunidad.
                             </Typography>
                         </Box>
-                        <Button
-                            variant="contained"
-                            startIcon={<AddIcon />}
-                            onClick={() => router.push('/registrar-operacion')} // Or create portfolio dialog? 
-                        // Currently creating a portfolio usually happens when registering an op or via a specific Create Portfolio UI.
-                        // The user didn't specify a "Create Portfolio" button, but I'll link to generic action or verify if there is a create-portfolio page.
-                        // For now, I'll point to registering an operation as it allows creating/selecting portfolios.
-                        >
-                            Nueva Estrategia
-                        </Button>
                     </Stack>
 
                     {loading ? (
@@ -72,17 +70,11 @@ export default function StrategiesPage() {
                         <Paper sx={{ p: 6, textAlign: 'center', borderRadius: 4 }}>
                             <TrendingUpIcon sx={{ fontSize: 60, color: 'text.secondary', mb: 2, opacity: 0.5 }} />
                             <Typography variant="h5" gutterBottom>
-                                Aún no tienes estrategias
+                                No hay estrategias destacadas
                             </Typography>
                             <Typography variant="body1" color="text.secondary" paragraph>
-                                Crea tu primer portafolio para organizar tus inversiones de manera eficiente.
+                                Vuelve más tarde para ver las mejores oportunidades de inversión.
                             </Typography>
-                            <Button
-                                variant="outlined"
-                                onClick={() => router.push('/registrar-operacion')}
-                            >
-                                Registrar Primera Operación
-                            </Button>
                         </Paper>
                     ) : (
                         <Grid container spacing={3}>
@@ -96,34 +88,49 @@ export default function StrategiesPage() {
                                         '&:hover': {
                                             transform: 'translateY(-4px)',
                                             boxShadow: 4
-                                        }
+                                        },
+                                        borderRadius: 3,
+                                        border: '1px solid',
+                                        borderColor: 'divider'
                                     }}>
                                         <CardContent sx={{ flexGrow: 1 }}>
-                                            <Typography variant="h6" gutterBottom fontWeight="bold">
-                                                {p.nombre}
+                                            <Stack direction="row" justifyContent="space-between" alignItems="start" mb={2}>
+                                                <Typography variant="h6" fontWeight="bold" noWrap sx={{ maxWidth: '70%' }}>
+                                                    {p.nombre}
+                                                </Typography>
+                                                {p.esDestacado && (
+                                                    <Chip label="Top" color="warning" size="small" icon={<StarIcon />} />
+                                                )}
+                                            </Stack>
+
+                                            <Typography variant="body2" color="text.secondary" sx={{
+                                                mb: 2,
+                                                display: '-webkit-box',
+                                                overflow: 'hidden',
+                                                WebkitBoxOrient: 'vertical',
+                                                WebkitLineClamp: 3
+                                            }}>
+                                                {p.descripcion || "Sin descripción disponible."}
                                             </Typography>
-                                            <Divider sx={{ mb: 2 }} />
-                                            <Typography variant="body2" color="text.secondary">
-                                                {p.descripcion || "Sin descripción"}
-                                            </Typography>
-                                            {/* We could fetch valuation for each, but getMisPortafolios might not return it. 
-                                                If we want valuation, we'd need to call getValuacion for each or use a bulk endpoint if available.
-                                                For now, simple list. */}
+
+                                            <Stack direction="row" alignItems="center" spacing={1} mt="auto">
+                                                <Avatar sx={{ width: 24, height: 24, fontSize: '0.75rem' }}>
+                                                    {p.dueñoNombre ? p.dueñoNombre[0].toUpperCase() : '?'}
+                                                </Avatar>
+                                                <Typography variant="caption" color="text.primary" fontWeight="medium">
+                                                    {p.dueñoNombre || "Usuario Anónimo"}
+                                                </Typography>
+                                            </Stack>
                                         </CardContent>
-                                        <CardActions sx={{ p: 2, pt: 0 }}>
+                                        <Divider />
+                                        <CardActions sx={{ p: 2 }}>
                                             <Button
-                                                size="small"
+                                                fullWidth
+                                                variant="outlined"
                                                 endIcon={<ArrowForwardIcon />}
                                                 onClick={() => router.push(`/portfolio?id=${p.id}`)}
-                                            // Assuming portfolio page can take query param or uses context.
-                                            // Actually PortfolioPage uses usePortfolioData which selects first by default.
-                                            // I might need to handle selection.
-                                            // Let's check PortfolioPage. It uses `selectedId` from state.
-                                            // It doesn't seem to read URL params.
-                                            // I'll link to /portfolio and maybe I should implement URL query param logic in PortfolioPage later?
-                                            // Or just let them go to portfolio and switch there.
                                             >
-                                                Ver Detalles
+                                                Ver Detalle
                                             </Button>
                                         </CardActions>
                                     </Card>
