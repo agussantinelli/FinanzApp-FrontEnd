@@ -46,8 +46,8 @@ export default function PortafolioTab() {
                     </TableHead>
                     <TableBody>
                         {portfolios.map((row) => {
-                            const totalInvertido = row.totalInvertido ?? 0;
-                            const totalValuado = row.totalValuado ?? 0;
+                            const totalInvertido = row.totalInvertidoUSD ?? 0;
+                            const totalValuado = row.totalValuadoUSD ?? 0;
                             let rentabilidad = 0;
 
                             if (totalInvertido > 0) {
