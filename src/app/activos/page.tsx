@@ -9,6 +9,8 @@ import {
   Stack,
   Typography,
   Button,
+  ToggleButton,
+  ToggleButtonGroup,
   Select,
   MenuItem,
   FormControl,
@@ -108,22 +110,72 @@ export default function Activos() {
           />
 
           {/* Favorites Toggle */}
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <Button
-              variant={onlyFavorites ? "contained" : "outlined"}
-              onClick={() => setOnlyFavorites(true)}
-              color="primary"
-              startIcon={<StarIcon />}
+          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+            <ToggleButtonGroup
+              value={onlyFavorites}
+              exclusive
+              onChange={(e, newVal) => {
+                if (newVal !== null) setOnlyFavorites(newVal);
+              }}
+              aria-label="filtro favoritos"
+              sx={{
+                bgcolor: 'rgba(255, 255, 255, 0.05)',
+                borderRadius: '12px',
+                p: 0.5,
+                border: '1px solid rgba(255, 255, 255, 0.12)'
+              }}
             >
-              Mis Favoritos
-            </Button>
-            <Button
-              variant={!onlyFavorites ? "contained" : "outlined"}
-              onClick={() => setOnlyFavorites(false)}
-              color="primary"
-            >
-              Todos los Activos
-            </Button>
+              <ToggleButton
+                value={true}
+                aria-label="favoritos"
+                sx={{
+                  color: 'text.secondary',
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  px: 3,
+                  py: 1,
+                  borderRadius: '8px !important',
+                  '&.Mui-selected': {
+                    bgcolor: 'rgba(13, 255, 33, 0.15) !important', // Neon Green tint
+                    color: '#0dff21 !important',
+                    borderColor: 'rgba(13, 255, 33, 0.3)'
+                  },
+                  '&:hover': {
+                    bgcolor: 'rgba(255, 255, 255, 0.08)'
+                  }
+                }}
+              >
+                <Stack direction="row" spacing={1} alignItems="center">
+                  {onlyFavorites ? <StarIcon fontSize="small" /> : <StarBorderIcon fontSize="small" />}
+                  <Typography variant="button" sx={{ textTransform: 'none', fontWeight: 700 }}>Mis Favoritos</Typography>
+                </Stack>
+              </ToggleButton>
+
+              <ToggleButton
+                value={false}
+                aria-label="todos"
+                sx={{
+                  color: 'text.secondary',
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  px: 3,
+                  py: 1,
+                  borderRadius: '8px !important',
+                  '&.Mui-selected': {
+                    bgcolor: 'rgba(33, 203, 243, 0.15) !important', // Cyan tint
+                    color: '#21CBF3 !important'
+                  },
+                  '&:hover': {
+                    bgcolor: 'rgba(255, 255, 255, 0.08)'
+                  }
+                }}
+              >
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <SearchIcon fontSize="small" />
+                  <Typography variant="button" sx={{ textTransform: 'none', fontWeight: 700 }}>Explorar Mercado</Typography>
+                </Stack>
+              </ToggleButton>
+            </ToggleButtonGroup>
           </Box>
 
           <div className={styles.controlsStack}>
