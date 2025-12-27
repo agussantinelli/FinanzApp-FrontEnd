@@ -5,7 +5,10 @@ export interface PortafolioDTO {
     esDestacado: boolean;
     esPrincipal: boolean;
     totalValuado?: number;
-    dueñoNombre?: string;
+    totalInvertido?: number;
+    nombreUsuario?: string;
+    rolUsuario?: string;
+    rentabilidadTotal?: number; // Keep this for now if backend sends it, but will calc frontend side too if needed
 }
 
 export interface ActivoEnPortafolioDTO {
