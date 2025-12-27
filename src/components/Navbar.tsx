@@ -41,6 +41,7 @@ const unauthItems = [
 ];
 
 const authMoreItems = [
+  { label: "Mis Operaciones", href: "/operaciones/me" },
   { label: "Noticias", href: "/noticias" },
   { label: "Reportes", href: "/reportes" },
 ];
