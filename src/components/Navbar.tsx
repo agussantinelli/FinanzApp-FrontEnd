@@ -171,7 +171,7 @@ export default function Navbar() {
                   color="inherit"
                   onClick={handleOpenMoreMenu}
                   endIcon={<ArrowDropDownIcon />}
-                  className={styles.navButton}
+                  className={styles.moreButton}
                 >
                   Más
                 </Button>
@@ -189,6 +189,7 @@ export default function Navbar() {
                       component={Link}
                       href={item.href}
                       onClick={handleCloseMoreMenu}
+                      className={styles.menuItem}
                     >
                       {item.label}
                     </MenuItem>

@@ -149,3 +149,19 @@
     margin-top: 8px !important;
     margin-bottom: 8px !important;
 }
+
+.moreButton {
+    text-transform: none !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    margin-right: 16px !important;
+}
+
+.menuItem {
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
