@@ -38,6 +38,9 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import SearchIcon from '@mui/icons-material/Search';
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import { toggleSeguirActivo } from "@/services/ActivosService";
 import NeonLoader from "@/components/ui/NeonLoader";
 import styles from "./styles/Activos.module.css";
 
@@ -71,8 +74,26 @@ export default function Activos() {
     handlePageChange,
     handleRefresh,
     executeSearch,
-    resetFilters
+    resetFilters,
+    updateAssetInList
   } = useActivosFilters();
+
+  const handleToggleSeguir = async (e: React.MouseEvent, asset: ActivoDTO) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Optimistic Update
+    const updatedAsset = { ...asset, loSigo: !asset.loSigo };
+    updateAssetInList(updatedAsset);
+
+    try {
+      await toggleSeguirActivo(asset.id);
+    } catch (error) {
+      console.error("Error toggling follow:", error);
+      // Revert on error
+      updateAssetInList(asset);
+    }
+  };
 
   return (
     <main className={styles.main}>
@@ -223,6 +244,9 @@ export default function Activos() {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead className={styles.tableHead}>
                   <TableRow>
+                    <TableCell padding="checkbox">
+                      {/* Empty header for star icon */}
+                    </TableCell>
                     <TableCell className={styles.columnHeader}>
                       <TableSortLabel
                         active={orderBy === "symbol"}
@@ -275,6 +299,11 @@ export default function Activos() {
                       key={activo.id}
                       className={styles.tableRow}
                     >
+                      <TableCell padding="checkbox">
+                        <IconButton onClick={(e) => handleToggleSeguir(e, activo)} size="small">
+                          {activo.loSigo ? <StarIcon color="warning" /> : <StarBorderIcon />}
+                        </IconButton>
+                      </TableCell>
                       <TableCell component="th" scope="row">
                         <div className={styles.assetInfo}>
                           <Avatar

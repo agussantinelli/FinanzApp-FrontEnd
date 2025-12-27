@@ -20,6 +20,11 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import IconButton from '@mui/material/IconButton';
+
+import { toggleSeguirActivo } from "@/services/ActivosService";
 
 import Link from "next/link";
 
@@ -63,9 +68,30 @@ export default function ActivoDetalle() {
     const id = params.id as string;
 
     const { isAuthenticated } = useAuth();
-    const { activo, activeRecommendations, loading } = useActivoDetail(id);
+    const { activo, activeRecommendations, loading, updateActivoState } = useActivoDetail(id);
     const { valuacion } = usePortfolioData();
     const [error, setError] = useState<string | null>(null);
+
+    const handleToggleSeguir = async () => {
+        if (!activo) return;
+        const user = getCurrentUser();
+        if (!user) {
+            router.push("/auth/login");
+            return;
+        }
+
+        // Optimistic Update
+        const updatedAsset = { ...activo, loSigo: !activo.loSigo };
+        updateActivoState(updatedAsset);
+
+        try {
+            await toggleSeguirActivo(activo.id);
+        } catch (error) {
+            console.error("Error toggling follow:", error);
+            // Revert on error
+            updateActivoState(activo);
+        }
+    };
 
     const handleOperation = (tipo: "COMPRA" | "VENTA") => {
         const user = getCurrentUser();
@@ -146,9 +172,14 @@ export default function ActivoDetalle() {
                                 {activo.symbol.substring(0, 1)}
                             </Avatar>
                             <Box>
-                                <Typography variant="h3" className={styles.symbolText}>
-                                    {activo.symbol}
-                                </Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <Typography variant="h3" className={styles.symbolText}>
+                                        {activo.symbol}
+                                    </Typography>
+                                    <IconButton onClick={handleToggleSeguir} sx={{ color: 'white' }}>
+                                        {activo.loSigo ? <StarIcon color="warning" /> : <StarBorderIcon />}
+                                    </IconButton>
+                                </Box>
                                 <Typography variant="h6" className={styles.nameText}>
                                     {activo.nombre}
                                 </Typography>

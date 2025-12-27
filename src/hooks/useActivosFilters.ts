@@ -264,6 +264,9 @@ export function useActivosFilters() {
         handlePageChange,
         handleRefresh,
         executeSearch,
-        resetFilters
+        resetFilters,
+        updateAssetInList: (updatedAsset: ActivoDTO) => {
+            setActivos(prev => prev.map(a => a.id === updatedAsset.id ? updatedAsset : a));
+        }
     };
 }

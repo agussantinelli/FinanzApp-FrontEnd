@@ -88,5 +88,10 @@ export function useActivoDetail(id: string) {
         }
     }, [id]);
 
-    return { activo, activeRecommendations, loading };
+    return {
+        activo,
+        activeRecommendations,
+        loading,
+        updateActivoState: setActivo
+    };
 }
