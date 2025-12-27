@@ -4,23 +4,27 @@ export interface PortafolioDTO {
     descripcion?: string;
     esDestacado: boolean;
     esPrincipal: boolean;
-    totalValuado?: number;
-    totalInvertido?: number;
-    nombreUsuario?: string;
-    rolUsuario?: string;
-    rentabilidadTotal?: number; // Keep this for now if backend sends it, but will calc frontend side too if needed
+
+    // --- CAMPOS ADMINISTRATIVOS Y FINANCIEROS (Dual Currency) ---
+    totalValuadoUSD: number;
+    totalValuadoARS: number;
+    totalInvertidoUSD: number;
+    totalInvertidoARS: number;
+
+    nombreUsuario: string;
+    rolUsuario: string;
 }
 
 export interface ActivoEnPortafolioDTO {
     activoId: string; // Guid
     symbol: string;
+    tipoActivo: string;
+    moneda: string;
     cantidad: number;
     precioPromedioCompra: number;
     precioActual: number;
     valorizadoNativo: number;
     porcentajeCartera: number;
-    moneda: string;
-    tipoActivo: string;
 }
 
 export interface PortafolioValuadoDTO {
@@ -29,12 +33,14 @@ export interface PortafolioValuadoDTO {
     descripcion?: string;
     esPrincipal: boolean;
     esDestacado: boolean;
+
     totalPesos: number;
     gananciaPesos: number;
     variacionPorcentajePesos: number;
     totalDolares: number;
     gananciaDolares: number;
     variacionPorcentajeDolares: number;
+
     loSigo: boolean;
     activos: ActivoEnPortafolioDTO[];
 }
