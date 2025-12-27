@@ -71,6 +71,12 @@ export async function getActivosByTipoAndSector(tipoId: number, sectorId: string
     return res.data;
 }
 
+export async function getActivosFavoritos(): Promise<ActivoDTO[]> {
+    const res = await http.get<ActivoDTO[]>("/api/activos/favoritos");
+    cacheActivos(res.data, true); // Cache favorites as important
+    return res.data;
+}
+
 export async function toggleSeguirActivo(id: string): Promise<void> {
     await http.post(`/api/activos/${id}/seguir`);
 }
