@@ -54,7 +54,7 @@ export async function getRankingActivos(criterio: string = "variacion", desc: bo
 }
 
 export async function searchActivos(texto: string): Promise<ActivoDTO[]> {
-    const res = await http.get<ActivoDTO[]>(`/api/activos/buscar/${texto}`);
+    const res = await http.get<ActivoDTO[]>(`/api/activos/buscar?q=${encodeURIComponent(texto)}`);
     cacheActivos(res.data);
     return res.data;
 }
