@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Box, Typography, IconButton } from "@mui/material";
 import { RiRobot2Line } from "react-icons/ri";
 import SendIcon from "@mui/icons-material/Send";
@@ -17,6 +18,7 @@ interface Message {
 }
 
 export default function FinanzAiChat() {
+    const pathname = usePathname();
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
         { id: 1, text: "¡Hola! Soy FinanzAI 🤖. ¿En qué puedo ayudarte hoy con tus inversiones?", sender: "ai" }
@@ -59,6 +61,11 @@ export default function FinanzAiChat() {
             setLoading(false);
         }
     };
+
+    // Ocultar en auth
+    if (pathname?.includes("/auth/login") || pathname?.includes("/auth/register")) {
+        return null;
+    }
 
     return (
         <Box className={styles.chatContainer}>
