@@ -7,8 +7,8 @@ export type OrderBy = 'symbol' | 'moneda' | 'cantidad' | 'ppc' | 'totalCost' | '
 interface UsePortfolioSortProps {
     activos: ActivoEnPortafolioDTO[] | undefined;
     currency: 'ARS' | 'USD';
-    totalPesos?: number;
-    totalDolares?: number;
+    totalPesos?: number | null;
+    totalDolares?: number | null;
 }
 
 export function usePortfolioSort({ activos, currency, totalPesos, totalDolares }: UsePortfolioSortProps) {
