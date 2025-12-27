@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, IconButton, Skeleton, TextField, InputAdornment, FormControl, InputLabel, Select, MenuItem, Stack, TableSortLabel } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -8,114 +8,29 @@ import { ConfirmDialog } from '@/components/common/ConfirmDialog';
 import AssetFormDialog from './AssetFormDialog';
 import styles from '../styles/Admin.module.css';
 import { ActivoDTO, ActivoCreateDTO, ActivoUpdateDTO } from '@/types/Activo';
-import { getTiposActivoNoMoneda } from '@/services/TipoActivosService';
-import { getSectores } from '@/services/SectorService';
-import { TipoActivoDTO } from '@/types/TipoActivo';
-import { SectorDTO } from '@/types/Sector';
-
-type Order = 'asc' | 'desc';
+import { useActivosFilterAndSort } from '@/hooks/useActivosFilterAndSort';
 
 export default function ActivosTab() {
     const { activos, loading, addAsset, updateAsset, removeAsset } = useAdminAssets();
 
+    // Custom hook for filtering and sorting logic
+    const {
+        tipos,
+        sectores,
+        searchTerm, setSearchTerm,
+        selectedType, setSelectedType,
+        selectedSector, setSelectedSector,
+        order, orderBy, handleRequestSort,
+        filteredAndSortedActivos
+    } = useActivosFilterAndSort(activos);
+
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [selectedId, setSelectedId] = useState<string | null>(null);
-
-    // Filter State
-    const [tipos, setTipos] = useState<TipoActivoDTO[]>([]);
-    const [sectores, setSectores] = useState<SectorDTO[]>([]);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [selectedType, setSelectedType] = useState<string | number>("Todos");
-    const [selectedSector, setSelectedSector] = useState<string>("Todos");
-
-    // Sort State
-    const [order, setOrder] = useState<Order>('asc');
-    const [orderBy, setOrderBy] = useState<keyof ActivoDTO>('symbol');
 
     // Dialog State
     const [dialogOpen, setDialogOpen] = useState(false);
     const [dialogMode, setDialogMode] = useState<'create' | 'edit'>('create');
     const [selectedAsset, setSelectedAsset] = useState<ActivoDTO | null>(null);
-
-    // Initial load for types/sectors
-    useEffect(() => {
-        const loadMetadata = async () => {
-            try {
-                const [t, s] = await Promise.all([getTiposActivoNoMoneda(), getSectores()]);
-                setTipos(t);
-                setSectores(s);
-            } catch (err) {
-                console.error("Error loading metadata", err);
-            }
-        };
-        loadMetadata();
-    }, []);
-
-    const handleRequestSort = (property: keyof ActivoDTO) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
-
-    const filteredActivos = useMemo(() => {
-        const filtered = activos.filter(activo => {
-            // Search Filter
-            const lowerTerm = searchTerm.toLowerCase();
-            const matchesSearch = activo.symbol.toLowerCase().includes(lowerTerm) ||
-                activo.nombre.toLowerCase().includes(lowerTerm);
-
-            // Type Filter
-            let matchesType = true;
-            if (selectedType !== "Todos") {
-                const tObj = tipos.find(t => t.id === Number(selectedType));
-                matchesType = tObj ? activo.tipo === tObj.nombre : true;
-            }
-
-            // Sector Filter
-            let matchesSector = true;
-            if (selectedSector !== "Todos") {
-                const sObj = sectores.find(s => s.id === selectedSector);
-                matchesSector = sObj ? activo.sector === sObj.nombre : true;
-            }
-
-            return matchesSearch && matchesType && matchesSector;
-        });
-
-        // Sorting
-        return filtered.sort((a, b) => {
-            let valueA = a[orderBy];
-            let valueB = b[orderBy];
-
-            // Handle null/undefined for Sector
-            if (orderBy === 'sector') {
-                valueA = valueA || '';
-                valueB = valueB || '';
-            }
-
-            if (typeof valueA === 'string' && typeof valueB === 'string') {
-                // Case insensitive sort
-                valueA = valueA.toLowerCase();
-                valueB = valueB.toLowerCase();
-                if (valueB < valueA) {
-                    return order === 'asc' ? 1 : -1;
-                }
-                if (valueB > valueA) {
-                    return order === 'asc' ? -1 : 1;
-                }
-                return 0;
-            }
-            // Numerical/Boolean sort
-            if (valueB < valueA) {
-                return order === 'asc' ? 1 : -1;
-            }
-            if (valueB > valueA) {
-                return order === 'asc' ? -1 : 1;
-            }
-            return 0;
-        });
-
-    }, [activos, searchTerm, selectedType, selectedSector, tipos, sectores, order, orderBy]);
-
 
     const handleDeleteClick = (id: string) => {
         setSelectedId(id);
@@ -263,7 +178,7 @@ export default function ActivosTab() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {filteredActivos.map((row) => (
+                        {filteredAndSortedActivos.map((row) => (
                             <TableRow key={row.id} hover>
                                 <TableCell>
                                     <Chip label={row.symbol} size="small" className={styles.chipSymbol} />
