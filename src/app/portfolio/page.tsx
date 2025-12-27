@@ -208,19 +208,43 @@ export default function PortfolioPage() {
             <Paper className={styles.card}>
               <Typography variant="caption" color="text.secondary">Ganancia/Pérdida ({currency})</Typography>
               <Typography variant="h4" className={`${styles.cardValue} ${(currency === 'ARS' ? (valuacion?.gananciaPesos ?? 0) : (valuacion?.gananciaDolares ?? 0)) >= 0 ? styles.positiveChange : styles.negativeChange}`}>
-                {valuacion
-                  ? (
-                    currency === 'ARS'
-                      ? (valuacion.gananciaPesos > 0 ? "+" : "") + formatARS(valuacion.gananciaPesos)
-                      : (valuacion.gananciaDolares > 0 ? "+" : "") + formatUSD(valuacion.gananciaDolares)
-                  )
-                  : "-"
-                }
+                {(() => {
+                  if (!valuacion) return "-";
+
+                  let gain = currency === 'ARS' ? valuacion.gananciaPesos : valuacion.gananciaDolares;
+
+                  // Fix for potentially missing USD gain
+                  if (currency === 'USD' && gain === 0 && valuacion.gananciaPesos !== 0 && valuacion.totalDolares > 0) {
+                    const impliedRate = valuacion.totalPesos / valuacion.totalDolares;
+                    if (impliedRate > 0) {
+                      gain = valuacion.gananciaPesos / impliedRate;
+                    }
+                  }
+
+                  return (gain > 0 ? "+" : "") + (currency === 'ARS' ? formatARS(gain) : formatUSD(gain));
+                })()}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Variación total: {valuacion
-                  ? formatPercentage(currency === 'ARS' ? valuacion.variacionPorcentajePesos : valuacion.variacionPorcentajeDolares)
-                  : "0"}%
+                Variación total: {(() => {
+                  if (!valuacion) return "0";
+
+                  let pct = currency === 'ARS' ? valuacion.variacionPorcentajePesos : valuacion.variacionPorcentajeDolares;
+                  let gain = currency === 'ARS' ? valuacion.gananciaPesos : valuacion.gananciaDolares;
+
+                  // Fix for missing USD data
+                  if (currency === 'USD' && gain === 0 && valuacion.gananciaPesos !== 0 && valuacion.totalDolares > 0) {
+                    const impliedRate = valuacion.totalPesos / valuacion.totalDolares;
+                    if (impliedRate > 0) {
+                      const estimatedSdkGain = valuacion.gananciaPesos / impliedRate;
+                      const cost = valuacion.totalDolares - estimatedSdkGain;
+                      if (cost !== 0) {
+                        pct = (estimatedSdkGain / cost) * 100;
+                      }
+                    }
+                  }
+
+                  return formatPercentage(pct);
+                })()}%
               </Typography>
             </Paper>
           </Grid>
