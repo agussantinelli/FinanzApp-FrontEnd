@@ -43,6 +43,8 @@ export interface PortafolioValuadoDTO {
 
     loSigo: boolean;
     activos: ActivoEnPortafolioDTO[];
+    nombreUsuario?: string;
+    rolUsuario?: string;
 }
 
 export interface PortafolioCreateDTO {

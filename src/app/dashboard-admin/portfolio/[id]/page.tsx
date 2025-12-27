@@ -62,7 +62,7 @@ export default function AdminPortfolioView() {
 
     if (loading) {
         return (
-            <RoleGuard allowedRoles={[RolUsuario.Admin]}>
+            <RoleGuard allowedRoles={['Admin']}>
                 <Box className={styles.container}>
                     <Skeleton variant="rectangular" height={200} />
                     <Skeleton variant="rectangular" height={400} sx={{ mt: 2 }} />
@@ -73,7 +73,7 @@ export default function AdminPortfolioView() {
 
     if (!valuacion) {
         return (
-            <RoleGuard allowedRoles={[RolUsuario.Admin]}>
+            <RoleGuard allowedRoles={['Admin']}>
                 <Box sx={{ p: 4, textAlign: 'center' }}>
                     <Typography variant="h5">Portafolio no encontrado</Typography>
                     <Button onClick={() => router.back()} sx={{ mt: 2 }} variant="outlined">Volver</Button>
@@ -83,7 +83,7 @@ export default function AdminPortfolioView() {
     }
 
     return (
-        <RoleGuard allowedRoles={[RolUsuario.Admin]}>
+        <RoleGuard allowedRoles={['Admin']}>
             <Box className={styles.container}>
                 <Button
                     startIcon={<ArrowBackIcon />}
@@ -108,6 +108,18 @@ export default function AdminPortfolioView() {
                                     <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
                                         {valuacion.esPrincipal && <Chip label="Principal" color="info" size="small" />}
                                         {valuacion.esDestacado && <Chip label="Destacado" color="warning" size="small" />}
+                                    </Stack>
+                                    <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1 }}>
+                                        <Typography variant="caption" color="text.secondary">
+                                            Creado por: <strong>{valuacion.nombreUsuario || "Desconocido"}</strong>
+                                        </Typography>
+                                        <Chip
+                                            label={valuacion.rolUsuario || "N/A"}
+                                            size="small"
+                                            color={valuacion.rolUsuario === 'Experto' ? 'secondary' : 'default'}
+                                            variant="outlined"
+                                            sx={{ height: 20, fontSize: '0.7rem' }}
+                                        />
                                     </Stack>
                                 </Box>
                                 <Box>
