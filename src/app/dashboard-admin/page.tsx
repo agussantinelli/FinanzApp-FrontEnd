@@ -20,6 +20,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import StarIcon from '@mui/icons-material/Star';
+import PieChartIcon from '@mui/icons-material/PieChart';
 
 import styles from "./styles/Admin.module.css";
 import { TabPanelProps } from "@/types/ComponentProps";
@@ -30,6 +31,7 @@ import UsuariosTab from "./components/UsuariosTab";
 import OperacionesTab from "./components/OperacionesTab";
 import ActivosTab from "./components/ActivosTab";
 import RecomendacionesTab from "./components/RecomendacionesTab";
+import PortafolioTab from "./components/PortafolioTab";
 
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -94,6 +96,7 @@ export default function AdminDashboardPage() {
             <Tab icon={<PersonIcon />} iconPosition="start" label="Usuarios" />
             <Tab icon={<DescriptionIcon />} iconPosition="start" label="Operaciones" />
             <Tab icon={<AttachMoneyIcon />} iconPosition="start" label="Activos" />
+            <Tab icon={<PieChartIcon />} iconPosition="start" label="Portafolios" />
             <Tab icon={<StarIcon />} iconPosition="start" label="Recomendaciones" />
           </Tabs>
         </Box>
@@ -116,6 +119,10 @@ export default function AdminDashboardPage() {
         </CustomTabPanel>
 
         <CustomTabPanel value={tabValue} index={4}>
+          <PortafolioTab />
+        </CustomTabPanel>
+
+        <CustomTabPanel value={tabValue} index={5}>
           <RecomendacionesTab />
         </CustomTabPanel>
 
