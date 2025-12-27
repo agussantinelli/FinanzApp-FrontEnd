@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, IconButton, Skeleton, TextField, InputAdornment, FormControl, InputLabel, Select, MenuItem, Stack } from '@mui/material';
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, IconButton, Skeleton, TextField, InputAdornment, FormControl, InputLabel, Select, MenuItem, Stack, TableSortLabel } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
@@ -13,6 +13,8 @@ import { getSectores } from '@/services/SectorService';
 import { TipoActivoDTO } from '@/types/TipoActivo';
 import { SectorDTO } from '@/types/Sector';
 
+type Order = 'asc' | 'desc';
+
 export default function ActivosTab() {
     const { activos, loading, addAsset, updateAsset, removeAsset } = useAdminAssets();
 
@@ -25,6 +27,10 @@ export default function ActivosTab() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedType, setSelectedType] = useState<string | number>("Todos");
     const [selectedSector, setSelectedSector] = useState<string>("Todos");
+
+    // Sort State
+    const [order, setOrder] = useState<Order>('asc');
+    const [orderBy, setOrderBy] = useState<keyof ActivoDTO>('symbol');
 
     // Dialog State
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -45,8 +51,14 @@ export default function ActivosTab() {
         loadMetadata();
     }, []);
 
+    const handleRequestSort = (property: keyof ActivoDTO) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
+
     const filteredActivos = useMemo(() => {
-        return activos.filter(activo => {
+        const filtered = activos.filter(activo => {
             // Search Filter
             const lowerTerm = searchTerm.toLowerCase();
             const matchesSearch = activo.symbol.toLowerCase().includes(lowerTerm) ||
@@ -68,7 +80,41 @@ export default function ActivosTab() {
 
             return matchesSearch && matchesType && matchesSector;
         });
-    }, [activos, searchTerm, selectedType, selectedSector, tipos, sectores]);
+
+        // Sorting
+        return filtered.sort((a, b) => {
+            let valueA = a[orderBy];
+            let valueB = b[orderBy];
+
+            // Handle null/undefined for Sector
+            if (orderBy === 'sector') {
+                valueA = valueA || '';
+                valueB = valueB || '';
+            }
+
+            if (typeof valueA === 'string' && typeof valueB === 'string') {
+                // Case insensitive sort
+                valueA = valueA.toLowerCase();
+                valueB = valueB.toLowerCase();
+                if (valueB < valueA) {
+                    return order === 'asc' ? 1 : -1;
+                }
+                if (valueB > valueA) {
+                    return order === 'asc' ? -1 : 1;
+                }
+                return 0;
+            }
+            // Numerical/Boolean sort
+            if (valueB < valueA) {
+                return order === 'asc' ? 1 : -1;
+            }
+            if (valueB > valueA) {
+                return order === 'asc' ? -1 : 1;
+            }
+            return 0;
+        });
+
+    }, [activos, searchTerm, selectedType, selectedSector, tipos, sectores, order, orderBy]);
 
 
     const handleDeleteClick = (id: string) => {
@@ -168,11 +214,51 @@ export default function ActivosTab() {
                 <Table>
                     <TableHead className={styles.tableHead}>
                         <TableRow>
-                            <TableCell>Símbolo</TableCell>
-                            <TableCell>Nombre</TableCell>
-                            <TableCell>Tipo</TableCell>
-                            <TableCell>Sector</TableCell>
-                            <TableCell>Moneda</TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={orderBy === 'symbol'}
+                                    direction={orderBy === 'symbol' ? order : 'asc'}
+                                    onClick={() => handleRequestSort('symbol')}
+                                >
+                                    Símbolo
+                                </TableSortLabel>
+                            </TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={orderBy === 'nombre'}
+                                    direction={orderBy === 'nombre' ? order : 'asc'}
+                                    onClick={() => handleRequestSort('nombre')}
+                                >
+                                    Nombre
+                                </TableSortLabel>
+                            </TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={orderBy === 'tipo'}
+                                    direction={orderBy === 'tipo' ? order : 'asc'}
+                                    onClick={() => handleRequestSort('tipo')}
+                                >
+                                    Tipo
+                                </TableSortLabel>
+                            </TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={orderBy === 'sector'}
+                                    direction={orderBy === 'sector' ? order : 'asc'}
+                                    onClick={() => handleRequestSort('sector')}
+                                >
+                                    Sector
+                                </TableSortLabel>
+                            </TableCell>
+                            <TableCell>
+                                <TableSortLabel
+                                    active={orderBy === 'moneda'}
+                                    direction={orderBy === 'moneda' ? order : 'asc'}
+                                    onClick={() => handleRequestSort('moneda')}
+                                >
+                                    Moneda
+                                </TableSortLabel>
+                            </TableCell>
                             <TableCell>Acciones</TableCell>
                         </TableRow>
                     </TableHead>
@@ -185,7 +271,11 @@ export default function ActivosTab() {
                                 <TableCell>{row.nombre}</TableCell>
                                 <TableCell>{row.tipo}</TableCell>
                                 <TableCell>
-                                    {row.sector && <Chip label={row.sector} size="small" variant="outlined" />}
+                                    {row.sector ? (
+                                        <Chip label={row.sector} size="small" variant="outlined" />
+                                    ) : (
+                                        <span style={{ opacity: 0.5, fontStyle: 'italic', fontSize: '0.8rem' }}>Sin Sector</span>
+                                    )}
                                 </TableCell>
                                 <TableCell><Chip label={row.moneda} size="small" variant="outlined" /></TableCell>
                                 <TableCell>
