@@ -270,7 +270,12 @@ export default function PortfolioPage() {
               open={editOpen}
               onClose={() => setEditOpen(false)}
               onSuccess={handleEditSuccess}
-              portfolio={valuacion ? { id: valuacion.id, nombre: valuacion.nombre, descripcion: valuacion.descripcion } : null}
+              portfolio={valuacion ? {
+                id: valuacion.id,
+                nombre: valuacion.nombre,
+                descripcion: valuacion.descripcion || '',
+                esPrincipal: valuacion.esPrincipal
+              } : null}
             />
           </Grid>
 
