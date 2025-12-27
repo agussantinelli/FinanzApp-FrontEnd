@@ -62,6 +62,34 @@ export function usePortfolioData() {
         setSelectedId(newId);
     };
 
+    const refreshPortfolios = useCallback(() => {
+        setLoading(true);
+        getMisPortafolios()
+            .then(data => {
+                setPortfolios(data);
+                // If the selected ID is no longer in the list (deleted), or if we had none, select the first one
+                if (data.length > 0) {
+                    if (!selectedId || !data.find(p => p.id === selectedId)) {
+                        setSelectedId(data[0].id);
+                    }
+                } else {
+                    setSelectedId("");
+                }
+                // If we have a selected ID, refresh its details too
+                if (selectedId && data.find(p => p.id === selectedId)) {
+                    // This will be handled by the useEffect dependent on selectedId? 
+                    // No, that only runs if selectedId changes. 
+                    // So we might want to manually fetch details if we want a full refresh, 
+                    // but refreshPortfolios is mainly for the list.
+                }
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error("Error refreshing portfolios", err);
+                setLoading(false);
+            });
+    }, [selectedId]);
+
     const refresh = useCallback(() => {
         if (selectedId) fetchDetails(selectedId);
     }, [selectedId, fetchDetails]);
@@ -72,6 +100,7 @@ export function usePortfolioData() {
         valuacion,
         loading,
         handlePortfolioChange,
-        refresh
+        refresh,
+        refreshPortfolios
     };
 }

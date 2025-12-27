@@ -22,7 +22,10 @@ import {
   Skeleton,
   FormControl,
   InputLabel,
-  TableSortLabel
+  TableSortLabel,
+  IconButton,
+  Menu,
+  Tooltip
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { RoleGuard } from "@/components/auth/RoleGuard";
@@ -32,15 +35,24 @@ import styles from "./styles/Portfolio.module.css";
 import { formatARS, formatPercentage, formatUSD, formatQuantity } from "@/utils/format";
 import AddIcon from '@mui/icons-material/Add';
 import HistoryIcon from '@mui/icons-material/History';
+import EditIcon from '@mui/icons-material/Edit';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { CurrencyToggle } from "@/components/common/CurrencyToggle";
 import PortfolioCompositionChart from "@/components/portfolio/PortfolioCompositionChart";
 // Helper for dynamic formatting
 import { usePortfolioSort, Order, OrderBy } from "@/hooks/usePortfolioSort";
+import { CreatePortfolioDialog, EditPortfolioDialog } from "@/components/portfolio/PortfolioDialogs";
 
 export default function PortfolioPage() {
   const router = useRouter();
-  const { portfolios, selectedId, valuacion, loading, handlePortfolioChange } = usePortfolioData();
+  // refreshPortfolios updates the list, refresh updates the current selected portfolio details
+  const { portfolios, selectedId, valuacion, loading, handlePortfolioChange, refreshPortfolios, refresh } = usePortfolioData();
   const [currency, setCurrency] = React.useState<'ARS' | 'USD'>('USD');
+
+  // UI State
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [createOpen, setCreateOpen] = React.useState(false);
+  const [editOpen, setEditOpen] = React.useState(false);
 
   // Sorting State
   const { order, orderBy, handleRequestSort, sortedActivos } = usePortfolioSort({
@@ -49,6 +61,26 @@ export default function PortfolioPage() {
     totalPesos: valuacion?.totalPesos,
     totalDolares: valuacion?.totalDolares
   });
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+  const handleSwitchPortfolio = (id: string) => {
+    handlePortfolioChange(id);
+    handleMenuClose();
+  };
+
+  const handleCreateSuccess = () => {
+    refreshPortfolios();
+  };
+
+  const handleEditSuccess = () => {
+    refreshPortfolios(); // Update name/desc in list dropdown
+    refresh(); // Update name/desc in current view header
+  };
 
 
   if (loading) {
@@ -123,17 +155,30 @@ export default function PortfolioPage() {
                   Actualmente no tienes ningún portafolio activo ni posiciones registradas.
                   Comienza operando para ver tus inversiones aquí.
                 </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => router.push('/registrar-operacion')}
-                  sx={{ mt: 2 }}
-                >
-                  Registrar Operación
-                </Button>
+                <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 2 }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => router.push('/registrar-operacion')}
+                  >
+                    Registrar Operación
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => setCreateOpen(true)}
+                  >
+                    Crear Nuevo Portafolio
+                  </Button>
+                </Stack>
               </Paper>
             </Grid>
           </Grid>
+          <CreatePortfolioDialog
+            open={createOpen}
+            onClose={() => setCreateOpen(false)}
+            onSuccess={() => { refreshPortfolios(); setCreateOpen(false); }}
+          />
         </Box>
       </RoleGuard>
     );
@@ -148,7 +193,47 @@ export default function PortfolioPage() {
             <Paper className={styles.headerPaper}>
               <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems="center" spacing={2}>
                 <Box>
-                  <Typography variant="h4" className={styles.headerTitle} sx={{ fontWeight: 700 }}>Resumen de Portafolio</Typography>
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Typography variant="h4" className={styles.headerTitle} sx={{ fontWeight: 700 }}>
+                      {valuacion?.nombre || "Mi Portafolio"}
+                    </Typography>
+
+                    {/* Change Portfolio */}
+                    <Tooltip title="Cambiar de portafolio">
+                      <IconButton size="small" onClick={handleMenuClick}>
+                        <KeyboardArrowDownIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={handleMenuClose}
+                    >
+                      {portfolios.map((p) => (
+                        <MenuItem
+                          key={p.id}
+                          selected={p.id === selectedId}
+                          onClick={() => handleSwitchPortfolio(p.id)}
+                        >
+                          {p.nombre}
+                        </MenuItem>
+                      ))}
+                    </Menu>
+
+                    {/* Edit Portfolio */}
+                    <Tooltip title="Editar detalles">
+                      <IconButton size="small" onClick={() => setEditOpen(true)}>
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+
+                    {/* Create Portfolio (El "más") */}
+                    <Tooltip title="Crear nuevo portafolio">
+                      <IconButton size="small" onClick={() => setCreateOpen(true)}>
+                        <AddIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </Stack>
                   <Typography variant="body2" color="text.secondary">
                     {valuacion?.descripcion || "Resumen de tus inversiones."}
                   </Typography>
@@ -172,17 +257,21 @@ export default function PortfolioPage() {
                   >
                     Registrar Operación
                   </Button>
-                  {portfolios.length > 1 && (
-                    <FormControl size="small" sx={{ minWidth: 150 }}>
-                      <InputLabel>Portafolio</InputLabel>
-                      <Select value={selectedId} label="Portafolio" onChange={(e) => handlePortfolioChange(e.target.value)}>
-                        {portfolios.map(p => <MenuItem key={p.id} value={p.id}>{p.nombre}</MenuItem>)}
-                      </Select>
-                    </FormControl>
-                  )}
                 </Stack>
               </Stack>
             </Paper>
+
+            <CreatePortfolioDialog
+              open={createOpen}
+              onClose={() => setCreateOpen(false)}
+              onSuccess={handleCreateSuccess}
+            />
+            <EditPortfolioDialog
+              open={editOpen}
+              onClose={() => setEditOpen(false)}
+              onSuccess={handleEditSuccess}
+              portfolio={valuacion ? { id: valuacion.id, nombre: valuacion.nombre, descripcion: valuacion.descripcion } : null}
+            />
           </Grid>
 
           {/* CARDS */}
