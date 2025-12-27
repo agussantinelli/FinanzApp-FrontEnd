@@ -94,7 +94,7 @@ export default function AdminPortfolioView() {
 
                 <Grid container spacing={3}>
                     {/* HEADER */}
-                    <Grid item xs={12}>
+                    <Grid xs={12}>
                         <Paper className={styles.headerPaper}>
                             <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems="center" spacing={2}>
                                 <Box>
@@ -117,7 +117,7 @@ export default function AdminPortfolioView() {
                     </Grid>
 
                     {/* CARDS */}
-                    <Grid item xs={12} md={4}>
+                    <Grid xs={12} md={4}>
                         <Paper className={`${styles.card} ${styles.highlightCard}`}>
                             <Typography variant="caption" color="text.secondary">Valor Total ({currency})</Typography>
                             <Typography variant="h4" className={styles.cardValue}>
@@ -126,7 +126,7 @@ export default function AdminPortfolioView() {
                         </Paper>
                     </Grid>
 
-                    <Grid item xs={12} md={4}>
+                    <Grid xs={12} md={4}>
                         <Paper className={styles.card}>
                             <Typography variant="caption" color="text.secondary">Ganancia/Pérdida ({currency})</Typography>
                             <Typography variant="h4" className={`${styles.cardValue} ${(currency === 'ARS' ? valuacion.gananciaPesos : valuacion.gananciaDolares) >= 0 ? styles.positiveChange : styles.negativeChange}`}>
@@ -142,7 +142,7 @@ export default function AdminPortfolioView() {
                         </Paper>
                     </Grid>
 
-                    <Grid item xs={12} md={4}>
+                    <Grid xs={12} md={4}>
                         <Paper className={styles.card}>
                             <Typography variant="caption" color="text.secondary">Activos en Cartera</Typography>
                             <Typography variant="h4" className={styles.cardValue}>
@@ -152,7 +152,7 @@ export default function AdminPortfolioView() {
                     </Grid>
 
                     {/* CHART */}
-                    <Grid item xs={12}>
+                    <Grid xs={12}>
                         <PortfolioCompositionChart
                             activos={valuacion.activos || []}
                             totalPesos={valuacion.totalPesos}
@@ -162,7 +162,7 @@ export default function AdminPortfolioView() {
                     </Grid>
 
                     {/* TABLE */}
-                    <Grid item xs={12}>
+                    <Grid xs={12}>
                         <Paper className={styles.tablePaper}>
                             <Typography variant="h6" className={styles.sectionTitle} gutterBottom>
                                 Detalle de Activos

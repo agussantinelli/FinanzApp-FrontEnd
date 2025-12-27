@@ -67,7 +67,7 @@ export default function AssetFormDialog({ open, onClose, onSave, initialData, mo
                 symbol: initialData.symbol, // Symbol is read-only in edit usually, but kept for state
                 nombre: initialData.nombre,
                 tipoActivoId: initialData.tipoActivoId,
-                monedaBase: initialData.moneda,
+                monedaBase: initialData.monedaBase,
                 esLocal: initialData.esLocal,
                 sectorId: initialData.sectorId || null as any, // Cast for TS compatibility if needed
                 descripcion: initialData.descripcion

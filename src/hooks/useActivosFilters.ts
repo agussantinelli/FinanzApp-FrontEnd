@@ -99,7 +99,7 @@ export function useActivosFilters() {
             }
             // Apply currency filter if searching
             if (selectedCurrency !== "Todos") {
-                data = data.filter(a => a.moneda === selectedCurrency);
+                data = data.filter(a => a.monedaBase === selectedCurrency);
             }
             setActivos(data);
         } catch (error) {
@@ -169,7 +169,7 @@ export function useActivosFilters() {
 
             // Apply Currency Filter
             if (selectedCurrency !== "Todos") {
-                data = data.filter(a => a.moneda === selectedCurrency);
+                data = data.filter(a => a.monedaBase === selectedCurrency);
             }
 
             const criterio = criterioMap[orderBy] || "marketCap";
