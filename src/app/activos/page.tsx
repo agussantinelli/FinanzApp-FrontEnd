@@ -75,7 +75,9 @@ export default function Activos() {
     handleRefresh,
     executeSearch,
     resetFilters,
-    updateAssetInList
+    updateAssetInList,
+    onlyFavorites,
+    setOnlyFavorites
   } = useActivosFilters();
 
   const handleToggleSeguir = async (e: React.MouseEvent, asset: ActivoDTO) => {
@@ -104,6 +106,25 @@ export default function Activos() {
             subtitle="Activos en Tiempo Real"
             description="Explora, analiza y descubre oportunidades de inversión en tiempo real."
           />
+
+          {/* Favorites Toggle */}
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button
+              variant={onlyFavorites ? "contained" : "outlined"}
+              onClick={() => setOnlyFavorites(true)}
+              color="primary"
+              startIcon={<StarIcon />}
+            >
+              Mis Favoritos
+            </Button>
+            <Button
+              variant={!onlyFavorites ? "contained" : "outlined"}
+              onClick={() => setOnlyFavorites(false)}
+              color="primary"
+            >
+              Todos los Activos
+            </Button>
+          </Box>
 
           <div className={styles.controlsStack}>
 

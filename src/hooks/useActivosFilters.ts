@@ -9,10 +9,12 @@ import {
     getActivosByTipoAndSector,
     searchActivos,
     getRankingActivos,
+    getActivosFavoritos
 } from '@/services/ActivosService';
 import { getTiposActivoNoMoneda } from '@/services/TipoActivosService';
 import { getSectores } from '@/services/SectorService';
 import { getAllActivosFromCache } from '@/lib/activos-cache';
+
 
 export function useActivosFilters() {
     const [selectedType, setSelectedType] = useState<string | number>("Todos");
@@ -30,6 +32,16 @@ export function useActivosFilters() {
 
     const [page, setPage] = useState(1);
     const itemsPerPage = 12;
+
+    const [onlyFavorites, setOnlyFavorites] = useState<boolean>(false);
+
+    // Initial load: Check auth and set default filter
+    useEffect(() => {
+        const token = typeof window !== 'undefined' ? sessionStorage.getItem("fa_token") : null;
+        if (token) {
+            setOnlyFavorites(true);
+        }
+    }, []);
 
     // Load tipos and sectores on mount
     useEffect(() => {
@@ -73,7 +85,7 @@ export function useActivosFilters() {
     const executeSearch = useCallback(async () => {
         setLoading(true);
         try {
-            let data: ActivoDTO[];
+            let data: ActivoDTO[] = [];
             const term = searchTerm.trim();
 
             if (term.length >= 1) {
@@ -101,7 +113,6 @@ export function useActivosFilters() {
         setLoading(true);
         try {
             let data: ActivoDTO[] = [];
-            const cache = getAllActivosFromCache();
 
             const criterioMap: Record<string, string> = {
                 "symbol": "nombre",
@@ -110,36 +121,49 @@ export function useActivosFilters() {
                 "marketCap": "marketCap"
             };
 
-            if (cache) {
-                data = [...cache];
-
-                if (selectedType !== "Todos") {
-                    const tObj = tipos.find(t => t.id === Number(selectedType));
-                    if (tObj) {
-                        data = data.filter(a => a.tipo === tObj.nombre);
-                    }
+            if (onlyFavorites) {
+                // Fetch Favorites
+                try {
+                    data = await getActivosFavoritos();
+                } catch (e) {
+                    console.error("Failed to fetch favorites, falling back to all", e);
+                    setOnlyFavorites(false); // Fallback
+                    data = await getActivosNoMoneda();
                 }
-
-                if (selectedSector !== "Todos") {
-                    const sObj = sectores.find(s => s.id === selectedSector);
-                    if (sObj) {
-                        data = data.filter(a => a.sector === sObj.nombre);
-                    }
-                }
-
             } else {
-                if (selectedType !== "Todos" || selectedSector !== "Todos") {
-                    if (selectedType !== "Todos" && selectedSector !== "Todos") {
-                        data = await getActivosByTipoAndSector(Number(selectedType), selectedSector);
-                    } else if (selectedSector !== "Todos") {
-                        data = await getActivosBySector(selectedSector);
-                    } else {
-                        data = await getActivosByTipoId(Number(selectedType));
-                    }
+                // Standard Logic
+                const cache = getAllActivosFromCache();
+
+                if (cache && cache.length > 0) {
+                    data = [...cache];
                 } else {
-                    const backendCriterio = criterioMap[orderBy] || "marketCap";
-                    const tipoId = selectedType !== "Todos" ? Number(selectedType) : undefined;
-                    data = await getRankingActivos(backendCriterio, orderDesc, tipoId);
+                    if (selectedType !== "Todos" || selectedSector !== "Todos") {
+                        if (selectedType !== "Todos" && selectedSector !== "Todos") {
+                            data = await getActivosByTipoAndSector(Number(selectedType), selectedSector);
+                        } else if (selectedSector !== "Todos") {
+                            data = await getActivosBySector(selectedSector);
+                        } else {
+                            data = await getActivosByTipoId(Number(selectedType));
+                        }
+                    } else {
+                        // Use workaround fallback
+                        data = await getRankingActivos(criterioMap[orderBy] || "variacion", orderDesc, selectedType !== "Todos" ? Number(selectedType) : undefined);
+                    }
+                }
+            }
+
+            // Client-Side Filtering (common filter logic)
+            if (selectedType !== "Todos") {
+                const tObj = tipos.find(t => t.id === Number(selectedType));
+                if (tObj) {
+                    data = data.filter(a => a.tipo === tObj.nombre);
+                }
+            }
+
+            if (selectedSector !== "Todos") {
+                const sObj = sectores.find(s => s.id === selectedSector);
+                if (sObj) {
+                    data = data.filter(a => a.sector === sObj.nombre);
                 }
             }
 
@@ -184,14 +208,14 @@ export function useActivosFilters() {
         } finally {
             setLoading(false);
         }
-    }, [selectedType, selectedSector, selectedCurrency, orderBy, orderDesc, tipos, sectores]);
+    }, [onlyFavorites, selectedType, selectedSector, selectedCurrency, orderBy, orderDesc, tipos, sectores]);
 
     // Initial load and filter changes
     useEffect(() => {
         if (searchTerm === "") {
             fetchActivos();
         }
-    }, [selectedType, selectedSector, selectedCurrency, orderBy, orderDesc, fetchActivos, searchTerm]);
+    }, [onlyFavorites, selectedType, selectedSector, selectedCurrency, orderBy, orderDesc, fetchActivos, searchTerm]);
 
     const handleRefresh = useCallback(() => {
         if (searchTerm.length > 0) {
@@ -245,6 +269,8 @@ export function useActivosFilters() {
         selectedType,
         selectedSector,
         selectedCurrency,
+        onlyFavorites,
+        setOnlyFavorites,
         activos,
         tipos,
         sectores,
