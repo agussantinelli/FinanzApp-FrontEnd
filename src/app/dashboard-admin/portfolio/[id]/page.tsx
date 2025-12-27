@@ -24,6 +24,7 @@ import { useParams, useRouter } from "next/navigation";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { getPortafolioValuado } from "@/services/PortafolioService";
 import { PortafolioValuadoDTO } from "@/types/Portafolio";
+import { RolUsuario } from "@/types/Usuario";
 import styles from "@/app/portfolio/styles/Portfolio.module.css"; // Reuse styles
 import { formatARS, formatPercentage, formatUSD, formatQuantity } from "@/utils/format";
 import { CurrencyToggle } from "@/components/common/CurrencyToggle";
@@ -61,7 +62,7 @@ export default function AdminPortfolioView() {
 
     if (loading) {
         return (
-            <RoleGuard allowedRoles={['Administrador']}>
+            <RoleGuard allowedRoles={[RolUsuario.Admin]}>
                 <Box className={styles.container}>
                     <Skeleton variant="rectangular" height={200} />
                     <Skeleton variant="rectangular" height={400} sx={{ mt: 2 }} />
@@ -72,7 +73,7 @@ export default function AdminPortfolioView() {
 
     if (!valuacion) {
         return (
-            <RoleGuard allowedRoles={['Administrador']}>
+            <RoleGuard allowedRoles={[RolUsuario.Admin]}>
                 <Box sx={{ p: 4, textAlign: 'center' }}>
                     <Typography variant="h5">Portafolio no encontrado</Typography>
                     <Button onClick={() => router.back()} sx={{ mt: 2 }} variant="outlined">Volver</Button>
@@ -82,7 +83,7 @@ export default function AdminPortfolioView() {
     }
 
     return (
-        <RoleGuard allowedRoles={['Administrador']}>
+        <RoleGuard allowedRoles={[RolUsuario.Admin]}>
             <Box className={styles.container}>
                 <Button
                     startIcon={<ArrowBackIcon />}
@@ -94,7 +95,7 @@ export default function AdminPortfolioView() {
 
                 <Grid container spacing={3}>
                     {/* HEADER */}
-                    <Grid xs={12}>
+                    <Grid size={{ xs: 12 }}>
                         <Paper className={styles.headerPaper}>
                             <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems="center" spacing={2}>
                                 <Box>
@@ -117,7 +118,7 @@ export default function AdminPortfolioView() {
                     </Grid>
 
                     {/* CARDS */}
-                    <Grid xs={12} md={4}>
+                    <Grid size={{ xs: 12, md: 4 }}>
                         <Paper className={`${styles.card} ${styles.highlightCard}`}>
                             <Typography variant="caption" color="text.secondary">Valor Total ({currency})</Typography>
                             <Typography variant="h4" className={styles.cardValue}>
@@ -126,7 +127,7 @@ export default function AdminPortfolioView() {
                         </Paper>
                     </Grid>
 
-                    <Grid xs={12} md={4}>
+                    <Grid size={{ xs: 12, md: 4 }}>
                         <Paper className={styles.card}>
                             <Typography variant="caption" color="text.secondary">Ganancia/Pérdida ({currency})</Typography>
                             <Typography variant="h4" className={`${styles.cardValue} ${(currency === 'ARS' ? valuacion.gananciaPesos : valuacion.gananciaDolares) >= 0 ? styles.positiveChange : styles.negativeChange}`}>
@@ -142,7 +143,7 @@ export default function AdminPortfolioView() {
                         </Paper>
                     </Grid>
 
-                    <Grid xs={12} md={4}>
+                    <Grid size={{ xs: 12, md: 4 }}>
                         <Paper className={styles.card}>
                             <Typography variant="caption" color="text.secondary">Activos en Cartera</Typography>
                             <Typography variant="h4" className={styles.cardValue}>
@@ -152,7 +153,7 @@ export default function AdminPortfolioView() {
                     </Grid>
 
                     {/* CHART */}
-                    <Grid xs={12}>
+                    <Grid size={{ xs: 12 }}>
                         <PortfolioCompositionChart
                             activos={valuacion.activos || []}
                             totalPesos={valuacion.totalPesos}
@@ -162,7 +163,7 @@ export default function AdminPortfolioView() {
                     </Grid>
 
                     {/* TABLE */}
-                    <Grid xs={12}>
+                    <Grid size={{ xs: 12 }}>
                         <Paper className={styles.tablePaper}>
                             <Typography variant="h6" className={styles.sectionTitle} gutterBottom>
                                 Detalle de Activos
