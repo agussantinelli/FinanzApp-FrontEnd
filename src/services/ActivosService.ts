@@ -60,7 +60,7 @@ export async function searchActivos(texto: string): Promise<ActivoDTO[]> {
 }
 
 export async function getActivosBySector(sectorId: string): Promise<ActivoDTO[]> {
-    const res = await http.get<ActivoDTO[]>(`/api/activos/filtrar/sector/${sectorId}`);
+    const res = await http.get<ActivoDTO[]>(`/api/activos/sector/${sectorId}`);
     cacheActivos(res.data);
     return res.data;
 }
