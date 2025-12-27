@@ -1,8 +1,11 @@
 export interface PortafolioDTO {
     id: string; // Guid
     nombre: string;
-    descripcion: string;
+    descripcion?: string;
     esDestacado: boolean;
+    esPrincipal: boolean;
+    totalValuado?: number;
+    dueñoNombre?: string;
 }
 
 export interface ActivoEnPortafolioDTO {
@@ -20,7 +23,9 @@ export interface ActivoEnPortafolioDTO {
 export interface PortafolioValuadoDTO {
     id: string; // Guid
     nombre: string;
-    descripcion: string;
+    descripcion?: string;
+    esPrincipal: boolean;
+    esDestacado: boolean;
     totalPesos: number;
     gananciaPesos: number;
     variacionPorcentajePesos: number;
@@ -33,5 +38,11 @@ export interface PortafolioValuadoDTO {
 
 export interface PortafolioCreateDTO {
     nombre: string;
-    descripcion: string;
+    descripcion?: string;
+    esPrincipal?: boolean;
+}
+
+export interface PortafolioUpdateDTO {
+    nombre: string;
+    descripcion?: string;
 }

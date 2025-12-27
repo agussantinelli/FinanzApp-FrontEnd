@@ -6,7 +6,9 @@ import {
     DialogActions,
     TextField,
     Button,
-    CircularProgress
+    CircularProgress,
+    FormControlLabel,
+    Checkbox
 } from '@mui/material';
 import { createPortafolio, updatePortafolio } from '@/services/PortafolioService';
 
@@ -19,16 +21,18 @@ interface CreatePortfolioDialogProps {
 export function CreatePortfolioDialog({ open, onClose, onSuccess }: CreatePortfolioDialogProps) {
     const [nombre, setNombre] = useState('');
     const [descripcion, setDescripcion] = useState('');
+    const [esPrincipal, setEsPrincipal] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async () => {
         if (!nombre.trim()) return;
         setLoading(true);
         try {
-            await createPortafolio({ nombre, descripcion });
+            await createPortafolio({ nombre, descripcion, esPrincipal });
             onSuccess();
             setNombre('');
             setDescripcion('');
+            setEsPrincipal(false);
             onClose();
         } catch (error) {
             console.error("Error creating portfolio", error);
@@ -59,6 +63,17 @@ export function CreatePortfolioDialog({ open, onClose, onSuccess }: CreatePortfo
                     value={descripcion}
                     onChange={(e) => setDescripcion(e.target.value)}
                     disabled={loading}
+                    sx={{ mb: 2 }}
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={esPrincipal}
+                            onChange={(e) => setEsPrincipal(e.target.checked)}
+                            disabled={loading}
+                        />
+                    }
+                    label="Definir como principal"
                 />
             </DialogContent>
             <DialogActions>
