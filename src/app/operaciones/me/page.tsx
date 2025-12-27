@@ -20,14 +20,27 @@ import {
     MenuItem,
     FormControl,
     InputLabel,
-    TableSortLabel
+    TableSortLabel,
+    IconButton,
+    Tooltip,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    TextField,
+    InputAdornment
 } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useRouter } from "next/navigation";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { formatARS, formatUSD, formatQuantity, formatDateTime } from "@/utils/format";
 import { useMyOperations, Order, FilterType, CurrencyFilterType } from "@/hooks/useMyOperations";
 import { OperacionResponseDTO } from "@/types/Operacion";
+import { deleteOperacion, updateOperacion } from "@/services/OperacionesService";
+import { ConfirmDialog } from "@/components/common/ConfirmDialog";
+import FloatingMessage from "@/components/ui/FloatingMessage";
 
 import styles from "./styles/MyOperations.module.css";
 
@@ -43,8 +56,76 @@ export default function MyOperationsPage() {
         setFilterType,
         filterCurrency,
         setFilterCurrency,
-        handleRequestSort
+        handleRequestSort,
+        refresh
     } = useMyOperations();
+
+    // Delete State
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [opToDelete, setOpToDelete] = useState<OperacionResponseDTO | null>(null);
+    const [deleting, setDeleting] = useState(false);
+
+    // Edit State
+    const [editDialogOpen, setEditDialogOpen] = useState(false);
+    const [editingOp, setEditingOp] = useState<OperacionResponseDTO | null>(null);
+    const [editValues, setEditValues] = useState({ cantidad: "", precio: "" });
+    const [updating, setUpdating] = useState(false);
+
+    // Feedback
+    const [message, setMessage] = useState<{ text: string, type: "success" | "error" } | null>(null);
+
+    // DELETE HANDLERS
+    const handleDeleteClick = (op: OperacionResponseDTO) => {
+        setOpToDelete(op);
+        setDeleteDialogOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!opToDelete) return;
+        setDeleting(true);
+        try {
+            await deleteOperacion(opToDelete.id);
+            setMessage({ text: "Operación eliminada correctamente.", type: "success" });
+            refresh();
+            setDeleteDialogOpen(false);
+        } catch (error) {
+            console.error(error);
+            setMessage({ text: "Error al eliminar la operación.", type: "error" });
+        } finally {
+            setDeleting(false);
+            setOpToDelete(null);
+        }
+    };
+
+    // EDIT HANDLERS
+    const handleEditClick = (op: OperacionResponseDTO) => {
+        setEditingOp(op);
+        setEditValues({
+            cantidad: op.cantidad.toString(),
+            precio: op.precioUnitario.toString()
+        });
+        setEditDialogOpen(true);
+    };
+
+    const confirmEdit = async () => {
+        if (!editingOp) return;
+        setUpdating(true);
+        try {
+            await updateOperacion(editingOp.id, {
+                cantidad: parseFloat(editValues.cantidad),
+                precioUnitario: parseFloat(editValues.precio)
+            });
+            setMessage({ text: "Operación actualizada correctamente.", type: "success" });
+            refresh();
+            setEditDialogOpen(false);
+        } catch (error) {
+            console.error(error);
+            setMessage({ text: "Error al actualizar la operación.", type: "error" });
+        } finally {
+            setUpdating(false);
+            setEditingOp(null);
+        }
+    };
 
     if (!user) return null;
 
@@ -163,6 +244,7 @@ export default function MyOperationsPage() {
                                                     Total
                                                 </TableSortLabel>
                                             </TableCell>
+                                            <TableCell align="center">Acciones</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -200,6 +282,20 @@ export default function MyOperationsPage() {
                                                     <TableCell align="left" className={styles.boldCell}>
                                                         {formatMoney(op.totalOperado)}
                                                     </TableCell>
+                                                    <TableCell align="center">
+                                                        <Stack direction="row" spacing={1} justifyContent="center">
+                                                            <Tooltip title="Editar">
+                                                                <IconButton size="small" onClick={() => handleEditClick(op)}>
+                                                                    <EditIcon fontSize="small" />
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                            <Tooltip title="Eliminar">
+                                                                <IconButton size="small" color="error" onClick={() => handleDeleteClick(op)}>
+                                                                    <DeleteIcon fontSize="small" />
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                        </Stack>
+                                                    </TableCell>
                                                 </TableRow>
                                             );
                                         })}
@@ -209,6 +305,61 @@ export default function MyOperationsPage() {
                         )}
                     </Paper>
                 </Container>
+
+                {/* DELETE CONFIRMATION */}
+                <ConfirmDialog
+                    open={deleteDialogOpen}
+                    title="Eliminar Operación"
+                    content={`¿Estás seguro de que deseas eliminar esta operación de ${opToDelete?.activoSymbol}? Esta acción no se puede deshacer.`}
+                    onClose={() => setDeleteDialogOpen(false)}
+                    onConfirm={confirmDelete}
+                    loading={deleting}
+                    confirmText="Eliminar"
+                    confirmColor="error"
+                />
+
+                {/* EDIT DIALOG */}
+                <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)} maxWidth="xs" fullWidth>
+                    <DialogTitle>Editar Operación</DialogTitle>
+                    <DialogContent>
+                        <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
+                            <Typography variant="body2" color="text.secondary">
+                                {editingOp?.activoSymbol} - {editingOp?.tipo} ({editingOp?.moneda})
+                            </Typography>
+                            <TextField
+                                label="Cantidad"
+                                type="number"
+                                fullWidth
+                                value={editValues.cantidad}
+                                onChange={(e) => setEditValues({ ...editValues, cantidad: e.target.value })}
+                            />
+                            <TextField
+                                label="Precio Unitario"
+                                type="number"
+                                fullWidth
+                                value={editValues.precio}
+                                onChange={(e) => setEditValues({ ...editValues, precio: e.target.value })}
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                }}
+                            />
+                        </Box>
+                    </DialogContent>
+                    <DialogActions sx={{ p: 2 }}>
+                        <Button onClick={() => setEditDialogOpen(false)} color="inherit">Cancelar</Button>
+                        <Button onClick={confirmEdit} variant="contained" disabled={updating}>
+                            {updating ? "Guardando..." : "Guardar Cambios"}
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+                {/* FEEDBACK */}
+                <FloatingMessage
+                    open={!!message}
+                    message={message?.text || ""}
+                    severity={message?.type || "info"}
+                    onClose={() => setMessage(null)}
+                />
             </Box>
         </RoleGuard >
     );

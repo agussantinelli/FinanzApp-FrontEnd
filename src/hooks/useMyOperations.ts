@@ -28,6 +28,12 @@ export function useMyOperations() {
     const [filterCurrency, setFilterCurrency] = useState<CurrencyFilterType>('TODAS');
     const [dolarBlue, setDolarBlue] = useState<{ compra: number, venta: number } | null>(null);
 
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+    const refresh = () => {
+        setRefreshTrigger(prev => prev + 1);
+    };
+
     useEffect(() => {
         if (user?.id) {
             setLoading(true);
@@ -50,7 +56,7 @@ export function useMyOperations() {
                 .catch(console.error)
                 .finally(() => setLoading(false));
         }
-    }, [user]);
+    }, [user, refreshTrigger]);
 
     // Sorting & Filtering Logic
     const processedOperations = useMemo(() => {
@@ -141,6 +147,7 @@ export function useMyOperations() {
         setFilterType,
         filterCurrency,
         setFilterCurrency,
-        handleRequestSort
+        handleRequestSort,
+        refresh
     };
 }

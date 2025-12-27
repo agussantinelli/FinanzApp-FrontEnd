@@ -74,6 +74,7 @@ export default function Navbar() {
     const mainItems = [
       { label: "Inicio", href: "/" },
       { label: "Dashboard", href: defaultPanelHref },
+      { label: "Estrategias", href: "/estrategias" },
       { label: "Portafolio", href: "/portfolio" },
       { label: "Activos", href: "/activos" },
       { label: "Recomendaciones", href: "/recomendaciones" },
