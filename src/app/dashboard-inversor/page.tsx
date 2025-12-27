@@ -95,13 +95,29 @@ export default function DashboardPage() {
     // If currency is USD but we use inversorStats (ARS), it's wrong.
     // So prefer valuacion always if available.
 
-    const dailyGain = valuacion
+    let dailyGain = valuacion
       ? (currency === 'ARS' ? valuacion.gananciaPesos : valuacion.gananciaDolares)
       : 0;
 
-    const dailyChangePct = valuacion
+    let dailyChangePct = valuacion
       ? (currency === 'ARS' ? valuacion.variacionPorcentajePesos : valuacion.variacionPorcentajeDolares)
       : (inversorStats?.rendimientoDiario ?? 0);
+
+    // FIX: If USD gain/variation is 0/missing but we have ARS data, 
+    // calculate an estimated USD gain using the implied exchange rate.
+    // This provides a "Snapshot Gain" (What my ARS gain is worth in USD today).
+    if (valuacion && currency === 'USD' && dailyGain === 0 && valuacion.gananciaPesos !== 0 && valuacion.totalDolares > 0) {
+      const impliedRate = valuacion.totalPesos / valuacion.totalDolares;
+      if (impliedRate > 0) {
+        dailyGain = valuacion.gananciaPesos / impliedRate;
+
+        // Recalculate percentage based on this estimated gain
+        const cost = totalValue - dailyGain;
+        if (cost !== 0) {
+          dailyChangePct = (dailyGain / cost) * 100;
+        }
+      }
+    }
 
     const formatFn = currency === 'ARS' ? formatARS : formatUSD;
 
