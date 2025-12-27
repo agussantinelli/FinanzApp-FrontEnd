@@ -13,7 +13,7 @@ import {
 } from '@/services/ActivosService';
 import { getTiposActivoNoMoneda } from '@/services/TipoActivosService';
 import { getSectores } from '@/services/SectorService';
-import { getAllActivosFromCache } from '@/lib/activos-cache';
+import { getAllActivosFromCache, cacheActivos } from '@/lib/activos-cache';
 
 
 export function useActivosFilters() {
@@ -293,6 +293,7 @@ export function useActivosFilters() {
         resetFilters,
         updateAssetInList: (updatedAsset: ActivoDTO) => {
             setActivos(prev => prev.map(a => a.id === updatedAsset.id ? updatedAsset : a));
+            cacheActivos([updatedAsset]);
         }
     };
 }
