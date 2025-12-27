@@ -4,13 +4,20 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAdminAssets } from '@/hooks/useAdminAssets';
 import { ConfirmDialog } from '@/components/common/ConfirmDialog';
+import AssetFormDialog from './AssetFormDialog';
 import styles from '../styles/Admin.module.css';
+import { ActivoDTO, ActivoCreateDTO, ActivoUpdateDTO } from '@/types/Activo';
 
 export default function ActivosTab() {
-    const { activos, loading, removeAsset } = useAdminAssets();
+    const { activos, loading, addAsset, updateAsset, removeAsset } = useAdminAssets();
 
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [selectedId, setSelectedId] = useState<string | null>(null);
+
+    // Dialog State
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogMode, setDialogMode] = useState<'create' | 'edit'>('create');
+    const [selectedAsset, setSelectedAsset] = useState<ActivoDTO | null>(null);
 
     const handleDeleteClick = (id: string) => {
         setSelectedId(id);
@@ -24,12 +31,36 @@ export default function ActivosTab() {
         setConfirmOpen(false);
     };
 
+    const handleCreateClick = () => {
+        setDialogMode('create');
+        setSelectedAsset(null);
+        setDialogOpen(true);
+    };
+
+    const handleEditClick = (asset: ActivoDTO) => {
+        setDialogMode('edit');
+        setSelectedAsset(asset);
+        setDialogOpen(true);
+    };
+
+    const handleSave = async (data: ActivoCreateDTO | ActivoUpdateDTO) => {
+        if (dialogMode === 'create') {
+            await addAsset(data as ActivoCreateDTO);
+        } else {
+            if (selectedAsset) {
+                await updateAsset(selectedAsset.id, data as ActivoUpdateDTO);
+            }
+        }
+    };
+
     if (loading) return <Skeleton variant="rectangular" height={400} />;
 
     return (
         <Box sx={{ py: 3 }}>
             <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>
-                <Button variant="contained" color="primary">Agregar Nuevo Activo</Button>
+                <Button variant="contained" color="primary" onClick={handleCreateClick}>
+                    Agregar Nuevo Activo
+                </Button>
             </Box>
             <TableContainer component={Paper} className={styles.tableContainer}>
                 <Table>
@@ -52,7 +83,9 @@ export default function ActivosTab() {
                                 <TableCell>{row.tipo}</TableCell>
                                 <TableCell><Chip label={row.moneda} size="small" variant="outlined" /></TableCell>
                                 <TableCell>
-                                    <IconButton size="small"><EditIcon fontSize="small" /></IconButton>
+                                    <IconButton size="small" onClick={() => handleEditClick(row)}>
+                                        <EditIcon fontSize="small" />
+                                    </IconButton>
                                     <IconButton
                                         size="small"
                                         color="error"
@@ -67,6 +100,14 @@ export default function ActivosTab() {
                     </TableBody>
                 </Table>
             </TableContainer>
+
+            <AssetFormDialog
+                open={dialogOpen}
+                onClose={() => setDialogOpen(false)}
+                onSave={handleSave}
+                mode={dialogMode}
+                initialData={selectedAsset}
+            />
 
             <ConfirmDialog
                 open={confirmOpen}
