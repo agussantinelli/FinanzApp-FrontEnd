@@ -108,7 +108,7 @@ export default function PortafolioTab() {
                                     <TableCell align="right">
                                         <Tooltip title="Ver Detalle">
                                             <IconButton
-                                                onClick={() => console.log("Navegar a detalle del portafolio", row.id)} // Placeholder for now or simple nav
+                                                onClick={() => router.push(`/dashboard-admin/portfolio/${row.id}`)}
                                                 color="primary"
                                             >
                                                 <VisibilityIcon />
