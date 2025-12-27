@@ -1,5 +1,5 @@
 import { http } from "@/lib/http";
-import { ActivoDTO, ActivoCreateDTO } from "@/types/Activo";
+import { ActivoDTO, ActivoCreateDTO, ActivoUpdateDTO } from "@/types/Activo";
 
 import { cacheActivos } from "@/lib/activos-cache";
 
@@ -9,7 +9,7 @@ export async function createActivo(dto: ActivoCreateDTO): Promise<ActivoDTO> {
     return res.data;
 }
 
-export async function updateActivo(id: string, dto: ActivoCreateDTO): Promise<ActivoDTO> {
+export async function updateActivo(id: string, dto: ActivoUpdateDTO): Promise<ActivoDTO> {
     const res = await http.put<ActivoDTO>(`/api/activos/${id}`, dto);
     cacheActivos([res.data]);
     return res.data;

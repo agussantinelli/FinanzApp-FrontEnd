@@ -30,7 +30,6 @@ export interface ActivoCreateDTO {
 }
 
 export interface ActivoUpdateDTO {
-    symbol: string;
     nombre: string;
     tipoActivoId: number; // byte
     monedaBase: string;

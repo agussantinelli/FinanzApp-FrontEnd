@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { ActivoDTO, ActivoCreateDTO } from '@/types/Activo';
+import { ActivoDTO, ActivoCreateDTO, ActivoUpdateDTO } from '@/types/Activo';
 import { getActivosNoMoneda, createActivo, updateActivo, deleteActivo } from '@/services/ActivosService';
 
 export function useAdminAssets() {
@@ -34,7 +34,7 @@ export function useAdminAssets() {
         }
     };
 
-    const updateAsset = async (id: string, dto: any) => {
+    const updateAsset = async (id: string, dto: ActivoUpdateDTO) => {
         setLoading(true);
         try {
             await updateActivo(id, dto);
