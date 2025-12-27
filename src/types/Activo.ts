@@ -4,36 +4,40 @@ export interface ActivoDTO {
     nombre: string;
     tipo: string;
     tipoActivoId: number;
-    moneda: string;
+    monedaBase: string; // "USD" | "ARS"
     sector: string;
     sectorId?: string | null;
 
     esLocal: boolean;
-    loSigo: boolean;
-    descripcion: string;
+    descripcion: string; // Now required in backend
 
+    // --- PRECIOS Y MERCADO ---
     precioActual?: number | null;
+    precioUSD?: number | null;
+    precioARS?: number | null;
     variacion24h?: number | null;
     marketCap?: number | null;
+    ultimaActualizacion?: string | null; // DateTime ISO
 
-    ultimaActualizacion?: string | null;
+    // --- ESTADO SOCIAL ---
+    loSigo: boolean;
 }
 
 export interface ActivoCreateDTO {
     symbol: string;
     nombre: string;
-    tipoActivoId: number; // byte
+    tipoActivoId: number;
+    sectorId?: string | null;
     monedaBase: string; // "USD" | "ARS"
     esLocal: boolean;
-    sectorId?: string | null;
     descripcion: string;
 }
 
 export interface ActivoUpdateDTO {
     nombre: string;
-    tipoActivoId: number; // byte
+    tipoActivoId: number;
+    sectorId?: string | null;
     monedaBase: string;
     esLocal: boolean;
-    sectorId?: string | null;
     descripcion: string;
 }

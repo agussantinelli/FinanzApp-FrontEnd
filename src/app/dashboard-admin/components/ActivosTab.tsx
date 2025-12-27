@@ -167,9 +167,9 @@ export default function ActivosTab() {
                             </TableCell>
                             <TableCell>
                                 <TableSortLabel
-                                    active={orderBy === 'moneda'}
-                                    direction={orderBy === 'moneda' ? order : 'asc'}
-                                    onClick={() => handleRequestSort('moneda')}
+                                    active={orderBy === 'monedaBase'}
+                                    direction={orderBy === 'monedaBase' ? order : 'asc'}
+                                    onClick={() => handleRequestSort('monedaBase')}
                                 >
                                     Moneda
                                 </TableSortLabel>
@@ -192,7 +192,7 @@ export default function ActivosTab() {
                                         <span style={{ opacity: 0.5, fontStyle: 'italic', fontSize: '0.8rem' }}>Sin Sector</span>
                                     )}
                                 </TableCell>
-                                <TableCell><Chip label={row.moneda} size="small" variant="outlined" /></TableCell>
+                                <TableCell><Chip label={row.monedaBase} size="small" variant="outlined" /></TableCell>
                                 <TableCell>
                                     <IconButton size="small" onClick={() => handleEditClick(row)}>
                                         <EditIcon fontSize="small" />
