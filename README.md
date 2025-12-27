@@ -150,7 +150,7 @@
 │   │   ├── movimientos/         # Historial de transacciones
 │   │   ├── noticias/            # Sección de novedades financieras
 │   │   ├── operaciones/         # Mis Operaciones / Historial
-│   │   ├── perfil/              # Perfil de Usuario (Solo Lectura)
+│   │   ├── perfil/              # Perfil de Usuario (Edición y Foto)
 │   │   ├── portfolio/           # Visualización y análisis patrimonial
 │   │   ├── recomendaciones/     # Señales de expertos y comunidad
 │   │   ├── registrar-operacion/ # Formulario de Compra/Venta
@@ -187,6 +187,9 @@
 
 <pre><code>npm install
 npm run dev
+npm run dev
+# o
+npm run lint  # Para verificar estilo de código
 # o
 yarn install
 yarn dev
@@ -278,6 +281,7 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
         </ul>
     </li>
     <li>Historial completo de transacciones.</li>
+    <li><strong>Filtro de Favoritos:</strong> Alterná rápidamente entre tu lista de seguimiento ("Mis Favoritos") y el mercado global con un solo clic.</li>
 </ul>
 
 <h3>📈 Estrategias de Inversión</h3>
@@ -298,6 +302,16 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
     <li>Dashboards específicos por rol protegidos por <code>RoleGuard</code>.</li>
     <li>Gestión de usuarios y métricas globales de la plataforma.</li>
     <li>Módulo para expertos: carga de señales, cálculo de efectividad y ranking global.</li>
+</ul>
+
+<h3>⚙️ Gestión de Perfil</h3>
+
+<p>Ruta principal: <code>/perfil</code></p>
+
+<ul>
+    <li>Visualización y edición de datos personales (Nombre, Apellido, Fecha de nacimiento).</li>
+    <li><strong>Foto de Perfil:</strong> Carga y actualización de imagen de usuario.</li>
+    <li>Gestión de ubicación (País, Provincia, Localidad) para personalizar la experiencia.</li>
 </ul>
 
 <hr>
@@ -387,6 +401,12 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
         <p>Si ves errores tipo <code>Network Error</code> al intentar loguearte, probá abrir la URL del backend en otra pestaña y aceptar el certificado SSL autofirmado de desarrollo ("Continuar a localhost (no seguro)").</p>
     </li>
 </ul>
+
+<hr>
+
+<h2>🤝 Contribuciones</h2>
+
+<p>¡Las contribuciones son bienvenidas! Por favor, sentite libre de abrir un <strong>Pull Request</strong> o reportar un <strong>Issue</strong> para mejorar el proyecto.</p>
 
 <hr>
 
