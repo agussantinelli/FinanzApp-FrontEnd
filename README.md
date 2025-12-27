@@ -146,6 +146,7 @@
 │   │   ├── dashboard-admin/     # Panel de Administración (Guard: Admin)
 │   │   ├── dashboard-experto/   # Dashboard para Expertos Financieros
 │   │   ├── dashboard-inversor/  # Home del Inversor (Resumen)
+│   │   ├── estrategias/         # Estrategias de Inversión (Copy Trading)
 │   │   ├── movimientos/         # Historial de transacciones
 │   │   ├── noticias/            # Sección de novedades financieras
 │   │   ├── operaciones/         # Mis Operaciones / Historial
@@ -154,6 +155,7 @@
 │   │   ├── recomendaciones/     # Señales de expertos y comunidad
 │   │   ├── registrar-operacion/ # Formulario de Compra/Venta
 │   │   ├── reportes/            # Análisis de mercado y tendencias
+│   │   ├── styles/              # Estilos globales de páginas
 │   │   └── page.tsx             # Landing Page pública
 │   ├── app-theme/               # Tema y configuración de Material UI
 │   ├── components/              # Componentes React Reutilizables
@@ -278,6 +280,16 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
     <li>Historial completo de transacciones.</li>
 </ul>
 
+<h3>📈 Estrategias de Inversión</h3>
+
+<p>Ruta principal: <code>/estrategias</code></p>
+
+<ul>
+    <li>Explorador de portafolios destacados de otros usuarios.</li>
+    <li>Métricas de rendimiento y composición para inspiración.</li>
+    <li>Filtrado automático para excluir el propio portafolio.</li>
+</ul>
+
 <h3>🛠️ Panel de Administración y Expertos</h3>
 
 <p>Rutas: <code>/dashboard-admin</code> y <code>/dashboard-experto</code></p>
@@ -354,7 +366,7 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
     </li>
     <li><strong>En Roadmap</strong>
         <ul>
-            <li>✅ Reportes exportables (PDF/Excel).</li>
+            <li>[ ] Reportes exportables (PDF/Excel).</li>
             <li>Notificaciones en tiempo real (WebSockets) para cambios de precio.</li>
             <li>Expansión del módulo de "Comunidad" y "Noticias".</li>
         </ul>
