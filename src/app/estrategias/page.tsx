@@ -15,50 +15,139 @@ import {
     CardActions,
     Divider,
     Avatar,
-    Chip
+    Chip,
+    ToggleButton,
+    ToggleButtonGroup,
+    Snackbar,
+    Alert,
+    IconButton
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import SearchIcon from '@mui/icons-material/Search';
 import { getCurrentUser } from "@/services/AuthService";
-import { getPortafoliosDestacados } from "@/services/PortafolioService";
+import { getPortafoliosDestacados, toggleSeguirPortafolio } from "@/services/PortafolioService";
 import { PortafolioDTO } from "@/types/Portafolio";
 
 export default function StrategiesPage() {
     const router = useRouter();
     const [portfolios, setPortfolios] = useState<PortafolioDTO[]>([]);
     const [loading, setLoading] = useState(true);
+    const [onlyFavorites, setOnlyFavorites] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [openSnack, setOpenSnack] = useState(false);
 
     useEffect(() => {
-        const user = getCurrentUser();
-        const userFullName = user ? `${user.nombre} ${user.apellido}` : "";
+        setIsLoggedIn(!!sessionStorage.getItem("fa_token"));
+    }, []);
 
+    const fetchPortfolios = () => {
+        setLoading(true);
         getPortafoliosDestacados()
             .then(data => {
                 setPortfolios(data);
+                // If backend doesn't return loSigo yet, we might want to fetch user's defaults or assume false.
+                // For now we rely on DTO.
             })
-            .catch(console.error)
+            .catch(err => console.error(err))
             .finally(() => setLoading(false));
+    };
+
+    useEffect(() => {
+        fetchPortfolios();
     }, []);
 
-    const topPortfolios = portfolios.filter(p => p.esTop).slice(0, 3);
-    const otherPortfolios = portfolios.filter(p => !p.esTop);
+    const handleToggleFollow = async (e: React.MouseEvent, id: string) => {
+        e.stopPropagation();
+        if (!isLoggedIn) {
+            setOpenSnack(true);
+            return;
+        }
+
+        // Optimistic update
+        const portfolio = portfolios.find(p => p.id === id);
+        if (!portfolio) return;
+
+        const newValue = !portfolio.loSigo;
+
+        setPortfolios(prev => prev.map(p =>
+            p.id === id ? { ...p, loSigo: newValue } : p
+        ));
+
+        try {
+            await toggleSeguirPortafolio(id);
+        } catch (error) {
+            console.error("Error toggling follow:", error);
+            // Revert
+            setPortfolios(prev => prev.map(p =>
+                p.id === id ? { ...p, loSigo: !newValue } : p
+            ));
+        }
+    };
+
+    // Filter logic
+    const displayedPortfolios = onlyFavorites
+        ? portfolios.filter(p => p.loSigo)
+        : portfolios;
+
+    const topPortfolios = displayedPortfolios.filter(p => p.esTop).slice(0, 3);
+    const otherPortfolios = displayedPortfolios.filter(p => !p.esTop);
 
     return (
         <RoleGuard>
             <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', pt: 4, pb: 8 }}>
                 <Container maxWidth="lg">
                     {/* Header */}
-                    <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4}>
-                        <Box>
-                            <Typography variant="h4" fontWeight="bold" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                Estrategias Destacadas <TrendingUpIcon color="primary" />
-                            </Typography>
-                            <Typography variant="body1" color="text.secondary">
-                                Descubre y sigue las estrategias de inversión más exitosas de la comunidad.
-                            </Typography>
+                    <Stack direction="column" spacing={3} mb={4}>
+                        <Stack direction="row" justifyContent="space-between" alignItems="center">
+                            <Box>
+                                <Typography variant="h4" fontWeight="bold" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    Estrategias Destacadas <TrendingUpIcon color="primary" />
+                                </Typography>
+                                <Typography variant="body1" color="text.secondary">
+                                    Descubre y sigue las estrategias de inversión más exitosas de la comunidad.
+                                </Typography>
+                            </Box>
+                        </Stack>
+
+                        {/* Favorites Toggle */}
+                        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                            <ToggleButtonGroup
+                                value={onlyFavorites}
+                                exclusive
+                                onChange={(e, newVal) => {
+                                    if (newVal !== null) {
+                                        if (newVal === true && !isLoggedIn) {
+                                            setOpenSnack(true);
+                                            return;
+                                        }
+                                        setOnlyFavorites(newVal);
+                                    }
+                                }}
+                                sx={{
+                                    bgcolor: 'background.paper',
+                                    borderRadius: 3,
+                                    border: '1px solid',
+                                    borderColor: 'divider'
+                                }}
+                            >
+                                <ToggleButton value={false} sx={{ px: 3, py: 1 }}>
+                                    <Stack direction="row" spacing={1} alignItems="center">
+                                        <SearchIcon fontSize="small" />
+                                        <Typography variant="button" sx={{ textTransform: 'none', fontWeight: 700 }}>Explorar</Typography>
+                                    </Stack>
+                                </ToggleButton>
+                                <ToggleButton value={true} sx={{ px: 3, py: 1 }}>
+                                    <Stack direction="row" spacing={1} alignItems="center">
+                                        {onlyFavorites ? <StarIcon fontSize="small" color="warning" /> : <StarBorderIcon fontSize="small" />}
+                                        <Typography variant="button" sx={{ textTransform: 'none', fontWeight: 700 }}>Mis Favoritos</Typography>
+                                    </Stack>
+                                </ToggleButton>
+                            </ToggleButtonGroup>
                         </Box>
                     </Stack>
 
@@ -66,15 +155,20 @@ export default function StrategiesPage() {
                         <Box display="flex" justifyContent="center" py={10}>
                             <CircularProgress />
                         </Box>
-                    ) : portfolios.length === 0 ? (
+                    ) : displayedPortfolios.length === 0 ? (
                         <Paper sx={{ p: 6, textAlign: 'center', borderRadius: 4 }}>
-                            <TrendingUpIcon sx={{ fontSize: 60, color: 'text.secondary', mb: 2, opacity: 0.5 }} />
+                            <StarIcon sx={{ fontSize: 60, color: 'text.secondary', mb: 2, opacity: 0.5 }} />
                             <Typography variant="h5" gutterBottom>
-                                No hay estrategias destacadas
+                                {onlyFavorites ? "No tienes estrategias favoritas" : "No hay estrategias disponibles"}
                             </Typography>
                             <Typography variant="body1" color="text.secondary" paragraph>
-                                Vuelve más tarde para ver las mejores oportunidades de inversión.
+                                {onlyFavorites ? "Explora el mercado y marca tus favoritas para verlas aquí." : "Vuelve más tarde para ver nuevas oportunidades."}
                             </Typography>
+                            {onlyFavorites && (
+                                <Button variant="outlined" onClick={() => setOnlyFavorites(false)}>
+                                    Ver Todas
+                                </Button>
+                            )}
                         </Paper>
                     ) : (
                         <>
@@ -98,6 +192,22 @@ export default function StrategiesPage() {
                                                     position: 'relative',
                                                     overflow: 'visible'
                                                 }}>
+                                                    {isLoggedIn && (
+                                                        <IconButton
+                                                            onClick={(e) => handleToggleFollow(e, p.id)}
+                                                            sx={{
+                                                                position: 'absolute',
+                                                                top: 8,
+                                                                right: 8,
+                                                                bgcolor: 'rgba(0,0,0,0.5)',
+                                                                color: p.loSigo ? '#FFD700' : 'white',
+                                                                '&:hover': { bgcolor: 'rgba(0,0,0,0.7)' },
+                                                                zIndex: 3
+                                                            }}
+                                                        >
+                                                            {p.loSigo ? <StarIcon /> : <StarBorderIcon />}
+                                                        </IconButton>
+                                                    )}
                                                     <Box sx={{
                                                         position: 'absolute',
                                                         top: -12,
@@ -174,8 +284,23 @@ export default function StrategiesPage() {
                                                     },
                                                     borderRadius: 3,
                                                     border: '1px solid',
-                                                    borderColor: 'divider'
+                                                    borderColor: 'divider',
+                                                    position: 'relative'
                                                 }}>
+                                                    {isLoggedIn && (
+                                                        <IconButton
+                                                            onClick={(e) => handleToggleFollow(e, p.id)}
+                                                            sx={{
+                                                                position: 'absolute',
+                                                                top: 8,
+                                                                right: 8,
+                                                                zIndex: 2,
+                                                                color: p.loSigo ? 'warning.main' : 'action.disabled',
+                                                            }}
+                                                        >
+                                                            {p.loSigo ? <StarIcon /> : <StarBorderIcon />}
+                                                        </IconButton>
+                                                    )}
                                                     <CardContent sx={{ flexGrow: 1 }}>
                                                         <Stack direction="row" justifyContent="space-between" alignItems="start" mb={2}>
                                                             <Typography variant="h6" fontWeight="bold" noWrap sx={{ maxWidth: '80%' }}>
@@ -225,6 +350,17 @@ export default function StrategiesPage() {
                         </>
                     )}
                 </Container>
+
+                <Snackbar
+                    open={openSnack}
+                    autoHideDuration={4000}
+                    onClose={() => setOpenSnack(false)}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                >
+                    <Alert severity="info" onClose={() => setOpenSnack(false)}>
+                        Inicia sesión para guardar tus estrategias favoritas.
+                    </Alert>
+                </Snackbar>
             </Box>
         </RoleGuard>
     );

@@ -7,6 +7,7 @@ export interface PortafolioDTO {
 
     // --- NUEVO: Propiedad Top ---
     esTop: boolean;
+    loSigo?: boolean;
 
     // --- CAMPOS ADMINISTRATIVOS Y FINANCIEROS (Dual Currency) ---
     totalValuadoUSD: number;
