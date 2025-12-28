@@ -73,6 +73,12 @@ export default function PortfolioPage() {
     totalDolares: valuacion?.totalDolares
   });
 
+  // Security Check
+  const isOwner = React.useMemo(() => {
+    if (!valuacion || !portfolios) return false;
+    return portfolios.some(p => p.id === valuacion.id);
+  }, [valuacion, portfolios]);
+
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -241,19 +247,24 @@ export default function PortfolioPage() {
                       ))}
                     </Menu>
 
-                    {/* Edit Portfolio */}
-                    <Tooltip title="Editar detalles">
-                      <IconButton size="small" onClick={() => setEditOpen(true)}>
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
+                    {/* Edit Portfolio - Only Owner */}
+                    {isOwner && (
+                      <Tooltip title="Editar detalles">
+                        <IconButton size="small" onClick={() => setEditOpen(true)}>
+                          <EditIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
 
-                    {/* Create Portfolio (El "más") */}
-                    <Tooltip title="Crear nuevo portafolio">
-                      <IconButton size="small" onClick={() => setCreateOpen(true)}>
-                        <AddIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
+                    {/* Create Portfolio - Only Owner context (kept visible in My Portfolios view) */}
+                    {/* User requested hiding "create" when viewing others. It's confusing context. */}
+                    {isOwner && (
+                      <Tooltip title="Crear nuevo portafolio">
+                        <IconButton size="small" onClick={() => setCreateOpen(true)}>
+                          <AddIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
                   </Stack>
                   <Typography variant="body2" color="text.secondary">
                     {valuacion?.descripcion || "Resumen de tus inversiones."}
@@ -261,23 +272,28 @@ export default function PortfolioPage() {
                 </Box>
                 <Stack direction="row" spacing={2} alignItems="center">
                   <CurrencyToggle currency={currency} onCurrencyChange={setCurrency} />
-                  <Button
-                    variant="outlined"
-                    startIcon={<HistoryIcon />}
-                    onClick={() => router.push('/operaciones/me')}
-                    sx={{ whiteSpace: 'nowrap' }}
-                  >
-                    Mis Operaciones
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<AddIcon />}
-                    onClick={() => router.push('/registrar-operacion')}
-                    sx={{ whiteSpace: 'nowrap' }}
-                  >
-                    Registrar Operación
-                  </Button>
+
+                  {isOwner && (
+                    <>
+                      <Button
+                        variant="outlined"
+                        startIcon={<HistoryIcon />}
+                        onClick={() => router.push('/operaciones/me')}
+                        sx={{ whiteSpace: 'nowrap' }}
+                      >
+                        Mis Operaciones
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={<AddIcon />}
+                        onClick={() => router.push('/registrar-operacion')}
+                        sx={{ whiteSpace: 'nowrap' }}
+                      >
+                        Registrar Operación
+                      </Button>
+                    </>
+                  )}
                 </Stack>
               </Stack>
             </Paper>
