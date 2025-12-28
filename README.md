@@ -79,6 +79,21 @@
     <li><strong>🤖 FinanzAI:</strong> Asistente financiero inteligente flotante, integrado con IA para responder consultas en tiempo real con formato enriquecido.</li>
 </ul>
 
+<h2>🚀 Novedades</h2>
+
+<ul>
+    <li><strong>Navegación Cruzada de Activos:</strong> Enlace directo entre CEDEARs y su Acción Original (y viceversa) desde el detalle del activo.</li>
+    <li><strong>Persistencia de Cotizaciones:</strong> Caché local de precios de Dólar para navegación instantánea, eliminando tiempos de carga.</li>
+    <li><strong>Experiencia de Usuario Mejorada:</strong>
+        <ul>
+            <li>Ocultamiento inteligente de métricas irrelevantes (Market Cap) para divisas.</li>
+            <li>Panel de cotización Compra/Venta destacado para monedas.</li>
+            <li>Filtros rápidos para alternar entre "Mis Favoritos" y el mercado global.</li>
+        </ul>
+    </li>
+    <li><strong>Seguridad en Administración:</strong> Confirmación explícita para acciones críticas (borrado/edición) en el dashboard de administrador.</li>
+</ul>
+
 <hr>
 
 <h2>🌐 Frontend (este repositorio)</h2>
