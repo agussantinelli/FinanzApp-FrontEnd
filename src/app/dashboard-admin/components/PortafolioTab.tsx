@@ -27,7 +27,7 @@ import { CurrencyToggle } from "@/components/common/CurrencyToggle";
 import { formatARS, formatUSD } from "@/utils/format";
 
 export default function PortafolioTab() {
-    const { portfolios, loading, toggleDestacado, deletePortafolio } = useAdminPortfolios();
+    const { portfolios, loading, toggleDestacado, toggleTop, deletePortafolio } = useAdminPortfolios();
     const router = useRouter();
     const [currency, setCurrency] = React.useState<'ARS' | 'USD'>('USD');
 
@@ -48,6 +48,7 @@ export default function PortafolioTab() {
                             <TableCell>Nombre Portafolio</TableCell>
                             <TableCell>Rentabilidad ({currency})</TableCell>
                             <TableCell>Destacado</TableCell>
+                            <TableCell>Top</TableCell>
                             <TableCell>Principal</TableCell>
                             <TableCell align="right">Acciones</TableCell>
                         </TableRow>
@@ -117,8 +118,18 @@ export default function PortafolioTab() {
                                         <IconButton
                                             onClick={() => toggleDestacado(row.id, row.esDestacado)}
                                             color={row.esDestacado ? "warning" : "default"}
+                                            title="Destacar"
                                         >
                                             {row.esDestacado ? <StarIcon /> : <StarBorderIcon />}
+                                        </IconButton>
+                                    </TableCell>
+                                    <TableCell>
+                                        <IconButton
+                                            onClick={() => toggleTop(row.id, row.esTop)}
+                                            sx={{ color: row.esTop ? '#FFD700' : 'action.disabled' }}
+                                            title="Marcar como Top"
+                                        >
+                                            {row.esTop ? <StarIcon /> : <StarBorderIcon />}
                                         </IconButton>
                                     </TableCell>
                                     <TableCell>

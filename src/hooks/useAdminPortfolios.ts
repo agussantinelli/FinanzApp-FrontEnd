@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { PortafolioDTO } from '@/types/Portafolio';
-import { getPortafoliosAdmin, toggleDestacado, deletePortafolio, getPortafolioValuado } from '@/services/PortafolioService';
+import { getPortafoliosAdmin, toggleDestacado, deletePortafolio, getPortafolioValuado, toggleTopPortafolio } from '@/services/PortafolioService';
 
 export function useAdminPortfolios() {
     const [portfolios, setPortfolios] = useState<PortafolioDTO[]>([]);
@@ -92,12 +92,28 @@ export function useAdminPortfolios() {
         }
     };
 
+    const handleToggleTop = async (id: string, currentStatus: boolean) => {
+        try {
+            // Optimistic update
+            setPortfolios(prev => prev.map(p =>
+                p.id === id ? { ...p, esTop: !currentStatus } : p
+            ));
+
+            await toggleTopPortafolio(id, !currentStatus);
+        } catch (err) {
+            console.error("Error toggling top:", err);
+            // Revert
+            fetchPortfolios();
+        }
+    };
+
     return {
         portfolios,
         loading,
         error,
         refresh: fetchPortfolios,
         toggleDestacado: handleToggleDestacado,
+        toggleTop: handleToggleTop,
         deletePortafolio: handleDelete
     };
 }
