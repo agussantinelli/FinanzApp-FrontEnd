@@ -45,7 +45,7 @@ export function useLogin() {
 
         try {
             setLoading(true);
-            const resp = await login({ email, password });
+            const resp = await login({ email: email.trim(), password });
             const destino = getHomePathForRole(resp.rol);
 
             setSuccessMessage("Inicio de sesión correcto. Redirigiendo…");
