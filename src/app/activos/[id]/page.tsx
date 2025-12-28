@@ -115,19 +115,27 @@ export default function ActivoDetalle() {
 
 
     const [dolarPrices, setDolarPrices] = useState<{ compra: number, venta: number } | null>(null);
+    const [riesgoValue, setRiesgoValue] = useState<number | null>(null);
 
     useEffect(() => {
         if (activo?.symbol && typeof window !== 'undefined') {
-            const cache = localStorage.getItem('DOLAR_PRICES_CACHE');
-            if (cache) {
+            const cacheDolar = localStorage.getItem('DOLAR_PRICES_CACHE');
+            if (cacheDolar) {
                 try {
-                    const parsed = JSON.parse(cache);
+                    const parsed = JSON.parse(cacheDolar);
                     const specific = parsed[activo.symbol];
                     if (specific) {
                         setDolarPrices(specific);
                     }
                 } catch (e) {
                     console.error("Error parsing dolar prices", e);
+                }
+            }
+
+            if (activo.symbol === "EMBI_AR") {
+                const cacheRiesgo = localStorage.getItem('RIESGO_PAIS_CACHE');
+                if (cacheRiesgo) {
+                    setRiesgoValue(Number(cacheRiesgo));
                 }
             }
         }
@@ -160,6 +168,7 @@ export default function ActivoDetalle() {
 
     const brandColor = getAvatarColor(activo.tipo);
     const isMoneda = activo.tipo === 'Moneda' || activo.tipo === 'Divisa';
+    const isRiesgoPais = activo.symbol === "EMBI_AR";
 
     const precioCompra = dolarPrices?.compra ?? activo.precioCompra;
     const precioVenta = dolarPrices?.venta ?? activo.precioVenta;
@@ -213,28 +222,38 @@ export default function ActivoDetalle() {
 
                         {!isMoneda && (
                             <Box className={styles.priceContainer}>
-                                <div className={styles.priceStack}>
-                                    <Typography variant="h3" className={styles.priceValue}>
-                                        {(activo.precioActual !== null && activo.precioActual !== undefined)
-                                            ? new Intl.NumberFormat('en-US', { style: 'currency', currency: activo.monedaBase }).format(activo.precioActual)
-                                            : '$ --'
-                                        }
-                                    </Typography>
-                                    <Chip
-                                        label={`${(activo.variacion24h ?? 0) >= 0 ? '+' : ''}${formatPercentage(activo.variacion24h)}%`}
-                                        size="medium"
-                                        className={styles.variationChip}
-                                        sx={{
-                                            bgcolor: (activo.variacion24h ?? 0) >= 0 ? 'success.light' : 'error.light',
-                                        }}
-                                    />
-                                </div>
-                                <Typography variant="body2" className={styles.updateText}>
-                                    {activo.ultimaActualizacion
-                                        ? `Actualizado: ${new Date(activo.ultimaActualizacion).toLocaleString()}`
-                                        : 'Actualización pendiente'
-                                    }
-                                </Typography>
+                                {isRiesgoPais ? (
+                                    <div className={styles.priceStack}>
+                                        <Typography variant="h3" className={styles.priceValue}>
+                                            {Math.round(riesgoValue ?? activo.precioActual ?? 0)} pbs
+                                        </Typography>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <div className={styles.priceStack}>
+                                            <Typography variant="h3" className={styles.priceValue}>
+                                                {(activo.precioActual !== null && activo.precioActual !== undefined)
+                                                    ? new Intl.NumberFormat('en-US', { style: 'currency', currency: activo.monedaBase }).format(activo.precioActual)
+                                                    : '$ --'
+                                                }
+                                            </Typography>
+                                            <Chip
+                                                label={`${(activo.variacion24h ?? 0) >= 0 ? '+' : ''}${formatPercentage(activo.variacion24h)}%`}
+                                                size="medium"
+                                                className={styles.variationChip}
+                                                sx={{
+                                                    bgcolor: (activo.variacion24h ?? 0) >= 0 ? 'success.light' : 'error.light',
+                                                }}
+                                            />
+                                        </div>
+                                        <Typography variant="body2" className={styles.updateText}>
+                                            {activo.ultimaActualizacion
+                                                ? `Actualizado: ${new Date(activo.ultimaActualizacion).toLocaleString()}`
+                                                : 'Actualización pendiente'
+                                            }
+                                        </Typography>
+                                    </>
+                                )}
                             </Box>
                         )}
                     </div>
@@ -299,7 +318,7 @@ export default function ActivoDetalle() {
                                         <Typography className={styles.infoValue}>{activo.sector || "-"}</Typography>
                                     </div>
                                 </Grid>
-                                {!isMoneda && (
+                                {!isMoneda && !isRiesgoPais && (
                                     <Grid size={{ xs: 6 }}>
                                         <div className={styles.infoCard}>
                                             <Typography className={styles.infoLabel}>MARKET CAP</Typography>
@@ -383,80 +402,82 @@ export default function ActivoDetalle() {
                             </Paper>
                         )}
 
-                        {isAuthenticated && activo && !isMoneda && (
+                        {isAuthenticated && activo && !isMoneda && !isRiesgoPais && (
                             <AssetOperationsHistory activoId={activo.id} symbol={activo.symbol} />
                         )}
 
                     </Grid>
                     <Grid size={{ xs: 12, md: 4 }}>
-                        <Paper
-                            elevation={0}
-                            className={styles.actionsPaper}
-                        >
-                            {isMoneda ? (
-                                <>
-                                    <Typography variant="h6" fontWeight="bold" gutterBottom>
-                                        Cotización
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                                        Valores de referencia para {activo!.symbol}.
-                                    </Typography>
+                        {!isRiesgoPais && (
+                            <Paper
+                                elevation={0}
+                                className={styles.actionsPaper}
+                            >
+                                {isMoneda ? (
+                                    <>
+                                        <Typography variant="h6" fontWeight="bold" gutterBottom>
+                                            Cotización
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                                            Valores de referencia para {activo!.symbol}.
+                                        </Typography>
 
-                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                                        <Box sx={{ p: 2, bgcolor: 'background.default', borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
-                                            <Typography variant="caption" color="text.secondary" fontWeight="bold">PRECIO COMPRA</Typography>
-                                            <Typography variant="h4" fontWeight="bold" color="primary.main">
-                                                {precioCompra
-                                                    ? new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(precioCompra)
-                                                    : '-'}
-                                            </Typography>
+                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                                            <Box sx={{ p: 2, bgcolor: 'background.default', borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+                                                <Typography variant="caption" color="text.secondary" fontWeight="bold">PRECIO COMPRA</Typography>
+                                                <Typography variant="h4" fontWeight="bold" color="primary.main">
+                                                    {precioCompra
+                                                        ? new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(precioCompra)
+                                                        : '-'}
+                                                </Typography>
+                                            </Box>
+                                            <Box sx={{ p: 2, bgcolor: 'background.default', borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+                                                <Typography variant="caption" color="text.secondary" fontWeight="bold">PRECIO VENTA</Typography>
+                                                <Typography variant="h4" fontWeight="bold" color="primary.main">
+                                                    {precioVenta
+                                                        ? new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(precioVenta)
+                                                        : '-'}
+                                                </Typography>
+                                            </Box>
                                         </Box>
-                                        <Box sx={{ p: 2, bgcolor: 'background.default', borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
-                                            <Typography variant="caption" color="text.secondary" fontWeight="bold">PRECIO VENTA</Typography>
-                                            <Typography variant="h4" fontWeight="bold" color="primary.main">
-                                                {precioVenta
-                                                    ? new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(precioVenta)
-                                                    : '-'}
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                </>
-                            ) : (
-                                <>
-                                    <Typography variant="h6" fontWeight="bold" gutterBottom>
-                                        Operar
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                                        Gestiona tus inversiones en {activo!.symbol}.
-                                    </Typography>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Typography variant="h6" fontWeight="bold" gutterBottom>
+                                            Operar
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                                            Gestiona tus inversiones en {activo!.symbol}.
+                                        </Typography>
 
-                                    <div className={styles.actionsStack}>
-                                        <Button
-                                            variant="contained"
-                                            size="large"
-                                            startIcon={<TrendingUpIcon />}
-                                            className={styles.primaryActionButton}
-                                            onClick={() => handleOperation("COMPRA")}
-                                            sx={{
-                                                bgcolor: "success.main",
-                                                "&:hover": { bgcolor: "success.dark" },
-                                            }}
-                                        >
-                                            Comprar {activo!.symbol}
-                                        </Button>
-                                        <Button
-                                            variant="outlined"
-                                            size="large"
-                                            startIcon={<AttachMoneyIcon />}
-                                            className={styles.secondaryActionButton}
-                                            onClick={() => handleOperation("VENTA")}
-                                        >
-                                            Vender
-                                        </Button>
-                                    </div>
-                                </>
-                            )}
-                        </Paper>
+                                        <div className={styles.actionsStack}>
+                                            <Button
+                                                variant="contained"
+                                                size="large"
+                                                startIcon={<TrendingUpIcon />}
+                                                className={styles.primaryActionButton}
+                                                onClick={() => handleOperation("COMPRA")}
+                                                sx={{
+                                                    bgcolor: "success.main",
+                                                    "&:hover": { bgcolor: "success.dark" },
+                                                }}
+                                            >
+                                                Comprar {activo!.symbol}
+                                            </Button>
+                                            <Button
+                                                variant="outlined"
+                                                size="large"
+                                                startIcon={<AttachMoneyIcon />}
+                                                className={styles.secondaryActionButton}
+                                                onClick={() => handleOperation("VENTA")}
+                                            >
+                                                Vender
+                                            </Button>
+                                        </div>
+                                    </>
+                                )}
+                            </Paper>
+                        )}
                     </Grid>
                 </Grid >
             </Container >

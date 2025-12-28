@@ -38,11 +38,23 @@ export default function IndexCard({ data: d }: Props) {
     const subtitle = meta?.desc || (d.dollarRateName === 'ARS' ? 'Índice Nacional' : 'Índice Internacional');
 
     // Navigation target
-    const targetSymbol = d.usSymbol || d.localSymbol;
+    let targetSymbol = d.usSymbol || d.localSymbol;
+    if (isRiesgo) targetSymbol = "EMBI_AR";
 
     if (isRiesgo) {
         return (
-            <Card className={`${styles.accionesCard} ${styles.riskCard}`}>
+            <Card
+                className={`${styles.accionesCard} ${styles.riskCard}`}
+                onClick={() => targetSymbol && router.push(`/activos/${targetSymbol}`)}
+                sx={{
+                    cursor: 'pointer',
+                    transition: 'transform 0.2s, box-shadow 0.2s',
+                    '&:hover': {
+                        transform: 'translateY(-4px)',
+                        boxShadow: 6
+                    }
+                }}
+            >
                 <CardContent className={styles.riskCardContent}>
                     <Typography variant="h6" className={styles.cardTitleRisk}>
                         {title}

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
     Paper, Typography, Button, Grid,
     CircularProgress, Divider, Box
@@ -22,7 +22,20 @@ export default function IndexesSection() {
         fetchData,
     } = useIndicesData();
 
+    useEffect(() => {
+        fetchData();
+        const id = setInterval(fetchData, 300_000);
+        return () => clearInterval(id);
+    }, [fetchData]);
 
+    useEffect(() => {
+        if (national && national.length > 0) {
+            const riesgo = national.find(n => n.localSymbol === "EMBI_AR" || n.localSymbol === "RIESGO");
+            if (riesgo) {
+                localStorage.setItem("RIESGO_PAIS_CACHE", riesgo.usPriceUSD.toString());
+            }
+        }
+    }, [national]);
 
     return (
         <Paper className={styles.sectionPaper}>
