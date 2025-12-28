@@ -199,9 +199,11 @@ export default function ActivoDetalle() {
                                     <Typography variant="h3" className={styles.symbolText}>
                                         {activo.symbol}
                                     </Typography>
-                                    <IconButton onClick={handleToggleSeguir} sx={{ color: 'white' }}>
-                                        {activo.loSigo ? <StarIcon color="warning" /> : <StarBorderIcon />}
-                                    </IconButton>
+                                    {isAuthenticated && (
+                                        <IconButton onClick={handleToggleSeguir} sx={{ color: 'white' }}>
+                                            {activo.loSigo ? <StarIcon color="warning" /> : <StarBorderIcon />}
+                                        </IconButton>
+                                    )}
                                 </Box>
                                 <Typography variant="h6" className={styles.nameText}>
                                     {activo.nombre}
