@@ -5,17 +5,8 @@ import { UserDTO } from '@/types/Usuario';
 import styles from '../styles/Admin.module.css';
 import { useAdminPortfolios } from '@/hooks/useAdminPortfolios';
 import { useAdminUsers } from '@/hooks/useAdminUsers';
-import {
-    Chart as ChartJS,
-    ArcElement,
-    Tooltip,
-    Legend,
-    ChartOptions
-} from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
 import { formatPercentage } from '@/utils/format';
-
-ChartJS.register(ArcElement, Tooltip, Legend);
+import UserDistributionChart from '@/components/charts/UserDistributionChart';
 
 export default function ResumenTab() {
     const theme = useTheme();
@@ -34,71 +25,7 @@ export default function ResumenTab() {
         return ((totalValuado - totalInvertido) / totalInvertido) * 100;
     }, [portfolios]);
 
-    // ... (rest of userDistribution calculation)
-
     const loading = statsLoading || portfoliosLoading; // Combine loading states (optional, or just handle gracefully)
-
-
-    // Calculate User Distribution
-    const userDistribution = useMemo(() => {
-        if (!users) return [0, 0, 0];
-
-        let adminCount = 0;
-        let expertoCount = 0;
-        let inversorCount = 0;
-
-        users.forEach(u => {
-            // Role comes as "Admin", "Experto", "Inversor" from enum
-            const role = u.rol?.toLowerCase();
-
-            if (role === 'admin' || role === 'administrador') {
-                adminCount++;
-            } else if (role === 'experto') {
-                expertoCount++;
-            } else {
-                inversorCount++; // Default to inversor
-            }
-        });
-
-        return [adminCount, expertoCount, inversorCount];
-    }, [users]);
-
-    const chartData = {
-        labels: ['Administradores', 'Expertos', 'Inversores'],
-        datasets: [
-            {
-                data: userDistribution,
-                backgroundColor: [
-                    '#FF4081', // Pink for Admin
-                    '#7B1FA2', // Purple for Expert
-                    '#2196F3', // Blue for Investor
-                ],
-                borderColor: theme.palette.background.paper,
-                borderWidth: 2,
-                hoverOffset: 4
-            },
-        ],
-    };
-
-    const chartOptions: ChartOptions<'doughnut'> = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'right' as const,
-                labels: {
-                    color: theme.palette.text.primary,
-                    font: {
-                        family: "'Inter', sans-serif",
-                        size: 12
-                    },
-                    usePointStyle: true,
-                    padding: 20
-                }
-            }
-        },
-        cutout: '70%',
-    };
 
     if (loading && !stats) {
         return (
@@ -178,13 +105,9 @@ export default function ResumenTab() {
                         <Paper className={styles.sectionPaper} sx={{ height: '350px', display: 'flex', flexDirection: 'column' }}>
                             <Typography variant="h6" className={styles.sectionTitle}>Distribución de Usuarios</Typography>
                             <Divider className={styles.divider} />
-                            <Box sx={{ flexGrow: 1, position: 'relative', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', p: 2 }}>
-                                {users.length > 0 ? (
-                                    <Doughnut data={chartData} options={chartOptions} />
-                                ) : (
-                                    <Skeleton variant="circular" width={200} height={200} />
-                                )}
-                            </Box>
+
+                            <UserDistributionChart users={users} />
+
                         </Paper>
                     </Grid>
 
