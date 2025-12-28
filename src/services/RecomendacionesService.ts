@@ -43,6 +43,11 @@ export const getFiltradasAdmin = async (estado?: number): Promise<RecomendacionR
     return data;
 };
 
+export const getRecomendacionesActivasPendientes = async (): Promise<RecomendacionResumenDTO[]> => {
+    const { data } = await http.get<RecomendacionResumenDTO[]>(`${ENDPOINT}/gestion/activas-pendientes`);
+    return data;
+};
+
 // Usuario Logueado
 export const getRecomendaciones = async (soloActivas: boolean = true): Promise<RecomendacionResumenDTO[]> => {
     const { data } = await http.get<RecomendacionResumenDTO[]>(ENDPOINT, {
