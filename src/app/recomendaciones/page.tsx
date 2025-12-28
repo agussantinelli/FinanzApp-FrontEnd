@@ -171,7 +171,7 @@ export default function RecomendacionesPage() {
                                         horizonteId: selectedHorizonte ? Number(selectedHorizonte) : undefined,
                                         riesgoId: selectedRiesgo ? Number(selectedRiesgo) : undefined,
                                         activoId: selectedAsset?.id || undefined,
-                                        adminStateFilter: (val !== "") ? Number(val) : undefined
+                                        adminStateFilter: (val !== "") ? Number(val) : -1
                                     });
                                 }}
                             >

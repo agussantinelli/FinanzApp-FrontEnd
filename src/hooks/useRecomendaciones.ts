@@ -70,7 +70,11 @@ export function useRecomendaciones(initialOptions?: { soloActivas?: boolean; ena
                 res = await service.getRecomendacionesByRiesgo(filters.riesgoId, filters.soloActivas);
                 // Admin specific filter
             } else if (filters.adminStateFilter !== undefined) {
-                res = await service.getRecomendacionesAdmin(filters.adminStateFilter === -1 ? undefined : filters.adminStateFilter);
+                if (filters.adminStateFilter === -1) {
+                    res = await service.getRecomendacionesActivasPendientes();
+                } else {
+                    res = await service.getRecomendacionesAdmin(filters.adminStateFilter);
+                }
             } else {
                 res = await service.getRecomendaciones(filters.soloActivas);
             }
