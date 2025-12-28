@@ -49,6 +49,11 @@ export async function toggleDestacado(id: string, destacar: boolean): Promise<bo
     return true;
 }
 
+export async function toggleTopPortafolio(id: string, esTop: boolean): Promise<boolean> {
+    await http.patch(`${ENDPOINT}/${id}/top?esTop=${esTop}`, {});
+    return true;
+}
+
 export async function deletePortafolio(id: string): Promise<void> {
     await http.delete(`${ENDPOINT}/${id}`);
 }
