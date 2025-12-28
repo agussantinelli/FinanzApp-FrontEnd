@@ -62,7 +62,7 @@ export default function AdminPortfolioView() {
 
     if (loading) {
         return (
-            <RoleGuard allowedRoles={['Admin']}>
+            <RoleGuard allowedRoles={[RolUsuario.Admin]}>
                 <Box className={styles.container}>
                     <Skeleton variant="rectangular" height={200} />
                     <Skeleton variant="rectangular" height={400} sx={{ mt: 2 }} />
@@ -73,7 +73,7 @@ export default function AdminPortfolioView() {
 
     if (!valuacion) {
         return (
-            <RoleGuard allowedRoles={['Admin']}>
+            <RoleGuard allowedRoles={[RolUsuario.Admin]}>
                 <Box sx={{ p: 4, textAlign: 'center' }}>
                     <Typography variant="h5">Portafolio no encontrado</Typography>
                     <Button onClick={() => router.back()} sx={{ mt: 2 }} variant="outlined">Volver</Button>
@@ -83,7 +83,7 @@ export default function AdminPortfolioView() {
     }
 
     return (
-        <RoleGuard allowedRoles={['Admin']}>
+        <RoleGuard allowedRoles={[RolUsuario.Admin]}>
             <Box className={styles.container}>
                 <Button
                     startIcon={<ArrowBackIcon />}
@@ -111,10 +111,10 @@ export default function AdminPortfolioView() {
                                     </Stack>
                                     <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 1 }}>
                                         <Typography variant="caption" color="text.secondary">
-                                            Creado por: <strong>{valuacion.nombreUsuario || "Desconocido"}</strong>
+                                            Creado por: <strong>{valuacion.nombreAutor}</strong>
                                         </Typography>
                                         <Chip
-                                            label={valuacion.rolUsuario || "N/A"}
+                                            label={valuacion.rolUsuario}
                                             size="small"
                                             color={valuacion.rolUsuario === 'Experto' ? 'secondary' : 'default'}
                                             variant="outlined"
@@ -145,7 +145,6 @@ export default function AdminPortfolioView() {
                             <Typography variant="h4" className={`${styles.cardValue} ${(currency === 'ARS' ? valuacion.gananciaPesos : valuacion.gananciaDolares) >= 0 ? styles.positiveChange : styles.negativeChange}`}>
                                 {(() => {
                                     let gain = currency === 'ARS' ? valuacion.gananciaPesos : valuacion.gananciaDolares;
-                                    // Same fix logic as main page if needed, simplified here
                                     return (gain > 0 ? "+" : "") + (currency === 'ARS' ? formatARS(gain) : formatUSD(gain));
                                 })()}
                             </Typography>
@@ -216,7 +215,6 @@ export default function AdminPortfolioView() {
                                         const isAssetUSD = assetCurrency === 'USD' || assetCurrency === 'USDT' || assetCurrency === 'USDC';
                                         const ccl = (valuacion.totalDolares && valuacion.totalPesos) ? valuacion.totalPesos / valuacion.totalDolares : 1;
 
-                                        // Normalize Prices (Simplified logic reuse)
                                         let priceARS = 0, priceUSD = 0, ppcARS = 0, ppcUSD = 0;
                                         if (isAssetUSD) {
                                             priceUSD = a.precioActual; priceARS = priceUSD * ccl;
@@ -229,10 +227,7 @@ export default function AdminPortfolioView() {
                                         const priceToShow = currency === 'ARS' ? priceARS : priceUSD;
                                         const ppcToShow = currency === 'ARS' ? ppcARS : ppcUSD;
                                         const totalCostToShow = ppcToShow * a.cantidad;
-                                        const totalToShow = priceToShow * a.cantidad; // Approximation
-
-                                        // Actually use valorizadoNativo logic from hook/helpers if available, 
-                                        // but calculating simply here for display consistency with main page logic used there.
+                                        const totalToShow = priceToShow * a.cantidad;
 
                                         const varPct = a.precioPromedioCompra > 0 ? ((a.precioActual - a.precioPromedioCompra) / a.precioPromedioCompra * 100) : 0;
 

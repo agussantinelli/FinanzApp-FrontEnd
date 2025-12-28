@@ -138,6 +138,6 @@ export default function PortafolioTab() {
                     </TableBody>
                 </Table>
             </TableContainer>
-        </Box>
+        </Box >
     );
 }
