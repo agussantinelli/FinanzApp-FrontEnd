@@ -319,7 +319,7 @@ export default function RecomendacionesPage() {
                 </Alert>
             )}
 
-            {!loading && !error && data.filter(item => item.estado === EstadoRecomendacion.Aceptada).length === 0 && (
+            {!loading && !error && data.length === 0 && (
                 <Alert severity="info" sx={{ mb: 3 }}>
                     No hay recomendaciones encontradas con estos filtros.
                 </Alert>
