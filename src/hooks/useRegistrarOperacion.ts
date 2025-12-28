@@ -6,8 +6,9 @@ import { debounce } from "@mui/material/utils";
 
 import { useAuth } from "@/hooks/useAuth";
 import { searchActivos, getActivoById } from "@/services/ActivosService";
-import { createOperacion } from "@/services/OperacionesService";
+import { createOperacion, getOperacionesByPersona } from "@/services/OperacionesService";
 import { getMisPortafolios, getPortafolioValuado } from "@/services/PortafolioService";
+import { validateTemporalConsistency } from "@/utils/operacionValidation";
 import { ActivoDTO } from "@/types/Activo";
 import { TipoOperacion, CreateOperacionDTO } from "@/types/Operacion";
 import { PortafolioDTO, PortafolioValuadoDTO } from "@/types/Portafolio";
@@ -177,6 +178,34 @@ export function useRegistrarOperacion() {
 
         setLoading(true);
         setError(null);
+
+        // TEMPORAL CONSISTENCY VALIDATION
+        try {
+            const allOps = await getOperacionesByPersona(user.id);
+            const assetOps = allOps.filter(o => o.activoSymbol === asset.symbol);
+
+            const targetOpEvent = {
+                fecha: new Date(fecha).toISOString(), // Ensure ISO format for comparison
+                tipo: tipo,
+                cantidad: qty,
+                activoSymbol: asset.symbol
+            };
+
+            const validation = validateTemporalConsistency(assetOps, 'CREATE', targetOpEvent);
+            if (!validation.valid) {
+                setError(validation.message || "Error de validación temporal.");
+                setLoading(false);
+                return;
+            }
+        } catch (valErr) {
+            console.error("Validation error:", valErr);
+            // Non-blocking? Or blocking? Blocking is safer.
+            // If fetch fails, we might proceed with risk or block.
+            // Let's block to be safe as per user request "que no puedas..."
+            setError("Error al validar consistencia de operaciones. Intenta nuevamente.");
+            setLoading(false);
+            return;
+        }
 
         try {
             const dto: CreateOperacionDTO = {

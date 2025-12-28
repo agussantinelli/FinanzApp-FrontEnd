@@ -6,6 +6,7 @@ import { getOperacionesByPersona } from "@/services/OperacionesService";
 import { getCotizacionesDolar } from "@/services/DolarService";
 import { OperacionResponseDTO } from "@/types/Operacion";
 import { formatQuantity } from "@/utils/format";
+import { validateTemporalConsistency } from "@/utils/operacionValidation";
 
 export type Order = 'asc' | 'desc';
 export type FilterType = 'TODAS' | 'Compra' | 'Venta';
@@ -146,39 +147,23 @@ export function useMyOperations() {
         // 1. Get all operations for this asset
         const assetOps = operaciones.filter(o => o.activoSymbol === op.activoSymbol);
 
-        // 2. Calculate Current Holding
-        const currentHolding = assetOps.reduce((acc, curr) => {
-            if (curr.tipo === "Compra") return acc + curr.cantidad;
-            if (curr.tipo === "Venta") return acc - curr.cantidad;
-            return acc;
-        }, 0);
+        // 4. Validate using Temporal Consistency Logic
+        const targetOpEvent = {
+            id: op.id,
+            fecha: op.fecha, // For DELETE/EDIT, usually date is same unless edited. 
+            // If editing, we need new date? The current EDIT implementation in MyOperationsPage only edits Quantity/Price, NOT Date.
+            // So op.fecha is correct.
+            tipo: op.tipo,
+            cantidad: newValues ? newValues.cantidad : op.cantidad,
+            activoSymbol: op.activoSymbol
+        };
 
-        // 3. Simulate Change
-        let projectedHolding = currentHolding;
-
-        if (action === 'DELETE') {
-            if (op.tipo === "Compra") {
-                projectedHolding = currentHolding - op.cantidad;
-            } else {
-                // Deleting a Venta increases holding, so it's usually safe regarding negative balance
-                projectedHolding = currentHolding + op.cantidad;
-            }
-        } else if (action === 'EDIT' && newValues) {
-            const oldContribution = op.tipo === "Compra" ? op.cantidad : -op.cantidad;
-            const newContribution = op.tipo === "Compra" ? newValues.cantidad : -newValues.cantidad;
-            projectedHolding = currentHolding - oldContribution + newContribution;
-        }
-
-        // 4. Validate
-        // Allow a small epsilon for floating point errors?
-        if (projectedHolding < -0.000001) {
-            return {
-                valid: false,
-                message: `No se puede realizar esta acción porque el saldo de ${op.activoSymbol} quedaría en negativo (${formatQuantity(projectedHolding)}).`
-            };
-        }
-
-        return { valid: true };
+        return validateTemporalConsistency(
+            assetOps,
+            action,
+            targetOpEvent,
+            op.id
+        );
     };
 
     return {
