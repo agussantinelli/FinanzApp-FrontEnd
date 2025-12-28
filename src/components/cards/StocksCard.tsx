@@ -3,6 +3,7 @@ import { Card, CardContent, Typography } from "@mui/material";
 import { DualQuoteDTO } from "@/types/Market";
 import styles from "./styles/StocksCard.module.css";
 import { formatARS, formatUSD, formatPercentage } from "@/utils/format";
+import { useRouter } from "next/navigation";
 
 interface Props {
     data: DualQuoteDTO & { name?: string };
@@ -12,9 +13,21 @@ interface Props {
 export default function StocksCard({ data: d, title }: Props) {
     const isCedearLocal = d.cedearRatio != null;
     const displayTitle = title || d.name || d.usSymbol;
+    const router = useRouter();
 
     return (
-        <Card className={styles.accionesCard}>
+        <Card
+            className={styles.accionesCard}
+            onClick={() => router.push(`/activos/${d.localSymbol}`)}
+            sx={{
+                cursor: 'pointer',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: 6
+                }
+            }}
+        >
             <CardContent>
                 <Typography variant="h6" className={styles.cardTitle}>
                     {displayTitle}
