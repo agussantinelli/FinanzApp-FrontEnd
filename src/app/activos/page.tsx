@@ -32,6 +32,8 @@ import {
   TextField,
   InputAdornment,
   Autocomplete,
+  Snackbar,
+  Alert
 } from "@mui/material";
 import { ActivoDTO } from "@/types/Activo";
 import { TipoActivoDTO } from "@/types/TipoActivo";
@@ -50,10 +52,10 @@ import { formatPercentage } from "@/utils/format";
 import { getAvatarColor } from "@/app-theme/icons-appearance";
 import PageHeader from "@/components/ui/PageHeader";
 
-
 export default function Activos() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [openLoginSnack, setOpenLoginSnack] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -108,400 +110,439 @@ export default function Activos() {
   };
 
   return (
-    <main className={styles.main}>
-      <Box className={styles.headerContainer}>
-        <Stack spacing={3}>
-          <PageHeader
-            title="Mercado Financiero"
-            subtitle="Activos en Tiempo Real"
-            description="Explora, analiza y descubre oportunidades de inversión en tiempo real."
-          />
-
-          {/* Favorites Toggle */}
-          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-            <ToggleButtonGroup
-              value={onlyFavorites}
-              exclusive
-              onChange={(e, newVal) => {
-                if (newVal !== null) setOnlyFavorites(newVal);
-              }}
-              aria-label="filtro favoritos"
-              sx={{
-                bgcolor: 'rgba(255, 255, 255, 0.05)',
-                borderRadius: '12px',
-                p: 0.5,
-                border: '1px solid rgba(255, 255, 255, 0.12)'
-              }}
-            >
-              <ToggleButton
-                value={true}
-                aria-label="favoritos"
-                sx={{
-                  color: 'text.secondary',
-                  textTransform: 'none',
-                  fontWeight: 600,
-                  px: 3,
-                  py: 1,
-                  borderRadius: '8px !important',
-                  '&.Mui-selected': {
-                    bgcolor: 'rgba(13, 255, 33, 0.15) !important', // Neon Green tint
-                    color: '#0dff21 !important',
-                    borderColor: 'rgba(13, 255, 33, 0.3)'
-                  },
-                  '&:hover': {
-                    bgcolor: 'rgba(255, 255, 255, 0.08)'
-                  }
-                }}
-              >
-                <Stack direction="row" spacing={1} alignItems="center">
-                  {onlyFavorites ? <StarIcon fontSize="small" /> : <StarBorderIcon fontSize="small" />}
-                  <Typography variant="button" sx={{ textTransform: 'none', fontWeight: 700 }}>Mis Favoritos</Typography>
-                </Stack>
-              </ToggleButton>
-
-              <ToggleButton
-                value={false}
-                aria-label="todos"
-                sx={{
-                  color: 'text.secondary',
-                  textTransform: 'none',
-                  fontWeight: 600,
-                  px: 3,
-                  py: 1,
-                  borderRadius: '8px !important',
-                  '&.Mui-selected': {
-                    bgcolor: 'rgba(33, 203, 243, 0.15) !important', // Cyan tint
-                    color: '#21CBF3 !important'
-                  },
-                  '&:hover': {
-                    bgcolor: 'rgba(255, 255, 255, 0.08)'
-                  }
-                }}
-              >
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <SearchIcon fontSize="small" />
-                  <Typography variant="button" sx={{ textTransform: 'none', fontWeight: 700 }}>Explorar Mercado</Typography>
-                </Stack>
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </Box>
-
-          <div className={styles.controlsStack}>
-
-            <Autocomplete
-              freeSolo
-              options={suggestions}
-              getOptionLabel={(option) => typeof option === 'string' ? option : `${option.symbol} - ${option.nombre}`}
-              filterOptions={(x) => x}
-              onInputChange={(event, newInputValue) => {
-                setSearchTerm(newInputValue);
-              }}
-              onChange={(event, newValue) => {
-                if (newValue && typeof newValue !== 'string') {
-                  router.push(`/activos/${newValue.id}`);
-                }
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  executeSearch();
-                }
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  placeholder="Buscar activo..."
-                  variant="outlined"
-                  size="small"
-                  className={styles.searchInput}
-                  InputProps={{
-                    ...params.InputProps,
-                    startAdornment: (
-                      <>
-                        <InputAdornment position="start">
-                          <SearchIcon color="action" />
-                        </InputAdornment>
-                        {params.InputProps.startAdornment}
-                      </>
-                    ),
-                  }}
-                />
-              )}
-              renderOption={(props, option) => {
-                const { key, ...otherProps } = props;
-                return (
-                  <li key={key} {...otherProps}>
-                    <div className={styles.optionInfo}>
-                      <Avatar sx={{ width: 24, height: 24, fontSize: '0.7rem', bgcolor: getAvatarColor(typeof option === 'string' ? '' : option.tipo) }}>
-                        {typeof option === 'string' ? '?' : option.symbol[0]}
-                      </Avatar>
-                      <Box>
-                        <Typography variant="body2" fontWeight="bold">
-                          {typeof option === 'string' ? option : option.symbol}
-                        </Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          {typeof option === 'string' ? '' : option.nombre}
-                        </Typography>
-                      </Box>
-                    </div>
-                  </li>
-                );
-              }}
-              sx={{ flexGrow: 1, width: "100%" }}
+    <>
+      <main className={styles.main}>
+        <Box className={styles.headerContainer}>
+          <Stack spacing={3}>
+            <PageHeader
+              title="Mercado Financiero"
+              subtitle="Activos en Tiempo Real"
+              description="Explora, analiza y descubre oportunidades de inversión en tiempo real."
             />
 
-            <Button
-              variant="contained"
-              onClick={handleRefresh}
-              disabled={loading}
-              className={styles.refreshButton}
-            >
-              <RefreshIcon />
-            </Button>
-
-            <FormControl size="small" className={styles.filterControl}>
-              <InputLabel id="sector-select-label">Filtrar por Sector</InputLabel>
-              <Select
-                labelId="sector-select-label"
-                id="sector-select"
-                value={selectedSector}
-                label="Filtrar por Sector"
-                onChange={handleSectorChange}
-                className={styles.filterSelect}
+            {/* Favorites Toggle */}
+            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+              <ToggleButtonGroup
+                value={onlyFavorites}
+                exclusive
+                onChange={(e, newVal) => {
+                  if (newVal !== null) {
+                    if (newVal === true && !isLoggedIn) {
+                      setOpenLoginSnack(true);
+                      return;
+                    }
+                    setOnlyFavorites(newVal);
+                  }
+                }}
+                aria-label="filtro favoritos"
+                sx={{
+                  bgcolor: 'rgba(255, 255, 255, 0.05)',
+                  borderRadius: '12px',
+                  p: 0.5,
+                  border: '1px solid rgba(255, 255, 255, 0.12)'
+                }}
               >
-                <MenuItem value="Todos">Todos</MenuItem>
-                {sectores.map((sector) => (
-                  <MenuItem key={sector.id} value={sector.id}>
-                    {sector.nombre}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                <ToggleButton
+                  value={true}
+                  aria-label="favoritos"
+                  sx={{
+                    color: 'text.secondary',
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    px: 3,
+                    py: 1,
+                    borderRadius: '8px !important',
+                    '&.Mui-selected': {
+                      bgcolor: 'rgba(13, 255, 33, 0.15) !important', // Neon Green tint
+                      color: '#0dff21 !important',
+                      borderColor: 'rgba(13, 255, 33, 0.3)'
+                    },
+                    '&:hover': {
+                      bgcolor: 'rgba(255, 255, 255, 0.08)'
+                    }
+                  }}
+                >
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    {onlyFavorites ? <StarIcon fontSize="small" /> : <StarBorderIcon fontSize="small" />}
+                    <Typography variant="button" sx={{ textTransform: 'none', fontWeight: 700 }}>Mis Favoritos</Typography>
+                  </Stack>
+                </ToggleButton>
 
-            <FormControl size="small" className={styles.filterControl}>
-              <InputLabel id="asset-type-label">Filtrar por Tipo</InputLabel>
-              <Select
-                labelId="asset-type-label"
-                id="asset-type-select"
-                value={selectedType}
-                label="Filtrar por Tipo"
-                onChange={handleTypeChange}
-                className={styles.filterSelect}
-              >
-                <MenuItem value="Todos">Todos</MenuItem>
-                {tipos.map((type) => (
-                  <MenuItem key={type.id} value={type.id}>
-                    {type.nombre}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <FormControl size="small" className={styles.filterControl}>
-              <InputLabel id="currency-select-label">Moneda</InputLabel>
-              <Select
-                labelId="currency-select-label"
-                id="currency-select"
-                value={selectedCurrency}
-                label="Moneda"
-                onChange={handleCurrencyChange}
-                className={styles.filterSelect}
-              >
-                <MenuItem value="Todos">Todas</MenuItem>
-                <MenuItem value="ARS">Pesos (ARS)</MenuItem>
-                <MenuItem value="USD">Dólares (USD)</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-        </Stack>
-      </Box>
-
-      {loading ? (
-        <NeonLoader message="Actualizando mercado..." />
-      ) : (
-        <>
-          {currentActivos.length > 0 ? (
-            <TableContainer component={Paper} elevation={0} className={styles.tableContainer}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead className={styles.tableHead}>
-                  <TableRow>
-                    <TableCell padding="checkbox">
-                      {/* Empty header for star icon */}
-                    </TableCell>
-                    <TableCell className={styles.columnHeader}>
-                      <TableSortLabel
-                        active={orderBy === "symbol"}
-                        direction={orderBy === "symbol" && orderDesc ? "desc" : "asc"}
-                        onClick={() => handleRequestSort("symbol")}
-                        IconComponent={orderBy !== "symbol" ? UnfoldMoreIcon : undefined}
-                      >
-                        Activo
-                      </TableSortLabel>
-                    </TableCell>
-                    <TableCell className={styles.columnHeader}>
-                      <TableSortLabel
-                        active={orderBy === "precio"}
-                        direction={orderBy === "precio" && orderDesc ? "desc" : "asc"}
-                        onClick={() => handleRequestSort("precio")}
-                        IconComponent={orderBy !== "precio" ? UnfoldMoreIcon : undefined}
-                      >
-                        Precio
-                      </TableSortLabel>
-                    </TableCell>
-                    <TableCell className={styles.columnHeader}>
-                      <TableSortLabel
-                        active={orderBy === "variacion"}
-                        direction={orderBy === "variacion" && orderDesc ? "desc" : "asc"}
-                        onClick={() => handleRequestSort("variacion")}
-                        IconComponent={orderBy !== "variacion" ? UnfoldMoreIcon : undefined}
-                      >
-                        24h %
-                      </TableSortLabel>
-                    </TableCell>
-                    <TableCell className={styles.columnHeader}>Sector</TableCell>
-                    <TableCell className={styles.columnHeader}>
-                      <TableSortLabel
-                        active={orderBy === "marketCap"}
-                        direction={orderBy === "marketCap" && orderDesc ? "desc" : "asc"}
-                        onClick={() => handleRequestSort("marketCap")}
-                        IconComponent={orderBy !== "marketCap" ? UnfoldMoreIcon : undefined}
-                      >
-                        Market Cap
-                      </TableSortLabel>
-                    </TableCell>
-                    <TableCell className={styles.columnHeader}>Moneda</TableCell>
-                    <TableCell className={styles.columnHeader}>Origen</TableCell>
-                    <TableCell align="right" className={styles.columnHeader}>Acciones</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {currentActivos.map((activo) => (
-                    <TableRow
-                      key={activo.id}
-                      className={styles.tableRow}
-                    >
-                      <TableCell padding="checkbox">
-                        {isLoggedIn && (
-                          <IconButton onClick={(e) => handleToggleSeguir(e, activo)} size="small">
-                            {activo.loSigo ? <StarIcon color="warning" /> : <StarBorderIcon />}
-                          </IconButton>
-                        )}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        <div className={styles.assetInfo}>
-                          <Avatar
-                            className={styles.avatar}
-                            sx={{ bgcolor: getAvatarColor(activo.tipo) }}
-                          >
-                            {activo.symbol.substring(0, 1)}
-                          </Avatar>
-                          <Box>
-                            <Typography variant="subtitle2" fontWeight="bold">
-                              {activo.symbol}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                              {activo.nombre}
-                            </Typography>
-                          </Box>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body2" className={styles.priceText}>
-                          {(activo.precioActual !== null && activo.precioActual !== undefined)
-                            ? new Intl.NumberFormat('en-US', { style: 'currency', currency: activo.monedaBase || 'USD' }).format(activo.precioActual)
-                            : '-'
-                          }
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Chip
-                          label={`${(activo.variacion24h ?? 0) >= 0 ? '+' : ''}${formatPercentage(activo.variacion24h)}%`}
-                          size="small"
-                          className={styles.variationChip}
-                          sx={{
-                            bgcolor: (activo.variacion24h ?? 0) >= 0 ? 'success.lighter' : 'error.lighter',
-                            color: (activo.variacion24h ?? 0) >= 0 ? 'success.main' : 'error.main',
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Chip label={activo.sector || "-"} size="small" variant="outlined" className={styles.chipRounded} />
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body2">
-                          {activo.marketCap
-                            ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: "compact", maximumFractionDigits: 1 }).format(activo.marketCap)
-                            : "-"}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Chip
-                          label={activo.monedaBase || '-'}
-                          size="small"
-                          variant="outlined"
-                          color={(activo.monedaBase || "") === "USD" ? "success" : "default"}
-                          className={styles.chipBold}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        {activo.esLocal ? (
-                          <Chip label="ARG" size="small" color="info" variant="outlined" className={styles.chipRounded} />
-                        ) : (
-                          <Typography variant="caption" color="text.secondary">-</Typography>
-                        )}
-                      </TableCell>
-                      <TableCell align="right">
-                        <Button
-                          component={Link}
-                          href={`/activos/${activo.symbol}`}
-                          variant="outlined"
-                          size="small"
-                          className={styles.detailsButton}
-                        >
-                          Ver Detalles
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          ) : (
-            <Box className={styles.noResultsBox}>
-              <SearchIcon className={styles.searchIconEmpty} />
-              <Typography variant="h6" gutterBottom>
-                No se encontraron activos
-              </Typography>
-              <Typography variant="body2" className={styles.noResultsText}>
-                No hay resultados para
-                {searchTerm ? <strong> "{searchTerm}" </strong> : ""}
-                {selectedType !== "Todos" ? ` del tipo "${tipos.find(t => t.id === Number(selectedType))?.nombre || selectedType}"` : ""}
-                {selectedSector !== "Todos" ? ` en el sector "${sectores.find(s => s.id === selectedSector)?.nombre || selectedSector}"` : ""}
-                . Intenta ajustar tus filtros.
-              </Typography>
-              <Button
-                variant="outlined"
-                onClick={resetFilters}
-                className={styles.cleanFiltersButton}
-              >
-                Limpiar Filtros
-              </Button>
+                <ToggleButton
+                  value={false}
+                  aria-label="todos"
+                  sx={{
+                    color: 'text.secondary',
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    px: 3,
+                    py: 1,
+                    borderRadius: '8px !important',
+                    '&.Mui-selected': {
+                      bgcolor: 'rgba(33, 203, 243, 0.15) !important', // Cyan tint
+                      color: '#21CBF3 !important'
+                    },
+                    '&:hover': {
+                      bgcolor: 'rgba(255, 255, 255, 0.08)'
+                    }
+                  }}
+                >
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <SearchIcon fontSize="small" />
+                    <Typography variant="button" sx={{ textTransform: 'none', fontWeight: 700 }}>Explorar Mercado</Typography>
+                  </Stack>
+                </ToggleButton>
+              </ToggleButtonGroup>
             </Box>
-          )}
 
-          {activos.length > 0 && (
-            <Box className={styles.paginationContainer}>
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={handlePageChange}
-                color="primary"
-                size="large"
+            <div className={styles.controlsStack}>
+
+              <Autocomplete
+                freeSolo
+                options={suggestions}
+                getOptionLabel={(option) => typeof option === 'string' ? option : `${option.symbol} - ${option.nombre}`}
+                filterOptions={(x) => x}
+                onInputChange={(event, newInputValue) => {
+                  setSearchTerm(newInputValue);
+                }}
+                onChange={(event, newValue) => {
+                  if (newValue && typeof newValue !== 'string') {
+                    router.push(`/activos/${newValue.id}`);
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    executeSearch();
+                  }
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    placeholder="Buscar activo..."
+                    variant="outlined"
+                    size="small"
+                    className={styles.searchInput}
+                    InputProps={{
+                      ...params.InputProps,
+                      startAdornment: (
+                        <>
+                          <InputAdornment position="start">
+                            <SearchIcon color="action" />
+                          </InputAdornment>
+                          {params.InputProps.startAdornment}
+                        </>
+                      ),
+                    }}
+                  />
+                )}
+                renderOption={(props, option) => {
+                  const { key, ...otherProps } = props;
+                  return (
+                    <li key={key} {...otherProps}>
+                      <div className={styles.optionInfo}>
+                        <Avatar sx={{ width: 24, height: 24, fontSize: '0.7rem', bgcolor: getAvatarColor(typeof option === 'string' ? '' : option.tipo) }}>
+                          {typeof option === 'string' ? '?' : option.symbol[0]}
+                        </Avatar>
+                        <Box>
+                          <Typography variant="body2" fontWeight="bold">
+                            {typeof option === 'string' ? option : option.symbol}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            {typeof option === 'string' ? '' : option.nombre}
+                          </Typography>
+                        </Box>
+                      </div>
+                    </li>
+                  );
+                }}
+                sx={{ flexGrow: 1, width: "100%" }}
               />
-            </Box>
-          )}
-        </>
-      )}
-    </main>
+
+              <Button
+                variant="contained"
+                onClick={handleRefresh}
+                disabled={loading}
+                className={styles.refreshButton}
+              >
+                <RefreshIcon />
+              </Button>
+
+              <FormControl size="small" className={styles.filterControl}>
+                <InputLabel id="sector-select-label">Filtrar por Sector</InputLabel>
+                <Select
+                  labelId="sector-select-label"
+                  id="sector-select"
+                  value={selectedSector}
+                  label="Filtrar por Sector"
+                  onChange={handleSectorChange}
+                  className={styles.filterSelect}
+                >
+                  <MenuItem value="Todos">Todos</MenuItem>
+                  {sectores.map((sector) => (
+                    <MenuItem key={sector.id} value={sector.id}>
+                      {sector.nombre}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl size="small" className={styles.filterControl}>
+                <InputLabel id="asset-type-label">Filtrar por Tipo</InputLabel>
+                <Select
+                  labelId="asset-type-label"
+                  id="asset-type-select"
+                  value={selectedType}
+                  label="Filtrar por Tipo"
+                  onChange={handleTypeChange}
+                  className={styles.filterSelect}
+                >
+                  <MenuItem value="Todos">Todos</MenuItem>
+                  {tipos.map((type) => (
+                    <MenuItem key={type.id} value={type.id}>
+                      {type.nombre}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl size="small" className={styles.filterControl}>
+                <InputLabel id="currency-select-label">Moneda</InputLabel>
+                <Select
+                  labelId="currency-select-label"
+                  id="currency-select"
+                  value={selectedCurrency}
+                  label="Moneda"
+                  onChange={handleCurrencyChange}
+                  className={styles.filterSelect}
+                >
+                  <MenuItem value="Todos">Todas</MenuItem>
+                  <MenuItem value="ARS">Pesos (ARS)</MenuItem>
+                  <MenuItem value="USD">Dólares (USD)</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+          </Stack>
+        </Box>
+
+        {loading ? (
+          <NeonLoader message="Actualizando mercado..." />
+        ) : (
+          <>
+            {currentActivos.length > 0 ? (
+              <TableContainer component={Paper} elevation={0} className={styles.tableContainer}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead className={styles.tableHead}>
+                    <TableRow>
+                      <TableCell padding="checkbox">
+                        {/* Empty header for star icon */}
+                      </TableCell>
+                      <TableCell className={styles.columnHeader}>
+                        <TableSortLabel
+                          active={orderBy === "symbol"}
+                          direction={orderBy === "symbol" && orderDesc ? "desc" : "asc"}
+                          onClick={() => handleRequestSort("symbol")}
+                          IconComponent={orderBy !== "symbol" ? UnfoldMoreIcon : undefined}
+                        >
+                          Activo
+                        </TableSortLabel>
+                      </TableCell>
+                      <TableCell className={styles.columnHeader}>
+                        <TableSortLabel
+                          active={orderBy === "precio"}
+                          direction={orderBy === "precio" && orderDesc ? "desc" : "asc"}
+                          onClick={() => handleRequestSort("precio")}
+                          IconComponent={orderBy !== "precio" ? UnfoldMoreIcon : undefined}
+                        >
+                          Precio
+                        </TableSortLabel>
+                      </TableCell>
+                      <TableCell className={styles.columnHeader}>
+                        <TableSortLabel
+                          active={orderBy === "variacion"}
+                          direction={orderBy === "variacion" && orderDesc ? "desc" : "asc"}
+                          onClick={() => handleRequestSort("variacion")}
+                          IconComponent={orderBy !== "variacion" ? UnfoldMoreIcon : undefined}
+                        >
+                          24h %
+                        </TableSortLabel>
+                      </TableCell>
+                      <TableCell className={styles.columnHeader}>Sector</TableCell>
+                      <TableCell className={styles.columnHeader}>
+                        <TableSortLabel
+                          active={orderBy === "marketCap"}
+                          direction={orderBy === "marketCap" && orderDesc ? "desc" : "asc"}
+                          onClick={() => handleRequestSort("marketCap")}
+                          IconComponent={orderBy !== "marketCap" ? UnfoldMoreIcon : undefined}
+                        >
+                          Market Cap
+                        </TableSortLabel>
+                      </TableCell>
+                      <TableCell className={styles.columnHeader}>Moneda</TableCell>
+                      <TableCell className={styles.columnHeader}>Origen</TableCell>
+                      <TableCell align="right" className={styles.columnHeader}>Acciones</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {currentActivos.map((activo) => (
+                      <TableRow
+                        key={activo.id}
+                        className={styles.tableRow}
+                      >
+                        <TableCell padding="checkbox">
+                          {isLoggedIn && (
+                            <IconButton onClick={(e) => handleToggleSeguir(e, activo)} size="small">
+                              {activo.loSigo ? <StarIcon color="warning" /> : <StarBorderIcon />}
+                            </IconButton>
+                          )}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          <div className={styles.assetInfo}>
+                            <Avatar
+                              className={styles.avatar}
+                              sx={{ bgcolor: getAvatarColor(activo.tipo) }}
+                            >
+                              {activo.symbol.substring(0, 1)}
+                            </Avatar>
+                            <Box>
+                              <Typography variant="subtitle2" fontWeight="bold">
+                                {activo.symbol}
+                              </Typography>
+                              <Typography variant="body2" color="text.secondary">
+                                {activo.nombre}
+                              </Typography>
+                            </Box>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2" className={styles.priceText}>
+                            {(activo.precioActual !== null && activo.precioActual !== undefined)
+                              ? new Intl.NumberFormat('en-US', { style: 'currency', currency: activo.monedaBase || 'USD' }).format(activo.precioActual)
+                              : '-'
+                            }
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Chip
+                            label={`${(activo.variacion24h ?? 0) >= 0 ? '+' : ''}${formatPercentage(activo.variacion24h)}%`}
+                            size="small"
+                            className={styles.variationChip}
+                            sx={{
+                              bgcolor: (activo.variacion24h ?? 0) >= 0 ? 'success.lighter' : 'error.lighter',
+                              color: (activo.variacion24h ?? 0) >= 0 ? 'success.main' : 'error.main',
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Chip label={activo.sector || "-"} size="small" variant="outlined" className={styles.chipRounded} />
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2">
+                            {activo.marketCap
+                              ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: "compact", maximumFractionDigits: 1 }).format(activo.marketCap)
+                              : "-"}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Chip
+                            label={activo.monedaBase || '-'}
+                            size="small"
+                            variant="outlined"
+                            color={(activo.monedaBase || "") === "USD" ? "success" : "default"}
+                            className={styles.chipBold}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          {activo.esLocal ? (
+                            <Chip label="ARG" size="small" color="info" variant="outlined" className={styles.chipRounded} />
+                          ) : (
+                            <Typography variant="caption" color="text.secondary">-</Typography>
+                          )}
+                        </TableCell>
+                        <TableCell align="right">
+                          <Button
+                            component={Link}
+                            href={`/activos/${activo.symbol}`}
+                            variant="outlined"
+                            size="small"
+                            className={styles.detailsButton}
+                          >
+                            Ver Detalles
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            ) : (
+              <Box className={styles.noResultsBox}>
+                <SearchIcon className={styles.searchIconEmpty} />
+                {isLoggedIn && onlyFavorites ? (
+                  <>
+                    <Typography variant="h6" gutterBottom>
+                      No tienes activos favoritos
+                    </Typography>
+                    <Typography variant="body2" className={styles.noResultsText}>
+                      Explora el mercado para agregar algunos.
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      onClick={() => setOnlyFavorites(false)}
+                      className={styles.cleanFiltersButton}
+                    >
+                      Explorar Mercado
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Typography variant="h6" gutterBottom>
+                      No se encontraron activos
+                    </Typography>
+                    <Typography variant="body2" className={styles.noResultsText}>
+                      No hay resultados para
+                      {searchTerm ? <strong> "{searchTerm}" </strong> : ""}
+                      {selectedType !== "Todos" ? ` del tipo "${tipos.find(t => t.id === Number(selectedType))?.nombre || selectedType}"` : ""}
+                      {selectedSector !== "Todos" ? ` en el sector "${sectores.find(s => s.id === selectedSector)?.nombre || selectedSector}"` : ""}
+                      . Intenta ajustar tus filtros.
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      onClick={resetFilters}
+                      className={styles.cleanFiltersButton}
+                    >
+                      Limpiar Filtros
+                    </Button>
+                  </>
+                )}
+              </Box>
+            )}
+
+            {totalPages > 1 && (
+              <Box className={styles.paginationContainer}>
+                <Pagination
+                  count={totalPages}
+                  page={page}
+                  onChange={handlePageChange}
+                  color="primary"
+                  size="large"
+                />
+              </Box>
+            )}
+          </>
+        )}
+      </main>
+
+      <Snackbar
+        open={openLoginSnack}
+        autoHideDuration={6000}
+        onClose={() => setOpenLoginSnack(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setOpenLoginSnack(false)} severity="warning" sx={{ width: '100%' }}>
+          Debes iniciar sesión para ver tus favoritos.
+        </Alert>
+      </Snackbar>
+    </>
   );
 }
