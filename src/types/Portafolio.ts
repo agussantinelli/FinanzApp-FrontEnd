@@ -11,8 +11,15 @@ export interface PortafolioDTO {
     totalInvertidoUSD: number;
     totalInvertidoARS: number;
 
+    // Optional computed fields for accuracy
+    gananciaDolares?: number;
+    variacionPorcentajeDolares?: number;
+    gananciaPesos?: number;
+    variacionPorcentajePesos?: number;
+
     nombreUsuario: string;
     rolUsuario: string;
+    activos?: ActivoEnPortafolioDTO[];
 }
 
 export interface ActivoEnPortafolioDTO {

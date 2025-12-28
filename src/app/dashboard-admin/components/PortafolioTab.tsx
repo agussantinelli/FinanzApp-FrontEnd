@@ -23,14 +23,22 @@ import { useAdminPortfolios } from '@/hooks/useAdminPortfolios';
 import styles from '../styles/Admin.module.css';
 import { useRouter } from 'next/navigation';
 
+import { CurrencyToggle } from "@/components/common/CurrencyToggle";
+import { formatARS, formatUSD } from "@/utils/format";
+
 export default function PortafolioTab() {
     const { portfolios, loading, toggleDestacado, deletePortafolio } = useAdminPortfolios();
     const router = useRouter();
+    const [currency, setCurrency] = React.useState<'ARS' | 'USD'>('USD');
 
     if (loading) return <Skeleton variant="rectangular" height={400} />;
 
     return (
         <Box sx={{ py: 3 }}>
+            <Stack direction="row" justifyContent="flex-end" sx={{ mb: 2 }}>
+                <CurrencyToggle currency={currency} onCurrencyChange={setCurrency} />
+            </Stack>
+
             <TableContainer component={Paper} className={styles.tableContainer}>
                 <Table>
                     <TableHead className={styles.tableHead}>
@@ -38,7 +46,7 @@ export default function PortafolioTab() {
                             <TableCell>Creador</TableCell>
                             <TableCell>Rol</TableCell>
                             <TableCell>Nombre Portafolio</TableCell>
-                            <TableCell>Rentabilidad</TableCell>
+                            <TableCell>Rentabilidad ({currency})</TableCell>
                             <TableCell>Destacado</TableCell>
                             <TableCell>Principal</TableCell>
                             <TableCell align="right">Acciones</TableCell>
@@ -46,11 +54,19 @@ export default function PortafolioTab() {
                     </TableHead>
                     <TableBody>
                         {portfolios.map((row) => {
-                            const totalInvertido = row.totalInvertidoUSD ?? 0;
-                            const totalValuado = row.totalValuadoUSD ?? 0;
-                            let rentabilidad = 0;
+                            const isARS = currency === 'ARS';
 
-                            if (totalInvertido > 0) {
+                            // Select values based on currency
+                            const totalInvertido = isARS ? (row.totalInvertidoARS ?? 0) : (row.totalInvertidoUSD ?? 0);
+                            const totalValuado = isARS ? (row.totalValuadoARS ?? 0) : (row.totalValuadoUSD ?? 0);
+
+                            // Select pre-calculated variation if available
+                            const preCalculatedVar = isARS ? row.variacionPorcentajePesos : row.variacionPorcentajeDolares;
+
+                            // Default to pre-calculated, else calculate naive ROI
+                            let rentabilidad = preCalculatedVar ?? 0;
+
+                            if (preCalculatedVar === undefined && totalInvertido > 0) {
                                 rentabilidad = ((totalValuado - totalInvertido) / totalInvertido) * 100;
                             }
 
@@ -86,13 +102,16 @@ export default function PortafolioTab() {
                                         </Stack>
                                     </TableCell>
                                     <TableCell>
-                                        <Chip
-                                            label={`${rentabilidad >= 0 ? '+' : ''}${rentabilidad.toFixed(2)}%`}
-                                            size="small"
-                                            color={rentabilidad >= 0 ? 'success' : 'error'}
-                                            variant="soft"
-                                            className={styles.chip}
-                                        />
+                                        <Tooltip title={`Inv: ${isARS ? formatARS(totalInvertido) : formatUSD(totalInvertido)} | Val: ${isARS ? formatARS(totalValuado) : formatUSD(totalValuado)}`} arrow>
+                                            <Chip
+                                                label={`${rentabilidad >= 0 ? '+' : ''}${rentabilidad.toFixed(2)}%`}
+                                                size="small"
+                                                color={rentabilidad >= 0 ? 'success' : 'error'}
+                                                variant="filled"
+                                                className={styles.chip}
+                                                sx={{ fontWeight: 'bold' }}
+                                            />
+                                        </Tooltip>
                                     </TableCell>
                                     <TableCell>
                                         <IconButton

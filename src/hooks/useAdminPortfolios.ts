@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { PortafolioDTO } from '@/types/Portafolio';
-import { getPortafoliosAdmin, toggleDestacado, deletePortafolio } from '@/services/PortafolioService';
+import { getPortafoliosAdmin, toggleDestacado, deletePortafolio, getPortafolioValuado } from '@/services/PortafolioService';
 
 export function useAdminPortfolios() {
     const [portfolios, setPortfolios] = useState<PortafolioDTO[]>([]);
@@ -10,8 +10,47 @@ export function useAdminPortfolios() {
     const fetchPortfolios = useCallback(async () => {
         setLoading(true);
         try {
-            const data = await getPortafoliosAdmin();
-            setPortfolios(data);
+            // 1. Fetch the list (which might have stale data)
+            const listData = await getPortafoliosAdmin();
+
+            // 2. Fetch fresh detailed valuations for each portfolio to ensure data consistency
+            // This fixes the issue where "admin/todos" returns stale/incorrect totals
+            const detailPromises = listData.map(p => getPortafolioValuado(p.id).catch(e => {
+                console.error(`Failed to load details for ${p.id}`, e);
+                return null;
+            }));
+
+            const details = await Promise.all(detailPromises);
+
+            // 3. Merge fresh data into the list
+            const mergedData = listData.map((p, index) => {
+                const detail = details[index];
+                if (!detail) return p;
+
+                return {
+                    ...p,
+                    totalValuadoUSD: detail.totalDolares, // Map totalDolares -> totalValuadoUSD
+                    totalValuadoARS: detail.totalPesos,   // Map totalPesos -> totalValuadoARS
+                    // Assuming PortafolioValuadoDTO uses totalDolares/Pesos naming convention
+                    // We need to keep totalInvertido if detail doesn't have it, OR use detail's if available
+                    // checking PortafolioValuadoDTO: it usually has calculated totals.
+                    // If PortafolioValuadoDTO lacks totalInvertido, we keep the original p's IF we trust it.
+                    // BUT user says "Calculos".
+                    // Let's assume detail has correct "totalInvertido" inferred?
+                    // PortafolioValuadoDTO has: totalPesos, totalDolares, gananciaPesos, gananciaDolares
+                    // So Invertido = Valuado - Ganancia
+                    totalInvertidoUSD: detail.totalDolares - detail.gananciaDolares,
+                    totalInvertidoARS: detail.totalPesos - detail.gananciaPesos,
+
+                    // Add direct profitability fields
+                    gananciaDolares: detail.gananciaDolares,
+                    gananciaPesos: detail.gananciaPesos,
+                    variacionPorcentajeDolares: detail.variacionPorcentajeDolares,
+                    variacionPorcentajePesos: detail.variacionPorcentajePesos
+                };
+            });
+
+            setPortfolios(mergedData);
             setError(null);
         } catch (err) {
             console.error("Error fetching portfolios:", err);
