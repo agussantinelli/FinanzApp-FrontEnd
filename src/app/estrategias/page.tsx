@@ -306,9 +306,7 @@ export default function StrategiesPage() {
                                                             <Typography variant="h6" fontWeight="bold" noWrap sx={{ maxWidth: '80%' }}>
                                                                 {p.nombre}
                                                             </Typography>
-                                                            {p.esDestacado && (
-                                                                <Chip label="Destacado" color="info" size="small" variant="outlined" />
-                                                            )}
+
                                                         </Stack>
 
                                                         <Typography variant="body2" color="text.secondary" sx={{
