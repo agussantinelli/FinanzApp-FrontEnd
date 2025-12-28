@@ -57,6 +57,11 @@ export const getRecomendacionesByAutor = async (personaId: string, soloActivas: 
     return data;
 };
 
+export const getRecomendacionesEnCursoByAutor = async (personaId: string): Promise<RecomendacionResumenDTO[]> => {
+    const { data } = await http.get<RecomendacionResumenDTO[]>(`${ENDPOINT}/autor/${personaId}/en-curso`);
+    return data;
+};
+
 export const getRecomendacionesByActivo = async (activoId: string, soloActivas: boolean = true): Promise<RecomendacionResumenDTO[]> => {
     const { data } = await http.get<RecomendacionResumenDTO[]>(`${ENDPOINT}/activo/${activoId}`, { params: { soloActivas } });
     return data;
