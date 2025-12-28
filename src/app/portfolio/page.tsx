@@ -225,27 +225,31 @@ export default function PortfolioPage() {
                       {valuacion?.nombre || "Mi Portafolio"}
                     </Typography>
 
-                    {/* Change Portfolio */}
-                    <Tooltip title="Cambiar de portafolio">
-                      <IconButton size="small" onClick={handleMenuClick}>
-                        <KeyboardArrowDownIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <Menu
-                      anchorEl={anchorEl}
-                      open={Boolean(anchorEl)}
-                      onClose={handleMenuClose}
-                    >
-                      {portfolios.map((p) => (
-                        <MenuItem
-                          key={p.id}
-                          selected={p.id === selectedId}
-                          onClick={() => handleSwitchPortfolio(p.id)}
+                    {/* Change Portfolio - Only Owner */}
+                    {isOwner && (
+                      <>
+                        <Tooltip title="Cambiar de portafolio">
+                          <IconButton size="small" onClick={handleMenuClick}>
+                            <KeyboardArrowDownIcon />
+                          </IconButton>
+                        </Tooltip>
+                        <Menu
+                          anchorEl={anchorEl}
+                          open={Boolean(anchorEl)}
+                          onClose={handleMenuClose}
                         >
-                          {p.nombre}
-                        </MenuItem>
-                      ))}
-                    </Menu>
+                          {portfolios.map((p) => (
+                            <MenuItem
+                              key={p.id}
+                              selected={p.id === selectedId}
+                              onClick={() => handleSwitchPortfolio(p.id)}
+                            >
+                              {p.nombre}
+                            </MenuItem>
+                          ))}
+                        </Menu>
+                      </>
+                    )}
 
                     {/* Edit Portfolio - Only Owner */}
                     {isOwner && (

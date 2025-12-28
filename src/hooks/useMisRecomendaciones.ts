@@ -25,11 +25,13 @@ const getHorizonteString = (val: number | string) => {
     }
 };
 
-export function useMisRecomendaciones() {
+export function useMisRecomendaciones(targetUserId?: string) {
     const { data, loading, error, applyFilters } = useRecomendaciones({ soloActivas: false });
     const { user } = useAuth();
 
-    console.log("useMisRecomendaciones Render - User:", user?.id, "Data:", data?.length, "Loading:", loading);
+    const effectiveUserId = targetUserId || user?.id;
+
+    console.log("useMisRecomendaciones Render - User:", effectiveUserId, "Data:", data?.length, "Loading:", loading);
 
     const [sectores, setSectores] = useState<SectorDTO[]>([]);
 
@@ -45,19 +47,19 @@ export function useMisRecomendaciones() {
 
     // Initial load
     useEffect(() => {
-        console.log("useMisRecomendaciones Effect - Calling applyFilters with User:", user?.id);
-        if (user?.id) {
-            applyFilters({ autorId: user.id, soloActivas: false });
+        console.log("useMisRecomendaciones Effect - Calling applyFilters with User:", effectiveUserId);
+        if (effectiveUserId) {
+            applyFilters({ autorId: effectiveUserId, soloActivas: false });
         }
         getSectores().then(setSectores).catch(console.error);
-    }, [user?.id, applyFilters]);
+    }, [effectiveUserId, applyFilters]);
 
     const handleApply = () => {
-        if (!user?.id) return;
+        if (!effectiveUserId) return;
 
         // Update Hook Filters (Force Author Fetch always)
         applyFilters({
-            autorId: user.id,
+            autorId: effectiveUserId,
             soloActivas: false,
             sectorId: undefined, // Force undefined so hook uses autorId
             horizonteId: undefined,
@@ -78,10 +80,10 @@ export function useMisRecomendaciones() {
         setActiveHorizonte("");
         setActiveSector("");
 
-        if (user?.id) {
+        if (effectiveUserId) {
             // Reset to just ME + inactive
             applyFilters({
-                autorId: user.id,
+                autorId: effectiveUserId,
                 soloActivas: false,
                 sectorId: undefined,
                 horizonteId: undefined,
@@ -125,7 +127,7 @@ export function useMisRecomendaciones() {
 
             return true;
         });
-    }, [data, user?.id, activeRiesgo, activeHorizonte, activeSector]);
+    }, [data, effectiveUserId, activeRiesgo, activeHorizonte, activeSector]);
 
     return {
         displayedData,
