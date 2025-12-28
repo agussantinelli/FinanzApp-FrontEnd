@@ -4,13 +4,15 @@ import React, { useMemo, useState } from "react";
 import {
     Typography, Box, TextField, Button, Grid, Paper, Divider,
     MenuItem, Select, InputLabel, FormControl, Autocomplete, IconButton, FormHelperText,
-    InputAdornment, Backdrop
+    InputAdornment, Backdrop,
+    Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions
 } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import LayersIcon from '@mui/icons-material/Layers';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
 import { useRouter } from "next/navigation";
 
 import { RoleGuard } from "@/components/auth/RoleGuard";
@@ -98,7 +100,7 @@ export default function CrearRecomendacionPage() {
         handleRemoveRow,
         updateRow,
         handleSubmit,
-        apiError, success, clearApiError, clearSuccess
+        apiError, aiError, success, clearApiError, clearAiError, clearSuccess
     } = useCrearRecomendacion();
 
     return (
@@ -355,6 +357,38 @@ export default function CrearRecomendacionPage() {
                 >
                     <NeonLoader message="Validando con IA..." size={80} />
                 </Backdrop>
+
+                {/* AI Validation Error Dialog */}
+                <Dialog
+                    open={!!aiError}
+                    onClose={clearAiError}
+                    aria-labelledby="ai-dialog-title"
+                    aria-describedby="ai-dialog-description"
+                    PaperProps={{
+                        sx: {
+                            bgcolor: 'background.paper',
+                            border: '1px solid #f44336',
+                            boxShadow: '0 0 20px rgba(244, 67, 54, 0.3)'
+                        }
+                    }}
+                >
+                    <DialogTitle id="ai-dialog-title" sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'error.main' }}>
+                        <SmartToyIcon /> Validación de IA Fallida
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="ai-dialog-description" sx={{ color: 'text.primary' }}>
+                            {aiError}
+                        </DialogContentText>
+                        <DialogContentText variant="caption" sx={{ mt: 2, display: 'block', color: 'text.secondary' }}>
+                            Por favor revisa la justificación y los valores ingresados. La IA detectó inconsistencias que podrían confundir a los inversores.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={clearAiError} color="error" variant="contained" autoFocus>
+                            Entendido, voy a corregirlo
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </main>
         </RoleGuard >
     );

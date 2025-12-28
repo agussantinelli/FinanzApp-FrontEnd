@@ -35,6 +35,7 @@ export const useCrearRecomendacion = () => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [apiError, setApiError] = useState<string | null>(null);
+    const [aiError, setAiError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
 
     useEffect(() => {
@@ -98,6 +99,7 @@ export const useCrearRecomendacion = () => {
         if (!validate()) return;
         setLoading(true);
         setApiError(null);
+        setAiError(null);
         setSuccess(null);
 
         try {
@@ -125,8 +127,15 @@ export const useCrearRecomendacion = () => {
             }, 1000);
         } catch (error: any) {
             console.error(error);
-            const msg = error.response?.data?.message || "Error al crear la recomendación.";
-            setApiError(msg);
+            const data = error.response?.data;
+            const msg = data?.mensaje || data?.message || "Error al crear la recomendación.";
+
+            // AI Validation Error Handling
+            if (error.response?.status === 400 && data?.error === "Validación IA Fallida") {
+                setAiError(msg);
+            } else {
+                setApiError(msg);
+            }
         } finally {
             setLoading(false);
         }
@@ -144,7 +153,7 @@ export const useCrearRecomendacion = () => {
         assetRows,
         loading,
         errors,
-        apiError, success,
+        apiError, aiError, success,
 
         // Handlers
         handleAddRow,
@@ -152,6 +161,7 @@ export const useCrearRecomendacion = () => {
         updateRow,
         handleSubmit,
         clearApiError: () => setApiError(null),
+        clearAiError: () => setAiError(null),
         clearSuccess: () => setSuccess(null),
     };
 };
