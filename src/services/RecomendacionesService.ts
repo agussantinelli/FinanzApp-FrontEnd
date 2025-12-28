@@ -34,6 +34,15 @@ export const getRecomendacionesAdmin = async (estado?: number): Promise<Recomend
     return data;
 };
 
+export const getFiltradasAdmin = async (estado?: number): Promise<RecomendacionResumenDTO[]> => {
+    const params: any = {};
+    if (estado !== undefined) params.estado = estado;
+
+    // Using the same endpoint as getRecomendacionesAdmin but naming it explicitly as requested
+    const { data } = await http.get<RecomendacionResumenDTO[]>(`${ENDPOINT}/admin/filtro`, { params });
+    return data;
+};
+
 // Usuario Logueado
 export const getRecomendaciones = async (soloActivas: boolean = true): Promise<RecomendacionResumenDTO[]> => {
     const { data } = await http.get<RecomendacionResumenDTO[]>(ENDPOINT, {
