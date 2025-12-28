@@ -77,7 +77,16 @@ export default function AdminDashboardPage() {
                 <Typography variant="h4" className={styles.headerTitle}>
                   Panel Administrador
                 </Typography>
-                <Chip label="Admin" size="small" color="secondary" className={styles.adminChip} />
+                <Chip
+                  label="Admin"
+                  size="small"
+                  variant="outlined"
+                  sx={{
+                    color: '#FF4081',
+                    borderColor: '#FF4081',
+                    fontWeight: 'bold'
+                  }}
+                />
               </Stack>
               <Typography variant="body2" color="text.secondary" mt={0.5}>
                 Bienvenido, {user?.nombre}. Gestiona usuarios, activos y monitorea operaciones.

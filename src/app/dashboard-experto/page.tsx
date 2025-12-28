@@ -73,8 +73,12 @@ export default function ExpertPage() {
                     <Chip
                       label="Experto"
                       size="small"
-                      color="secondary"
-                      className={styles.expertChip}
+                      variant="outlined"
+                      sx={{
+                        color: '#7B1FA2',
+                        borderColor: '#7B1FA2',
+                        fontWeight: 'bold'
+                      }}
                     />
                   </Stack>
                   <Typography variant="body2" color="text.secondary">

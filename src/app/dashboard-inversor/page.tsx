@@ -331,8 +331,16 @@ export default function DashboardPage() {
                     <Chip
                       label={user?.rol || "Usuario"}
                       size="small"
-                      color={user?.rol === RolUsuario.Admin ? "secondary" : "primary"}
-                      className={styles.roleChip}
+                      variant="outlined"
+                      sx={{
+                        fontWeight: 'bold',
+                        color: user?.rol === RolUsuario.Admin ? '#FF4081' :
+                          user?.rol === RolUsuario.Experto ? '#7B1FA2' :
+                            '#2196F3',
+                        borderColor: user?.rol === RolUsuario.Admin ? '#FF4081' :
+                          user?.rol === RolUsuario.Experto ? '#7B1FA2' :
+                            '#2196F3',
+                      }}
                     />
                   </Stack>
                   <Typography variant="body2" color="text.secondary">
