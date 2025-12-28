@@ -17,19 +17,20 @@ export default function ResumenTab() {
     const averageReturn = useMemo(() => {
         if (!portfolios || portfolios.length === 0) return 0;
 
-        let validPortfolios = 0;
-        const sumOfReturns = portfolios.reduce((acc, p) => {
+        let totalInvested = 0;
+        let totalValued = 0;
+
+        portfolios.forEach(p => {
             const invested = p.totalInvertidoUSD || 0;
             const valued = p.totalValuadoUSD || 0;
 
-            if (invested <= 0) return acc;
+            if (invested > 0) {
+                totalInvested += invested;
+                totalValued += valued;
+            }
+        });
 
-            const returnPct = ((valued - invested) / invested) * 100;
-            validPortfolios++;
-            return acc + returnPct;
-        }, 0);
-
-        return validPortfolios > 0 ? sumOfReturns / validPortfolios : 0;
+        return totalInvested > 0 ? ((totalValued - totalInvested) / totalInvested) * 100 : 0;
     }, [portfolios]);
 
     const loading = statsLoading || portfoliosLoading; // Combine loading states (optional, or just handle gracefully)
@@ -102,7 +103,7 @@ export default function ResumenTab() {
                                 {formatPercentage(averageReturn)}%
                             </Typography>
                             <Typography variant="body2" color="text.secondary" className={styles.kpiChange}>
-                                Rendimiento promedio general
+                                Rendimiento global ponderado
                             </Typography>
                         </Paper>
                     </Grid>
