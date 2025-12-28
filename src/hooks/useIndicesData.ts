@@ -48,7 +48,7 @@ export function useIndicesData() {
         const emergentes = findIndex(data, ["EMERGENTES", "EEM"]);
         const ewz = findIndex(data, ["EWZ"]);
 
-        const riesgo = findIndex(data, ["RIESGO", "PAIS"]);
+        const riesgo = findIndex(data, ["RIESGO", "PAIS", "EMBI_AR"]);
         const merval = findIndex(data, ["MERVAL", "MERV"]);
 
         return {
