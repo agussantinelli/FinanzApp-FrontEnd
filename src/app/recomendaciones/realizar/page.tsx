@@ -104,7 +104,7 @@ export default function CrearRecomendacionPage() {
     } = useCrearRecomendacion();
 
     return (
-        <RoleGuard allowedRoles={[RolUsuario.Experto]}>
+        <RoleGuard allowedRoles={[RolUsuario.Experto, RolUsuario.Admin]}>
             <main className={styles.container}>
                 <PageHeader
                     title="Nueva Recomendación"

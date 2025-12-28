@@ -38,7 +38,7 @@ export default function MisRecomendacionesPage() {
     } = useMisRecomendaciones(targetUserId || undefined);
 
     return (
-        <RoleGuard allowedRoles={[RolUsuario.Experto]}>
+        <RoleGuard allowedRoles={[RolUsuario.Experto, RolUsuario.Admin]}>
             <main className={styles.container}>
                 <PageHeader
                     title={isViewingOther ? "Recomendaciones del Usuario" : "Mis Recomendaciones"}

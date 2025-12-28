@@ -132,7 +132,7 @@ export default function RecomendacionesPage() {
                 subtitle="Opinión Experta"
                 description="Descubre estrategias de inversión diseñadas por profesionales."
             >
-                {user?.rol === RolUsuario.Experto && (
+                {(user?.rol === RolUsuario.Experto || user?.rol === RolUsuario.Admin) && (
                     <Box display="flex" gap={2}>
                         <Button
                             variant="outlined"
