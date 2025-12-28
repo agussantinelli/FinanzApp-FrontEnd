@@ -304,7 +304,17 @@ export default function DashboardPage() {
       <Box className={styles.container}>
         <Grid container spacing={3}>
           <Grid size={{ xs: 12 }}>
-            <Paper className={styles.headerPaper}>
+            <Paper
+              className={styles.headerPaper}
+              sx={{
+                border: user?.rol === RolUsuario.Admin ? '1px solid #FF4081' :
+                  user?.rol === RolUsuario.Experto ? '1px solid #7B1FA2' :
+                    '1px solid #2196F3',
+                boxShadow: user?.rol === RolUsuario.Admin ? '0 0 15px rgba(255, 64, 129, 0.2)' :
+                  user?.rol === RolUsuario.Experto ? '0 0 15px rgba(123, 31, 162, 0.2)' :
+                    '0 0 15px rgba(33, 150, 243, 0.2)'
+              }}
+            >
               <Stack
                 direction={{ xs: "column", md: "row" }}
                 justifyContent="space-between"

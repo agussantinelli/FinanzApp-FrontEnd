@@ -70,7 +70,7 @@ export default function AdminDashboardPage() {
       <Box className={styles.container}>
 
         {/* Header */}
-        <Paper className={styles.headerPaper}>
+        <Paper className={styles.headerPaper} sx={{ border: '1px solid #FF4081', boxShadow: '0 0 15px rgba(255, 64, 129, 0.2)' }}>
           <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems="center" spacing={2}>
             <Box>
               <Stack direction="row" spacing={1} alignItems="center">
