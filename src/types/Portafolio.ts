@@ -5,6 +5,9 @@ export interface PortafolioDTO {
     esDestacado: boolean;
     esPrincipal: boolean;
 
+    // --- NUEVO: Propiedad Top ---
+    esTop: boolean;
+
     // --- CAMPOS ADMINISTRATIVOS Y FINANCIEROS (Dual Currency) ---
     totalValuadoUSD: number;
     totalValuadoARS: number;
@@ -19,6 +22,7 @@ export interface PortafolioDTO {
 
     nombreUsuario: string;
     rolUsuario: string;
+    fotoPerfil?: string;
     activos?: ActivoEnPortafolioDTO[];
 }
 
@@ -40,6 +44,7 @@ export interface PortafolioValuadoDTO {
     descripcion?: string;
     esPrincipal: boolean;
     esDestacado: boolean;
+    esTop: boolean;
 
     totalPesos: number;
     gananciaPesos: number;
@@ -52,6 +57,7 @@ export interface PortafolioValuadoDTO {
     activos: ActivoEnPortafolioDTO[];
     nombreAutor: string;
     rolUsuario: string;
+    fotoPerfil?: string;
 }
 
 export interface PortafolioCreateDTO {
