@@ -15,6 +15,21 @@ import DolarCard from "@/components/cards/DolarCard";
 
 
 
+const getTickerForDolar = (name?: string): string | undefined => {
+  if (!name) return undefined;
+  const n = name.toLowerCase();
+
+  if (n.includes('blue')) return 'USD_BLUE';
+  if (n.includes('oficial')) return 'USD_OFICIAL';
+  if (n.includes('mep') || n.includes('bolsa')) return 'USD_MEP';
+  if (n.includes('contado') || n.includes('ccl')) return 'USD_CCL';
+  if (n.includes('cripto')) return 'USD_CRIPTO';
+  if (n.includes('tarjeta')) return 'USD_TARJETA';
+  if (n.includes('mayorista')) return 'USD_MAYORISTA';
+
+  return name;
+};
+
 export default function DolarSection() {
   const {
     firstRow,
@@ -70,9 +85,10 @@ export default function DolarSection() {
         <Grid container spacing={3} justifyContent="center">
           {firstRow.map((c, i) => {
             const label = normalizeName(c?.nombre) || "—";
+            const ticker = getTickerForDolar(c?.nombre);
             return (
               <Grid size={{ xs: 12, sm: 6, md: 3 }} key={`row1-${i}`} component="div">
-                <DolarCard data={c} title={label} />
+                <DolarCard data={c} title={label} ticker={ticker} />
               </Grid>
             );
           })}
@@ -82,9 +98,10 @@ export default function DolarSection() {
           <Grid container spacing={3} justifyContent="center">
             {secondRow.map((c, i) => {
               const label = normalizeName(c?.nombre) || "—";
+              const ticker = getTickerForDolar(c?.nombre);
               return (
                 <Grid size={{ xs: 12, sm: 6, md: 3 }} key={`row2-${i}`} component="div">
-                  <DolarCard data={c} title={label} />
+                  <DolarCard data={c} title={label} ticker={ticker} />
                 </Grid>
               );
             })}

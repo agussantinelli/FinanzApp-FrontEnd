@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ActivoDTO } from '@/types/Activo';
-import { getActivoById, searchActivos } from '@/services/ActivosService';
+import { getActivoById, searchActivos, getActivoByTicker } from '@/services/ActivosService';
 import { getRecomendacionesByActivo, getRecomendacionById } from '@/services/RecomendacionesService';
 import { RecomendacionResumenDTO, RecomendacionDetalleDTO, RecomendacionDTO } from '@/types/Recomendacion';
 import { getActivoFromCache } from '@/lib/activos-cache';
@@ -35,14 +35,19 @@ export function useActivoDetail(id: string) {
                         currentActivo = await getActivoById(id);
                     }
                 } else {
-                    // It's likely a Ticker/Symbol
+                    // It's a Ticker/Symbol
                     const params = decodeURIComponent(id);
-                    const results = await searchActivos(params);
+                    try {
+                        currentActivo = await getActivoByTicker(params);
+                    } catch (err) {
+                        console.warn(`Direct ticker fetch failed for ${params}, trying search fallback...`);
 
-                    if (results && results.length > 0) {
-                        // Find exact match first (case insensitive)
-                        const exactMatch = results.find((a: ActivoDTO) => a.symbol.toLowerCase() === params.toLowerCase());
-                        currentActivo = exactMatch || results[0];
+                        // Fallback to search if direct ticker fails (e.g. slight mismatch)
+                        const results = await searchActivos(params);
+                        if (results && results.length > 0) {
+                            const exactMatch = results.find((a: ActivoDTO) => a.symbol.toLowerCase() === params.toLowerCase());
+                            currentActivo = exactMatch || results[0];
+                        }
                     }
                 }
 

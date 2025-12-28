@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/navigation";
 import { Card, CardContent, Typography } from "@mui/material";
 import { DolarDTO } from "@/types/Dolar";
 import styles from "./styles/DolarCard.module.css";
@@ -7,13 +8,24 @@ import { formatARS, formatPercentage } from "@/utils/format";
 interface Props {
     data: DolarDTO | null;
     title: string;
+    ticker?: string;
 }
 
-export default function DolarCard({ data: c, title }: Props) {
+export default function DolarCard({ data: c, title, ticker }: Props) {
+    const router = useRouter();
+
     if (!c) return null;
 
     return (
-        <Card className={styles.dolarCard}>
+        <Card
+            className={styles.dolarCard}
+            onClick={() => ticker && router.push(`/activos/${ticker}`)}
+            sx={{
+                cursor: ticker ? 'pointer' : 'default',
+                transition: 'transform 0.2s',
+                '&:hover': ticker ? { transform: 'translateY(-4px)' } : {}
+            }}
+        >
             <CardContent>
                 <Typography variant="h6" className={styles.cardTitle}>
                     {title}
