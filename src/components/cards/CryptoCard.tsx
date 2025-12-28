@@ -3,6 +3,7 @@ import { Card, CardContent, Typography } from "@mui/material";
 import { CryptoTopDTO } from "@/types/Crypto";
 import styles from "./styles/CryptoCard.module.css";
 import { formatUSD, formatPercentage } from "@/utils/format";
+import { useRouter } from "next/navigation";
 
 interface Props {
     data: CryptoTopDTO;
@@ -10,9 +11,21 @@ interface Props {
 
 export default function CryptoCard({ data: c }: Props) {
     const change = c.changePct24h ?? 0;
+    const router = useRouter();
 
     return (
-        <Card className={styles.cryptoCard}>
+        <Card
+            className={styles.cryptoCard}
+            onClick={() => router.push(`/activos/${c.symbol}`)}
+            sx={{
+                cursor: 'pointer',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: 6
+                }
+            }}
+        >
             <CardContent>
                 <Typography variant="h6" className={styles.cardTitle}>
                     {c.name}
