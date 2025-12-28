@@ -1,3 +1,12 @@
+
+export interface ContraparteDto {
+    id: string;
+    symbol: string;
+    nombre: string;
+    tipoRelacion: string; // "CEDEAR" | "Subyacente"
+    ratio: number;
+}
+
 export interface ActivoDTO {
     id: string; // Guid
     symbol: string;
@@ -9,20 +18,25 @@ export interface ActivoDTO {
     sectorId?: string | null;
 
     esLocal: boolean;
-    descripcion: string; // Now required in backend
+    descripcion: string;
 
     // --- PRECIOS Y MERCADO ---
     precioActual?: number | null;
-    precioCompra?: number | null;
-    precioVenta?: number | null;
     precioUSD?: number | null;
     precioARS?: number | null;
     variacion24h?: number | null;
     marketCap?: number | null;
     ultimaActualizacion?: string | null; // DateTime ISO
 
+    // --- RELACIÓN CEDEAR <-> USA ---
+    contraparte?: ContraparteDto | null;
+
     // --- ESTADO SOCIAL ---
     loSigo: boolean;
+
+    // --- LEGACY / FRONTEND SPECIFIC ---
+    precioCompra?: number | null;
+    precioVenta?: number | null;
 }
 
 export interface ActivoCreateDTO {
