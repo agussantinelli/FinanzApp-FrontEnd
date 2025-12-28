@@ -32,6 +32,11 @@ export async function getActivoById(id: string): Promise<ActivoDTO> {
     return res.data;
 }
 
+export async function getActivoByTicker(symbol: string): Promise<ActivoDTO> {
+    const res = await http.get<ActivoDTO>(`/api/activos/ticker/${symbol}`);
+    return res.data;
+}
+
 export async function getActivosByTipoId(id: number): Promise<ActivoDTO[]> {
     const res = await http.get<ActivoDTO[]>(`/api/activos/tipo/${id}`);
     cacheActivos(res.data);
