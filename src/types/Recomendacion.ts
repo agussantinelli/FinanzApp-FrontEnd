@@ -72,6 +72,7 @@ export interface RecomendacionResumenDTO {
     horizonte: string; // String from backend
     autorId: string; // Added to keys for filtering
     autorNombre: string;
+    fotoPerfil?: string;
     cantidadActivos: number;
     estado: number; // Enum
     esDestacada: boolean;
@@ -89,8 +90,8 @@ export interface CrearRecomendacionDTO {
     detalles: {
         activoId: string;
         precioAlRecomendar: number;
-        precioObjetivo: number;
-        stopLoss: number;
+        precioObjetivo?: number;
+        stopLoss?: number;
         accion: AccionRecomendada;
     }[];
 }
