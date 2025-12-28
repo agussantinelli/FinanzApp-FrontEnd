@@ -50,16 +50,16 @@ function RegistrarOperacionContent() {
         <RoleGuard>
             <Box className={styles.container}>
                 <Container maxWidth="md">
-                    {/* Header Discreto */}
-                    <Box sx={{ mb: 4, mt: 2 }}>
-                        <Typography variant="h4" component="h1" gutterBottom sx={{ color: 'white', fontWeight: 500 }}>
-                            Registrar Operación
-                        </Typography>
-                        <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-                            Completa los datos de tu compra, venta o dividendo.
-                        </Typography>
-                    </Box>
                     <Paper className={styles.paper}>
+                        {/* Header Integrado */}
+                        <Box sx={{ mb: 4, textAlign: 'center' }}>
+                            <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
+                                Registrar Operación
+                            </Typography>
+                            <Typography variant="body1" color="text.secondary">
+                                Completa los datos de tu compra, venta o dividendo.
+                            </Typography>
+                        </Box>
                         {/* 1. Mode Selector */}
                         <Box className={styles.modeSelector}>
                             <ToggleButtonGroup
