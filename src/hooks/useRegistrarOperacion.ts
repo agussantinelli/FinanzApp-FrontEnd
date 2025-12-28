@@ -30,6 +30,7 @@ export function useRegistrarOperacion() {
     const [tipo, setTipo] = useState<TipoOperacion>(TipoOperacion.Compra);
     const [cantidad, setCantidad] = useState<string>("");
     const [precio, setPrecio] = useState<string>("");
+    const [moneda, setMoneda] = useState<string>("ARS");
 
     // Initial date handling
     const getLocalISOString = () => {
@@ -104,6 +105,14 @@ export function useRegistrarOperacion() {
                 setPrecio(asset.precioActual.toString());
             }
         }
+
+        // Auto-set currency based on asset
+        if (asset) {
+            // Check both properties as legacy/new dtos might vary, default to ARS
+            const assetCurrency = (asset as any).moneda || asset.monedaBase || "ARS";
+            setMoneda(assetCurrency);
+        }
+
         // Clear portfolio-specific errors when asset changes
         setError(prev => prev?.includes("en este portafolio") ? null : prev);
     }, [mode, asset]);
@@ -177,7 +186,7 @@ export function useRegistrarOperacion() {
                 tipo: tipo,
                 cantidad: qty,
                 precioUnitario: price,
-                monedaOperacion: asset.moneda || "ARS",
+                monedaOperacion: moneda, // Use state instead of dynamic inference
                 fechaOperacion: new Date(fecha).toISOString(),
             };
 
@@ -208,6 +217,7 @@ export function useRegistrarOperacion() {
         tipo, setTipo,
         cantidad, setCantidad,
         precio, setPrecio,
+        moneda, setMoneda,
         fecha, setFecha,
         loading, error, success,
         clearError,

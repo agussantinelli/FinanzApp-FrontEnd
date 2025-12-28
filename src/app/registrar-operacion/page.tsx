@@ -34,6 +34,7 @@ function RegistrarOperacionContent() {
         tipo, setTipo,
         cantidad, setCantidad,
         precio, setPrecio,
+        moneda, setMoneda,
         fecha, setFecha,
         loading, error, success,
         clearError, clearSuccess,
@@ -49,10 +50,17 @@ function RegistrarOperacionContent() {
         <RoleGuard>
             <Box className={styles.container}>
                 <Container maxWidth="md">
-                    {/* ... (Header and Paper content remains same) ... */}
-
+                    {/* Header Discreto */}
+                    <Box sx={{ mb: 4, mt: 2 }}>
+                        <Typography variant="h4" component="h1" gutterBottom sx={{ color: 'white', fontWeight: 500 }}>
+                            Registrar Operación
+                        </Typography>
+                        <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                            Completa los datos de tu compra, venta o dividendo.
+                        </Typography>
+                    </Box>
                     <Paper className={styles.paper}>
-                        {/* 1. Mode Selector - existing code */}
+                        {/* 1. Mode Selector */}
                         <Box className={styles.modeSelector}>
                             <ToggleButtonGroup
                                 value={mode}
@@ -194,17 +202,31 @@ function RegistrarOperacionContent() {
                                             ) : (tipo === TipoOperacion.Venta && asset ? "No tienes este activo en el portafolio seleccionado." : null)
                                         }
                                     />
-                                    <TextField
-                                        label="Precio Unitario"
-                                        type="number"
-                                        fullWidth
-                                        value={precio}
-                                        onChange={(e) => setPrecio(e.target.value)}
-                                        helperText={mode === "actual" ? "Precio de mercado actual (editable)" : "Precio histórico por unidad"}
-                                        InputProps={{
-                                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                        }}
-                                    />
+
+                                    <Stack direction="row" spacing={2}>
+                                        <TextField
+                                            label="Precio Unitario"
+                                            type="number"
+                                            fullWidth
+                                            value={precio}
+                                            onChange={(e) => setPrecio(e.target.value)}
+                                            helperText={mode === "actual" ? "Precio de mercado actual (editable)" : "Precio histórico por unidad"}
+                                            InputProps={{
+                                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                            }}
+                                        />
+                                        <FormControl sx={{ minWidth: 120 }}>
+                                            <InputLabel>Moneda</InputLabel>
+                                            <Select
+                                                value={moneda}
+                                                label="Moneda"
+                                                onChange={(e) => setMoneda(e.target.value)}
+                                            >
+                                                <MenuItem value="ARS">ARS</MenuItem>
+                                                <MenuItem value="USD">USD</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Stack>
                                 </Stack>
                             </Box>
 
@@ -212,12 +234,12 @@ function RegistrarOperacionContent() {
                             <Paper variant="outlined" className={styles.summaryPaper}>
                                 <Typography variant="subtitle2" color="text.secondary" gutterBottom>TOTAL ESTIMADO</Typography>
                                 <Typography variant="h3" className={styles.totalAmount}>
-                                    $ {totalEstimado.toLocaleString("es-AR")}
+                                    {moneda === 'USD' ? 'USD' : '$'} {totalEstimado.toLocaleString("es-AR")}
                                 </Typography>
-                                {asset && <Typography variant="caption" sx={{ display: 'block', mt: 1 }}>Moneda: {asset.moneda || "ARS"}</Typography>}
+                                <Typography variant="caption" sx={{ display: 'block', mt: 1 }}>
+                                    Moneda seleccionada: {moneda}
+                                </Typography>
                             </Paper>
-
-                            {/* REMOVED STATIC ALERT */}
 
                             {/* ACTIONS */}
                             <Stack direction="row" justifyContent="flex-end" spacing={2} className={styles.actionStack}>

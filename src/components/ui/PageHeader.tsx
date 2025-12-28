@@ -3,7 +3,7 @@ import styles from './styles/PageHeader.module.css';
 
 interface PageHeaderProps {
     title: string;
-    subtitle: string;
+    subtitle?: string;
     description?: string;
     children?: React.ReactNode;
 }
