@@ -426,10 +426,10 @@ export default function Activos() {
                       </TableCell>
                       <TableCell>
                         <Chip
-                          label={activo.moneda}
+                          label={activo.moneda || activo.monedaBase || '-'}
                           size="small"
                           variant="outlined"
-                          color={activo.moneda === "USD" ? "success" : "default"}
+                          color={(activo.moneda || activo.monedaBase) === "USD" ? "success" : "default"}
                           className={styles.chipBold}
                         />
                       </TableCell>
