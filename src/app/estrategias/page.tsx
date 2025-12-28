@@ -37,9 +37,7 @@ export default function StrategiesPage() {
 
         getPortafoliosDestacados()
             .then(data => {
-                // Filter out portfolios owned by the current user
-                // Assuming dueñoNombre is formatted as "Nombre Apellido"
-                const filtered = data.filter(p => !p.dueñoNombre || p.dueñoNombre !== userFullName);
+                const filtered = data.filter(p => !p.nombreUsuario || p.nombreUsuario !== userFullName);
                 setPortfolios(filtered);
             })
             .catch(console.error)
@@ -115,10 +113,10 @@ export default function StrategiesPage() {
 
                                             <Stack direction="row" alignItems="center" spacing={1} mt="auto">
                                                 <Avatar sx={{ width: 24, height: 24, fontSize: '0.75rem' }}>
-                                                    {p.dueñoNombre ? p.dueñoNombre[0].toUpperCase() : '?'}
+                                                    {p.nombreUsuario ? p.nombreUsuario[0].toUpperCase() : '?'}
                                                 </Avatar>
                                                 <Typography variant="caption" color="text.primary" fontWeight="medium">
-                                                    {p.dueñoNombre || "Usuario Anónimo"}
+                                                    {p.nombreUsuario || "Usuario Anónimo"}
                                                 </Typography>
                                             </Stack>
                                         </CardContent>
