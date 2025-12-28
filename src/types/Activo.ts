@@ -1,12 +1,3 @@
-
-export interface ContraparteDto {
-    id: string;
-    symbol: string;
-    nombre: string;
-    tipoRelacion: string; // "CEDEAR" | "Subyacente"
-    ratio: number;
-}
-
 export interface ActivoDTO {
     id: string; // Guid
     symbol: string;
@@ -28,8 +19,12 @@ export interface ActivoDTO {
     marketCap?: number | null;
     ultimaActualizacion?: string | null; // DateTime ISO
 
-    // --- RELACIÓN CEDEAR <-> USA ---
-    contraparte?: ContraparteDto | null;
+    // --- RELACIÓN CEDEAR <-> USA (Flat) ---
+    contraparteId?: string | null;
+    contraparteSymbol?: string | null;
+    contraparteNombre?: string | null;
+    tipoRelacion?: string | null; // "CEDEAR" | "Subyacente"
+    ratioCedear?: number | null;
 
     // --- ESTADO SOCIAL ---
     loSigo: boolean;
