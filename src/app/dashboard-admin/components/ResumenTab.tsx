@@ -3,6 +3,7 @@ import { Box, Grid, Paper, Typography, Divider, Skeleton, Stack, useTheme } from
 import { useAdminStats } from '@/hooks/useAdminStats';
 import { UserDTO } from '@/types/Usuario';
 import styles from '../styles/Admin.module.css';
+import { useAdminPortfolios } from '@/hooks/useAdminPortfolios';
 import { useAdminUsers } from '@/hooks/useAdminUsers';
 import {
     Chart as ChartJS,
@@ -18,8 +19,25 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function ResumenTab() {
     const theme = useTheme();
-    const { params: { stats, portfolioStats, loading } } = useAdminStats();
+    const { params: { stats, portfolioStats, loading: statsLoading } } = useAdminStats();
     const { users } = useAdminUsers();
+    const { portfolios, loading: portfoliosLoading } = useAdminPortfolios(); // Fetch portfolios
+
+    const globalTotalReturn = useMemo(() => {
+        if (!portfolios || portfolios.length === 0) return 0;
+
+        const totalInvertido = portfolios.reduce((acc, p) => acc + (p.totalInvertidoUSD || 0), 0);
+        const totalValuado = portfolios.reduce((acc, p) => acc + (p.totalValuadoUSD || 0), 0);
+
+        if (totalInvertido === 0) return 0;
+
+        return ((totalValuado - totalInvertido) / totalInvertido) * 100;
+    }, [portfolios]);
+
+    // ... (rest of userDistribution calculation)
+
+    const loading = statsLoading || portfoliosLoading; // Combine loading states (optional, or just handle gracefully)
+
 
     // Calculate User Distribution
     const userDistribution = useMemo(() => {
@@ -140,17 +158,17 @@ export default function ResumenTab() {
 
                     <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                         <Paper className={styles.card}>
-                            <Typography className={styles.kpiLabel}>Rendimiento Diario</Typography>
+                            <Typography className={styles.kpiLabel}>Rendimiento Total</Typography>
                             <Typography
                                 variant="h4"
                                 className={styles.kpiValue}
-                                sx={{ color: (portfolioStats?.variacionPromedioDiaria ?? 0) >= 0 ? 'success.main' : 'error.main' }}
+                                sx={{ color: globalTotalReturn >= 0 ? 'success.main' : 'error.main' }}
                             >
-                                {(portfolioStats?.variacionPromedioDiaria ?? 0) > 0 ? '+' : ''}
-                                {formatPercentage(portfolioStats?.variacionPromedioDiaria)}%
+                                {globalTotalReturn > 0 ? '+' : ''}
+                                {formatPercentage(globalTotalReturn)}%
                             </Typography>
                             <Typography variant="body2" color="text.secondary" className={styles.kpiChange}>
-                                Promedio global de portafolios
+                                Rendimiento histórico global
                             </Typography>
                         </Paper>
                     </Grid>
