@@ -14,8 +14,8 @@ export const getOperacionesByPersona = async (personaId: string): Promise<Operac
 };
 
 export const getOperacionesByActivo = async (activoId: string): Promise<OperacionResponseDTO[]> => {
-    const { data } = await http.get<OperacionResponseDTO[]>(`${ENDPOINT}/activo/${activoId}`);
-    return data;
+    const allOps = await getOperaciones();
+    return allOps.filter(op => op.activoId?.toLowerCase() === activoId.toLowerCase());
 };
 
 export const createOperacion = async (dto: CreateOperacionDTO): Promise<OperacionResponseDTO> => {
