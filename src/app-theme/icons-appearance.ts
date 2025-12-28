@@ -20,6 +20,11 @@ export const getAvatarColor = (tipo: string) => {
         case 'moneda':
         case 'monedas':
             return "#bbff00ff";
+        case 'indices':
+        case 'indice':
+        case 'índice':
+        case 'índices':
+            return "#ff4545ff";
         default:
             return "#757575";
     }
