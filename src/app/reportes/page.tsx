@@ -13,6 +13,8 @@ import { CurrencyToggle } from "@/components/common/CurrencyToggle";
 import Link from "next/link";
 import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
+import AdminDistributionSection from "./components/AdminDistributionSection";
+import { RolUsuario } from "@/types/Usuario";
 
 export default function Reportes() {
   const { user, isAuthenticated } = useAuth();
@@ -79,15 +81,20 @@ export default function Reportes() {
           <Grid size={{ xs: 12, md: 4 }}>
             <Box mb={2}>
             </Box>
-            <Box className={styles.gradientCard}>
-              <Typography variant="h6"> Planes Futuros</Typography>
-              <Typography variant="body2" color="text.secondary">
-                Próximamente: Patrimonio total, distribución por clase y alertas personalizadas.
-              </Typography>
-              <Box className={styles.widgetPlaceholder}>
-                <Typography variant="caption">Widget en construcción</Typography>
+
+            {isAuthenticated && (user?.rol === 'Admin' || user?.rol === RolUsuario.Admin) ? (
+              <AdminDistributionSection />
+            ) : (
+              <Box className={styles.gradientCard}>
+                <Typography variant="h6"> Planes Futuros</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Próximamente: Patrimonio total, distribución por clase y alertas personalizadas.
+                </Typography>
+                <Box className={styles.widgetPlaceholder}>
+                  <Typography variant="caption">Widget en construcción</Typography>
+                </Box>
               </Box>
-            </Box>
+            )}
           </Grid>
         </Grid>
       </Box>
