@@ -24,11 +24,14 @@ http.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       if (typeof window !== "undefined") {
-        console.error('Sesión inválida o servidor reiniciado. Redirigiendo...');
-        sessionStorage.clear();
+        const token = sessionStorage.getItem("fa_token");
+        if (token) {
+          console.error('Sesión inválida o servidor reiniciado. Redirigiendo...');
+          sessionStorage.clear();
 
-        if (!window.location.pathname.includes("/auth/login")) {
-          window.location.href = "/auth/login?session=expired";
+          if (!window.location.pathname.includes("/auth/login")) {
+            window.location.href = "/auth/login?session=expired";
+          }
         }
       }
     }

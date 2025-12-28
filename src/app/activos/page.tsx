@@ -398,7 +398,7 @@ export default function Activos() {
                       <TableCell>
                         <Typography variant="body2" className={styles.priceText}>
                           {(activo.precioActual !== null && activo.precioActual !== undefined)
-                            ? new Intl.NumberFormat('en-US', { style: 'currency', currency: activo.moneda }).format(activo.precioActual)
+                            ? new Intl.NumberFormat('en-US', { style: 'currency', currency: activo.moneda || 'USD' }).format(activo.precioActual)
                             : '-'
                           }
                         </Typography>
