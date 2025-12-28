@@ -22,6 +22,7 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import IconButton from '@mui/material/IconButton';
 
 import { toggleSeguirActivo } from "@/services/ActivosService";
@@ -280,6 +281,26 @@ export default function ActivoDetalle() {
                                 className={styles.tagChipOutlined}
                             />
                         )}
+
+                        {activo.contraparteSymbol && (
+                            <Chip
+                                icon={<SwapHorizIcon />}
+                                label={activo.tipoRelacion === 'Subyacente'
+                                    ? `Ver Acción Original (${activo.contraparteSymbol})`
+                                    : `Ver CEDEAR (${activo.contraparteSymbol})`}
+                                onClick={() => router.push(`/activos/${activo.contraparteSymbol}`)}
+                                variant="outlined"
+                                sx={{
+                                    cursor: 'pointer',
+                                    borderColor: 'secondary.main',
+                                    color: 'secondary.main',
+                                    '&:hover': {
+                                        bgcolor: 'secondary.main',
+                                        color: 'white'
+                                    }
+                                }}
+                            />
+                        )}
                     </div>
                 </Container>
             </Box>
@@ -446,9 +467,6 @@ export default function ActivoDetalle() {
                                         <Typography variant="h6" fontWeight="bold" gutterBottom>
                                             Operar
                                         </Typography>
-                                        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                                            Gestiona tus inversiones en {activo!.symbol}.
-                                        </Typography>
 
                                         <div className={styles.actionsStack}>
                                             <Button
@@ -464,6 +482,25 @@ export default function ActivoDetalle() {
                                             >
                                                 Comprar {activo!.symbol}
                                             </Button>
+                                            {activo.contraparteSymbol && (
+                                                <Chip
+                                                    icon={<SwapHorizIcon />}
+                                                    label={activo.tipoRelacion === 'Subyacente'
+                                                        ? `Ver Acción Original (${activo.contraparteSymbol})`
+                                                        : `Ver CEDEAR (${activo.contraparteSymbol})`}
+                                                    onClick={() => router.push(`/activos/${activo.contraparteSymbol}`)}
+                                                    variant="outlined"
+                                                    sx={{
+                                                        cursor: 'pointer',
+                                                        borderColor: 'secondary.main',
+                                                        color: 'secondary.main',
+                                                        '&:hover': {
+                                                            bgcolor: 'secondary.main',
+                                                            color: 'white'
+                                                        }
+                                                    }}
+                                                />
+                                            )}
                                             <Button
                                                 variant="outlined"
                                                 size="large"

@@ -23,6 +23,7 @@ export async function deleteActivo(id: string): Promise<void> {
 export async function getActivos(tipo?: string): Promise<ActivoDTO[]> {
     const params = tipo && tipo !== "Todos" ? { tipo } : {};
     const res = await http.get<ActivoDTO[]>("/api/activos", { params });
+    console.log(`[DEBUG] getActivos(${tipo || 'all'}):`, res.data);
     cacheActivos(res.data, !tipo || tipo === "Todos");
     return res.data;
 }
@@ -34,6 +35,7 @@ export async function getActivoById(id: string): Promise<ActivoDTO> {
 
 export async function getActivoByTicker(symbol: string): Promise<ActivoDTO> {
     const res = await http.get<ActivoDTO>(`/api/activos/ticker/${symbol}`);
+    console.log(`[DEBUG] getActivoByTicker(${symbol}):`, res.data);
     return res.data;
 }
 
