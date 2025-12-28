@@ -14,15 +14,22 @@ export default function ResumenTab() {
     const { users } = useAdminUsers();
     const { portfolios, loading: portfoliosLoading } = useAdminPortfolios(); // Fetch portfolios
 
-    const globalTotalReturn = useMemo(() => {
+    const averageReturn = useMemo(() => {
         if (!portfolios || portfolios.length === 0) return 0;
 
-        const totalInvertido = portfolios.reduce((acc, p) => acc + (p.totalInvertidoUSD || 0), 0);
-        const totalValuado = portfolios.reduce((acc, p) => acc + (p.totalValuadoUSD || 0), 0);
+        let validPortfolios = 0;
+        const sumOfReturns = portfolios.reduce((acc, p) => {
+            const invested = p.totalInvertidoUSD || 0;
+            const valued = p.totalValuadoUSD || 0;
 
-        if (totalInvertido === 0) return 0;
+            if (invested <= 0) return acc;
 
-        return ((totalValuado - totalInvertido) / totalInvertido) * 100;
+            const returnPct = ((valued - invested) / invested) * 100;
+            validPortfolios++;
+            return acc + returnPct;
+        }, 0);
+
+        return validPortfolios > 0 ? sumOfReturns / validPortfolios : 0;
     }, [portfolios]);
 
     const loading = statsLoading || portfoliosLoading; // Combine loading states (optional, or just handle gracefully)
@@ -85,17 +92,17 @@ export default function ResumenTab() {
 
                     <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                         <Paper className={styles.card}>
-                            <Typography className={styles.kpiLabel}>Rendimiento Total</Typography>
+                            <Typography className={styles.kpiLabel}>Rendimiento Promedio</Typography>
                             <Typography
                                 variant="h4"
                                 className={styles.kpiValue}
-                                sx={{ color: globalTotalReturn >= 0 ? 'success.main' : 'error.main' }}
+                                sx={{ color: averageReturn >= 0 ? 'success.main' : 'error.main' }}
                             >
-                                {globalTotalReturn > 0 ? '+' : ''}
-                                {formatPercentage(globalTotalReturn)}%
+                                {averageReturn > 0 ? '+' : ''}
+                                {formatPercentage(averageReturn)}%
                             </Typography>
                             <Typography variant="body2" color="text.secondary" className={styles.kpiChange}>
-                                Rendimiento histórico global
+                                Rendimiento promedio general
                             </Typography>
                         </Paper>
                     </Grid>
