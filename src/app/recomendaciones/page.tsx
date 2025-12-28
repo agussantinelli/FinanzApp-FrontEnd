@@ -38,7 +38,7 @@ export default function RecomendacionesPage() {
     const [selectedHorizonte, setSelectedHorizonte] = useState(filters.horizonteId || "");
     const [selectedRiesgo, setSelectedRiesgo] = useState(filters.riesgoId || "");
     const [selectedAsset, setSelectedAsset] = useState<ActivoDTO | null>(null);
-    const [selectedState, setSelectedState] = useState<number | string>("");
+    const [selectedState, setSelectedState] = useState<number | string>(EstadoRecomendacion.Aceptada);
 
     const isAdmin = user?.rol === RolUsuario.Admin;
 
@@ -154,6 +154,34 @@ export default function RecomendacionesPage() {
                         </Button>
                     </Box>
                 )}
+                {isAdmin && (
+                    <Box display="flex" gap={2} alignItems="center">
+                        <FormControl size="small" sx={{ minWidth: 150, bgcolor: 'background.paper', borderRadius: 1 }}>
+                            <InputLabel>Estado</InputLabel>
+                            <Select
+                                value={selectedState}
+                                label="Estado"
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    setSelectedState(val);
+                                    // Auto-apply logic for this specific filter since it's outside the main block
+                                    applyFilters({
+                                        sectorId: selectedSector || undefined,
+                                        autorId: selectedAutor || undefined,
+                                        horizonteId: selectedHorizonte ? Number(selectedHorizonte) : undefined,
+                                        riesgoId: selectedRiesgo ? Number(selectedRiesgo) : undefined,
+                                        activoId: selectedAsset?.id || undefined,
+                                        adminStateFilter: (val !== "") ? Number(val) : undefined
+                                    });
+                                }}
+                            >
+                                <MenuItem value={EstadoRecomendacion.Aceptada}>Aceptadas</MenuItem>
+                                <MenuItem value={EstadoRecomendacion.Pendiente}>Pendientes</MenuItem>
+                                <MenuItem value=""><em>Todas</em></MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+                )}
             </PageHeader>
 
             <Paper variant="outlined" sx={{ p: 2, mb: 4, borderRadius: 2 }}>
@@ -186,23 +214,7 @@ export default function RecomendacionesPage() {
                     </Grid>
 
                     {/* Admin State Filter */}
-                    {isAdmin && (
-                        <Grid size={{ xs: 12, md: 2 }}>
-                            <FormControl fullWidth size="small">
-                                <InputLabel>Estado</InputLabel>
-                                <Select
-                                    value={selectedState}
-                                    label="Estado"
-                                    onChange={(e) => setSelectedState(e.target.value)}
-                                >
-                                    <MenuItem value=""><em>Todas</em></MenuItem>
-                                    <MenuItem value={EstadoRecomendacion.Aceptada}>Aceptadas</MenuItem>
-                                    <MenuItem value={EstadoRecomendacion.Pendiente}>Pendientes</MenuItem>
-                                    <MenuItem value={EstadoRecomendacion.Rechazada}>Rechazadas</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                    )}
+
 
                     {/* Sector Filter - Smaller */}
                     <Grid size={{ xs: 12, md: 2 }} >
