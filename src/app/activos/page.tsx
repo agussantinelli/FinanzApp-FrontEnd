@@ -53,6 +53,14 @@ import PageHeader from "@/components/ui/PageHeader";
 
 export default function Activos() {
   const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsLoggedIn(!!sessionStorage.getItem("fa_token"));
+    }
+  }, []);
+
   const {
     selectedType,
     selectedSector,
@@ -373,9 +381,11 @@ export default function Activos() {
                       className={styles.tableRow}
                     >
                       <TableCell padding="checkbox">
-                        <IconButton onClick={(e) => handleToggleSeguir(e, activo)} size="small">
-                          {activo.loSigo ? <StarIcon color="warning" /> : <StarBorderIcon />}
-                        </IconButton>
+                        {isLoggedIn && (
+                          <IconButton onClick={(e) => handleToggleSeguir(e, activo)} size="small">
+                            {activo.loSigo ? <StarIcon color="warning" /> : <StarBorderIcon />}
+                          </IconButton>
+                        )}
                       </TableCell>
                       <TableCell component="th" scope="row">
                         <div className={styles.assetInfo}>
@@ -398,7 +408,7 @@ export default function Activos() {
                       <TableCell>
                         <Typography variant="body2" className={styles.priceText}>
                           {(activo.precioActual !== null && activo.precioActual !== undefined)
-                            ? new Intl.NumberFormat('en-US', { style: 'currency', currency: activo.moneda || 'USD' }).format(activo.precioActual)
+                            ? new Intl.NumberFormat('en-US', { style: 'currency', currency: activo.monedaBase || 'USD' }).format(activo.precioActual)
                             : '-'
                           }
                         </Typography>
@@ -426,10 +436,10 @@ export default function Activos() {
                       </TableCell>
                       <TableCell>
                         <Chip
-                          label={activo.moneda || activo.monedaBase || '-'}
+                          label={activo.monedaBase || '-'}
                           size="small"
                           variant="outlined"
-                          color={(activo.moneda || activo.monedaBase) === "USD" ? "success" : "default"}
+                          color={(activo.monedaBase || "") === "USD" ? "success" : "default"}
                           className={styles.chipBold}
                         />
                       </TableCell>
