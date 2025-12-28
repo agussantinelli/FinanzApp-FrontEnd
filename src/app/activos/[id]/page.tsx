@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
     Box,
@@ -114,6 +114,25 @@ export default function ActivoDetalle() {
     };
 
 
+    const [dolarPrices, setDolarPrices] = useState<{ compra: number, venta: number } | null>(null);
+
+    useEffect(() => {
+        if (activo?.symbol && typeof window !== 'undefined') {
+            const cache = localStorage.getItem('DOLAR_PRICES_CACHE');
+            if (cache) {
+                try {
+                    const parsed = JSON.parse(cache);
+                    const specific = parsed[activo.symbol];
+                    if (specific) {
+                        setDolarPrices(specific);
+                    }
+                } catch (e) {
+                    console.error("Error parsing dolar prices", e);
+                }
+            }
+        }
+    }, [activo?.symbol]);
+
     if (loading) {
         return (
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "60vh" }}>
@@ -140,6 +159,10 @@ export default function ActivoDetalle() {
     }
 
     const brandColor = getAvatarColor(activo.tipo);
+    const isMoneda = activo.tipo === 'Moneda' || activo.tipo === 'Divisa';
+
+    const precioCompra = dolarPrices?.compra ?? activo.precioCompra;
+    const precioVenta = dolarPrices?.venta ?? activo.precioVenta;
 
     return (
         <Box className={styles.mainBox}>
@@ -186,30 +209,32 @@ export default function ActivoDetalle() {
                             </Box>
                         </div>
 
-                        <Box className={styles.priceContainer}>
-                            <div className={styles.priceStack}>
-                                <Typography variant="h3" className={styles.priceValue}>
-                                    {(activo.precioActual !== null && activo.precioActual !== undefined)
-                                        ? new Intl.NumberFormat('en-US', { style: 'currency', currency: activo.moneda }).format(activo.precioActual)
-                                        : '$ --'
+                        {!isMoneda && (
+                            <Box className={styles.priceContainer}>
+                                <div className={styles.priceStack}>
+                                    <Typography variant="h3" className={styles.priceValue}>
+                                        {(activo.precioActual !== null && activo.precioActual !== undefined)
+                                            ? new Intl.NumberFormat('en-US', { style: 'currency', currency: activo.monedaBase }).format(activo.precioActual)
+                                            : '$ --'
+                                        }
+                                    </Typography>
+                                    <Chip
+                                        label={`${(activo.variacion24h ?? 0) >= 0 ? '+' : ''}${formatPercentage(activo.variacion24h)}%`}
+                                        size="medium"
+                                        className={styles.variationChip}
+                                        sx={{
+                                            bgcolor: (activo.variacion24h ?? 0) >= 0 ? 'success.light' : 'error.light',
+                                        }}
+                                    />
+                                </div>
+                                <Typography variant="body2" className={styles.updateText}>
+                                    {activo.ultimaActualizacion
+                                        ? `Actualizado: ${new Date(activo.ultimaActualizacion).toLocaleString()}`
+                                        : 'Actualización pendiente'
                                     }
                                 </Typography>
-                                <Chip
-                                    label={`${(activo.variacion24h ?? 0) >= 0 ? '+' : ''}${formatPercentage(activo.variacion24h)}%`}
-                                    size="medium"
-                                    className={styles.variationChip}
-                                    sx={{
-                                        bgcolor: (activo.variacion24h ?? 0) >= 0 ? 'success.light' : 'error.light',
-                                    }}
-                                />
-                            </div>
-                            <Typography variant="body2" className={styles.updateText}>
-                                {activo.ultimaActualizacion
-                                    ? `Actualizado: ${new Date(activo.ultimaActualizacion).toLocaleString()}`
-                                    : 'Actualización pendiente'
-                                }
-                            </Typography>
-                        </Box>
+                            </Box>
+                        )}
                     </div>
 
                     <div className={styles.tagsStack}>
@@ -222,7 +247,7 @@ export default function ActivoDetalle() {
                             }}
                         />
                         <Chip
-                            label={activo.moneda}
+                            label={activo.monedaBase}
                             variant="outlined"
                             className={styles.tagChipOutlined}
                         />
@@ -238,7 +263,6 @@ export default function ActivoDetalle() {
                 </Container>
             </Box>
 
-            {/* Content Section */}
             <Container maxWidth="lg" className={styles.contentContainer}>
                 <Grid container spacing={4}>
                     {/* Left Column: Details */}
@@ -260,12 +284,7 @@ export default function ActivoDetalle() {
                             <Divider sx={{ my: 3 }} />
 
                             <Grid container spacing={2}>
-                                <Grid size={{ xs: 6 }}>
-                                    <div className={styles.infoCard}>
-                                        <Typography className={styles.infoLabel}>MONEDA</Typography>
-                                        <Typography className={styles.infoValue}>{activo.moneda}</Typography>
-                                    </div>
-                                </Grid>
+
                                 <Grid size={{ xs: 6 }}>
                                     <div className={styles.infoCard}>
                                         <Typography className={styles.infoLabel}>ORIGEN</Typography>
@@ -278,16 +297,18 @@ export default function ActivoDetalle() {
                                         <Typography className={styles.infoValue}>{activo.sector || "-"}</Typography>
                                     </div>
                                 </Grid>
-                                <Grid size={{ xs: 6 }}>
-                                    <div className={styles.infoCard}>
-                                        <Typography className={styles.infoLabel}>MARKET CAP</Typography>
-                                        <Typography className={styles.infoValue}>
-                                            {activo.marketCap
-                                                ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: "compact", maximumFractionDigits: 1 }).format(activo.marketCap)
-                                                : "-"}
-                                        </Typography>
-                                    </div>
-                                </Grid>
+                                {!isMoneda && (
+                                    <Grid size={{ xs: 6 }}>
+                                        <div className={styles.infoCard}>
+                                            <Typography className={styles.infoLabel}>MARKET CAP</Typography>
+                                            <Typography className={styles.infoValue}>
+                                                {activo.marketCap
+                                                    ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: "compact", maximumFractionDigits: 1 }).format(activo.marketCap)
+                                                    : "-"}
+                                            </Typography>
+                                        </div>
+                                    </Grid>
+                                )}
                             </Grid>
                         </Paper>
 
@@ -360,53 +381,83 @@ export default function ActivoDetalle() {
                             </Paper>
                         )}
 
-                        {isAuthenticated && activo && (
+                        {isAuthenticated && activo && !isMoneda && (
                             <AssetOperationsHistory activoId={activo.id} symbol={activo.symbol} />
                         )}
 
                     </Grid>
-
-                    {/* Right Column: Actions */}
                     <Grid size={{ xs: 12, md: 4 }}>
                         <Paper
                             elevation={0}
                             className={styles.actionsPaper}
                         >
-                            <Typography variant="h6" fontWeight="bold" gutterBottom>
-                                Operar
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                                Gestiona tus inversiones en {activo.symbol}.
-                            </Typography>
+                            {isMoneda ? (
+                                <>
+                                    <Typography variant="h6" fontWeight="bold" gutterBottom>
+                                        Cotización
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                                        Valores de referencia para {activo!.symbol}.
+                                    </Typography>
 
-                            <div className={styles.actionsStack}>
-                                <Button
-                                    variant="contained"
-                                    size="large"
-                                    startIcon={<TrendingUpIcon />}
-                                    className={styles.primaryActionButton}
-                                    onClick={() => handleOperation("COMPRA")}
-                                    sx={{
-                                        bgcolor: "success.main",
-                                        "&:hover": { bgcolor: "success.dark" },
-                                    }}
-                                >
-                                    Comprar {activo.symbol}
-                                </Button>
-                                <Button
-                                    variant="outlined"
-                                    size="large"
-                                    startIcon={<AttachMoneyIcon />}
-                                    className={styles.secondaryActionButton}
-                                    onClick={() => handleOperation("VENTA")}
-                                >
-                                    Vender
-                                </Button>
-                            </div>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                                        <Box sx={{ p: 2, bgcolor: 'background.default', borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+                                            <Typography variant="caption" color="text.secondary" fontWeight="bold">PRECIO COMPRA</Typography>
+                                            <Typography variant="h4" fontWeight="bold" color="primary.main">
+                                                {precioCompra
+                                                    ? new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(precioCompra)
+                                                    : '-'}
+                                            </Typography>
+                                        </Box>
+                                        <Box sx={{ p: 2, bgcolor: 'background.default', borderRadius: 2, border: '1px solid', borderColor: 'divider' }}>
+                                            <Typography variant="caption" color="text.secondary" fontWeight="bold">PRECIO VENTA</Typography>
+                                            <Typography variant="h4" fontWeight="bold" color="primary.main">
+                                                {precioVenta
+                                                    ? new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(precioVenta)
+                                                    : '-'}
+                                            </Typography>
+                                        </Box>
+                                    </Box>
+                                </>
+                            ) : (
+                                <>
+                                    <Typography variant="h6" fontWeight="bold" gutterBottom>
+                                        Operar
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                                        Gestiona tus inversiones en {activo!.symbol}.
+                                    </Typography>
+
+                                    <div className={styles.actionsStack}>
+                                        <Button
+                                            variant="contained"
+                                            size="large"
+                                            startIcon={<TrendingUpIcon />}
+                                            className={styles.primaryActionButton}
+                                            onClick={() => handleOperation("COMPRA")}
+                                            sx={{
+                                                bgcolor: "success.main",
+                                                "&:hover": { bgcolor: "success.dark" },
+                                            }}
+                                        >
+                                            Comprar {activo!.symbol}
+                                        </Button>
+                                        <Button
+                                            variant="outlined"
+                                            size="large"
+                                            startIcon={<AttachMoneyIcon />}
+                                            className={styles.secondaryActionButton}
+                                            onClick={() => handleOperation("VENTA")}
+                                        >
+                                            Vender
+                                        </Button>
+                                    </div>
+                                </>
+                            )}
                         </Paper>
                     </Grid>
-                </Grid>
-            </Container>
+                </Grid >
+            </Container >
 
             <FloatingMessage
                 open={!!error}
@@ -414,6 +465,6 @@ export default function ActivoDetalle() {
                 severity="error"
                 onClose={() => setError(null)}
             />
-        </Box>
+        </Box >
     );
 }

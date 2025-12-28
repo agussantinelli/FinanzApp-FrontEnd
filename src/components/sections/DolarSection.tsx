@@ -15,20 +15,8 @@ import DolarCard from "@/components/cards/DolarCard";
 
 
 
-const getTickerForDolar = (name?: string): string | undefined => {
-  if (!name) return undefined;
-  const n = name.toLowerCase();
-
-  if (n.includes('blue')) return 'USD_BLUE';
-  if (n.includes('oficial')) return 'USD_OFICIAL';
-  if (n.includes('mep') || n.includes('bolsa')) return 'USD_MEP';
-  if (n.includes('contado') || n.includes('ccl')) return 'USD_CCL';
-  if (n.includes('cripto')) return 'USD_CRIPTO';
-  if (n.includes('tarjeta')) return 'USD_TARJETA';
-  if (n.includes('mayorista')) return 'USD_MAYORISTA';
-
-  return name;
-};
+import { getTickerForDolar } from "@/utils/tickerMapping";
+import { useEffect } from "react";
 
 export default function DolarSection() {
   const {
@@ -39,6 +27,20 @@ export default function DolarSection() {
     fetchData,
     normalizeName
   } = useDolarData();
+
+  // Persist Dolar Prices to LocalStorage for ActivoDetail to use
+  useEffect(() => {
+    if ((firstRow.length > 0 || secondRow.length > 0) && typeof window !== 'undefined') {
+      const cache: Record<string, { compra: number, venta: number }> = {};
+      [...firstRow, ...secondRow].forEach(d => {
+        const t = getTickerForDolar(d?.nombre);
+        if (t && d) {
+          cache[t] = { compra: d.compra, venta: d.venta };
+        }
+      });
+      localStorage.setItem('DOLAR_PRICES_CACHE', JSON.stringify(cache));
+    }
+  }, [firstRow, secondRow]);
 
   return (
     <Paper className={styles.sectionPaper}>
