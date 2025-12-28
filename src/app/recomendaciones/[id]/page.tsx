@@ -8,9 +8,13 @@ import {
     Button, CircularProgress, Alert, Container, Stack, Link as MuiLink
 } from '@mui/material';
 import Link from 'next/link';
-import { RecomendacionDTO, RecomendacionDetalleDTO, AccionRecomendada } from '@/types/Recomendacion';
-import { getRecomendacionById, getRecomendaciones } from '@/services/RecomendacionesService';
+import { RecomendacionDTO, RecomendacionDetalleDTO, AccionRecomendada, EstadoRecomendacion } from '@/types/Recomendacion';
+import { getRecomendacionById, getRecomendaciones, aprobarRecomendacion, rechazarRecomendacion } from '@/services/RecomendacionesService';
 import { createSlug } from '@/utils/slug';
+import { useAuth } from "@/hooks/useAuth";
+import { RolUsuario } from "@/types/Usuario";
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PersonIcon from '@mui/icons-material/Person';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
@@ -86,9 +90,31 @@ const getHorizonteLabel = (h: string | number) => {
 export default function RecomendacionDetallePage() {
     const { id } = useParams();
     const router = useRouter();
+    const { user } = useAuth();
     const [recomendacion, setRecomendacion] = useState<RecomendacionDTO | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    const isAdmin = user?.rol === RolUsuario.Admin; // Using Admin based on previous check of type file, but wait, type said Default logic?
+    // Let's check imports. RolUsuario.Admin is correct based on type file I saw.
+
+    // Handlers
+    const handleApprove = async () => {
+        if (!recomendacion) return;
+        try {
+            await aprobarRecomendacion(recomendacion.id);
+            // Reload or update state
+            window.location.reload();
+        } catch (e) { console.error(e); }
+    };
+
+    const handleReject = async () => {
+        if (!recomendacion) return;
+        try {
+            await rechazarRecomendacion(recomendacion.id);
+            window.location.reload(); // Simple reload for now
+        } catch (e) { console.error(e); }
+    };
 
     useEffect(() => {
         const loadData = async () => {
@@ -179,9 +205,31 @@ export default function RecomendacionDetallePage() {
                                         label={getRiesgoLabel(recomendacion.riesgo)}
                                         color={getRiesgoColor(recomendacion.riesgo) as any}
                                         variant="outlined"
+
                                     />
                                 </Stack>
                             </Grid>
+                            {/* Admin Actions for Pending */}
+                            {isAdmin && recomendacion.estado === EstadoRecomendacion.Pendiente && (
+                                <Grid size={{ xs: 12, md: 4 }} display="flex" justifyContent="flex-end" gap={2}>
+                                    <Button
+                                        variant="contained"
+                                        color="success"
+                                        startIcon={<ThumbUpIcon />}
+                                        onClick={handleApprove}
+                                    >
+                                        Aprobar
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        color="error"
+                                        startIcon={<ThumbDownIcon />}
+                                        onClick={handleReject}
+                                    >
+                                        Rechazar
+                                    </Button>
+                                </Grid>
+                            )}
                         </Grid>
                     </Box>
                 </Paper>

@@ -10,6 +10,7 @@ interface FilterState {
     activoId?: string;
     horizonteId?: number;
     riesgoId?: number;
+    adminStateFilter?: number;
 }
 
 export function useRecomendaciones(initialOptions?: { soloActivas?: boolean; enabled?: boolean; requireFilter?: boolean; enCursoOnly?: boolean }) {
@@ -67,6 +68,9 @@ export function useRecomendaciones(initialOptions?: { soloActivas?: boolean; ena
                 res = await service.getRecomendacionesByHorizonte(filters.horizonteId, filters.soloActivas);
             } else if (filters.riesgoId) {
                 res = await service.getRecomendacionesByRiesgo(filters.riesgoId, filters.soloActivas);
+                // Admin specific filter
+            } else if (filters.adminStateFilter !== undefined) {
+                res = await service.getRecomendacionesAdmin(filters.adminStateFilter === -1 ? undefined : filters.adminStateFilter);
             } else {
                 res = await service.getRecomendaciones(filters.soloActivas);
             }

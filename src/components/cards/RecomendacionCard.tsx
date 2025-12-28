@@ -8,6 +8,9 @@ import {
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import RemoveIcon from '@mui/icons-material/Remove';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import { IconButton } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ShieldIcon from '@mui/icons-material/Shield';
 import PersonIcon from '@mui/icons-material/Person';
@@ -21,6 +24,9 @@ import CancelIcon from '@mui/icons-material/Cancel';
 interface Props {
     item: RecomendacionResumenDTO;
     showStatus?: boolean;
+    isAdmin?: boolean;
+    onApprove?: () => void;
+    onReject?: () => void;
 }
 
 const getRiesgoColor = (r: string) => {
@@ -76,7 +82,7 @@ const getEstadoConfig = (e: number) => {
     }
 };
 
-export default function RecomendacionCard({ item, showStatus = false }: Props) {
+export default function RecomendacionCard({ item, showStatus = false, isAdmin = false, onApprove, onReject }: Props) {
     const router = useRouter();
     const formattedDate = new Date(item.fecha).toLocaleDateString('es-AR', {
         day: '2-digit', month: 'short', year: 'numeric'
@@ -197,10 +203,36 @@ export default function RecomendacionCard({ item, showStatus = false }: Props) {
 
                     <Divider sx={{ my: 1 }} />
 
-                    <Box mt={1}>
+                    <Box mt={1} display="flex" justifyContent="space-between" alignItems="center">
                         <Typography variant="caption" color="text.secondary" fontStyle="italic">
                             Haz clic para ver la estrategia completa.
                         </Typography>
+                        {isAdmin && item.estado === EstadoRecomendacion.Pendiente && (
+                            <Stack direction="row" spacing={1}>
+                                <IconButton
+                                    size="small"
+                                    color="success"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onApprove?.();
+                                    }}
+                                    title="Aprobar"
+                                >
+                                    <ThumbUpIcon fontSize="small" />
+                                </IconButton>
+                                <IconButton
+                                    size="small"
+                                    color="error"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onReject?.();
+                                    }}
+                                    title="Rechazar"
+                                >
+                                    <ThumbDownIcon fontSize="small" />
+                                </IconButton>
+                            </Stack>
+                        )}
                     </Box>
                 </CardContent>
             </Box>

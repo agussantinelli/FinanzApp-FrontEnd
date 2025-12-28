@@ -22,10 +22,11 @@ import { searchActivos } from "@/services/ActivosService";
 import { SectorDTO } from "@/types/Sector";
 import { ActivoDTO } from "@/types/Activo";
 import { EstadoRecomendacion } from "@/types/Recomendacion";
+import { aprobarRecomendacion, rechazarRecomendacion } from "@/services/RecomendacionesService";
 import { debounce } from "@mui/material/utils";
 
 export default function RecomendacionesPage() {
-    const { data, loading, error, filters, applyFilters, clearFilters } = useRecomendaciones();
+    const { data, loading, error, filters, applyFilters, clearFilters, refresh } = useRecomendaciones();
     const { user } = useAuth();
     const router = useRouter();
 
@@ -37,6 +38,27 @@ export default function RecomendacionesPage() {
     const [selectedHorizonte, setSelectedHorizonte] = useState(filters.horizonteId || "");
     const [selectedRiesgo, setSelectedRiesgo] = useState(filters.riesgoId || "");
     const [selectedAsset, setSelectedAsset] = useState<ActivoDTO | null>(null);
+    const [selectedState, setSelectedState] = useState<number | string>("");
+
+    const isAdmin = user?.rol === RolUsuario.Admin;
+
+    const handleApprove = async (id: string) => {
+        try {
+            await aprobarRecomendacion(id);
+            refresh();
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    const handleReject = async (id: string) => {
+        try {
+            await rechazarRecomendacion(id);
+            refresh();
+        } catch (e) {
+            console.error(e);
+        }
+    };
 
     const authors = useMemo(() => {
         const uniqueAuthors: { id: string, nombre: string }[] = [];
@@ -89,7 +111,8 @@ export default function RecomendacionesPage() {
             autorId: selectedAutor || undefined,
             horizonteId: selectedHorizonte ? Number(selectedHorizonte) : undefined,
             riesgoId: selectedRiesgo ? Number(selectedRiesgo) : undefined,
-            activoId: selectedAsset?.id || undefined
+            activoId: selectedAsset?.id || undefined,
+            adminStateFilter: (isAdmin && selectedState !== "") ? Number(selectedState) : undefined
         });
     };
 
@@ -161,6 +184,25 @@ export default function RecomendacionesPage() {
                             noOptionsText="Buscar..."
                         />
                     </Grid>
+
+                    {/* Admin State Filter */}
+                    {isAdmin && (
+                        <Grid size={{ xs: 12, md: 2 }}>
+                            <FormControl fullWidth size="small">
+                                <InputLabel>Estado</InputLabel>
+                                <Select
+                                    value={selectedState}
+                                    label="Estado"
+                                    onChange={(e) => setSelectedState(e.target.value)}
+                                >
+                                    <MenuItem value=""><em>Todas</em></MenuItem>
+                                    <MenuItem value={EstadoRecomendacion.Aceptada}>Aceptadas</MenuItem>
+                                    <MenuItem value={EstadoRecomendacion.Pendiente}>Pendientes</MenuItem>
+                                    <MenuItem value={EstadoRecomendacion.Rechazada}>Rechazadas</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                    )}
 
                     {/* Sector Filter - Smaller */}
                     <Grid size={{ xs: 12, md: 2 }} >
@@ -271,10 +313,16 @@ export default function RecomendacionesPage() {
                 </Alert>
             )}
 
+            {/* Remove client-side filtering to allow Admin results (Pending/Rejected) to show */}
             <Grid container spacing={3}>
-                {data.filter(item => item.estado === EstadoRecomendacion.Aceptada).map((item) => (
+                {data.map((item) => (
                     <Grid size={{ xs: 12, md: 6, lg: 4 }} key={item.id}>
-                        <RecomendacionCard item={item} />
+                        <RecomendacionCard
+                            item={item}
+                            isAdmin={isAdmin}
+                            onApprove={() => { handleApprove(item.id).then(() => window.location.reload()) }}
+                            onReject={() => { handleReject(item.id).then(() => window.location.reload()) }}
+                        />
                     </Grid>
                 ))}
             </Grid>

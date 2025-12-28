@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { RecomendacionResumenDTO } from '@/types/Recomendacion';
-import { getRecomendacionesAdmin, destacarRecomendacion, resolverRecomendacion } from '@/services/RecomendacionesService';
+import { getRecomendacionesAdmin, destacarRecomendacion, resolverRecomendacion, aprobarRecomendacion, rechazarRecomendacion } from '@/services/RecomendacionesService';
 
 export function useAdminRecommendations() {
     const [recommendations, setRecommendations] = useState<RecomendacionResumenDTO[]>([]);
@@ -34,6 +34,16 @@ export function useAdminRecommendations() {
         loadRecommendations();
     };
 
+    const aprobar = async (id: string) => {
+        await aprobarRecomendacion(id);
+        loadRecommendations();
+    };
+
+    const rechazar = async (id: string) => {
+        await rechazarRecomendacion(id);
+        loadRecommendations();
+    };
+
     return {
         recommendations,
         loading,
@@ -41,6 +51,8 @@ export function useAdminRecommendations() {
         setFilter,
         loadRecommendations,
         toggleDestacar,
-        resolver
+        resolver,
+        aprobar,
+        rechazar
     };
 }
