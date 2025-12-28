@@ -12,11 +12,14 @@ interface FilterState {
     riesgoId?: number;
 }
 
-export function useRecomendaciones(initialOptions?: { soloActivas?: boolean }) {
+export function useRecomendaciones(initialOptions?: { soloActivas?: boolean; enabled?: boolean; requireFilter?: boolean; enCursoOnly?: boolean }) {
     const [data, setData] = useState<RecomendacionResumenDTO[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [filters, setFilters] = useState<FilterState>({ soloActivas: initialOptions?.soloActivas ?? true });
+    const enabled = initialOptions?.enabled ?? true;
+    const requireFilter = initialOptions?.requireFilter ?? false;
+    const enCursoOnly = initialOptions?.enCursoOnly ?? false;
 
     const applyFilters = useCallback((newFilters: Partial<FilterState>) => {
         setFilters(prev => ({ ...prev, ...newFilters }));
@@ -27,10 +30,17 @@ export function useRecomendaciones(initialOptions?: { soloActivas?: boolean }) {
     }, []);
 
     const fetchData = useCallback(async () => {
+        if (!enabled) return;
         setLoading(true);
         setError(null);
 
         const isGenericFetch = !filters.sectorId && !filters.autorId && !filters.activoId && !filters.horizonteId && !filters.riesgoId;
+
+        if (requireFilter && isGenericFetch) {
+            setLoading(false);
+            return;
+        }
+
         if (isGenericFetch) {
             const cached = getAllRecomendacionesFromCache();
             if (cached && cached.length > 0) {
@@ -46,7 +56,11 @@ export function useRecomendaciones(initialOptions?: { soloActivas?: boolean }) {
             if (filters.sectorId) {
                 res = await service.getRecomendacionesBySector(filters.sectorId, filters.soloActivas);
             } else if (filters.autorId) {
-                res = await service.getRecomendacionesByAutor(filters.autorId, filters.soloActivas);
+                if (enCursoOnly) {
+                    res = await service.getRecomendacionesEnCursoByAutor(filters.autorId);
+                } else {
+                    res = await service.getRecomendacionesByAutor(filters.autorId, filters.soloActivas);
+                }
             } else if (filters.activoId) {
                 res = await service.getRecomendacionesByActivo(filters.activoId, filters.soloActivas);
             } else if (filters.horizonteId) {
@@ -65,7 +79,7 @@ export function useRecomendaciones(initialOptions?: { soloActivas?: boolean }) {
         } finally {
             setLoading(false);
         }
-    }, [filters]);
+    }, [filters, enabled]);
 
     useEffect(() => {
         fetchData();

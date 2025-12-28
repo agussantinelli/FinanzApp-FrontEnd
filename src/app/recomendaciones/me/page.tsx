@@ -6,7 +6,7 @@ import {
     Grid, Box, CircularProgress, Alert, Button,
     Paper, Select, InputLabel, FormControl, MenuItem
 } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
@@ -21,6 +21,10 @@ import styles from "../styles/Recomendaciones.module.css";
 
 export default function MisRecomendacionesPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const targetUserId = searchParams.get('userId');
+    const isViewingOther = !!targetUserId;
+
     const {
         displayedData,
         loading,
@@ -31,15 +35,15 @@ export default function MisRecomendacionesPage() {
         selectedRiesgo, setSelectedRiesgo,
         handleApply,
         handleClear
-    } = useMisRecomendaciones();
+    } = useMisRecomendaciones(targetUserId || undefined);
 
     return (
         <RoleGuard allowedRoles={[RolUsuario.Experto]}>
             <main className={styles.container}>
                 <PageHeader
-                    title="Mis Recomendaciones"
-                    subtitle="Gestión"
-                    description="Revisa el estado de tus recomendaciones y su rendimiento."
+                    title={isViewingOther ? "Recomendaciones del Usuario" : "Mis Recomendaciones"}
+                    subtitle={isViewingOther ? "Perfil Externo" : "Gestión"}
+                    description={isViewingOther ? "Explora el historial de recomendaciones de este experto." : "Revisa el estado de tus recomendaciones y su rendimiento."}
                 >
                     <Button
                         variant="outlined"

@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { createSlug } from "@/utils/slug";
 import {
     Card, CardContent, Typography, Box, Chip, Divider, Stack
@@ -76,14 +77,13 @@ const getEstadoConfig = (e: number) => {
 };
 
 export default function RecomendacionCard({ item, showStatus = false }: Props) {
+    const router = useRouter();
     const formattedDate = new Date(item.fecha).toLocaleDateString('es-AR', {
         day: '2-digit', month: 'short', year: 'numeric'
     });
 
     // Default to Aprobada if not present (backward comp), or check value
     const estadoConfig = item.estado !== undefined ? getEstadoConfig(item.estado) : null;
-
-
 
     // Acertada Logic
     let resolutionConfig = null;
@@ -98,6 +98,7 @@ export default function RecomendacionCard({ item, showStatus = false }: Props) {
     return (
         <Card
             variant="outlined"
+            onClick={() => router.push(`/recomendaciones/${createSlug(item.titulo)}`)}
             sx={{
                 height: '100%',
                 display: 'flex',
@@ -114,85 +115,92 @@ export default function RecomendacionCard({ item, showStatus = false }: Props) {
                     <StarIcon fontSize="small" />
                 </Box>
             )}
-            <Link href={`/recomendaciones/${createSlug(item.titulo)}`} style={{ textDecoration: 'none', color: 'inherit', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                    <CardContent sx={{ flex: 1 }}>
-                        <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={1}>
-                            <Box>
-                                <Typography variant="overline" color="text.secondary">
-                                    {item.fuente} • {formattedDate}
-                                </Typography>
-                                <Typography variant="h6" component="div" sx={{ lineHeight: 1.2, mb: 0.5 }}>
-                                    {item.titulo}
-                                </Typography>
-                                <Typography variant="caption" color="primary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+
+            {/* Main Content Container - acts as the clickable body via Card onClick */}
+            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', textDecoration: 'none', color: 'inherit' }}>
+                <CardContent sx={{ flex: 1 }}>
+                    <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={1}>
+                        <Box>
+                            <Typography variant="overline" color="text.secondary">
+                                {item.fuente} • {formattedDate}
+                            </Typography>
+                            <Typography variant="h6" component="div" sx={{ lineHeight: 1.2, mb: 0.5 }}>
+                                {item.titulo}
+                            </Typography>
+
+                            <Link
+                                href={`/recomendaciones/me?userId=${item.autorId}`}
+                                onClick={(e) => e.stopPropagation()}
+                                style={{ textDecoration: 'none', color: 'inherit' }}
+                            >
+                                <Typography variant="caption" color="primary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, '&:hover': { textDecoration: 'underline' } }}>
                                     <PersonIcon fontSize="inherit" /> {item.autorNombre}
                                 </Typography>
-                            </Box>
+                            </Link>
+                        </Box>
 
-                            <Box display="flex" gap={1} flexWrap="wrap">
-                                {resolutionConfig && (
-                                    <Chip
-                                        label={resolutionConfig.label}
-                                        color={resolutionConfig.color as any}
-                                        size="small"
-                                        icon={resolutionConfig.icon}
-                                        variant="filled"
-                                        sx={{ fontWeight: 'bold' }}
-                                    />
-                                )}
-                                {showStatus && estadoConfig && !resolutionConfig && (
-                                    <Chip
-                                        label={estadoConfig.label}
-                                        color={estadoConfig.color as any}
-                                        size="small"
-                                        variant="filled" // Filled to distinguish from Risk
-                                        sx={{ fontWeight: 'bold' }}
-                                    />
-                                )}
+                        <Box display="flex" gap={1} flexWrap="wrap">
+                            {resolutionConfig && (
                                 <Chip
-                                    label={item.riesgo}
-                                    color={getRiesgoColor(item.riesgo) as any}
+                                    label={resolutionConfig.label}
+                                    color={resolutionConfig.color as any}
                                     size="small"
-                                    icon={<ShieldIcon />}
-                                    variant="outlined"
+                                    icon={resolutionConfig.icon}
+                                    variant="filled"
+                                    sx={{ fontWeight: 'bold' }}
                                 />
-                            </Box>
-                        </Box>
-
-                        <Box mb={2}>
-                            <Typography variant="body2" color="text.secondary">
-                                {item.cantidadActivos} activo{item.cantidadActivos !== 1 ? 's' : ''} recomendados.
-                                <br />
-                                Ver detalle completo para más información.
-                            </Typography>
-                        </Box>
-
-                        <Stack direction="row" spacing={1} mb={2}>
+                            )}
+                            {showStatus && estadoConfig && !resolutionConfig && (
+                                <Chip
+                                    label={estadoConfig.label}
+                                    color={estadoConfig.color as any}
+                                    size="small"
+                                    variant="filled"
+                                    sx={{ fontWeight: 'bold' }}
+                                />
+                            )}
                             <Chip
-                                icon={<AccessTimeIcon style={{ color: 'inherit' }} />}
-                                label={getHorizonteLabel(item.horizonte)}
+                                label={item.riesgo}
+                                color={getRiesgoColor(item.riesgo) as any}
                                 size="small"
+                                icon={<ShieldIcon />}
                                 variant="outlined"
-                                sx={{
-                                    fontSize: '0.75rem',
-                                    fontWeight: 'bold',
-                                    ...getHorizonteStyle(item.horizonte),
-                                    backgroundColor: 'rgba(0,0,0,0.2)'
-                                }}
                             />
-                        </Stack>
-
-                        <Divider sx={{ my: 1 }} />
-
-                        <Box mt={1}>
-                            <Typography variant="caption" color="text.secondary" fontStyle="italic">
-                                Haz clic para ver la estrategia completa.
-                            </Typography>
                         </Box>
-                    </CardContent>
-                </Box>
-            </Link>
+                    </Box>
+
+                    <Box mb={2}>
+                        <Typography variant="body2" color="text.secondary">
+                            {item.cantidadActivos} activo{item.cantidadActivos !== 1 ? 's' : ''} recomendados.
+                            <br />
+                            Ver detalle completo para más información.
+                        </Typography>
+                    </Box>
+
+                    <Stack direction="row" spacing={1} mb={2}>
+                        <Chip
+                            icon={<AccessTimeIcon style={{ color: 'inherit' }} />}
+                            label={getHorizonteLabel(item.horizonte)}
+                            size="small"
+                            variant="outlined"
+                            sx={{
+                                fontSize: '0.75rem',
+                                fontWeight: 'bold',
+                                ...getHorizonteStyle(item.horizonte),
+                                backgroundColor: 'rgba(0,0,0,0.2)'
+                            }}
+                        />
+                    </Stack>
+
+                    <Divider sx={{ my: 1 }} />
+
+                    <Box mt={1}>
+                        <Typography variant="caption" color="text.secondary" fontStyle="italic">
+                            Haz clic para ver la estrategia completa.
+                        </Typography>
+                    </Box>
+                </CardContent>
+            </Box>
         </Card>
     );
 }

@@ -26,10 +26,15 @@ const getHorizonteString = (val: number | string) => {
 };
 
 export function useMisRecomendaciones(targetUserId?: string) {
-    const { data, loading, error, applyFilters } = useRecomendaciones({ soloActivas: false });
     const { user } = useAuth();
-
     const effectiveUserId = targetUserId || user?.id;
+
+    const { data, loading, error, applyFilters } = useRecomendaciones({
+        soloActivas: false,
+        enabled: !!effectiveUserId,
+        requireFilter: true,
+        enCursoOnly: true
+    });
 
     console.log("useMisRecomendaciones Render - User:", effectiveUserId, "Data:", data?.length, "Loading:", loading);
 
