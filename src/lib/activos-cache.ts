@@ -17,3 +17,8 @@ export function cacheActivos(activos: ActivoDTO[], fullList: boolean = false) {
     activos.forEach(a => assetsCache.set(a.id, a));
     if (fullList) isFullCache = true;
 }
+
+export function clearCache() {
+    assetsCache.clear();
+    isFullCache = false;
+}

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { BASEURL } from "@/config/api";
+import { clearCache } from "@/lib/activos-cache";
 
 export const http = axios.create({
   baseURL: BASEURL,
@@ -28,6 +29,7 @@ http.interceptors.response.use(
         if (token) {
           console.error('Sesión inválida o servidor reiniciado. Redirigiendo...');
           sessionStorage.clear();
+          clearCache();
 
           if (!window.location.pathname.includes("/auth/login")) {
             window.location.href = "/auth/login?session=expired";

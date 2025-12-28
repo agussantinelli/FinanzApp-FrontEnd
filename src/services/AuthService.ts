@@ -1,4 +1,5 @@
 import { http } from "@/lib/http";
+import { clearCache } from "@/lib/activos-cache";
 import { RegisterGeoDataDTO } from "@/types/Geo";
 import { UserLoginRequest, UserRegisterRequest, UserLoginResponseDTO, AuthenticatedUser, RolUsuario } from "@/types/Usuario";
 import { ChangePasswordDTO, ResetPasswordRequestDTO, ResetPasswordConfirmDTO } from "@/types/Auth";
@@ -31,6 +32,7 @@ export function clearAuthSession() {
   if (typeof window === "undefined") return;
 
   sessionStorage.clear();
+  clearCache();
   notifyAuthChanged();
 }
 
