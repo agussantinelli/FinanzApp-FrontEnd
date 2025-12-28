@@ -111,7 +111,7 @@ export default function StrategiesPage() {
                                             </Typography>
 
                                             <Stack direction="row" alignItems="center" spacing={1} mt="auto">
-                                                <Avatar sx={{ width: 24, height: 24, fontSize: '0.75rem' }}>
+                                                <Avatar src={p.fotoPerfil} sx={{ width: 24, height: 24, fontSize: '0.75rem' }}>
                                                     {p.nombreUsuario ? p.nombreUsuario[0].toUpperCase() : '?'}
                                                 </Avatar>
                                                 <Typography variant="caption" color="text.primary" fontWeight="medium">

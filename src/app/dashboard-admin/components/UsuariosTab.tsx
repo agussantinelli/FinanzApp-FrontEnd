@@ -56,7 +56,9 @@ export default function UsuariosTab() {
                                 <TableCell>#{row.id.substring(0, 8)}</TableCell>
                                 <TableCell>
                                     <Stack direction="row" spacing={2} alignItems="center">
-                                        <Avatar sx={{ width: 24, height: 24 }}>{row.nombre[0]}</Avatar>
+                                        <Avatar src={row.urlFotoPerfil} sx={{ width: 24, height: 24 }}>
+                                            {row.nombre ? row.nombre[0] : '?'}
+                                        </Avatar>
                                         <Typography variant="body2" fontWeight={600}>{row.nombre}</Typography>
                                     </Stack>
                                 </TableCell>

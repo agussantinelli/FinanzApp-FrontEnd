@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createSlug } from "@/utils/slug";
 import {
-    Card, CardContent, Typography, Box, Chip, Divider, Stack
+    Card, CardContent, Typography, Box, Chip, Divider, Stack, Avatar
 } from '@mui/material';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
@@ -134,7 +134,10 @@ export default function RecomendacionCard({ item, showStatus = false }: Props) {
                                 style={{ textDecoration: 'none', color: 'inherit' }}
                             >
                                 <Typography variant="caption" color="primary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, '&:hover': { textDecoration: 'underline' } }}>
-                                    <PersonIcon fontSize="inherit" /> {item.autorNombre}
+                                    <Avatar src={item.fotoPerfil} sx={{ width: 20, height: 20, fontSize: 10 }}>
+                                        {item.autorNombre ? item.autorNombre[0].toUpperCase() : '?'}
+                                    </Avatar>
+                                    {item.autorNombre}
                                 </Typography>
                             </Link>
                         </Box>
