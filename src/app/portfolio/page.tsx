@@ -27,7 +27,8 @@ import {
   Menu,
   Tooltip
 } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { RoleGuard } from "@/components/auth/RoleGuard";
 
 import { usePortfolioData } from "@/hooks/usePortfolioData";
@@ -45,6 +46,9 @@ import { CreatePortfolioDialog, EditPortfolioDialog } from "@/components/portfol
 
 export default function PortfolioPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const urlId = searchParams.get('id');
+  const showBackButton = !!urlId;
   // refreshPortfolios updates the list, refresh updates the current selected portfolio details
   const { portfolios, selectedId, valuacion, loading, handlePortfolioChange, refreshPortfolios, refresh } = usePortfolioData();
   const [currency, setCurrency] = React.useState<'ARS' | 'USD'>('USD');
@@ -53,6 +57,13 @@ export default function PortfolioPage() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [createOpen, setCreateOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
+
+  // Handle URL ID change
+  React.useEffect(() => {
+    if (urlId && urlId !== selectedId) {
+      handlePortfolioChange(urlId);
+    }
+  }, [urlId, handlePortfolioChange, selectedId]);
 
   // Sorting State
   const { order, orderBy, handleRequestSort, sortedActivos } = usePortfolioSort({
@@ -191,6 +202,16 @@ export default function PortfolioPage() {
           {/* HEADER */}
           <Grid size={{ xs: 12 }}>
             <Paper className={styles.headerPaper}>
+              {showBackButton && (
+                <Button
+                  startIcon={<ArrowBackIcon />}
+                  onClick={() => router.back()}
+                  sx={{ mb: 2, textTransform: 'none', fontWeight: 600 }}
+                  color="inherit"
+                >
+                  Volver al listado
+                </Button>
+              )}
               <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems="center" spacing={2}>
                 <Box>
                   <Stack direction="row" alignItems="center" spacing={1}>

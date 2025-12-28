@@ -37,8 +37,7 @@ export default function StrategiesPage() {
 
         getPortafoliosDestacados()
             .then(data => {
-                const filtered = data.filter(p => !p.nombreUsuario || p.nombreUsuario !== userFullName);
-                setPortfolios(filtered);
+                setPortfolios(data);
             })
             .catch(console.error)
             .finally(() => setLoading(false));
