@@ -176,7 +176,7 @@ export default function StrategiesPage() {
                             {topPortfolios.length > 0 && (
                                 <Box mb={6}>
                                     <Typography variant="h5" fontWeight="bold" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#FFD700' }}>
-                                        <StarIcon sx={{ color: '#FFD700' }} /> TOP 3 ESTRATEGIAS
+                                        <StarIcon sx={{ color: '#FFD700' }} /> ESTRATEGIAS POPULARES
                                     </Typography>
                                     <Grid container spacing={3}>
                                         {topPortfolios.map((p) => (
