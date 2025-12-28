@@ -17,6 +17,9 @@ export const getAvatarColor = (tipo: string) => {
         case 'cripto':
         case 'crypto':
             return "#f14ae4ff";
+        case 'moneda':
+        case 'monedas':
+            return "#bbff00ff";
         default:
             return "#757575";
     }
