@@ -12,6 +12,7 @@ import {
     ChartOptions
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import { formatPercentage } from '@/utils/format';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -139,10 +140,17 @@ export default function ResumenTab() {
 
                     <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                         <Paper className={styles.card}>
-                            <Typography className={styles.kpiLabel}>Efectividad Global</Typography>
-                            <Typography variant="h4" className={styles.kpiValue}>{stats.efectividadGlobal}</Typography>
+                            <Typography className={styles.kpiLabel}>Rendimiento Diario</Typography>
+                            <Typography
+                                variant="h4"
+                                className={styles.kpiValue}
+                                sx={{ color: (portfolioStats?.variacionPromedioDiaria ?? 0) >= 0 ? 'success.main' : 'error.main' }}
+                            >
+                                {(portfolioStats?.variacionPromedioDiaria ?? 0) > 0 ? '+' : ''}
+                                {formatPercentage(portfolioStats?.variacionPromedioDiaria)}%
+                            </Typography>
                             <Typography variant="body2" color="text.secondary" className={styles.kpiChange}>
-                                Total Activos: {stats.totalActivos}
+                                Promedio global de portafolios
                             </Typography>
                         </Paper>
                     </Grid>
