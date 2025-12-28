@@ -13,6 +13,8 @@ export interface ActivoDTO {
 
     // --- PRECIOS Y MERCADO ---
     precioActual?: number | null;
+    precioCompra?: number | null;
+    precioVenta?: number | null;
     precioUSD?: number | null;
     precioARS?: number | null;
     variacion24h?: number | null;
