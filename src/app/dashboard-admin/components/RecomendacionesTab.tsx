@@ -4,6 +4,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { EstadoRecomendacion } from '@/types/Recomendacion';
 import { useAdminRecommendations } from '@/hooks/useAdminRecommendations';
 import { ConfirmDialog } from '@/components/common/ConfirmDialog';
@@ -16,7 +18,9 @@ export default function RecomendacionesTab() {
         filter,
         setFilter,
         toggleDestacar,
-        resolver
+        resolver,
+        aprobar,
+        rechazar
     } = useAdminRecommendations();
 
     const [confirmOpen, setConfirmOpen] = useState(false);
@@ -93,13 +97,21 @@ export default function RecomendacionesTab() {
                                         </IconButton>
                                     </TableCell>
                                     <TableCell>
-                                        {row.estado !== EstadoRecomendacion.Cerrada && (
+                                        {/* Moderation Actions (Pending) */}
+                                        {row.estado === EstadoRecomendacion.Pendiente && (
+                                            <>
+                                                <IconButton size="small" title="Aprobar" onClick={() => aprobar(row.id)} color="success"><ThumbUpIcon /></IconButton>
+                                                <IconButton size="small" title="Rechazar" onClick={() => rechazar(row.id)} color="error"><ThumbDownIcon /></IconButton>
+                                            </>
+                                        )}
+
+                                        {/* Resolution Actions (Active/Accepted) */}
+                                        {row.estado === EstadoRecomendacion.Aceptada && (
                                             <>
                                                 <IconButton size="small" title="Marcar Acertada" onClick={() => handleResolveClick(row.id, true)} color="success"><CheckIcon /></IconButton>
                                                 <IconButton size="small" title="Marcar Fallida" onClick={() => handleResolveClick(row.id, false)} color="error"><CloseIcon /></IconButton>
                                             </>
                                         )}
-
                                     </TableCell>
                                 </TableRow>
                             ))}

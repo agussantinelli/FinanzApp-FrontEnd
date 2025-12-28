@@ -13,7 +13,9 @@ import {
     Chip,
     Skeleton,
     IconButton,
-    Tooltip
+    Tooltip,
+    Snackbar,
+    Alert
 } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
@@ -30,6 +32,19 @@ export default function PortafolioTab() {
     const { portfolios, loading, toggleDestacado, toggleTop, deletePortafolio } = useAdminPortfolios();
     const router = useRouter();
     const [currency, setCurrency] = React.useState<'ARS' | 'USD'>('USD');
+    const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
+
+    const handleToggleTop = async (id: string, currentVal: boolean) => {
+        if (!currentVal) {
+            // Attempting to make it Top
+            const currentTopCount = portfolios.filter(p => p.esTop).length;
+            if (currentTopCount >= 3) {
+                setErrorMsg("No se pueden marcar más de 3 activos como Top.");
+                return;
+            }
+        }
+        await toggleTop(id, currentVal);
+    };
 
     if (loading) return <Skeleton variant="rectangular" height={400} />;
 
@@ -125,7 +140,7 @@ export default function PortafolioTab() {
                                     </TableCell>
                                     <TableCell>
                                         <IconButton
-                                            onClick={() => toggleTop(row.id, row.esTop)}
+                                            onClick={() => handleToggleTop(row.id, row.esTop)}
                                             sx={{ color: row.esTop ? '#FFD700' : 'action.disabled' }}
                                             title="Marcar como Top"
                                         >
@@ -168,6 +183,11 @@ export default function PortafolioTab() {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Snackbar open={!!errorMsg} autoHideDuration={6000} onClose={() => setErrorMsg(null)}>
+                <Alert onClose={() => setErrorMsg(null)} severity="error" sx={{ width: '100%' }}>
+                    {errorMsg}
+                </Alert>
+            </Snackbar>
         </Box >
     );
 }
