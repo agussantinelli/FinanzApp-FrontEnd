@@ -285,9 +285,9 @@ export default function ActivoDetalle() {
                         {activo.contraparteSymbol && (
                             <Chip
                                 icon={<SwapHorizIcon />}
-                                label={activo.tipoRelacion === 'Subyacente'
-                                    ? `Ver Acción Original (${activo.contraparteSymbol})`
-                                    : `Ver CEDEAR (${activo.contraparteSymbol})`}
+                                label={activo.tipoRelacion === 'CEDEAR (ARG)'
+                                    ? `Ver CEDEAR (${activo.contraparteSymbol})`
+                                    : `Ver Acción Original (${activo.contraparteSymbol})`}
                                 onClick={() => router.push(`/activos/${activo.contraparteSymbol}`)}
                                 variant="outlined"
                                 sx={{
@@ -467,6 +467,9 @@ export default function ActivoDetalle() {
                                         <Typography variant="h6" fontWeight="bold" gutterBottom>
                                             Operar
                                         </Typography>
+                                        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                                            Gestiona tus inversiones en {activo!.symbol}.
+                                        </Typography>
 
                                         <div className={styles.actionsStack}>
                                             <Button
@@ -482,25 +485,6 @@ export default function ActivoDetalle() {
                                             >
                                                 Comprar {activo!.symbol}
                                             </Button>
-                                            {activo.contraparteSymbol && (
-                                                <Chip
-                                                    icon={<SwapHorizIcon />}
-                                                    label={activo.tipoRelacion === 'Subyacente'
-                                                        ? `Ver Acción Original (${activo.contraparteSymbol})`
-                                                        : `Ver CEDEAR (${activo.contraparteSymbol})`}
-                                                    onClick={() => router.push(`/activos/${activo.contraparteSymbol}`)}
-                                                    variant="outlined"
-                                                    sx={{
-                                                        cursor: 'pointer',
-                                                        borderColor: 'secondary.main',
-                                                        color: 'secondary.main',
-                                                        '&:hover': {
-                                                            bgcolor: 'secondary.main',
-                                                            color: 'white'
-                                                        }
-                                                    }}
-                                                />
-                                            )}
                                             <Button
                                                 variant="outlined"
                                                 size="large"
