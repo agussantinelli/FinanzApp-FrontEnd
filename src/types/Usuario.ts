@@ -42,6 +42,8 @@ export interface AuthenticatedUser {
     rol: RolUsuario | string;
     urlFotoPerfil?: string;
     expiraUtc?: string;
+    perfilCompletado: boolean;
+    tieneContrasenaConfigurada: boolean;
 }
 
 export interface UserLoginRequest {
