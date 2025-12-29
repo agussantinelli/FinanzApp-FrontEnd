@@ -21,12 +21,14 @@ import { getRegisterGeoData } from "@/services/AuthService";
 import { UserDTO, UserUpdateRequest } from "@/types/Usuario";
 import { RegisterGeoDataDTO, PaisDTO, ProvinciaDTO, LocalidadDTO } from "@/types/Geo";
 import FloatingMessage from "@/components/ui/FloatingMessage";
+import ChangePasswordDialog from "@/components/auth/ChangePasswordDialog";
 
 export default function EditProfilePage() {
     const router = useRouter();
     const { user } = useAuth();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [changePasswordOpen, setChangePasswordOpen] = useState(false);
 
     // Separate errors for loading (blocking) and submitting (non-blocking)
     const [loadingError, setLoadingError] = useState<string | null>(null);
@@ -263,9 +265,21 @@ export default function EditProfilePage() {
                                 {saving ? "Guardando..." : "Guardar Cambios"}
                             </Button>
                         </Stack>
+
+                        <Box sx={{ mt: 2, borderTop: '1px solid rgba(255,255,255,0.1)', pt: 2 }}>
+                            <Button
+                                variant="text"
+                                color="secondary"
+                                onClick={() => setChangePasswordOpen(true)}
+                            >
+                                Cambiar Contraseña
+                            </Button>
+                        </Box>
                     </Stack>
                 </form>
             </Paper>
+
+            <ChangePasswordDialog open={changePasswordOpen} onClose={() => setChangePasswordOpen(false)} />
 
             <FloatingMessage
                 open={!!submitError}
