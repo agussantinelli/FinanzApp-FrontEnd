@@ -9,11 +9,10 @@ export interface UserDTO {
     nombre: string;
     apellido: string;
     email: string;
+    urlFotoPerfil?: string;
+    fechaNacimiento: string; // DateTime
+    fechaAlta: string; // DateTime
     rol: string;
-    fechaAlta: string; // Renamed from fechaRegistro
-    fechaNacimiento: string;
-
-    // Location
     esResidenteArgentina: boolean;
     nacionalidadId: number;
     nacionalidadNombre?: string;
@@ -22,7 +21,6 @@ export interface UserDTO {
     localidadResidenciaId?: number;
     localidadResidenciaNombre?: string;
     provinciaResidenciaNombre?: string;
-    urlFotoPerfil?: string;
 
     // Stats
     cantidadOperaciones: number;
@@ -62,12 +60,12 @@ export interface UserRegisterRequest {
     nombre: string;
     apellido: string;
     email: string;
-    fechaNacimiento: string;          // ISO yyyy-MM-dd
-    password: string;
-    nacionalidadId: number;
-    paisResidenciaId: number | null;
-    localidadResidenciaId: number | null;
+    fechaNacimiento: string;
     esResidenteArgentina: boolean;
+    nacionalidadId: number;
+    paisResidenciaId?: number | null;
+    localidadResidenciaId?: number | null;
+    password: string;
 }
 
 export interface UserUpdateRequest {
@@ -75,8 +73,10 @@ export interface UserUpdateRequest {
     apellido: string;
     fechaNac: string;
     rol: string;
+    nacionalidadId?: number;
+    nacionalidadNombre?: string;
     esResidenteArgentina: boolean;
-    localidadResidenciaId: number | null;
+    localidadResidenciaId?: number | null;
     paisResidenciaId: number;
     paisNacionalidadId: number;
 }
