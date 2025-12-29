@@ -44,6 +44,9 @@ import PortfolioCompositionChart from "@/components/portfolio/PortfolioCompositi
 import { usePortfolioSort, Order, OrderBy } from "@/hooks/usePortfolioSort";
 import { CreatePortfolioDialog, EditPortfolioDialog } from "@/components/portfolio/PortfolioDialogs";
 import FloatingMessage from "@/components/ui/FloatingMessage";
+import { downloadPortfolioPdf, downloadPortfolioExcel } from "@/services/ReportesService";
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import DescriptionIcon from '@mui/icons-material/Description';
 
 const PortfolioContent = () => {
   const router = useRouter();
@@ -297,6 +300,19 @@ const PortfolioContent = () => {
                 </Box>
                 <Stack direction="row" spacing={2} alignItems="center">
                   <CurrencyToggle currency={currency} onCurrencyChange={setCurrency} />
+
+                  <Stack direction="row" spacing={1}>
+                    <Tooltip title="Exportar a PDF">
+                      <IconButton size="small" onClick={() => valuacion && downloadPortfolioPdf(valuacion.id)} disabled={!valuacion}>
+                        <PictureAsPdfIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Exportar a Excel">
+                      <IconButton size="small" onClick={() => valuacion && downloadPortfolioExcel(valuacion.id)} disabled={!valuacion}>
+                        <DescriptionIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </Stack>
 
                   {isOwner && (
                     <>

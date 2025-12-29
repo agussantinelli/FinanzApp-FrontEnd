@@ -41,6 +41,10 @@ import { OperacionResponseDTO } from "@/types/Operacion";
 import { deleteOperacion, updateOperacion } from "@/services/OperacionesService";
 import { ConfirmDialog } from "@/components/common/ConfirmDialog";
 import FloatingMessage from "@/components/ui/FloatingMessage";
+import { downloadMisOperacionesPdf, downloadMisOperacionesExcel } from "@/services/ReportesService";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import DescriptionIcon from '@mui/icons-material/Description';
 
 import styles from "./styles/MyOperations.module.css";
 
@@ -207,6 +211,29 @@ export default function MyOperationsPage() {
                                     <MenuItem value="USD">Dólares</MenuItem>
                                 </Select>
                             </FormControl>
+
+                            <Stack direction="row" spacing={1}>
+                                <Button
+                                    variant="outlined"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => downloadMisOperacionesPdf()}
+                                    disabled={operaciones.length === 0}
+                                    sx={{ minWidth: 40, px: 0 }}
+                                >
+                                    <PictureAsPdfIcon />
+                                </Button>
+                                <Button
+                                    variant="outlined"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => downloadMisOperacionesExcel()}
+                                    disabled={operaciones.length === 0}
+                                    sx={{ minWidth: 40, px: 0 }}
+                                >
+                                    <DescriptionIcon />
+                                </Button>
+                            </Stack>
                         </Box>
                     </Stack>
 
