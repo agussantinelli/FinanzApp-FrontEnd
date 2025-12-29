@@ -43,3 +43,8 @@ export const uploadUserPhoto = async (id: string, file: File): Promise<{ message
     });
     return data;
 };
+
+export const deletePersona = async (id: string): Promise<void> => {
+    await http.delete(`${ENDPOINT}/${id}`);
+};
+
