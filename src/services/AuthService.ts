@@ -99,7 +99,8 @@ export async function register(
   data: UserRegisterRequest
 ): Promise<UserLoginResponseDTO> {
   const response = await http.post<UserLoginResponseDTO>("/api/auth/register", data);
-  setAuthSession(response.data);
+  // Disabled auto-session to require manual login after registration per user request
+  // setAuthSession(response.data); 
   return response.data;
 }
 

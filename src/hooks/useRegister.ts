@@ -168,12 +168,11 @@ export function useRegister() {
             setSubmitting(true);
             const resp = await registerService(payload);
 
-            setSuccessSubmit("Cuenta creada correctamente. Redirigiendo…");
+            setSuccessSubmit("Cuenta creada correctamente. Inicie sesión para continuar.");
 
-            const destino = getHomePathForRole(resp.rol);
             setTimeout(() => {
-                router.push(destino);
-            }, 800);
+                router.push(`/auth/login?email=${encodeURIComponent(email.trim())}`);
+            }, 2000);
         } catch (err: any) {
             console.error("Error registro:", err);
             const msgFromApi =

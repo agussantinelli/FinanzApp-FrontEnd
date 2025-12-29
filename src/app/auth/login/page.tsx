@@ -9,6 +9,7 @@ import {
   Button,
   Link as MuiLink,
   Stack,
+  CircularProgress,
 } from "@mui/material";
 import Link from "next/link";
 import { useLogin } from "@/hooks/useLogin";
@@ -16,7 +17,9 @@ import FloatingMessage from "@/components/ui/FloatingMessage";
 
 import styles from "./styles/Login.module.css";
 
-export default function LoginPage() {
+import { Suspense } from "react";
+
+function LoginContent() {
   const {
     email, setEmail,
     password, setPassword,
@@ -109,5 +112,13 @@ export default function LoginPage() {
         </Stack>
       </Paper>
     </Box>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<Box className={styles.container}><CircularProgress /></Box>}>
+      <LoginContent />
+    </Suspense>
   );
 }

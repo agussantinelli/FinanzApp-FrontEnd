@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { login, getHomePathForRole } from "@/services/AuthService";
 
 export type LoginErrors = {
@@ -8,6 +8,7 @@ export type LoginErrors = {
 };
 
 export function useLogin() {
+    const searchParams = useSearchParams();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -17,6 +18,13 @@ export function useLogin() {
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const router = useRouter();
+
+    useEffect(() => {
+        const emailParam = searchParams.get("email");
+        if (emailParam) {
+            setEmail(emailParam);
+        }
+    }, [searchParams]);
 
     const validate = (): boolean => {
         const errors: LoginErrors = {};
