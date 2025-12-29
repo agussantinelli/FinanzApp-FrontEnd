@@ -28,10 +28,7 @@ export async function marcarComoPrincipal(id: string): Promise<boolean> {
     return true;
 }
 
-export async function toggleSeguirPortafolio(id: string): Promise<{ siguiendo: boolean, message: string }> {
-    const { data } = await http.post<{ siguiendo: boolean, message: string }>(`${ENDPOINT}/${id}/seguir`);
-    return data;
-}
+
 
 export async function createPortafolio(dto: PortafolioCreateDTO): Promise<PortafolioDTO> {
     const { data } = await http.post<PortafolioDTO>(ENDPOINT, dto);

@@ -68,7 +68,6 @@ export default function PortafolioTab() {
                             <TableCell>Rol</TableCell>
                             <TableCell>Nombre Portafolio</TableCell>
                             <TableCell>Rentabilidad ({currency})</TableCell>
-                            <TableCell>Seguidores</TableCell>
                             <TableCell>Destacado</TableCell>
                             <TableCell>Top</TableCell>
                             <TableCell>Principal</TableCell>
@@ -135,11 +134,6 @@ export default function PortafolioTab() {
                                                 sx={{ fontWeight: 'bold' }}
                                             />
                                         </Tooltip>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography variant="body2" align="center">
-                                            {row.cantSeguidores ?? 0}
-                                        </Typography>
                                     </TableCell>
                                     <TableCell>
                                         <IconButton

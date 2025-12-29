@@ -5,16 +5,12 @@ export interface PortafolioDTO {
     esDestacado: boolean;
     esPrincipal: boolean;
     esTop: boolean;
-    cantSeguidores: number;
-    loSigo?: boolean;
 
-    // --- CAMPOS ADMINISTRATIVOS Y FINANCIEROS (Dual Currency) ---
     totalValuadoUSD: number;
     totalValuadoARS: number;
     totalInvertidoUSD: number;
     totalInvertidoARS: number;
 
-    // Optional computed fields for accuracy
     gananciaDolares?: number;
     variacionPorcentajeDolares?: number;
     gananciaPesos?: number;
@@ -23,6 +19,7 @@ export interface PortafolioDTO {
     nombreUsuario: string;
     rolUsuario: string;
     fotoPerfil?: string;
+    personaId?: string; // Owner ID
     activos?: ActivoEnPortafolioDTO[];
 }
 
@@ -46,7 +43,6 @@ export interface PortafolioValuadoDTO {
     esDestacado: boolean;
     esTop: boolean;
 
-    cantSeguidores: number; // Agregado
 
     totalPesos: number;
     gananciaPesos: number;
@@ -55,7 +51,6 @@ export interface PortafolioValuadoDTO {
     gananciaDolares: number;
     variacionPorcentajeDolares: number;
 
-    loSigo: boolean;
     activos: ActivoEnPortafolioDTO[];
     nombreAutor: string;
     rolUsuario: string;
