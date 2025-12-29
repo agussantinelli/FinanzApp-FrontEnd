@@ -12,7 +12,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import FloatingMessage from "@/components/ui/FloatingMessage";
 
 export default function UsuariosTab() {
-    const { users, loading, error, changeRole } = useAdminUsers();
+    const { users, loading, error, changeRole, removeUser } = useAdminUsers();
 
     // Confirm Dialog State
     const [confirmOpen, setConfirmOpen] = useState(false);
@@ -132,8 +132,22 @@ export default function UsuariosTab() {
                                         </IconButton>
                                         <Box sx={{ mx: 1, borderLeft: '1px solid #444' }} />
                                         {/* Edit button removed as requested */}
-                                        <IconButton size="small" color="error"><DeleteIcon fontSize="small" /></IconButton>
+                                        <IconButton
+                                            size="small"
+                                            color="error"
+                                            onClick={() => handleOpenConfirm(
+                                                "Eliminar Usuario",
+                                                `¿Estás seguro de eliminar permanentemente a ${row.nombre}? Esta acción no se puede deshacer.`,
+                                                async () => await removeUser(row.id),
+                                                "error"
+                                            )}
+                                            title="Eliminar usuario"
+                                            disabled={row.rol === 'Admin'} // Protect admins
+                                        >
+                                            <DeleteIcon fontSize="small" />
+                                        </IconButton>
                                     </Stack>
+
                                 </TableCell>
                             </TableRow>
                         ))}

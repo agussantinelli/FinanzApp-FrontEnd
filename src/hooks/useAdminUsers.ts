@@ -50,5 +50,21 @@ export function useAdminUsers() {
         }
     };
 
-    return { users, loading, error, loadUsers, changeRole };
+    const removeUser = async (id: string) => {
+        setLoading(true);
+        setError(null);
+        try {
+            const { deletePersona } = await import('@/services/PersonaService');
+            await deletePersona(id);
+            await loadUsers(); // Reload list
+        } catch (error) {
+            console.error("Error deleting user", error);
+            setError("Error al eliminar el usuario. Intente nuevamente.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return { users, loading, error, loadUsers, changeRole, removeUser };
 }
+
