@@ -49,6 +49,11 @@ export function useRegister() {
 
     // Load Geo Data
     useEffect(() => {
+        // Clear any stale session to avoid 401 on registration if a bad token exists
+        if (typeof window !== "undefined") {
+            sessionStorage.clear();
+        }
+
         let mounted = true;
         const load = async () => {
             try {
