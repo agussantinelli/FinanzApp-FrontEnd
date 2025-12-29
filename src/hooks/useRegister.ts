@@ -36,6 +36,9 @@ export function useRegister() {
     const [provinciaResidenciaId, setProvinciaResidenciaId] = useState<string>("");
     const [localidadResidenciaId, setLocalidadResidenciaId] = useState<string>("");
 
+    // Captcha
+    const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+
     // Geo Data State
     const [geoData, setGeoData] = useState<RegisterGeoDataDTO | null>(null);
     const [loadingGeo, setLoadingGeo] = useState(true);
@@ -135,6 +138,15 @@ export function useRegister() {
                     "La localidad de residencia es obligatoria.";
         }
 
+        if (!recaptchaToken) {
+            // Ideally we show a global error or field error. 
+            // Since it's not a field in the visual form list (it's separate), we might set a generic error or just fail logic.
+            // Let's set a generic apiError or similar if user tries to submit without it?
+            // Or better, return false and let the UI show "Falta validar captcha" if we had a dedicated error slot.
+            // For now, let's treat it as a blocker but maybe not strictly a 'fieldError' unless we map it.
+            // I'll leave it as is, but handle it in handleSubmit check.
+        }
+
         setFieldErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -146,6 +158,10 @@ export function useRegister() {
         setSuccessSubmit(null);
 
         if (!validate()) return;
+        if (!recaptchaToken) {
+            setApiError("Por favor completa el captcha.");
+            return;
+        }
 
         const nacionalidadId = Number(paisNacId);
         const paisResidId = Number(paisResidenciaId);
@@ -162,6 +178,7 @@ export function useRegister() {
                 ? Number(localidadResidenciaId)
                 : null,
             esResidenteArgentina: esResidenciaArgentina,
+            recaptchaToken: recaptchaToken
         };
 
         try {
@@ -201,6 +218,9 @@ export function useRegister() {
         paisResidenciaId, setPaisResidenciaId,
         provinciaResidenciaId, setProvinciaResidenciaId,
         localidadResidenciaId, setLocalidadResidenciaId,
+
+        // Captcha
+        recaptchaToken, setRecaptchaToken,
 
         // Geo Data
         geoData,

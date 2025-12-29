@@ -64,7 +64,6 @@ export function useLogin() {
         } catch (err) {
             console.error("Error login:", err);
             setServerError("Email o contraseña incorrectos.");
-        } finally {
             setLoading(false);
         }
     };

@@ -10,8 +10,9 @@ import {
   Stack,
   MenuItem,
   Link as MuiLink,
-  CircularProgress,
+  CircularProgress
 } from "@mui/material";
+import ReCAPTCHA from "react-google-recaptcha";
 import Link from "next/link";
 import { useRegister } from "@/hooks/useRegister";
 import FloatingMessage from "@/components/ui/FloatingMessage";
@@ -50,7 +51,8 @@ export default function RegisterPage() {
     handleSubmit,
     clearFieldError,
     clearApiError,
-    clearSuccessSubmit
+    clearSuccessSubmit,
+    setRecaptchaToken
   } = useRegister();
 
   if (loadingGeo) {
@@ -283,6 +285,14 @@ export default function RegisterPage() {
                 error={!!fieldErrors.password2}
                 helperText={fieldErrors.password2}
               />
+
+              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                <ReCAPTCHA
+                  sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
+                  onChange={(token) => setRecaptchaToken(token)}
+                  theme="dark"
+                />
+              </Box>
 
               <FloatingMessage
                 open={!!apiError}
