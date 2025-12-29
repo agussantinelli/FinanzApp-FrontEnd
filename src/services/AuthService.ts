@@ -24,6 +24,8 @@ export function setAuthSession(resp: UserLoginResponseDTO) {
       rol: resp.rol,
       urlFotoPerfil: resp.urlFotoPerfil,
       expiraUtc: resp.expiraUtc,
+      perfilCompletado: resp.perfilCompletado,
+      tieneContrasenaConfigurada: resp.tieneContrasenaConfigurada,
     })
   );
 
