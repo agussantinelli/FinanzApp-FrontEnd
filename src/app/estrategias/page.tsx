@@ -26,12 +26,14 @@ import StarIcon from '@mui/icons-material/Star';
 import { getPortafoliosDestacados } from "@/services/PortafolioService";
 import { PortafolioDTO } from "@/types/Portafolio";
 import { useAuth } from "@/hooks/useAuth";
+import FloatingMessage from "@/components/ui/FloatingMessage";
 
 export default function StrategiesPage() {
     const { user } = useAuth();
     const router = useRouter();
     const [portfolios, setPortfolios] = useState<PortafolioDTO[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     // Removed specific favorites state
     const isLoggedIn = !!user;
 
@@ -46,7 +48,10 @@ export default function StrategiesPage() {
                 console.log("Portfolios Data:", data); // Debug
                 setPortfolios(data);
             })
-            .catch(err => console.error(err))
+            .catch(err => {
+                console.error(err);
+                setError("Error al cargar las estrategias destacadas.");
+            })
             .finally(() => setLoading(false));
     };
 
@@ -88,6 +93,16 @@ export default function StrategiesPage() {
                             <Typography variant="body1" color="text.secondary" paragraph>
                                 Vuelve más tarde para ver nuevas oportunidades.
                             </Typography>
+                        </Paper>
+                    ) : (loading || portfolios.length === 0) && error ? (
+                        <Paper sx={{ p: 6, textAlign: 'center', borderRadius: 4 }}>
+                            <Typography variant="h5" color="error" gutterBottom>
+                                Error al cargar
+                            </Typography>
+                            <Typography variant="body1" color="text.secondary">
+                                {error}
+                            </Typography>
+                            <Button sx={{ mt: 2 }} variant="outlined" onClick={fetchPortfolios}>Reintentar</Button>
                         </Paper>
                     ) : (
                         <>
@@ -247,7 +262,13 @@ export default function StrategiesPage() {
                         </>
                     )}
                 </Container>
+                <FloatingMessage
+                    open={!!error && portfolios.length > 0}
+                    message={error || ""}
+                    severity="error"
+                    onClose={() => setError(null)}
+                />
             </Box>
-        </RoleGuard>
+        </RoleGuard >
     );
 }

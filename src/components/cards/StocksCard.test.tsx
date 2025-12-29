@@ -21,7 +21,7 @@ const mockData: DualQuoteDTO & { name?: string } = {
     dollarRateName: "CCL",
     localChangePct: 2.0,
     usChangePct: 1.5,
-    lastUpdate: "2023-01-01",
+    localPriceUSD: 1,
     name: "Grupo Galicia"
 };
 

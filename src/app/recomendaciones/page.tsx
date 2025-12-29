@@ -12,6 +12,7 @@ import { RolUsuario } from "@/types/Usuario";
 import { useRecomendaciones } from '@/hooks/useRecomendaciones';
 import RecomendacionCard from '@/components/cards/RecomendacionCard';
 import PageHeader from '@/components/ui/PageHeader';
+import FloatingMessage from "@/components/ui/FloatingMessage";
 import styles from "./styles/Recomendaciones.module.css";
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
@@ -313,11 +314,12 @@ export default function RecomendacionesPage() {
                 </Box>
             )}
 
-            {error && (
-                <Alert severity="error" sx={{ mb: 3 }}>
-                    {error}
-                </Alert>
-            )}
+            <FloatingMessage
+                open={!!error}
+                message={error || ""}
+                severity="error"
+                onClose={() => { }}
+            />
 
             {!loading && !error && data.length === 0 && (
                 <Alert severity="info" sx={{ mb: 3 }}>

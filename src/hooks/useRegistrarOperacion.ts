@@ -53,7 +53,10 @@ export function useRegistrarOperacion() {
         if (activoIdParam) {
             getActivoById(activoIdParam)
                 .then(data => setAsset(data))
-                .catch(err => console.error("Error fetching asset from param:", err));
+                .catch(err => {
+                    console.error("Error fetching asset from param:", err);
+                    setError("No se pudo cargar el activo indicado en el enlace.");
+                });
         }
 
         if (tipoParam === "VENTA") {
@@ -72,7 +75,10 @@ export function useRegistrarOperacion() {
                     setPortfolioId(data[0].id);
                 }
             })
-            .catch(console.error);
+            .catch(err => {
+                console.error(err);
+                setError("Error al cargar tus portafolios. Intenta recargar.");
+            });
     }, []);
 
     // Fetch Detailed Portfolio when ID changes
@@ -80,7 +86,16 @@ export function useRegistrarOperacion() {
         if (!portfolioId) return;
         getPortafolioValuado(portfolioId)
             .then(data => setDetailedPortfolio(data))
-            .catch(err => console.error("Error fetching detailed portfolio:", err));
+            .catch(err => {
+                console.error("Error fetching detailed portfolio:", err);
+                // Don't block everything, but warn
+                // setError("Error al cargar detalles del portafolio."); 
+                // Actually maybe better to just log or show a non-blocking toast. 
+                // Since we use the same 'error' state for specific form validation, 
+                // setting it here might be annoying if it persists.
+                // Let's set it but maybe the user can dismiss it.
+                setError("No se pudo cargar el detalle del portafolio seleccionado.");
+            });
     }, [portfolioId]);
 
     // Asset Search Logic

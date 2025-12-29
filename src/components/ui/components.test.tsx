@@ -7,7 +7,7 @@ import TypingIndicator from './TypingIndicator';
 
 describe('UI Components', () => {
     it('FloatingMessage renders when open', () => {
-        render(<FloatingMessage open={true} message="Test Message" onClose={vi.fn()} />);
+        render(<FloatingMessage open={true} message="Test Message" severity="info" onClose={vi.fn()} />);
         expect(screen.getByText('Test Message')).toBeInTheDocument();
     });
 

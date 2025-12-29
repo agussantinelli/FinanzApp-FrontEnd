@@ -3,7 +3,7 @@
 import React from "react";
 import { Snackbar, Alert, AlertColor } from "@mui/material";
 
-interface FloatingMessageProps {
+export interface FloatingMessageProps {
     open: boolean;
     message: string | null;
     severity: AlertColor;

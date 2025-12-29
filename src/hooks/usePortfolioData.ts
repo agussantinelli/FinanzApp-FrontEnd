@@ -8,6 +8,7 @@ export function usePortfolioData() {
     const [selectedId, setSelectedId] = useState<string>("");
     const [valuacion, setValuacion] = useState<PortafolioValuadoDTO | null>(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     const { isAuthenticated } = useAuth();
 
@@ -41,11 +42,13 @@ export function usePortfolioData() {
     const fetchDetails = useCallback(async (id: string) => {
         if (!id) return;
         setLoading(true);
+        setError(null);
         try {
             const data = await getPortafolioValuado(id);
             setValuacion(data);
         } catch (error) {
             console.error("Error fetching portfolio details", error);
+            setError("Error al cargar los detalles del portafolio.");
             setValuacion(null);
         } finally {
             setLoading(false);
@@ -64,6 +67,7 @@ export function usePortfolioData() {
 
     const refreshPortfolios = useCallback(() => {
         setLoading(true);
+        setError(null);
         getMisPortafolios()
             .then(data => {
                 setPortfolios(data);
@@ -75,17 +79,11 @@ export function usePortfolioData() {
                 } else {
                     setSelectedId("");
                 }
-                // If we have a selected ID, refresh its details too
-                if (selectedId && data.find(p => p.id === selectedId)) {
-                    // This will be handled by the useEffect dependent on selectedId? 
-                    // No, that only runs if selectedId changes. 
-                    // So we might want to manually fetch details if we want a full refresh, 
-                    // but refreshPortfolios is mainly for the list.
-                }
                 setLoading(false);
             })
             .catch(err => {
                 console.error("Error refreshing portfolios", err);
+                setError("Error al actualizar la lista de portafolios.");
                 setLoading(false);
             });
     }, [selectedId]);
@@ -99,6 +97,7 @@ export function usePortfolioData() {
         selectedId,
         valuacion,
         loading,
+        error,
         handlePortfolioChange,
         refresh,
         refreshPortfolios

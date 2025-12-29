@@ -7,14 +7,18 @@ export function useAdminRecommendations() {
     const [filter, setFilter] = useState<number | ''>(''); // '' = All
     const [loading, setLoading] = useState(false);
 
+    const [error, setError] = useState<string | null>(null);
+
     const loadRecommendations = useCallback(async () => {
         setLoading(true);
+        setError(null);
         try {
             const estado = filter === '' ? undefined : filter;
             const data = await getRecomendacionesAdmin(estado);
             setRecommendations(data);
         } catch (error) {
             console.error("Error fetching recs", error);
+            setError("Error al cargar las recomendaciones.");
         } finally {
             setLoading(false);
         }
@@ -25,28 +29,53 @@ export function useAdminRecommendations() {
     }, [loadRecommendations]);
 
     const toggleDestacar = async (id: string) => {
-        await destacarRecomendacion(id);
-        loadRecommendations();
+        setError(null);
+        try {
+            await destacarRecomendacion(id);
+            await loadRecommendations();
+        } catch (e) {
+            console.error(e);
+            setError("Error al destacar/quitar destacar la recomendación.");
+        }
     };
 
     const resolver = async (id: string, acierto: boolean) => {
-        await resolverRecomendacion(id, acierto);
-        loadRecommendations();
+        setError(null);
+        try {
+            await resolverRecomendacion(id, acierto);
+            await loadRecommendations();
+        } catch (e) {
+            console.error(e);
+            setError("Error al resolver la recomendación.");
+        }
     };
 
     const aprobar = async (id: string) => {
-        await aprobarRecomendacion(id);
-        loadRecommendations();
+        setError(null);
+        try {
+            await aprobarRecomendacion(id);
+            await loadRecommendations();
+        } catch (e) {
+            console.error(e);
+            setError("Error al aprobar la recomendación.");
+        }
     };
 
     const rechazar = async (id: string) => {
-        await rechazarRecomendacion(id);
-        loadRecommendations();
+        setError(null);
+        try {
+            await rechazarRecomendacion(id);
+            await loadRecommendations();
+        } catch (e) {
+            console.error(e);
+            setError("Error al rechazar la recomendación.");
+        }
     };
 
     return {
         recommendations,
         loading,
+        error,
         filter,
         setFilter,
         loadRecommendations,

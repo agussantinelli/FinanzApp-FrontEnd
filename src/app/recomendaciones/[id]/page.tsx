@@ -23,6 +23,7 @@ import ShieldIcon from '@mui/icons-material/Shield';
 import { colors } from '@/app-theme/design-tokens';
 import styles from './styles/RecomendacionDetail.module.css';
 import { RoleGuard } from "@/components/auth/RoleGuard";
+import FloatingMessage from "@/components/ui/FloatingMessage";
 
 // Helper for Action Action Colors
 const getAccionColor = (accion: AccionRecomendada) => {
@@ -94,6 +95,7 @@ export default function RecomendacionDetallePage() {
     const [recomendacion, setRecomendacion] = useState<RecomendacionDTO | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [actionError, setActionError] = useState<string | null>(null);
 
     const isAdmin = user?.rol === RolUsuario.Admin; // Using Admin based on previous check of type file, but wait, type said Default logic?
     // Let's check imports. RolUsuario.Admin is correct based on type file I saw.
@@ -101,19 +103,27 @@ export default function RecomendacionDetallePage() {
     // Handlers
     const handleApprove = async () => {
         if (!recomendacion) return;
+        setActionError(null);
         try {
             await aprobarRecomendacion(recomendacion.id);
             // Reload or update state
             window.location.reload();
-        } catch (e) { console.error(e); }
+        } catch (e) {
+            console.error(e);
+            setActionError("Error al aprobar la recomendación.");
+        }
     };
 
     const handleReject = async () => {
         if (!recomendacion) return;
+        setActionError(null);
         try {
             await rechazarRecomendacion(recomendacion.id);
             window.location.reload(); // Simple reload for now
-        } catch (e) { console.error(e); }
+        } catch (e) {
+            console.error(e);
+            setActionError("Error al rechazar la recomendación.");
+        }
     };
 
     useEffect(() => {
@@ -319,7 +329,13 @@ export default function RecomendacionDetallePage() {
                         </Table>
                     </TableContainer>
                 </Box>
+                <FloatingMessage
+                    open={!!actionError}
+                    message={actionError || ""}
+                    severity="error"
+                    onClose={() => setActionError(null)}
+                />
             </Container>
-        </RoleGuard>
+        </RoleGuard >
     );
 }

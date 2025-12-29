@@ -16,12 +16,12 @@ const mockData: DualQuoteDTO = {
     localPriceARS: 0,
     usPriceUSD: 4500,
     usPriceARS: 0,
+    localPriceUSD: 4500,
     cedearRatio: undefined,
     usedDollarRate: 1,
     dollarRateName: "USD",
     localChangePct: undefined,
     usChangePct: 0.5,
-    lastUpdate: "2023-01-01"
 };
 
 const mockIndex = {

@@ -49,6 +49,7 @@ export default function MyOperationsPage() {
     const {
         operaciones,
         loading,
+        error: loadError,
         user,
         orderBy,
         order,
@@ -213,6 +214,12 @@ export default function MyOperationsPage() {
                         {loading ? (
                             <Box display="flex" justifyContent="center" p={4}>
                                 <CircularProgress />
+                            </Box>
+                        ) : loadError ? (
+                            <Box className={styles.noDataContainer}>
+                                <Typography variant="h6" color="error">
+                                    {loadError}
+                                </Typography>
                             </Box>
                         ) : operaciones.length === 0 ? (
                             <Box className={styles.noDataContainer}>

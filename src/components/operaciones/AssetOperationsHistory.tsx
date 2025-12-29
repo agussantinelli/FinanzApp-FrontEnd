@@ -1,5 +1,7 @@
 "use client";
 
+import FloatingMessage from "@/components/ui/FloatingMessage";
+
 import { useEffect, useState } from "react";
 import {
     Box,
@@ -28,6 +30,7 @@ export default function AssetOperationsHistory({ activoId, symbol }: AssetOperat
     const { user } = useAuth();
     const [operations, setOperations] = useState<OperacionResponseDTO[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     const isAdmin = user?.rol === 'Administrador' || user?.rol === 'Admin';
 
@@ -35,6 +38,7 @@ export default function AssetOperationsHistory({ activoId, symbol }: AssetOperat
         if (!user || !activoId) return;
 
         setLoading(true);
+        setError(null);
 
         const fetchOps = async () => {
             try {
@@ -58,6 +62,7 @@ export default function AssetOperationsHistory({ activoId, symbol }: AssetOperat
                 setOperations(data);
             } catch (error) {
                 console.error("Error fetching asset operations:", error);
+                setError("No se pudo cargar el historial de operaciones de este activo.");
             } finally {
                 setLoading(false);
             }
@@ -73,6 +78,16 @@ export default function AssetOperationsHistory({ activoId, symbol }: AssetOperat
             <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
                 <CircularProgress size={30} />
             </Box>
+        );
+    }
+
+    if (error) {
+        return (
+            <Paper elevation={0} sx={{ p: 3, mt: 4, border: '1px solid', borderColor: 'divider' }}>
+                <Typography variant="body1" color="error">
+                    {error}
+                </Typography>
+            </Paper>
         );
     }
 

@@ -9,9 +9,10 @@ import AssetFormDialog from './AssetFormDialog';
 import styles from '../styles/Admin.module.css';
 import { ActivoDTO, ActivoCreateDTO, ActivoUpdateDTO } from '@/types/Activo';
 import { useActivosFilterAndSort } from '@/hooks/useActivosFilterAndSort';
+import FloatingMessage from "@/components/ui/FloatingMessage";
 
 export default function ActivosTab() {
-    const { activos, loading, addAsset, updateAsset, removeAsset } = useAdminAssets();
+    const { activos, loading, error, addAsset, updateAsset, removeAsset } = useAdminAssets();
 
     // Custom hook for filtering and sorting logic
     const {
@@ -228,6 +229,12 @@ export default function ActivosTab() {
                 onConfirm={handleConfirmDelete}
                 confirmText="Eliminar"
                 confirmColor="error"
+            />
+            <FloatingMessage
+                open={!!error}
+                message={error || ""}
+                severity="error"
+                onClose={() => { }}
             />
         </Box>
     );

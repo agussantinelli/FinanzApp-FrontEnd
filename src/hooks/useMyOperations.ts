@@ -32,6 +32,8 @@ export function useMyOperations() {
 
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
+    const [error, setError] = useState<string | null>(null);
+
     const refresh = () => {
         setRefreshTrigger(prev => prev + 1);
     };
@@ -39,6 +41,7 @@ export function useMyOperations() {
     useEffect(() => {
         if (user?.id) {
             setLoading(true);
+            setError(null);
             Promise.all([
                 getOperacionesByPersona(user.id),
                 getCotizacionesDolar()
@@ -55,7 +58,10 @@ export function useMyOperations() {
                         setDolarBlue({ compra: paramDolar.compra, venta: paramDolar.venta });
                     }
                 })
-                .catch(console.error)
+                .catch(err => {
+                    console.error(err);
+                    setError("No se pudieron cargar las operaciones. Intenta recargar la página.");
+                })
                 .finally(() => setLoading(false));
         }
     }, [user, refreshTrigger]);
@@ -169,6 +175,7 @@ export function useMyOperations() {
     return {
         operaciones: processedOperations,
         loading,
+        error,
         user,
         orderBy,
         order,

@@ -9,8 +9,10 @@ import styles from '../styles/Admin.module.css';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
+import FloatingMessage from "@/components/ui/FloatingMessage";
+
 export default function UsuariosTab() {
-    const { users, loading, changeRole } = useAdminUsers();
+    const { users, loading, error, changeRole } = useAdminUsers();
 
     // Confirm Dialog State
     const [confirmOpen, setConfirmOpen] = useState(false);
@@ -146,6 +148,12 @@ export default function UsuariosTab() {
                 onClose={() => setConfirmOpen(false)}
                 onConfirm={handleConfirm}
                 confirmColor={confirmConfig.color}
+            />
+            <FloatingMessage
+                open={!!error}
+                message={error || ""}
+                severity="error"
+                onClose={() => { }}
             />
         </Box>
     );

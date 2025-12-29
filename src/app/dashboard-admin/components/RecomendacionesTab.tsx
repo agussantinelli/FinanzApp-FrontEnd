@@ -11,10 +11,13 @@ import { useAdminRecommendations } from '@/hooks/useAdminRecommendations';
 import { ConfirmDialog } from '@/components/common/ConfirmDialog';
 import styles from '../styles/Admin.module.css';
 
+import FloatingMessage from "@/components/ui/FloatingMessage";
+
 export default function RecomendacionesTab() {
     const {
         recommendations,
         loading,
+        error,
         filter,
         setFilter,
         toggleDestacar,
@@ -133,6 +136,12 @@ export default function RecomendacionesTab() {
                 onClose={() => setConfirmOpen(false)}
                 confirmText="Confirmar"
                 confirmColor={resolutionState?.acerto ? "success" : "error"}
+            />
+            <FloatingMessage
+                open={!!error}
+                message={error || ""}
+                severity="error"
+                onClose={() => { }}
             />
         </Box>
     );

@@ -20,13 +20,18 @@ import { getPersonaById, updatePersona } from "@/services/PersonaService";
 import { getRegisterGeoData } from "@/services/AuthService";
 import { UserDTO, UserUpdateRequest } from "@/types/Usuario";
 import { RegisterGeoDataDTO, PaisDTO, ProvinciaDTO, LocalidadDTO } from "@/types/Geo";
+import FloatingMessage from "@/components/ui/FloatingMessage";
 
 export default function EditProfilePage() {
     const router = useRouter();
     const { user } = useAuth();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+
+    // Separate errors for loading (blocking) and submitting (non-blocking)
+    const [loadingError, setLoadingError] = useState<string | null>(null);
+    const [submitError, setSubmitError] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     // Form Data
     const [formData, setFormData] = useState<UserUpdateRequest>({
@@ -40,7 +45,7 @@ export default function EditProfilePage() {
         localidadResidenciaId: null
     });
 
-    // Aux state for province selection (not in update payload but needed for UI)
+    // Aux state for province selection
     const [selectedProvinceId, setSelectedProvinceId] = useState<number | null>(null);
 
     // Geo Data
@@ -66,8 +71,6 @@ export default function EditProfilePage() {
                     localidadResidenciaId: userData.localidadResidenciaId || null
                 });
 
-                // Infer province if argentina and locality is set (This is tricky without locality objects having provinceId reference easily accessible in a flat list if not loaded... 
-                // but RegisterGeoDataDTO has localitiesArgentina which has provinceId.
                 if (userData.esResidenteArgentina && userData.localidadResidenciaId) {
                     const loc = geo.localidadesArgentina.find(l => l.id === userData.localidadResidenciaId);
                     if (loc) setSelectedProvinceId(loc.provinciaId);
@@ -76,7 +79,7 @@ export default function EditProfilePage() {
                 setLoading(false);
             }).catch(err => {
                 console.error("Error loading data", err);
-                setError("No se pudo cargar la información");
+                setLoadingError("No se pudo cargar la información del perfil.");
                 setLoading(false);
             });
         }
@@ -105,20 +108,31 @@ export default function EditProfilePage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!user?.id) return;
+
         setSaving(true);
-        setError(null);
+        setSubmitError(null);
+        setSuccessMessage(null);
+
         try {
             await updatePersona(user.id, formData);
-            router.push("/perfil");
-        } catch (err) {
+            setSuccessMessage("Perfil actualizado correctamente");
+
+            // Allow user to see the success message briefly before redirecting
+            setTimeout(() => {
+                router.push("/perfil");
+            }, 1500);
+        } catch (err: any) {
             console.error("Error updating profile", err);
-            setError("Error al guardar los cambios.");
+            const msg = err.response?.data ?? "Error al guardar los cambios.";
+            setSubmitError(msg);
             setSaving(false);
         }
     };
 
     if (loading) return <Box sx={{ p: 4, display: 'flex', justifyContent: 'center' }}><CircularProgress /></Box>;
-    if (error) return <Box sx={{ p: 4 }}><Alert severity="error">{error}</Alert></Box>;
+
+    // Blocking error only for initial load failure
+    if (loadingError) return <Box sx={{ p: 4 }}><Alert severity="error">{loadingError}</Alert></Box>;
 
     return (
         <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 800, margin: "0 auto" }}>
@@ -252,6 +266,19 @@ export default function EditProfilePage() {
                     </Stack>
                 </form>
             </Paper>
+
+            <FloatingMessage
+                open={!!submitError}
+                message={submitError}
+                severity="error"
+                onClose={() => setSubmitError(null)}
+            />
+            <FloatingMessage
+                open={!!successMessage}
+                message={successMessage}
+                severity="success"
+                onClose={() => setSuccessMessage(null)}
+            />
         </Box>
     );
 }

@@ -43,6 +43,7 @@ import PortfolioCompositionChart from "@/components/portfolio/PortfolioCompositi
 // Helper for dynamic formatting
 import { usePortfolioSort, Order, OrderBy } from "@/hooks/usePortfolioSort";
 import { CreatePortfolioDialog, EditPortfolioDialog } from "@/components/portfolio/PortfolioDialogs";
+import FloatingMessage from "@/components/ui/FloatingMessage";
 
 const PortfolioContent = () => {
   const router = useRouter();
@@ -50,7 +51,7 @@ const PortfolioContent = () => {
   const urlId = searchParams.get('id');
   const showBackButton = !!urlId;
   // refreshPortfolios updates the list, refresh updates the current selected portfolio details
-  const { portfolios, selectedId, valuacion, loading, handlePortfolioChange, refreshPortfolios, refresh } = usePortfolioData();
+  const { portfolios, selectedId, valuacion, loading, error, handlePortfolioChange, refreshPortfolios, refresh } = usePortfolioData();
   const [currency, setCurrency] = React.useState<'ARS' | 'USD'>('USD');
 
   // UI State
@@ -152,6 +153,26 @@ const PortfolioContent = () => {
                 </Stack>
               </Paper>
             </Grid>
+          </Grid>
+        </Box>
+      </RoleGuard>
+    );
+  }
+
+  if (!loading && error && portfolios.length === 0) {
+    return (
+      <RoleGuard>
+        <Box className={styles.container}>
+          <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: "60vh" }}>
+            <Paper className={styles.card} sx={{ textAlign: 'center', py: 6, px: 4 }}>
+              <Typography variant="h5" color="error" gutterBottom sx={{ fontWeight: 'bold' }}>
+                Error al cargar
+              </Typography>
+              <Typography variant="body1" color="text.secondary" paragraph>
+                {error}
+              </Typography>
+              <Button variant="outlined" onClick={() => refreshPortfolios()}>Reintentar</Button>
+            </Paper>
           </Grid>
         </Box>
       </RoleGuard>
@@ -541,6 +562,12 @@ const PortfolioContent = () => {
             </Paper>
           </Grid>
         </Grid>
+        <FloatingMessage
+          open={!!error && portfolios.length > 0}
+          message={error || ""}
+          severity="error"
+          onClose={() => { /* No close handler needed for persistent error state from hook, but maybe we should allow dismissing? Hook state is persistent unless retry. We can just let it sit or auto-hide. Let's auto-hide visually but state remains. */ }}
+        />
       </Box>
     </RoleGuard >
   );

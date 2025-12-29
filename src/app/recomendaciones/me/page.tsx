@@ -16,6 +16,7 @@ import { useMisRecomendaciones } from '@/hooks/useMisRecomendaciones';
 import RecomendacionCard from '@/components/cards/RecomendacionCard';
 import PageHeader from '@/components/ui/PageHeader';
 import { RoleGuard } from "@/components/auth/RoleGuard";
+import FloatingMessage from "@/components/ui/FloatingMessage";
 
 import styles from "../styles/Recomendaciones.module.css";
 
@@ -136,11 +137,12 @@ const MisRecomendacionesContent = () => {
                     </Box>
                 )}
 
-                {error && (
-                    <Alert severity="error" sx={{ mb: 3 }}>
-                        {error}
-                    </Alert>
-                )}
+                <FloatingMessage
+                    open={!!error}
+                    message={error || ""}
+                    severity="error"
+                    onClose={() => { }}
+                />
 
                 {!loading && !error && displayedData.length === 0 && (
                     <Alert severity="info" sx={{ mb: 3 }}>
