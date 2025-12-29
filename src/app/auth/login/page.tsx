@@ -96,12 +96,38 @@ function LoginContent() {
             <Box sx={{ mt: 3 }}>
               <Button
                 fullWidth
-                variant="outlined"
-                color="secondary"
+                variant="contained"
                 onClick={() => alert("Funcionalidad de Google Login pendiente de integración frontend (SDK).")}
                 disabled={loading}
+                sx={{
+                  bgcolor: '#ffffff',
+                  color: '#1f1f1f',
+                  textTransform: 'none',
+                  fontWeight: 500,
+                  border: '1px solid #dadce0',
+                  boxShadow: 'none',
+                  py: 1,
+                  '&:hover': {
+                    bgcolor: '#f8fbfc',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
+                    borderColor: '#dadce0',
+                  },
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.5,
+                  position: 'relative'
+                }}
               >
-                Ingresar con Google
+                <Box
+                  component="img"
+                  src="/google-logo.svg"
+                  alt="Google Logo"
+                  width="20px"
+                  height="20px"
+                />
+                <Typography variant="body2" fontWeight={500} sx={{ fontFamily: 'Roboto, arial, sans-serif', fontSize: '14px' }}>
+                  Continuar con Google
+                </Typography>
               </Button>
             </Box>
           </Box>
