@@ -214,11 +214,15 @@
 │   ├── hooks/                   # Custom Hooks (Lógica de negocio encapsulada)
 │   ├── lib/                     # Utilidades Core (Cliente HTTP, Caché)
 │   ├── services/                # Comunicación con API Backend (Axios + DTOs)
+│   ├── test/                    # Configuración de Vitest y utilidades de test
 │   ├── types/                   # Definiciones TypeScript (Interfaces)
 │   └── utils/                   # Helpers de formateo y strings
 ├── .env.local                   # Variables de entorno
+├── eslint.config.mjs            # Configuración de Linter
 ├── next.config.ts               # Configuración del framework
-└── package.json                 # Dependencias y scripts
+├── package.json                 # Dependencias y scripts
+├── tsconfig.json                # Configuración de TypeScript
+└── vitest.config.ts             # Configuración de Tests Unitarios
 </code></pre>
 
 
