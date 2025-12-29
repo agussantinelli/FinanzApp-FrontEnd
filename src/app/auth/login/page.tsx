@@ -86,6 +86,24 @@ function LoginContent() {
                 {loading ? "Ingresando..." : "Entrar"}
               </Button>
             </div>
+
+            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+              <MuiLink component={Link} href="/auth/forgot-password" variant="body2" underline="hover">
+                ¿Olvidaste tu contraseña?
+              </MuiLink>
+            </Box>
+
+            <Box sx={{ mt: 3 }}>
+              <Button
+                fullWidth
+                variant="outlined"
+                color="secondary"
+                onClick={() => alert("Funcionalidad de Google Login pendiente de integración frontend (SDK).")}
+                disabled={loading}
+              >
+                Ingresar con Google
+              </Button>
+            </Box>
           </Box>
 
           <FloatingMessage
