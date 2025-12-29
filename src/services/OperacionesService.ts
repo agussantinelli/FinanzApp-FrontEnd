@@ -11,7 +11,6 @@ export const getOperaciones = async (): Promise<OperacionResponseDTO[]> => {
 export const getOperacionesByPersona = async (personaId: string): Promise<OperacionResponseDTO[]> => {
     const { data } = await http.get<OperacionResponseDTO[]>(`${ENDPOINT}/persona/${personaId}`);
     return data;
-    return data;
 };
 
 export const getReportePdf = async (): Promise<Blob> => {

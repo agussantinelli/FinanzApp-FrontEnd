@@ -71,7 +71,7 @@ export async function getActivosBySector(sectorId: string): Promise<ActivoDTO[]>
 }
 
 export async function getActivosByTipoAndSector(tipoId: number, sectorId: string): Promise<ActivoDTO[]> {
-    const res = await http.get<ActivoDTO[]>(`/api/activos/filtrar/tipo/${tipoId}/sector/${sectorId}`);
+    const res = await http.get<ActivoDTO[]>(`/api/activos/tipo/${tipoId}/sector/${sectorId}`);
     cacheActivos(res.data);
     return res.data;
 }

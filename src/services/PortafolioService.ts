@@ -16,7 +16,6 @@ export async function getPortafoliosDestacados(): Promise<PortafolioDTO[]> {
 export async function getPortafolioValuado(id: string): Promise<PortafolioValuadoDTO> {
     const { data } = await http.get<PortafolioValuadoDTO>(`${ENDPOINT}/${id}`);
     return data;
-    return data;
 }
 
 export async function getReportePdf(id: string): Promise<Blob> {
