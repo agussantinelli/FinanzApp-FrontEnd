@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import Link from 'next/link';
 import { RecomendacionDTO, RecomendacionDetalleDTO, AccionRecomendada, EstadoRecomendacion } from '@/types/Recomendacion';
-import { getRecomendacionById, getRecomendaciones, aprobarRecomendacion, rechazarRecomendacion } from '@/services/RecomendacionesService';
+import { getRecomendacionById, getRecomendaciones, getRecomendacionesActivasPendientes, aprobarRecomendacion, rechazarRecomendacion } from '@/services/RecomendacionesService';
 import { createSlug } from '@/utils/slug';
 import { useAuth } from "@/hooks/useAuth";
 import { RolUsuario } from "@/types/Usuario";
@@ -90,7 +90,7 @@ const getHorizonteLabel = (h: string | number) => {
 export default function RecomendacionDetallePage() {
     const { id } = useParams();
     const router = useRouter();
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const [recomendacion, setRecomendacion] = useState<RecomendacionDTO | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -118,7 +118,7 @@ export default function RecomendacionDetallePage() {
 
     useEffect(() => {
         const loadData = async () => {
-            if (!id) return;
+            if (!id || authLoading) return;
             setLoading(true);
 
             try {
@@ -130,8 +130,14 @@ export default function RecomendacionDetallePage() {
 
                 if (!isUuid) {
                     // It's a slug, we need to find the ID
-                    // Optimization: We could have a searchBySlug endpoint in backend, but for now we fetch list
-                    const allRecs = await getRecomendaciones(true); // Fetch active ones
+                    let allRecs;
+
+                    if (isAdmin) {
+                        allRecs = await getRecomendacionesActivasPendientes();
+                    } else {
+                        allRecs = await getRecomendaciones(true);
+                    }
+
                     const match = allRecs.find(r => createSlug(r.titulo) === param);
 
                     if (match) {
@@ -152,7 +158,7 @@ export default function RecomendacionDetallePage() {
         };
 
         loadData();
-    }, [id]);
+    }, [id, isAdmin, authLoading]);
 
     if (loading) return <Box display="flex" justifyContent="center" height="50vh" alignItems="center"><CircularProgress /></Box>;
     if (error) return <Container sx={{ mt: 4 }}><Alert severity="error">{error}</Alert></Container>;
