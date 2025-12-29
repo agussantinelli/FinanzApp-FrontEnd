@@ -26,6 +26,8 @@
     <img src="https://img.shields.io/badge/React_Icons-5.5.0-E91E63?style=for-the-badge&logo=react&logoColor=white" alt="React Icons Badge"/>
     <img src="https://img.shields.io/badge/tsParticles-2.12-000000?style=for-the-badge&logo=javascript&logoColor=white" alt="tsParticles Badge"/>
     <img src="https://img.shields.io/badge/JWT%20Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT Badge"/>
+    <img src="https://img.shields.io/badge/Vitest-2.1.8-6E9F18?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest Badge"/>
+    <img src="https://img.shields.io/badge/Testing%20Library-16.1.0-E33332?style=for-the-badge&logo=testing-library&logoColor=white" alt="Testing Library Badge"/>
     <a href="https://drive.google.com/drive/folders/1b5H8fDgOKmrxfY4RXfi4oYA3CvXy4ot6?usp=drive_link" target="_blank">
         <img src="https://img.shields.io/badge/📂%20Documentación%20Proyecto-4285F4?style=for-the-badge&logo=googledrive&logoColor=white" alt="Carpeta TPI Drive Badge"/>
     </a>
@@ -401,6 +403,31 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
             <li>Expansión del módulo de "Comunidad" y "Noticias".</li>
         </ul>
     </li>
+</ul>
+
+<hr>
+
+<h2>🧪 Testing y Calidad</h2>
+
+<p>Actualmente el proyecto cuenta con una suite de <strong>Tests Unitarios</strong> implementada con <strong>Vitest</strong> y <strong>React Testing Library</strong>.</p>
+
+<ul>
+    <li>
+        <strong>Unit Testing:</strong> Se ha configurado Vitest para cubrir componentes críticos y hooks personalizados.
+    </li>
+    <li>
+        <strong>Component Testing:</strong> Validación de renderizado y lógica de interacción en tarjetas (Cards), secciones y páginas principales.
+    </li>
+</ul>
+
+<h3>🚧 Roadmap de Testing</h3>
+
+<p>El próximo paso en la estrategia de QA es la implementación de <strong>End-to-End (E2E) Testing</strong> utilizando <strong>Playwright</strong>. Esto permitirá:</p>
+
+<ul>
+    <li>Simular flujos completos de usuario (Registro -> Operación -> Portfolio).</li>
+    <li>Validar la integración con el Backend real en un entorno controlado.</li>
+    <li>Asegurar la estabilidad visual y funcional en diferentes dispositivos y navegadores.</li>
 </ul>
 
 <hr>
