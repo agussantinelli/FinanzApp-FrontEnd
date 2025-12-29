@@ -17,12 +17,14 @@ import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { getPersonaById, uploadUserPhoto } from "@/services/PersonaService";
 import { UserDTO } from "@/types/Usuario";
+import SetInitialPasswordDialog from "@/components/auth/SetInitialPasswordDialog";
 
 export default function ProfilePage() {
     const { user, logout } = useAuth();
     const [profile, setProfile] = useState<UserDTO | null>(null);
     const [loadingProfile, setLoadingProfile] = useState(true);
     const [uploading, setUploading] = useState(false);
+    const [setInitialPwOpen, setSetInitialPwOpen] = useState(false);
 
     useEffect(() => {
         if (user?.id) {
@@ -123,15 +125,42 @@ export default function ProfilePage() {
                         </Stack>
                     </Box>
                     <Box sx={{ flexGrow: 1 }} />
-                    <Button
-                        component={Link}
-                        href="/perfil/editar"
-                        variant="outlined"
-                        color="inherit"
-                        sx={{ borderColor: 'rgba(255,255,255,0.2)' }}
-                    >
-                        Editar Perfil
-                    </Button>
+                    <Stack direction="column" spacing={1} alignItems={{ xs: "center", sm: "flex-end" }}>
+                        {/* Complete vs Edit Profile */}
+                        {!profile.perfilCompletado ? (
+                            <Button
+                                component={Link}
+                                href="/perfil/completar"
+                                variant="contained"
+                                color="primary"
+                                size="large"
+                            >
+                                Completar Perfil
+                            </Button>
+                        ) : (
+                            <Button
+                                component={Link}
+                                href="/perfil/editar"
+                                variant="outlined"
+                                color="inherit"
+                                sx={{ borderColor: 'rgba(255,255,255,0.2)' }}
+                            >
+                                Editar Perfil
+                            </Button>
+                        )}
+
+                        {/* Set Password if missing */}
+                        {!profile.tieneContrasenaConfigurada && (
+                            <Button
+                                variant="outlined"
+                                color="warning"
+                                size="small"
+                                onClick={() => setSetInitialPwOpen(true)}
+                            >
+                                Establecer Contraseña
+                            </Button>
+                        )}
+                    </Stack>
                 </Stack>
 
                 <Divider sx={{ mb: 4 }} />
@@ -179,6 +208,11 @@ export default function ProfilePage() {
                 </Stack>
 
             </Paper>
+
+            <SetInitialPasswordDialog
+                open={setInitialPwOpen}
+                onClose={() => setSetInitialPwOpen(false)}
+            />
         </Box>
     );
 }
