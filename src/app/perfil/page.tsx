@@ -48,14 +48,13 @@ export default function ProfilePage() {
 
         const file = event.target.files[0];
 
-        // Validation
         const validExtensions = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
         if (!validExtensions.includes(file.type)) {
             alert("Solo se permiten archivos JPG, PNG o WEBP.");
             return;
         }
 
-        if (file.size > 5 * 1024 * 1024) { // 5MB
+        if (file.size > 5 * 1024 * 1024) {
             alert("El archivo no puede superar los 5MB.");
             return;
         }
@@ -65,7 +64,6 @@ export default function ProfilePage() {
         try {
             const { url } = await uploadUserPhoto(user.id, file);
 
-            // Immediate update with returned URL
             setProfile(prev => prev ? { ...prev, urlFotoPerfil: url } : null);
         } catch (error) {
             console.error("Error uploading photo:", error);
@@ -83,7 +81,6 @@ export default function ProfilePage() {
         <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 1000, margin: "0 auto" }}>
             <Paper elevation={0} sx={{ p: 4, borderRadius: 3, border: "1px solid rgba(255,255,255,0.1)" }}>
 
-                {/* Header */}
                 <Stack direction={{ xs: "column", sm: "row" }} alignItems="center" spacing={3} sx={{ mb: 4 }}>
                     <Box sx={{ position: 'relative', width: 100, height: 100 }}>
                         <Avatar
@@ -128,7 +125,6 @@ export default function ProfilePage() {
                     </Box>
                     <Box sx={{ flexGrow: 1 }} />
                     <Stack direction="column" spacing={1} alignItems={{ xs: "center", sm: "flex-end" }}>
-                        {/* Complete vs Edit Profile */}
                         {!profile.perfilCompletado ? (
                             <Button
                                 component={Link}
@@ -151,7 +147,6 @@ export default function ProfilePage() {
                             </Button>
                         )}
 
-                        {/* Password Management */}
                         {!profile.tieneContrasenaConfigurada ? (
                             <Button
                                 variant="outlined"
@@ -176,51 +171,59 @@ export default function ProfilePage() {
 
                 <Divider sx={{ mb: 4 }} />
 
-                <Stack direction={{ xs: 'column', md: 'row' }} spacing={4}>
-                    <Box sx={{ flex: 1 }}>
-                        <Typography variant="h6" gutterBottom color="primary">Información Personal</Typography>
-                        <Stack spacing={2}>
-                            <Box>
-                                <Typography variant="caption" color="text.secondary">Fecha de Nacimiento</Typography>
-                                <Typography>
-                                    {profile.fechaNacimiento
-                                        ? new Date(profile.fechaNacimiento).toLocaleDateString()
-                                        : "No especificada"}
-                                </Typography>
-                            </Box>
-                            <Box>
-                                <Typography variant="caption" color="text.secondary">Nacionalidad</Typography>
-                                <Typography>{profile.nacionalidadNombre || "No especificada"}</Typography>
-                            </Box>
-                        </Stack>
+                {!profile.perfilCompletado ? (
+                    <Box sx={{ py: 4, textAlign: 'center' }}>
+                        <Typography variant="body1" color="text.secondary">
+                            No hay datos personales
+                        </Typography>
                     </Box>
+                ) : (
+                    <Stack direction={{ xs: 'column', md: 'row' }} spacing={4}>
+                        <Box sx={{ flex: 1 }}>
+                            <Typography variant="h6" gutterBottom color="primary">Información Personal</Typography>
+                            <Stack spacing={2}>
+                                <Box>
+                                    <Typography variant="caption" color="text.secondary">Fecha de Nacimiento</Typography>
+                                    <Typography>
+                                        {profile.fechaNacimiento
+                                            ? new Date(profile.fechaNacimiento).toLocaleDateString()
+                                            : "No especificada"}
+                                    </Typography>
+                                </Box>
+                                <Box>
+                                    <Typography variant="caption" color="text.secondary">Nacionalidad</Typography>
+                                    <Typography>{profile.nacionalidadNombre || "No especificada"}</Typography>
+                                </Box>
+                            </Stack>
+                        </Box>
 
-                    <Box sx={{ flex: 1 }}>
-                        <Typography variant="h6" gutterBottom color="primary">Residencia</Typography>
-                        <Stack spacing={2}>
-                            <Box>
-                                <Typography variant="caption" color="text.secondary">País</Typography>
-                                <Typography>
-                                    {profile.esResidenteArgentina
-                                        ? "Argentina"
-                                        : (profile.paisResidenciaNombre || "No especificado")}
-                                </Typography>
-                            </Box>
-                            {profile.provinciaResidenciaNombre && (
+                        <Box sx={{ flex: 1 }}>
+                            <Typography variant="h6" gutterBottom color="primary">Residencia</Typography>
+                            <Stack spacing={2}>
                                 <Box>
-                                    <Typography variant="caption" color="text.secondary">Provincia</Typography>
-                                    <Typography>{profile.provinciaResidenciaNombre}</Typography>
+                                    <Typography variant="caption" color="text.secondary">País</Typography>
+                                    <Typography>
+                                        {profile.esResidenteArgentina
+                                            ? "Argentina"
+                                            : (profile.paisResidenciaNombre || "No especificado")}
+                                    </Typography>
                                 </Box>
-                            )}
-                            {profile.localidadResidenciaNombre && (
-                                <Box>
-                                    <Typography variant="caption" color="text.secondary">Localidad</Typography>
-                                    <Typography>{profile.localidadResidenciaNombre}</Typography>
-                                </Box>
-                            )}
-                        </Stack>
-                    </Box>
-                </Stack>
+                                {profile.provinciaResidenciaNombre && (
+                                    <Box>
+                                        <Typography variant="caption" color="text.secondary">Provincia</Typography>
+                                        <Typography>{profile.provinciaResidenciaNombre}</Typography>
+                                    </Box>
+                                )}
+                                {profile.localidadResidenciaNombre && (
+                                    <Box>
+                                        <Typography variant="caption" color="text.secondary">Localidad</Typography>
+                                        <Typography>{profile.localidadResidenciaNombre}</Typography>
+                                    </Box>
+                                )}
+                            </Stack>
+                        </Box>
+                    </Stack>
+                )}
 
             </Paper>
 
