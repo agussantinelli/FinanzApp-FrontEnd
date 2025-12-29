@@ -104,6 +104,12 @@ export async function register(
   return response.data;
 }
 
+export async function googleLogin(idToken: string): Promise<UserLoginResponseDTO> {
+  const response = await http.post<UserLoginResponseDTO>("/api/auth/google", { idToken });
+  setAuthSession(response.data);
+  return response.data;
+}
+
 export async function changePassword(data: ChangePasswordDTO): Promise<void> {
   await http.post("/api/auth/change-password", data);
 }
