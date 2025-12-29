@@ -244,6 +244,8 @@ pnpm dev
 
 <pre><code># Base de la API (cambiar por prod al desplegar)
 NEXT_PUBLIC_API_BASE=https://localhost:7088
+# Google Identity Services (Client ID para Login)
+NEXT_PUBLIC_GOOGLE_CLIENT_ID=tu_client_id_aqui
 </code></pre>
 
 <p>Todos los <code>fetch</code> / llamadas Axios del frontend apuntan a <code>NEXT_PUBLIC_API_BASE</code> (incluidos los endpoints protegidos con JWT).</p>
@@ -407,7 +409,7 @@ NEXT_PUBLIC_API_BASE=https://localhost:7088
 <ul>
     <li><strong>Completado (V1.0)</strong>
         <ul>
-            <li>✅ Autenticación Full (JWT, Persistencia, Logout).</li>
+            <li>✅ Autenticación Full (JWT, Google Login, Persistencia, Logout).</li>
             <li>✅ Flow de Inversión Completo: Buscar Activo -> Registrar Operación -> Ver en Portafolio.</li>
             <li>✅ Lógica Multimoneda: Manejo robusto de pares ARS/USD en tablas y gráficos.</li>
             <li>✅ Dashboards Responsivos: UI adaptada a Móvil/Tablet/Desktop con Material UI.</li>
