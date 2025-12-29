@@ -7,6 +7,7 @@ export interface PortafolioDTO {
 
     // --- NUEVO: Propiedad Top ---
     esTop: boolean;
+    cantSeguidores: number; // Agregado
     loSigo?: boolean;
 
     // --- CAMPOS ADMINISTRATIVOS Y FINANCIEROS (Dual Currency) ---
@@ -46,6 +47,8 @@ export interface PortafolioValuadoDTO {
     esPrincipal: boolean;
     esDestacado: boolean;
     esTop: boolean;
+
+    cantSeguidores: number; // Agregado
 
     totalPesos: number;
     gananciaPesos: number;
