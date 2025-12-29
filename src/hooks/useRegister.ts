@@ -195,7 +195,6 @@ export function useRegister() {
             const msgFromApi =
                 err?.response?.data ?? "No se pudo completar el registro.";
             setApiError(msgFromApi);
-        } finally {
             setSubmitting(false);
         }
     };
