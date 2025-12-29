@@ -44,7 +44,9 @@ export default function EditProfilePage() {
         esResidenteArgentina: false,
         paisResidenciaId: 0,
         paisNacionalidadId: 0,
-        localidadResidenciaId: null
+        localidadResidenciaId: null,
+        nacionalidadId: 0,
+        nacionalidadNombre: ""
     });
 
     // Aux state for province selection
@@ -70,7 +72,9 @@ export default function EditProfilePage() {
                     esResidenteArgentina: userData.esResidenteArgentina,
                     paisResidenciaId: userData.paisResidenciaId || 0,
                     paisNacionalidadId: userData.nacionalidadId || 0,
-                    localidadResidenciaId: userData.localidadResidenciaId || null
+                    localidadResidenciaId: userData.localidadResidenciaId || null,
+                    nacionalidadId: userData.nacionalidadId || 0,
+                    nacionalidadNombre: userData.nacionalidadNombre || ""
                 });
 
                 if (userData.esResidenteArgentina && userData.localidadResidenciaId) {
@@ -116,7 +120,13 @@ export default function EditProfilePage() {
         setSuccessMessage(null);
 
         try {
-            await updatePersona(user.id, formData);
+            // Map redundant fields for backend compatibility
+            const payload: UserUpdateRequest = {
+                ...formData,
+                nacionalidadId: formData.paisNacionalidadId,
+                nacionalidadNombre: geoData?.paises.find(p => p.id === formData.paisNacionalidadId)?.nombre
+            };
+            await updatePersona(user.id, payload);
             setSuccessMessage("Perfil actualizado correctamente");
 
             // Allow user to see the success message briefly before redirecting
