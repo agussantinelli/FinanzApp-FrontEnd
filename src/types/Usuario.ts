@@ -38,6 +38,7 @@ export interface AuthenticatedUser {
     apellido: string;
     email: string;
     rol: RolUsuario | string;
+    urlFotoPerfil?: string;
     expiraUtc?: string;
 }
 

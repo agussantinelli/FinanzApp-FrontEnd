@@ -21,6 +21,7 @@ export function setAuthSession(resp: UserLoginResponseDTO) {
       apellido: resp.apellido,
       email: resp.email,
       rol: resp.rol,
+      urlFotoPerfil: resp.urlFotoPerfil,
       expiraUtc: resp.expiraUtc,
     })
   );
