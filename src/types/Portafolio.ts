@@ -4,10 +4,8 @@ export interface PortafolioDTO {
     descripcion?: string;
     esDestacado: boolean;
     esPrincipal: boolean;
-
-    // --- NUEVO: Propiedad Top ---
     esTop: boolean;
-    cantSeguidores: number; // Agregado
+    cantSeguidores: number;
     loSigo?: boolean;
 
     // --- CAMPOS ADMINISTRATIVOS Y FINANCIEROS (Dual Currency) ---
