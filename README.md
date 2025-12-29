@@ -149,6 +149,26 @@
             <td>Efecto de partículas neón</td>
             <td>Ligero y compatible con SSR.</td>
         </tr>
+        <tr>
+            <td><strong>Validación</strong></td>
+            <td>Zod</td>
+            <td>Esquemas estrictos y seguridad de tipos (Runtime).</td>
+        </tr>
+        <tr>
+            <td><strong>HTTP Client</strong></td>
+            <td>Axios</td>
+            <td>Manejo robusto de requests e interceptores (Auth).</td>
+        </tr>
+        <tr>
+            <td><strong>Testing</strong></td>
+            <td>Vitest + Testing Library</td>
+            <td>Unit y Component testing de alto rendimiento.</td>
+        </tr>
+        <tr>
+            <td><strong>Gráficos</strong></td>
+            <td>Chart.js</td>
+            <td>Visualización de datos (Doughnut, Line charts).</td>
+        </tr>
     </tbody>
 </table>
 
