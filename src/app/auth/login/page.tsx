@@ -28,6 +28,7 @@ function LoginContent() {
     serverError, setServerError,
     successMessage, setSuccessMessage,
     handleSubmit,
+    handleGoogleLogin,
     clearFieldError
   } = useLogin();
 
@@ -87,17 +88,12 @@ function LoginContent() {
               </Button>
             </div>
 
-            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-              <MuiLink component={Link} href="/auth/forgot-password" variant="body2" underline="hover">
-                ¿Olvidaste tu contraseña?
-              </MuiLink>
-            </Box>
 
             <Box sx={{ mt: 3 }}>
               <Button
                 fullWidth
                 variant="contained"
-                onClick={() => alert("Funcionalidad de Google Login pendiente de integración frontend (SDK).")}
+                onClick={handleGoogleLogin}
                 disabled={loading}
                 sx={{
                   bgcolor: '#ffffff',
@@ -144,6 +140,12 @@ function LoginContent() {
             severity="success"
             onClose={() => setSuccessMessage(null)}
           />
+
+          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+            <MuiLink component={Link} href="/auth/forgot-password" variant="body2" underline="hover">
+              ¿Olvidaste tu contraseña?
+            </MuiLink>
+          </Box>
 
           <Box className={styles.footer}>
             <Typography variant="body2" color="text.secondary">
