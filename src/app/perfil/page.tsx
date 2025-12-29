@@ -18,6 +18,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { getPersonaById, uploadUserPhoto } from "@/services/PersonaService";
 import { UserDTO } from "@/types/Usuario";
 import SetInitialPasswordDialog from "@/components/auth/SetInitialPasswordDialog";
+import ChangePasswordDialog from "@/components/auth/ChangePasswordDialog";
 
 export default function ProfilePage() {
     const { user, logout } = useAuth();
@@ -25,6 +26,7 @@ export default function ProfilePage() {
     const [loadingProfile, setLoadingProfile] = useState(true);
     const [uploading, setUploading] = useState(false);
     const [setInitialPwOpen, setSetInitialPwOpen] = useState(false);
+    const [changePwOpen, setChangePwOpen] = useState(false);
 
     useEffect(() => {
         if (user?.id) {
@@ -149,8 +151,8 @@ export default function ProfilePage() {
                             </Button>
                         )}
 
-                        {/* Set Password if missing */}
-                        {!profile.tieneContrasenaConfigurada && (
+                        {/* Password Management */}
+                        {!profile.tieneContrasenaConfigurada ? (
                             <Button
                                 variant="outlined"
                                 color="warning"
@@ -158,6 +160,15 @@ export default function ProfilePage() {
                                 onClick={() => setSetInitialPwOpen(true)}
                             >
                                 Establecer Contraseña
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="outlined"
+                                color="secondary"
+                                size="small"
+                                onClick={() => setChangePwOpen(true)}
+                            >
+                                Cambiar Contraseña
                             </Button>
                         )}
                     </Stack>
@@ -216,6 +227,11 @@ export default function ProfilePage() {
             <SetInitialPasswordDialog
                 open={setInitialPwOpen}
                 onClose={() => setSetInitialPwOpen(false)}
+            />
+
+            <ChangePasswordDialog
+                open={changePwOpen}
+                onClose={() => setChangePwOpen(false)}
             />
         </Box>
     );
