@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { render } from '@/test/test-utils';
 import EditProfilePage from './page';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useAuth } from '@/hooks/useAuth';
@@ -43,18 +44,19 @@ describe('EditProfilePage', () => {
     it('renders form with user data', async () => {
         render(<EditProfilePage />);
         await waitFor(() => {
-            expect((screen.getByLabelText('Nombre') as HTMLInputElement).value).toBe('Juan');
+            // Using regex i to handle "Nombre *" and case insensitivity
+            expect((screen.getByLabelText(/Nombre/i) as HTMLInputElement).value).toBe('Juan');
         });
-        expect((screen.getByLabelText('Apellido') as HTMLInputElement).value).toBe('Perez');
+        expect((screen.getByLabelText(/Apellido/i) as HTMLInputElement).value).toBe('Perez');
     });
 
     it('updates user data on submit', async () => {
         render(<EditProfilePage />);
         await waitFor(() => {
-            expect((screen.getByLabelText('Nombre') as HTMLInputElement).value).toBe('Juan');
+            expect((screen.getByLabelText(/Nombre/i) as HTMLInputElement).value).toBe('Juan');
         });
 
-        const nameInput = screen.getByLabelText('Nombre');
+        const nameInput = screen.getByLabelText(/Nombre/i);
         fireEvent.change(nameInput, { target: { value: 'Juan Carlos' } });
 
         const submitBtn = screen.getByText('Guardar Cambios');
@@ -67,13 +69,16 @@ describe('EditProfilePage', () => {
 
     it('handles switching residence to not Argentina', async () => {
         render(<EditProfilePage />);
+        // Wait for first render
         await waitFor(() => screen.getByLabelText('Resido en Argentina'));
 
         const switchControl = screen.getByLabelText('Resido en Argentina');
         fireEvent.click(switchControl); // toggle off
 
-        expect(await screen.findByLabelText('País de Residencia')).toBeInTheDocument();
-        // Should not see Provincia/Localidad anymore
-        expect(screen.queryByLabelText('Provincia')).not.toBeInTheDocument();
+        // "País de Residencia" might have * so strict match fails. Use regex or loose match.
+        expect(await screen.findByLabelText(/País de Residencia/i)).toBeInTheDocument();
+
+        // "Provincia" might also have *
+        expect(screen.queryByLabelText(/Provincia/i)).not.toBeInTheDocument();
     });
 });
