@@ -16,6 +16,17 @@ export async function getPortafoliosDestacados(): Promise<PortafolioDTO[]> {
 export async function getPortafolioValuado(id: string): Promise<PortafolioValuadoDTO> {
     const { data } = await http.get<PortafolioValuadoDTO>(`${ENDPOINT}/${id}`);
     return data;
+    return data;
+}
+
+export async function getReportePdf(id: string): Promise<Blob> {
+    const response = await http.get(`${ENDPOINT}/${id}/reporte/pdf`, { responseType: 'blob' });
+    return response.data;
+}
+
+export async function getReporteExcel(id: string): Promise<Blob> {
+    const response = await http.get(`${ENDPOINT}/${id}/reporte/excel`, { responseType: 'blob' });
+    return response.data;
 }
 
 export async function updatePortafolio(id: string, nombre: string, descripcion: string): Promise<boolean> {

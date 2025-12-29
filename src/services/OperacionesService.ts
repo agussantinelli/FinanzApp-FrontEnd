@@ -11,6 +11,17 @@ export const getOperaciones = async (): Promise<OperacionResponseDTO[]> => {
 export const getOperacionesByPersona = async (personaId: string): Promise<OperacionResponseDTO[]> => {
     const { data } = await http.get<OperacionResponseDTO[]>(`${ENDPOINT}/persona/${personaId}`);
     return data;
+    return data;
+};
+
+export const getReportePdf = async (): Promise<Blob> => {
+    const response = await http.get(`${ENDPOINT}/reporte/pdf`, { responseType: 'blob' });
+    return response.data;
+};
+
+export const getReporteExcel = async (): Promise<Blob> => {
+    const response = await http.get(`${ENDPOINT}/reporte/excel`, { responseType: 'blob' });
+    return response.data;
 };
 
 export const getOperacionesByActivo = async (activoId: string): Promise<OperacionResponseDTO[]> => {

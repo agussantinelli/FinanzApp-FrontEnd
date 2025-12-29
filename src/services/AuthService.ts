@@ -2,7 +2,8 @@ import { http } from "@/lib/http";
 import { clearCache } from "@/lib/activos-cache";
 import { RegisterGeoDataDTO } from "@/types/Geo";
 import { UserLoginRequest, UserRegisterRequest, UserLoginResponseDTO, AuthenticatedUser, RolUsuario } from "@/types/Usuario";
-import { ChangePasswordDTO, ResetPasswordRequestDTO, ResetPasswordConfirmDTO } from "@/types/Auth";
+import { ChangePasswordDTO, ResetPasswordRequestDTO, ResetPasswordConfirmDTO, SetInitialPasswordDTO } from "@/types/Auth";
+import { CompletarPerfilDTO } from "@/types/Usuario";
 
 function notifyAuthChanged() {
   if (typeof window === "undefined") return;
@@ -109,6 +110,15 @@ export async function googleLogin(idToken: string): Promise<UserLoginResponseDTO
   const response = await http.post<UserLoginResponseDTO>("/api/auth/google", { idToken });
   setAuthSession(response.data);
   return response.data;
+}
+
+export async function completeProfile(data: CompletarPerfilDTO): Promise<UserLoginResponseDTO> {
+  const response = await http.post<UserLoginResponseDTO>("/api/auth/complete-profile", data);
+  return response.data as any;
+}
+
+export async function setInitialPassword(data: SetInitialPasswordDTO): Promise<void> {
+  await http.post("/api/auth/set-initial-password", data);
 }
 
 export async function changePassword(data: ChangePasswordDTO): Promise<void> {
