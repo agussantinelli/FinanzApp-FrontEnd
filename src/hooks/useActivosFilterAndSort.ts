@@ -94,7 +94,9 @@ export function useActivosFilterAndSort(activos: ActivoDTO[]) {
                 }
                 return 0;
             }
-            // Numerical/Boolean sort
+            if (valueA == null) return 1;
+            if (valueB == null) return -1;
+
             if (valueB < valueA) {
                 return order === 'asc' ? 1 : -1;
             }
