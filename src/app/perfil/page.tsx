@@ -189,7 +189,11 @@ export default function ProfilePage() {
                         <Stack spacing={2}>
                             <Box>
                                 <Typography variant="caption" color="text.secondary">País</Typography>
-                                <Typography>{profile.paisResidenciaNombre || "No especificado"}</Typography>
+                                <Typography>
+                                    {profile.esResidenteArgentina
+                                        ? "Argentina"
+                                        : (profile.paisResidenciaNombre || "No especificado")}
+                                </Typography>
                             </Box>
                             {profile.provinciaResidenciaNombre && (
                                 <Box>
