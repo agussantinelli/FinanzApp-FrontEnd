@@ -49,7 +49,7 @@ import NeonLoader from "@/components/ui/NeonLoader";
 import styles from "./styles/Activos.module.css";
 
 import { formatPercentage } from "@/utils/format";
-import { getAvatarColor } from "@/app-theme/icons-appearance";
+import { getAvatarColor } from "@/theme/icons-appearance";
 import PageHeader from "@/components/ui/PageHeader";
 
 export default function Activos() {

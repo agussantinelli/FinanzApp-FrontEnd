@@ -3,7 +3,7 @@
 import "@/app/styles/globals.css";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
-import theme from "@/app-theme/theme";
+import theme from "@/theme/theme";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (

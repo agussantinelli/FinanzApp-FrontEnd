@@ -37,7 +37,7 @@ import AssetOperationsHistory from "@/components/operaciones/AssetOperationsHist
 import styles from "./styles/ActivoDetail.module.css";
 
 import { formatPercentage } from "@/utils/format";
-import { getAvatarColor } from "@/app-theme/icons-appearance";
+import { getAvatarColor } from "@/theme/icons-appearance";
 import { getCurrentUser } from "@/services/AuthService";
 import { createSlug } from "@/utils/slug";
 import { AccionRecomendada } from "@/types/Recomendacion";

@@ -14,7 +14,7 @@ import { IconButton } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ShieldIcon from '@mui/icons-material/Shield';
 import PersonIcon from '@mui/icons-material/Person';
-import { colors } from '@/app-theme/design-tokens';
+import { colors } from '@/theme/design-tokens';
 import { RecomendacionResumenDTO, Riesgo, AccionRecomendada, Horizonte, EstadoRecomendacion } from '@/types/Recomendacion';
 import CircleIcon from '@mui/icons-material/Circle';
 import StarIcon from '@mui/icons-material/Star';

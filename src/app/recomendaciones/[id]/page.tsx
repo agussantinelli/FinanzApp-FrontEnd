@@ -20,7 +20,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ShieldIcon from '@mui/icons-material/Shield';
-import { colors } from '@/app-theme/design-tokens';
+import { colors } from '@/theme/design-tokens';
 import styles from './styles/RecomendacionDetail.module.css';
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import FloatingMessage from "@/components/ui/FloatingMessage";
