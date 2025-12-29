@@ -453,21 +453,27 @@ NEXT_PUBLIC_GOOGLE_CLIENT_ID=tu_client_id_aqui
 
 <ul>
     <li>
-        <strong>Unit Testing:</strong> Se ha configurado Vitest para cubrir componentes críticos y hooks personalizados.
+        <strong>Unit Testing:</strong> Ejecutar con <code>npm run test:unit</code>. Cubre componentes críticos y hooks personalizados usando Vitest.
     </li>
     <li>
-        <strong>Component Testing:</strong> Validación de renderizado y lógica de interacción en tarjetas (Cards), secciones y páginas principales.
+        <strong>Component Testing:</strong> Validación de renderizado y lógica de interacción.
     </li>
 </ul>
 
-<h3>🚧 Roadmap de Testing</h3>
+<h3>🎭 End-to-End (E2E) Testing</h3>
 
-<p>El próximo paso en la estrategia de QA es la implementación de <strong>End-to-End (E2E) Testing</strong> utilizando <strong>Playwright</strong>. Esto permitirá:</p>
+<p>Se han implementado tests End-to-End utilizando <strong>Playwright</strong> para asegurar la robustez de los flujos críticos de usuario.</p>
 
+<p><strong>Comandos disponibles:</strong></p>
 <ul>
-    <li>Simular flujos completos de usuario (Registro -> Operación -> Portfolio).</li>
-    <li>Validar la integración con el Backend real en un entorno controlado.</li>
-    <li>Asegurar la estabilidad visual y funcional en diferentes dispositivos y navegadores.</li>
+    <li><code>npm run test:e2e</code>: Ejecuta los tests en modo visual (headed).</li>
+    <li><code>npx playwright test</code>: Ejecuta los tests en modo headless (CI/CD).</li>
+    <li><code>npx playwright show-report</code>: Visualiza el reporte HTML de la última ejecución.</li>
+</ul>
+
+<p><strong>Flujos cubiertos:</strong></p>
+<ul>
+    <li>✅ <strong>Compra de Activos:</strong> Login -> Navegación -> Búsqueda de Activo (BTC) -> Validación de UI -> Compra -> Verificación en Portafolio.</li>
 </ul>
 
 <hr>
