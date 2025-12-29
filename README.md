@@ -180,7 +180,12 @@
 │   ├── app/                     # App Router (Next.js 16+)
 │   │   ├── access-denied/       # Página de acceso denegado
 │   │   ├── activos/             # Buscador y detalles de Activos
-│   │   ├── auth/                # Módulos de Login y Registro
+│   │   ├── auth/                # Módulos de Login, Registro y Recuperación
+│   │   │   ├── forgot-password/
+│   │   │   ├── google-callback/
+│   │   │   ├── login/
+│   │   │   ├── register/
+│   │   │   └── reset-password/
 │   │   ├── dashboard-admin/     # Panel de Administración (Guard: Admin)
 │   │   ├── dashboard-experto/   # Dashboard para Expertos Financieros
 │   │   ├── dashboard-inversor/  # Home del Inversor (Resumen)
