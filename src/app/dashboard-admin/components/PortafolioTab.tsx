@@ -37,6 +37,12 @@ export default function PortafolioTab() {
     const handleToggleTop = async (id: string, currentVal: boolean) => {
         if (!currentVal) {
             // Attempting to make it Top
+            const portfolio = portfolios.find(p => p.id === id);
+            if (!portfolio?.esDestacado) {
+                setErrorMsg("Un portafolio debe ser Destacado para ser Top.");
+                return;
+            }
+
             const currentTopCount = portfolios.filter(p => p.esTop).length;
             if (currentTopCount >= 3) {
                 setErrorMsg("No se pueden marcar más de 3 activos como Top.");
