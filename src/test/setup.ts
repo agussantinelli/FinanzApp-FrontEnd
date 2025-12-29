@@ -20,18 +20,25 @@ Object.defineProperty(window, 'matchMedia', {
     })),
 });
 
-// Mock ResizeObserver
-global.ResizeObserver = vi.fn().mockImplementation(() => ({
-    observe: vi.fn(),
-    unobserve: vi.fn(),
-    disconnect: vi.fn(),
-}));
+// Mocks de APIs del navegador
+class ResizeObserver {
+    observe() { }
+    unobserve() { }
+    disconnect() { }
+}
+global.ResizeObserver = ResizeObserver;
 
-global.IntersectionObserver = vi.fn().mockImplementation(() => ({
-    observe: vi.fn(),
-    unobserve: vi.fn(),
-    disconnect: vi.fn(),
-}));
+class IntersectionObserver {
+    constructor() { }
+    observe() { }
+    unobserve() { }
+    disconnect() { }
+    takeRecords() { return []; }
+    root = null;
+    rootMargin = '';
+    thresholds = [];
+}
+global.IntersectionObserver = IntersectionObserver as any;
 
 // Mock requestAnimationFrame
 global.requestAnimationFrame = vi.fn((callback) => setTimeout(callback, 0)) as unknown as (callback: FrameRequestCallback) => number;
