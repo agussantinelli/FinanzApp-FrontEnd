@@ -247,6 +247,14 @@ pnpm dev
 
 <p>Abrí <a href="http://localhost:3000">http://localhost:3000</a> en tu navegador para ver el resultado.</p>
 
+<h3>🔑 Credenciales de Prueba</h3>
+
+<p>Para probar el flujo de inversor (E2E Tests):</p>
+<ul>
+    <li><strong>Email:</strong> <code>agus@gmail.com</code></li>
+    <li><strong>Password:</strong> <code>agus</code></li>
+</ul>
+
 <h3>⚙️ Variables de Entorno</h3>
 
 <p>Crea un archivo <code>.env.local</code> en la raíz del proyecto para configurar la conexión al <a href="https://github.com/agussantinelli/FinanzApp-BackEnd.git">Backend</a>:</p>
