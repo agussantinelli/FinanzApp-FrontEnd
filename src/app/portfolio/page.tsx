@@ -44,7 +44,7 @@ import PortfolioCompositionChart from "@/components/portfolio/PortfolioCompositi
 import { usePortfolioSort, Order, OrderBy } from "@/hooks/usePortfolioSort";
 import { CreatePortfolioDialog, EditPortfolioDialog } from "@/components/portfolio/PortfolioDialogs";
 
-export default function PortfolioPage() {
+const PortfolioContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const urlId = searchParams.get('id');
@@ -543,5 +543,17 @@ export default function PortfolioPage() {
         </Grid>
       </Box>
     </RoleGuard >
+  );
+}
+
+export default function PortfolioPage() {
+  return (
+    <React.Suspense fallback={
+      <Box sx={{ p: 4, display: 'flex', justifyContent: 'center' }}>
+        <CircularProgress />
+      </Box>
+    }>
+      <PortfolioContent />
+    </React.Suspense>
   );
 }

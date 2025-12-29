@@ -19,7 +19,7 @@ import { RoleGuard } from "@/components/auth/RoleGuard";
 
 import styles from "../styles/Recomendaciones.module.css";
 
-export default function MisRecomendacionesPage() {
+const MisRecomendacionesContent = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const targetUserId = searchParams.get('userId');
@@ -157,5 +157,17 @@ export default function MisRecomendacionesPage() {
                 </Grid>
             </main>
         </RoleGuard>
+    );
+}
+
+export default function MisRecomendacionesPage() {
+    return (
+        <React.Suspense fallback={
+            <Box display="flex" justifyContent="center" my={5}>
+                <CircularProgress />
+            </Box>
+        }>
+            <MisRecomendacionesContent />
+        </React.Suspense>
     );
 }
