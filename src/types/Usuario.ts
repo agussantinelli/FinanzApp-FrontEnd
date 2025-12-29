@@ -74,6 +74,7 @@ export interface UserRegisterRequest {
     paisResidenciaId?: number | null;
     localidadResidenciaId?: number | null;
     password: string;
+    recaptchaToken?: string;
 }
 
 export interface UserUpdateRequest {
