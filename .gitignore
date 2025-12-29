@@ -48,3 +48,6 @@ Thumbs.db
 
 tsc_error_*.txt
 build_error_*.txt
+
+# Test Output
+test_output.txt
