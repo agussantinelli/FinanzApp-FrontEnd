@@ -27,9 +27,16 @@ global.ResizeObserver = vi.fn().mockImplementation(() => ({
     disconnect: vi.fn(),
 }));
 
-// Mock IntersectionObserver
 global.IntersectionObserver = vi.fn().mockImplementation(() => ({
     observe: vi.fn(),
     unobserve: vi.fn(),
     disconnect: vi.fn(),
 }));
+
+// Mock requestAnimationFrame
+global.requestAnimationFrame = vi.fn((callback) => setTimeout(callback, 0)) as unknown as (callback: FrameRequestCallback) => number;
+global.cancelAnimationFrame = vi.fn((id) => clearTimeout(id));
+
+// Suppress useLayoutEffect warning in JSDOM
+import React from 'react';
+React.useLayoutEffect = React.useEffect;
