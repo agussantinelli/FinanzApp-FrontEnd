@@ -3,6 +3,11 @@ export interface ChangePasswordDTO {
     newPassword: string;
 }
 
+export interface SetInitialPasswordDTO {
+    newPassword: string;
+}
+
+
 export interface ResetPasswordRequestDTO {
     email: string;
 }

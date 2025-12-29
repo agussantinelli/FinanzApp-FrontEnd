@@ -22,6 +22,10 @@ export interface UserDTO {
     localidadResidenciaNombre?: string;
     provinciaResidenciaNombre?: string;
 
+    // Banderas de estado
+    perfilCompletado: boolean;
+    tieneContrasenaConfigurada: boolean;
+
     // Stats
     cantidadOperaciones: number;
     cantidadRecomendaciones: number;
@@ -54,6 +58,8 @@ export interface UserLoginResponseDTO {
     email: string;
     rol: RolUsuario | string;
     urlFotoPerfil?: string;
+    perfilCompletado: boolean;
+    tieneContrasenaConfigurada: boolean;
 }
 
 export interface UserRegisterRequest {
@@ -80,4 +86,13 @@ export interface UserUpdateRequest {
     paisResidenciaId: number;
     paisNacionalidadId: number;
 }
+
+export interface CompletarPerfilDTO {
+    fechaNacimiento: string;
+    nacionalidadId: number;
+    esResidenteArgentina: boolean;
+    paisResidenciaId?: number | null;
+    localidadResidenciaId?: number | null;
+}
+
 
