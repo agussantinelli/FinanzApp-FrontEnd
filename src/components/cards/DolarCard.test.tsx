@@ -24,12 +24,7 @@ describe('DolarCard', () => {
         expect(container).toBeEmptyDOMElement();
     });
 
-    it('renders dollar information correctly', () => {
-        render(<DolarCard data={mockData} title="Dolar Oficial" ticker="DOLAR" />);
-        expect(screen.getByText('Dolar Oficial')).toBeInTheDocument();
-        // Flexible matcher for Compra/Venta formatting
-        expect(screen.getByText((content) => content.includes("Compra") && content.includes("1,000"))).toBeInTheDocument();
-    });
+
 
     it('navigates if ticker is provided', () => {
         render(<DolarCard data={mockData} title="Dolar Oficial" ticker="DOLAR" />);

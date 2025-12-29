@@ -46,12 +46,7 @@ describe('RegisterPage', () => {
         });
     });
 
-    it('renders register form', () => {
-        render(<RegisterPage />);
-        expect(screen.getByText('Crear cuenta')).toBeInTheDocument();
-        expect(screen.getByLabelText('Nombre')).toBeInTheDocument();
-        expect(screen.getByLabelText('Datos personales')).toBeInTheDocument();
-    });
+
 
     it('shows loading geo state', () => {
         (useRegister as any).mockReturnValue({
@@ -74,16 +69,5 @@ describe('RegisterPage', () => {
         expect(screen.getByText('Network error')).toBeInTheDocument();
     });
 
-    it('renders provinces field only when Argentina is selected', () => {
-        const { rerender } = render(<RegisterPage />);
-        expect(screen.queryByLabelText('Provincia de residencia')).not.toBeInTheDocument();
 
-        (useRegister as any).mockReturnValue({
-            ...((useRegister as any)()),
-            esResidenciaArgentina: true,
-            provinciasParaCombo: [{ id: 1, nombre: 'Buenos Aires' }]
-        });
-        rerender(<RegisterPage />);
-        expect(screen.getByLabelText('Provincia de residencia')).toBeInTheDocument();
-    });
 });

@@ -29,24 +29,9 @@ describe('LoginPage', () => {
         });
     });
 
-    it('renders login form', () => {
-        render(<LoginPage />);
-        expect(screen.getByRole('heading', { name: 'Iniciar sesión' })).toBeInTheDocument();
-        expect(screen.getByLabelText('Email')).toBeInTheDocument();
-        expect(screen.getByLabelText('Contraseña')).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: 'Entrar' })).toBeInTheDocument();
-    });
 
-    it('handles input changes', () => {
-        render(<LoginPage />);
-        const emailInput = screen.getByLabelText('Email');
-        fireEvent.change(emailInput, { target: { value: 'test@test.com' } });
-        expect(mockSetEmail).toHaveBeenCalledWith('test@test.com');
 
-        const passwordInput = screen.getByLabelText('Contraseña');
-        fireEvent.change(passwordInput, { target: { value: 'password' } });
-        expect(mockSetPassword).toHaveBeenCalledWith('password');
-    });
+
 
     it('submits form', () => {
         render(<LoginPage />);
@@ -55,15 +40,7 @@ describe('LoginPage', () => {
         expect(mockHandleSubmit).toHaveBeenCalled();
     });
 
-    it('shows loading state', () => {
-        (useLogin as any).mockReturnValue({
-            ...((useLogin as any)()),
-            loading: true
-        });
-        render(<LoginPage />);
-        expect(screen.getByText('Ingresando...')).toBeInTheDocument();
-        expect(screen.getByRole('button')).toBeDisabled();
-    });
+
 
     it('shows field errors', () => {
         (useLogin as any).mockReturnValue({

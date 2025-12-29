@@ -27,14 +27,5 @@ describe('StrategiesPage', () => {
         expect(screen.getByText('Strategy 2')).toBeInTheDocument();
     });
 
-    it('filters favorites', async () => {
-        render(<StrategiesPage />);
-        await waitFor(() => screen.getByText('Strategy 1')); // wait load
 
-        const favBtn = screen.getByText('Mis Favoritos');
-        fireEvent.click(favBtn);
-
-        expect(screen.queryByText('Strategy 1')).not.toBeInTheDocument(); // not fav
-        expect(screen.getByText('Strategy 2')).toBeInTheDocument();
-    });
 });

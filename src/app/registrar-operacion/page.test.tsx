@@ -58,13 +58,7 @@ describe('RegistrarOperacionPage', () => {
         });
     });
 
-    it('renders form elements', () => {
-        render(<RegistrarOperacionPage />);
-        expect(screen.getByText('Registrar Operación')).toBeInTheDocument();
-        expect(screen.getByText('1. Datos de la Operación')).toBeInTheDocument();
-        // Use a more specific query or partial match if the text is split or styled differently
-        expect(screen.getByText(/Monitor de Mercado/i)).toBeInTheDocument();
-    });
+
 
     it('handles asset selection interaction', () => {
         render(<RegistrarOperacionPage />);

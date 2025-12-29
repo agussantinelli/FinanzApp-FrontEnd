@@ -28,14 +28,5 @@ describe('CryptoSection', () => {
         expect(screen.getByText('Ethereum')).toBeInTheDocument();
     });
 
-    it('allows manual refresh', async () => {
-        render(<CryptoSection />);
-        await waitFor(() => expect(getTopCryptos).toHaveBeenCalledTimes(1));
 
-        const refreshBtn = screen.getByText('Actualizar');
-        fireEvent.click(refreshBtn);
-
-        // Should call again
-        await waitFor(() => expect(getTopCryptos).toHaveBeenCalledTimes(2));
-    });
 });

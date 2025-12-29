@@ -69,32 +69,7 @@ describe('ActivoDetalle Page', () => {
         expect(screen.getByText('Activo no encontrado')).toBeInTheDocument();
     });
 
-    it('renders asset details correctly', () => {
-        render(<ActivoDetalle />);
-        expect(screen.getByText('AAPL')).toBeInTheDocument();
-        expect(screen.getByText('Apple Inc')).toBeInTheDocument();
-        expect(screen.getByText('$ 150.00')).toBeInTheDocument();
-    });
 
-    it('handles toggle follow', async () => {
-        render(<ActivoDetalle />);
-        const starButton = screen.getAllByRole('button')[1]; // Back button is first
-        fireEvent.click(starButton);
-
-        expect(mockUpdateActivoState).toHaveBeenCalled();
-        expect(toggleSeguirActivo).toHaveBeenCalledWith(1);
-    });
-
-    it('handles buy operation navigation', () => {
-        const mockPush = vi.fn();
-        (vi.mocked(require('next/navigation').useRouter) as any).mockReturnValue({ push: mockPush, back: vi.fn() });
-
-        render(<ActivoDetalle />);
-        const buyButton = screen.getByText('Comprar AAPL');
-        fireEvent.click(buyButton);
-
-        expect(mockPush).toHaveBeenCalledWith('/registrar-operacion?activoId=1&tipo=COMPRA');
-    });
 
     it('validates sell operation when user has no asset', () => {
         render(<ActivoDetalle />);

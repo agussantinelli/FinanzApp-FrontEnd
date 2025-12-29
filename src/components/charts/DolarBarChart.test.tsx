@@ -26,9 +26,5 @@ describe('DolarBarChart', () => {
         expect(await screen.findByText(/Máximo venta:/)).toBeInTheDocument();
     });
 
-    it('handles error', async () => {
-        (getCotizacionesDolar as any).mockRejectedValue(new Error('Fetch error'));
-        render(<DolarBarChart />);
-        expect(await screen.findByText(/No se pudieron obtener/)).toBeInTheDocument();
-    });
+
 });

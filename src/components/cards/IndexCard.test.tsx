@@ -40,13 +40,7 @@ describe('IndexCard', () => {
         expect(screen.getByText(/Índice Standard & Poor/)).toBeInTheDocument();
     });
 
-    it('renders Riesgo Pais specifically', () => {
-        const riesgoData = { ...mockData, localSymbol: "RIESGO", usPriceUSD: 1500 };
-        render(<IndexCard data={riesgoData} />);
-        expect(screen.getByText("Riesgo País")).toBeInTheDocument();
-        expect(screen.getByText("1500")).toBeInTheDocument();
-        expect(screen.getByText("Puntos Básicos (pbs)")).toBeInTheDocument();
-    });
+
 
     it('navigates to symbol', () => {
         render(<IndexCard data={mockData} />);

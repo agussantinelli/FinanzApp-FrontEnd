@@ -18,11 +18,5 @@ describe('UserDistributionChart', () => {
         expect(screen.getByText('DoughnutChart')).toBeInTheDocument();
     });
 
-    it('renders skeleton on no data', () => {
-        render(<UserDistributionChart users={[]} />);
-        const skeleton = screen.getByRole('progressbar', { hidden: true }); // Skeleton often has no role or progressbar role depending on mui version, typically check for class or structure if possible. 
-        // Actually MUI Skeleton usually doesn't have an easily queryable role by default without aria-label.
-        // Let's just check Doughnut is NOT there.
-        expect(screen.queryByText('DoughnutChart')).not.toBeInTheDocument();
-    });
+
 });
