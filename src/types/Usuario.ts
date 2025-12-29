@@ -54,6 +54,7 @@ export interface UserLoginResponseDTO {
     apellido: string;
     email: string;
     rol: RolUsuario | string;
+    urlFotoPerfil?: string;
 }
 
 export interface UserRegisterRequest {

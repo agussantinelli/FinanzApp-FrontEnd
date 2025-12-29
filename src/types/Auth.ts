@@ -12,3 +12,7 @@ export interface ResetPasswordConfirmDTO {
     token: string;
     newPassword: string;
 }
+
+export interface GoogleLoginRequestDTO {
+    idToken: string;
+}
