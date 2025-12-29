@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@/test/test-utils';
 import { RoleGuard } from './RoleGuard';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useAuth } from '@/hooks/useAuth';

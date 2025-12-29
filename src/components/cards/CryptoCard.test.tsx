@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@/test/test-utils';
 import CryptoCard from './CryptoCard';
 import { describe, it, expect, vi } from 'vitest';
 import { CryptoTopDTO } from '@/types/Crypto';
@@ -11,7 +11,7 @@ vi.mock('next/navigation', () => ({
     }),
 }));
 
-const mockData: CryptoTopDTO = {
+const mockData = {
     id: "bitcoin",
     name: "Bitcoin",
     symbol: "BTC",
@@ -23,8 +23,14 @@ const mockData: CryptoTopDTO = {
     supply: 18000000,
     maxSupply: 21000000,
     vwap24h: 49000,
-    explorer: "https://blockchain.info"
-};
+    explorer: "https://blockchain.info",
+    // Adding properties from the user's provided mockCrypto, assuming they are intended as extra props
+    // and casting to any to bypass type checks for CryptoTopDTO if these are not part of it.
+    current_price: 50000, // This seems redundant with priceUsd, but included as per user's edit
+    price_change_percentage_24h: 5.5, // Redundant with changePct24h
+    image: 'btc.png',
+    last_updated: '2023-01-01'
+} as any;
 
 describe('CryptoCard', () => {
     it('renders crypto information correctly', () => {

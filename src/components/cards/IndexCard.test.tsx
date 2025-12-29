@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@/test/test-utils';
 import IndexCard from './IndexCard';
 import { describe, it, expect, vi } from 'vitest';
 import { DualQuoteDTO } from '@/types/Market';
@@ -16,13 +16,21 @@ const mockData: DualQuoteDTO = {
     localPriceARS: 0,
     usPriceUSD: 4500,
     usPriceARS: 0,
-    cedearRatio: null,
+    cedearRatio: undefined,
     usedDollarRate: 1,
     dollarRateName: "USD",
-    localChangePct: null,
+    localChangePct: undefined,
     usChangePct: 0.5,
     lastUpdate: "2023-01-01"
 };
+
+const mockIndex = {
+    symbol: 'SPY',
+    price: 450,
+    change: undefined,
+    changePercent: undefined,
+    lastUpdate: '2023-01-01'
+} as any;
 
 describe('IndexCard', () => {
     it('renders Standard & Poor information correctly', () => {

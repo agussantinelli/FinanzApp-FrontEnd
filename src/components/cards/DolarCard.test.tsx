@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@/test/test-utils';
 import DolarCard from './DolarCard';
 import { describe, it, expect, vi } from 'vitest';
 import { DolarDTO } from '@/types/Dolar';
@@ -10,13 +10,13 @@ vi.mock('next/navigation', () => ({
     }),
 }));
 
-const mockData: DolarDTO = {
+const mockData = {
+    nombre: 'Blue',
     compra: 1000,
     venta: 1020,
-    variacion: 1.5,
-    fecha: "2023-01-01",
+    fecha: '2023-01-01',
     valor: 1010
-};
+} as any;
 
 describe('DolarCard', () => {
     it('renders null when no data', () => {

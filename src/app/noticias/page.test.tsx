@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import Noticias from './page';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('@/components/ui/PageHeader', () => ({
     default: ({ title, subtitle }: any) => (

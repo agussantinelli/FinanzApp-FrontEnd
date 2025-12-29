@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import AccionesARSection from './AccionesARGYSection';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useStocksData } from '@/hooks/useStocksData';
 
 // Mock hook
