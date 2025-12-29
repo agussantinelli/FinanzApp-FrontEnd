@@ -425,11 +425,12 @@ NEXT_PUBLIC_GOOGLE_CLIENT_ID=tu_client_id_aqui
             <li>✅ Integración Backend: Consumo de endpoints reales para Valuación, Operaciones y Cotizaciones.</li>
             <li>✅ Gestión de Recomendaciones: Panel para expertos con estadísticas, ranking y creación de señales.</li>
             <li>✅ Reportes Visuales: Gráficos de composición de cartera y evolución del dólar.</li>
+            <li>✅ Reportes Exportables: Descarga de historial de operaciones y portafolio en PDF y Excel.</li>
         </ul>
     </li>
     <li><strong>En Roadmap</strong>
         <ul>
-            <li>[ ] Reportes exportables (PDF/Excel).</li>
+
             <li>Notificaciones en tiempo real (WebSockets) para cambios de precio.</li>
             <li>Expansión del módulo de "Comunidad" y "Noticias".</li>
         </ul>
