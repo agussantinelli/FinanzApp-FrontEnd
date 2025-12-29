@@ -52,6 +52,17 @@ export default function PortafolioTab() {
         await toggleTop(id, currentVal);
     };
 
+    const handleToggleDestacado = async (id: string, currentVal: boolean) => {
+        // If we are turning OFF destacado (currentVal is true), we must turn OFF Top too if it's on
+        if (currentVal) {
+            const portfolio = portfolios.find(p => p.id === id);
+            if (portfolio?.esTop) {
+                await toggleTop(id, true); // true passes 'currentVal' of top, so it toggles to false
+            }
+        }
+        await toggleDestacado(id, currentVal);
+    };
+
     if (loading) return <Skeleton variant="rectangular" height={400} />;
 
     return (
@@ -137,7 +148,7 @@ export default function PortafolioTab() {
                                     </TableCell>
                                     <TableCell>
                                         <IconButton
-                                            onClick={() => toggleDestacado(row.id, row.esDestacado)}
+                                            onClick={() => handleToggleDestacado(row.id, row.esDestacado)}
                                             color={row.esDestacado ? "warning" : "default"}
                                             title="Destacar"
                                         >
