@@ -141,7 +141,7 @@ function LoginContent() {
             onClose={() => setSuccessMessage(null)}
           />
 
-          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
             <MuiLink component={Link} href="/auth/forgot-password" variant="body2" underline="hover">
               ¿Olvidaste tu contraseña?
             </MuiLink>
