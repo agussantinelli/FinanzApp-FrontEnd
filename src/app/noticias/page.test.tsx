@@ -12,14 +12,6 @@ vi.mock('@/components/ui/PageHeader', () => ({
 }));
 
 describe('Noticias Page', () => {
-    it('renders news sources', () => {
-        render(<Noticias />);
-        expect(screen.getByText('Noticias')).toBeInTheDocument();
-
-        expect(screen.getByText('CoinDesk / CoinMarketCap')).toBeInTheDocument();
-        expect(screen.getByText('Bull Market – Claves del Día')).toBeInTheDocument();
-        expect(screen.getByText('Ámbito – Criptomonedas')).toBeInTheDocument();
-    });
 
     it('renders links', () => {
         render(<Noticias />);

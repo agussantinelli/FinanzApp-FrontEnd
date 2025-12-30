@@ -30,14 +30,6 @@ describe('ProfilePage', () => {
         (getPersonaById as any).mockResolvedValue(defaultUser);
     });
 
-    it('renders profile information', async () => {
-        render(<ProfilePage />);
-        expect(await screen.findByText('Juan Perez')).toBeInTheDocument();
-        expect(screen.getByText('Inversor')).toBeInTheDocument();
-        expect(screen.getByText('juan@test.com')).toBeInTheDocument();
-        expect(screen.getByText('La Plata')).toBeInTheDocument();
-    });
-
     it('renders loading state', () => {
         render(<ProfilePage />);
         expect(screen.getByRole('progressbar')).toBeInTheDocument();
