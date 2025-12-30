@@ -45,6 +45,8 @@ import { downloadMisOperacionesPdf, downloadMisOperacionesExcel } from "@/servic
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import DescriptionIcon from '@mui/icons-material/Description';
+import FileUploadIcon from '@mui/icons-material/FileUpload'; // Import Icon
+import ImportExcelModal from "@/components/operaciones/ImportExcelModal"; // Import Modal
 
 import styles from "./styles/MyOperations.module.css";
 
@@ -79,6 +81,14 @@ export default function MyOperationsPage() {
 
 
     const [message, setMessage] = useState<{ text: string, type: "success" | "error" } | null>(null);
+
+    // Import Modal State
+    const [importModalOpen, setImportModalOpen] = useState(false);
+
+    const handleImportSuccess = () => {
+        setMessage({ text: "Operaciones importadas correctamente", type: "success" });
+        refresh(); // Refresh list
+    };
 
 
     const handleDeleteClick = (op: OperacionResponseDTO) => {
@@ -225,6 +235,16 @@ export default function MyOperationsPage() {
                                     <DescriptionIcon />
                                 </Button>
                             </Stack>
+
+                            <Button
+                                variant="contained"
+                                startIcon={<FileUploadIcon />}
+                                size="small"
+                                onClick={() => setImportModalOpen(true)}
+                                sx={{ height: 40 }}
+                            >
+                                Importar Excel
+                            </Button>
                         </Box>
                     </Stack>
 
@@ -416,6 +436,12 @@ export default function MyOperationsPage() {
                     message={message?.text || ""}
                     severity={message?.type || "info"}
                     onClose={() => setMessage(null)}
+                />
+
+                <ImportExcelModal
+                    open={importModalOpen}
+                    onClose={() => setImportModalOpen(false)}
+                    onSuccess={handleImportSuccess}
                 />
             </Box>
         </RoleGuard >
