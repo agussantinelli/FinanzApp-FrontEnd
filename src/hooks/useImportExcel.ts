@@ -15,7 +15,7 @@ export function useImportExcel(onSuccess?: () => void) {
     const [isEditing, setIsEditing] = useState(false);
     const [editingItems, setEditingItems] = useState<ImportedItemPreviewDTO[]>([]);
 
-    const { selectedId } = usePortfolioData();
+    const { selectedId, valuacion } = usePortfolioData();
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
@@ -51,10 +51,44 @@ export function useImportExcel(onSuccess?: () => void) {
             return;
         }
 
+        const validItems = previewData.items.filter((i: ImportedItemPreviewDTO) => i.isValid);
+
+        // Pre-Import Consistency Check
+        if (valuacion && valuacion.activos) {
+            const changes: Record<string, number> = {};
+
+            // 1. Calculate impact of new operations
+            validItems.forEach(item => {
+                const symbol = item.symbol.toUpperCase();
+                if (!changes[symbol]) changes[symbol] = 0;
+
+                if (item.tipoOperacion === "Compra") {
+                    changes[symbol] += item.cantidad;
+                } else if (item.tipoOperacion === "Venta") {
+                    changes[symbol] -= item.cantidad;
+                }
+            });
+
+            // 2. Verify against current holdings
+            for (const [symbol, change] of Object.entries(changes)) {
+
+                // Find asset case-insensitively
+                const currentAsset = valuacion.activos.find(a =>
+                    a.symbol && a.symbol.toUpperCase() === symbol
+                );
+
+                const currentQty = currentAsset ? currentAsset.cantidad : 0;
+                const finalQty = currentQty + change;
+
+                if (finalQty < 0) {
+                    setErrorMessage(`Importación cancelada: El activo ${symbol} quedaría con saldo negativo (${finalQty}). Verifica tus datos.`);
+                    return;
+                }
+            }
+        }
+
         setStep("CONFIRMING");
         try {
-            const validItems = previewData.items.filter((i: ImportedItemPreviewDTO) => i.isValid);
-
             await confirmImport({
                 portafolioId: selectedId,
                 items: validItems
