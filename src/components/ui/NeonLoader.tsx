@@ -9,7 +9,6 @@ const NeonLoader: React.FC<NeonLoaderProps> = ({ message = "Cargando...", size =
     return (
         <Box className={styles.container}>
             <Box className={styles.loaderWrapper}>
-                {/* Outer glow effect */}
                 <Box
                     className={styles.glowEffect}
                     sx={{ width: size, height: size }}

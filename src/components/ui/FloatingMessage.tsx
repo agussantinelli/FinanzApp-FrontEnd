@@ -20,7 +20,7 @@ export default function FloatingMessage({ open, message, severity, onClose }: Fl
             sx={{
                 mt: 10,
                 width: '95%',
-                maxWidth: '1600px', // Prevent it from being too wide on ultra-wide screens, but effectively full width on laptops
+                maxWidth: '1600px',
                 left: '50%',
                 transform: 'translateX(-50%)'
             }}
@@ -31,7 +31,7 @@ export default function FloatingMessage({ open, message, severity, onClose }: Fl
                 sx={{
                     width: "100%",
                     boxShadow: 3,
-                    fontSize: '1rem', // Slightly larger text for better readability on wide alerts
+                    fontSize: '1rem',
                     alignItems: 'center'
                 }}
             >

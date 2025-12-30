@@ -71,7 +71,6 @@ export default function Navbar() {
       return { desktopItems: unauthItems, mobileItems: unauthItems };
     }
 
-    // Auth items structure
     const mainItems = [
       { label: "Inicio", href: "/" },
       { label: "Dashboard", href: defaultPanelHref },
@@ -83,7 +82,6 @@ export default function Navbar() {
 
     return {
       desktopItems: mainItems,
-      // For mobile drawer, we might want to flatten everything or keep same structure
       mobileItems: [...mainItems, ...authMoreItems],
     };
   }, [isAuthenticated, mounted, defaultPanelHref]);
@@ -114,7 +112,6 @@ export default function Navbar() {
 
   const toggle = (v: boolean) => () => setOpen(v);
 
-  // Logo links to Dashboard if logged in, else Home
   const logoHref = (mounted && isAuthenticated) ? defaultPanelHref : "/";
 
   const roleLabel =
@@ -124,7 +121,6 @@ export default function Navbar() {
         ? "Inversor"
         : user?.rol ?? "";
 
-  // Helper to safely render auth/unauth content
   const showAuthContent = mounted && isAuthenticated;
 
   return (
@@ -151,7 +147,6 @@ export default function Navbar() {
 
           <Box className={styles.flexGrow} />
 
-          {/* Desktop nav */}
           <Box className={styles.desktopNav}>
             {desktopItems.map((item) => (
               <Button

@@ -26,7 +26,6 @@ describe('Navbar', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
-        // Default to unauthenticated
         (useAuth as any).mockReturnValue({
             user: null,
             isAuthenticated: false,
@@ -37,9 +36,7 @@ describe('Navbar', () => {
     it('renders public elements when unauthenticated', async () => {
         render(<Navbar />);
 
-        // Check for basic logo
         expect(screen.getByText('FinanzApp')).toBeInTheDocument();
-        // Check for public specific buttons
         expect(screen.getByText('Iniciar sesión')).toBeInTheDocument();
         expect(screen.getByText('Registrarse')).toBeInTheDocument();
     });
@@ -53,7 +50,6 @@ describe('Navbar', () => {
 
         render(<Navbar />);
 
-        // Wait for mounted effect
         await waitFor(() => {
             expect(screen.getByText(/Agus Test/)).toBeInTheDocument();
         });
@@ -75,18 +71,14 @@ describe('Navbar', () => {
             expect(screen.getByText(/Admin/)).toBeInTheDocument();
         });
 
-        // Open menu
         const userButton = screen.getByText(/Agus Test/).closest('button');
         fireEvent.click(userButton!);
 
-        // Check menu items
         expect(screen.getByText('Perfil')).toBeInTheDocument();
         const logoutButton = screen.getByText('Cerrar sesión');
         expect(logoutButton).toBeInTheDocument();
 
-        // Click logout
         fireEvent.click(logoutButton);
-        // Logout is delayed by 1000ms in component
         await waitFor(() => expect(mockLogout).toHaveBeenCalled(), { timeout: 1500 });
     });
 });

@@ -46,12 +46,6 @@
     z-index: 1;
 }
 
-/* Note: Targeting internal MUI class usually requires :global or careful targeting. 
-   Since this is a CSS module, we might need a wrapper or use sx for deep internal overrides if this fails.
-   However, for .MuiCircularProgress-circle, it's often better to leave it or use global css if complex selectors are needed.
-   Here we will try to use a class on the component.
-*/
-
 .loadingText {
     margin-top: 24px !important;
     color: #39FF14 !important;

@@ -79,9 +79,7 @@
     font-family: 'Inter', sans-serif;
     font-size: 1.125rem;
     font-weight: 500;
-    /* Slightly bolder */
     color: #cbd5e1;
-    /* Slate-300: Lighter for better contrast against dark bg */
     margin-top: 0.5rem;
     max-width: 700px;
     line-height: 1.5;

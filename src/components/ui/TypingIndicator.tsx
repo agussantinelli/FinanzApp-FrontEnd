@@ -4,7 +4,7 @@ import styles from './styles/TypingIndicator.module.css';
 
 interface TypingIndicatorProps {
     className?: string;
-    dotColor?: string; // Optional prop to override color via inline styles if needed
+    dotColor?: string;
 }
 
 export const TypingIndicator: React.FC<TypingIndicatorProps> = ({ className }) => {
