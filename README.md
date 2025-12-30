@@ -167,54 +167,54 @@
 <h3>📁 Estructura del Proyecto</h3>
 
 <pre><code>FinanzApp-FrontEnd/
-├── public/                      # Archivos estáticos accesibles públicamente
-├── src/                         # Código fuente principal
-│   ├── app/                     # App Router (Next.js 16+)
-│   │   ├── access-denied/       # Página de acceso denegado
-│   │   ├── activos/             # Buscador y detalles de Activos
-│   │   ├── auth/                # Módulos de Login, Registro y Recuperación
+├── public/                                      # Archivos estáticos accesibles públicamente
+├── src/                                         # Código fuente principal
+│   ├── app/                                     # App Router (Next.js 16+)
+│   │   ├── access-denied/                       # Página de acceso denegado
+│   │   ├── activos/                             # Buscador y detalles de Activos
+│   │   ├── auth/                                # Módulos de Login, Registro y Recuperación
 │   │   │   ├── forgot-password/
 │   │   │   ├── google-callback/
 │   │   │   ├── login/
 │   │   │   ├── register/
 │   │   │   └── reset-password/
-│   │   ├── dashboard-admin/     # Panel de Administración (Guard: Admin)
-│   │   ├── dashboard-experto/   # Dashboard para Expertos Financieros
-│   │   ├── dashboard-inversor/  # Home del Inversor (Resumen)
-│   │   ├── estrategias/         # Estrategias de Inversión (Copy Trading)
-│   │   ├── movimientos/         # Historial de transacciones
-│   │   ├── noticias/            # Sección de novedades financieras
-│   │   ├── operaciones/         # Mis Operaciones / Historial
-│   │   ├── perfil/              # Perfil de Usuario (Edición y Foto)
-│   │   ├── portfolio/           # Visualización y análisis patrimonial
-│   │   ├── recomendaciones/     # Señales de expertos y comunidad
-│   │   ├── registrar-operacion/ # Formulario de Compra/Venta
-│   │   ├── reportes/            # Análisis de mercado y tendencias
-│   │   ├── styles/              # Estilos globales de páginas
-│   │   └── page.tsx             # Landing Page pública
-│   ├── components/              # Componentes React Reutilizables
-│   │   ├── auth/                # Componentes de seguridad (RoleGuard)
-│   │   ├── cards/               # Tarjetas de UI (Activos, Noticias)
-│   │   ├── charts/              # Gráficos (Chart.js / Recharts)
-│   │   ├── common/              # Componentes comunes (CurrencyToggle, etc.)
-│   │   ├── operaciones/         # Componentes de historial/operativa
-│   │   ├── portfolio/           # Componentes específicos del Portafolio
-│   │   ├── sections/            # Secciones de Landing/Dashboard
-│   │   └── ui/                  # Componentes base
-│   ├── config/                  # Configuración global
-│   ├── hooks/                   # Custom Hooks (Lógica de negocio encapsulada)
-│   ├── lib/                     # Utilidades Core (Cliente HTTP, Caché)
-│   ├── services/                # Comunicación con API Backend (Axios + DTOs)
-│   ├── test/                    # Configuración de Vitest y utilidades de test
-│   ├── theme/                   # Tema y configuración de Material UI
-│   ├── types/                   # Definiciones TypeScript (Interfaces)
-│   └── utils/                   # Helpers de formateo y strings
-├── .env.local                   # Variables de entorno
-├── eslint.config.mjs            # Configuración de Linter
-├── next.config.ts               # Configuración del framework
-├── package.json                 # Dependencias y scripts
-├── tsconfig.json                # Configuración de TypeScript
-└── vitest.config.ts             # Configuración de Tests Unitarios
+│   │   ├── dashboard-admin/                     # Panel de Administración (Guard: Admin)
+│   │   ├── dashboard-experto/                   # Dashboard para Expertos Financieros
+│   │   ├── dashboard-inversor/                  # Home del Inversor (Resumen)
+│   │   ├── estrategias/                         # Estrategias de Inversión (Copy Trading)
+│   │   ├── movimientos/                         # Historial de transacciones
+│   │   ├── noticias/                            # Sección de novedades financieras
+│   │   ├── operaciones/                         # Mis Operaciones / Historial
+│   │   ├── perfil/                              # Perfil de Usuario (Edición y Foto)
+│   │   ├── portfolio/                           # Visualización y análisis patrimonial
+│   │   ├── recomendaciones/                     # Señales de expertos y comunidad
+│   │   ├── registrar-operacion/                 # Formulario de Compra/Venta
+│   │   ├── reportes/                            # Análisis de mercado y tendencias
+│   │   ├── styles/                              # Estilos globales de páginas
+│   │   └── page.tsx                             # Landing Page pública
+│   ├── components/                              # Componentes React Reutilizables
+│   │   ├── auth/                                # Componentes de seguridad (RoleGuard)
+│   │   ├── cards/                               # Tarjetas de UI (Activos, Noticias)
+│   │   ├── charts/                              # Gráficos (Chart.js / Recharts)
+│   │   ├── common/                              # Componentes comunes (CurrencyToggle, etc.)
+│   │   ├── operaciones/                         # Componentes de historial/operativa
+│   │   ├── portfolio/                           # Componentes específicos del Portafolio
+│   │   ├── sections/                            # Secciones de Landing/Dashboard
+│   │   └── ui/                                  # Componentes base
+│   ├── config/                                  # Configuración global
+│   ├── hooks/                                   # Custom Hooks (Lógica de negocio encapsulada)
+│   ├── lib/                                     # Utilidades Core (Cliente HTTP, Caché)
+│   ├── services/                                # Comunicación con API Backend (Axios + DTOs)
+│   ├── test/                                    # Configuración de Vitest y utilidades de test
+│   ├── theme/                                   # Tema y configuración de Material UI
+│   ├── types/                                   # Definiciones TypeScript (Interfaces)
+│   └── utils/                                   # Helpers de formateo y strings
+├── .env.local                                   # Variables de entorno
+├── eslint.config.mjs                            # Configuración de Linter
+├── next.config.ts                               # Configuración del framework
+├── package.json                                 # Dependencias y scripts
+├── tsconfig.json                                # Configuración de TypeScript
+└── vitest.config.ts                             # Configuración de Tests Unitarios
 </code></pre>
 
 
