@@ -85,8 +85,22 @@ export default function ImportExcelModal({ open, onClose, onSuccess }: ImportExc
     };
 
     return (
-        <Dialog open={open} onClose={handleClose} maxWidth="xl" fullWidth>
-            <DialogTitle>Importar Operaciones desde Excel</DialogTitle>
+        <Dialog
+            open={open}
+            onClose={handleClose}
+            maxWidth="xl"
+            fullWidth
+            PaperProps={{
+                sx: {
+                    border: '1px solid #00ff00',
+                    boxShadow: '0 0 20px rgba(0, 255, 0, 0.3)',
+                    borderRadius: 2
+                }
+            }}
+        >
+            <DialogTitle sx={{ textAlign: 'center', m: 2, fontWeight: 'bold' }}>
+                Importar Operaciones desde Excel
+            </DialogTitle>
             <DialogContent>
                 <Box sx={{ mt: 2, minHeight: 200, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
 
