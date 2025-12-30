@@ -33,7 +33,7 @@ export default function ResumenTab() {
         return totalInvested > 0 ? ((totalValued - totalInvested) / totalInvested) * 100 : 0;
     }, [portfolios]);
 
-    const loading = statsLoading || portfoliosLoading; // Combine loading states (optional, or just handle gracefully)
+    const loading = statsLoading || portfoliosLoading;
 
     if (loading && !stats) {
         return (
@@ -60,7 +60,6 @@ export default function ResumenTab() {
         <Box sx={{ py: 3 }}>
             {stats ? (
                 <Grid container spacing={3}>
-                    {/* KPI Cards */}
                     <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                         <Paper className={styles.card}>
                             <Typography className={styles.kpiLabel}>Total Usuarios</Typography>
@@ -108,7 +107,6 @@ export default function ResumenTab() {
                         </Paper>
                     </Grid>
 
-                    {/* Chart Section */}
                     <Grid size={{ xs: 12, md: 6 }}>
                         <Paper className={styles.sectionPaper} sx={{ height: '350px', display: 'flex', flexDirection: 'column' }}>
                             <Typography variant="h6" className={styles.sectionTitle}>Distribución de Usuarios</Typography>

@@ -14,7 +14,6 @@ import FloatingMessage from "@/components/ui/FloatingMessage";
 export default function UsuariosTab() {
     const { users, loading, error, changeRole, removeUser } = useAdminUsers();
 
-    // Confirm Dialog State
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [confirmConfig, setConfirmConfig] = useState<{
         title: string;
@@ -131,7 +130,6 @@ export default function UsuariosTab() {
                                             <ArrowDownwardIcon fontSize="small" color={row.rol.includes('Experto') ? 'error' : 'disabled'} />
                                         </IconButton>
                                         <Box sx={{ mx: 1, borderLeft: '1px solid #444' }} />
-                                        {/* Edit button removed as requested */}
                                         <IconButton
                                             size="small"
                                             color="error"

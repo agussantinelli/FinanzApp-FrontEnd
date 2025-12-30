@@ -30,12 +30,10 @@ export default function EditProfilePage() {
     const [saving, setSaving] = useState(false);
     const [changePasswordOpen, setChangePasswordOpen] = useState(false);
 
-    // Separate errors for loading (blocking) and submitting (non-blocking)
     const [loadingError, setLoadingError] = useState<string | null>(null);
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-    // Form Data
     const [formData, setFormData] = useState<UserUpdateRequest>({
         nombre: "",
         apellido: "",
@@ -49,10 +47,8 @@ export default function EditProfilePage() {
         nacionalidadNombre: ""
     });
 
-    // Aux state for province selection
     const [selectedProvinceId, setSelectedProvinceId] = useState<number | null>(null);
 
-    // Geo Data
     const [geoData, setGeoData] = useState<RegisterGeoDataDTO | null>(null);
 
     useEffect(() => {
@@ -63,7 +59,6 @@ export default function EditProfilePage() {
             ]).then(([userData, geo]) => {
                 setGeoData(geo);
 
-                // Initialize Form
                 setFormData({
                     nombre: userData.nombre,
                     apellido: userData.apellido,
@@ -97,7 +92,6 @@ export default function EditProfilePage() {
 
     const handleResidenciaArgentinaChange = (checked: boolean) => {
         if (checked) {
-            // Find Argentina ID
             const argentina = geoData?.paises.find(p => p.esArgentina);
             handleChange('esResidenteArgentina', true);
             handleChange('paisResidenciaId', argentina?.id || 0);
@@ -120,7 +114,6 @@ export default function EditProfilePage() {
         setSuccessMessage(null);
 
         try {
-            // Map redundant fields for backend compatibility
             const payload: UserUpdateRequest = {
                 ...formData,
                 nacionalidadId: formData.paisNacionalidadId,
@@ -129,7 +122,6 @@ export default function EditProfilePage() {
             await updatePersona(user.id, payload);
             setSuccessMessage("Perfil actualizado correctamente");
 
-            // Allow user to see the success message briefly before redirecting
             setTimeout(() => {
                 router.push("/perfil");
             }, 1500);
@@ -143,7 +135,6 @@ export default function EditProfilePage() {
 
     if (loading) return <Box sx={{ p: 4, display: 'flex', justifyContent: 'center' }}><CircularProgress /></Box>;
 
-    // Blocking error only for initial load failure
     if (loadingError) return <Box sx={{ p: 4 }}><Alert severity="error">{loadingError}</Alert></Box>;
 
     return (

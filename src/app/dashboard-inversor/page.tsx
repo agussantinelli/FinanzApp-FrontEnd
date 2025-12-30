@@ -88,12 +88,7 @@ export default function DashboardPage() {
 
     const totalValue = valuacion
       ? (currency === 'ARS' ? valuacion.totalPesos : valuacion.totalDolares)
-      : (inversorStats?.valorTotal ?? 0); // Fallback to stats if hook not ready (stats are likely ARS, need caution)
-
-    // Note: inversorStats.valorTotal is usually in ARS or default. 
-    // Ideally we rely on valuacion for currency switching.
-    // If currency is USD but we use inversorStats (ARS), it's wrong.
-    // So prefer valuacion always if available.
+      : (inversorStats?.valorTotal ?? 0);
 
     let dailyGain = valuacion
       ? (currency === 'ARS' ? valuacion.gananciaPesos : valuacion.gananciaDolares)
@@ -109,7 +104,6 @@ export default function DashboardPage() {
       if (impliedRate > 0) {
         dailyGain = valuacion.gananciaPesos / impliedRate;
 
-        // Recalculate percentage based on this estimated gain
         const cost = totalValue - dailyGain;
         if (cost !== 0) {
           dailyChangePct = (dailyGain / cost) * 100;

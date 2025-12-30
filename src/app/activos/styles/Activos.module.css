@@ -63,7 +63,6 @@
 .searchInput {
     min-width: 100%;
     background-color: rgba(255, 255, 255, 0.05);
-    /* Approximate background.paper */
 }
 
 @media (min-width: 900px) {

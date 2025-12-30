@@ -32,7 +32,6 @@ export default function CompleteProfilePage() {
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-    // Form Data
     const [formData, setFormData] = useState<CompletarPerfilDTO>({
         fechaNacimiento: "",
         nacionalidadId: 0,
@@ -52,7 +51,6 @@ export default function CompleteProfilePage() {
             ]).then(([userData, geo]) => {
                 setGeoData(geo);
 
-                // Pre-fill what we have. Usually this is mostly empty or partial for incomplete profiles.
                 setFormData({
                     fechaNacimiento: userData.fechaNacimiento ? userData.fechaNacimiento.split('T')[0] : "",
                     nacionalidadId: userData.nacionalidadId || 0,
@@ -103,25 +101,12 @@ export default function CompleteProfilePage() {
         setSuccessMessage(null);
 
         try {
-            // Call completeProfile
             const updatedUserResponse = await completeProfile(formData);
 
-            // Note: completeProfile returns specific response (UserLoginResponseDTO) usually.
-            // If it returns the updated user with new token, we setAuthSession.
-            // If your backend returns PersonaDTO as discussed earlier, we might need manual handling.
-            // Assuming it returns UserLoginResponseDTO as defined in AuthService.ts types
 
-            // If the response has a token, we update the session fully
             if ((updatedUserResponse as any).token) {
                 setAuthSession(updatedUserResponse);
             } else {
-                // If it returned just user data, we force a refresh or manual update if possible
-                // But for now let's assume standard behavior or just reload user.
-                // refreshUser() calls getCurrentUser() which reads session. 
-                // We need to update session storage manually if completeProfile didn't give us a fresh token structure.
-                // Based on previous toolstep for AuthService completion, we decided to cast as any.
-                // Let's try to just refresh the user if the backend didn't return a token.
-                // BUT better yet, let's force a reload of the profile logic.
             }
 
             setSuccessMessage("¡Perfil completado con éxito!");

@@ -29,18 +29,12 @@ describe('LoginPage', () => {
         });
     });
 
-
-
-
-
     it('submits form', () => {
         render(<LoginPage />);
         const submitBtn = screen.getByRole('button', { name: 'Entrar' });
         fireEvent.click(submitBtn);
         expect(mockHandleSubmit).toHaveBeenCalled();
     });
-
-
 
     it('shows field errors', () => {
         (useLogin as any).mockReturnValue({

@@ -14,7 +14,6 @@
     max-width: 420px;
     padding: 24px;
     border-radius: 24px !important;
-    /* using !important to override MUI default if needed, or just standard css */
     background-color: rgba(15, 15, 15, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(10px);
@@ -34,25 +33,21 @@
 
 .subtitle {
     color: rgba(255, 255, 255, 0.7);
-    /* text.secondary */
 }
 
 .formStack {
     margin-top: 24px;
-    /* spacing derived from Stack spacing={3} ~ 24px */
 }
 
 .inputStack {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    /* spacing={2.5} ~ 20px */
 }
 
 .submitButton {
     margin-top: 8px !important;
     padding-top: 9.6px !important;
-    /* py: 1.2 */
     padding-bottom: 9.6px !important;
     font-weight: 700 !important;
     text-transform: none !important;

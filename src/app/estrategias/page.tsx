@@ -34,18 +34,15 @@ export default function StrategiesPage() {
     const [portfolios, setPortfolios] = useState<PortafolioDTO[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    // Removed specific favorites state
     const isLoggedIn = !!user;
 
     useEffect(() => {
-        // useAuth handles auth state
     }, []);
 
     const fetchPortfolios = () => {
         setLoading(true);
         getPortafoliosDestacados()
             .then(data => {
-                console.log("Portfolios Data:", data); // Debug
                 setPortfolios(data);
             })
             .catch(err => {
@@ -66,7 +63,6 @@ export default function StrategiesPage() {
         <RoleGuard>
             <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', pt: 4, pb: 8 }}>
                 <Container maxWidth="lg">
-                    {/* Header */}
                     <Stack direction="column" spacing={3} mb={4}>
                         <Stack direction="row" justifyContent="space-between" alignItems="center">
                             <Box>
@@ -106,7 +102,6 @@ export default function StrategiesPage() {
                         </Paper>
                     ) : (
                         <>
-                            {/* TOP 3 Highlight Section */}
                             {topPortfolios.length > 0 && (
                                 <Box mb={6}>
                                     <Typography variant="h5" fontWeight="bold" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#FFD700' }}>
@@ -129,7 +124,6 @@ export default function StrategiesPage() {
                                                         position: 'relative',
                                                         overflow: 'visible'
                                                     }}>
-                                                        {/* Removed Favorite Button */}
                                                         <Box sx={{
                                                             position: 'absolute',
                                                             top: -12,
@@ -189,7 +183,6 @@ export default function StrategiesPage() {
                                 </Box>
                             )}
 
-                            {/* Standard Destacados */}
                             {otherPortfolios.length > 0 && (
                                 <>
                                     {topPortfolios.length > 0 && <Divider sx={{ mb: 4 }} >Otras Estrategias Destacadas</Divider>}
@@ -213,7 +206,6 @@ export default function StrategiesPage() {
                                                         borderColor: 'divider',
                                                         position: 'relative'
                                                     }}>
-                                                        {/* Removed Favorite Button */}
                                                         <CardContent sx={{ flexGrow: 1 }}>
                                                             <Stack direction="row" justifyContent="space-between" alignItems="start" mb={2}>
                                                                 <Typography variant="h6" fontWeight="bold" noWrap sx={{ maxWidth: '80%' }}>

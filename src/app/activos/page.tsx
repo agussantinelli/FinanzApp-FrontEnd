@@ -335,7 +335,6 @@ export default function Activos() {
                   <TableHead className={styles.tableHead}>
                     <TableRow>
                       <TableCell padding="checkbox">
-                        {/* Empty header for star icon */}
                       </TableCell>
                       <TableCell className={styles.columnHeader}>
                         <TableSortLabel

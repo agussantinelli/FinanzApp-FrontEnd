@@ -50,7 +50,7 @@ const SOURCES: NewsSource[] = [
   },
   {
     key: "ambito-cripto",
-    title: "Ámbito – Criptomonedas",
+    title: "Ámbito   Criptomonedas",
     subtitle: "Tendencias y notas más leídas en AR",
     href: "https://www.ambito.com/criptomonedas-a5122580",
     icon: <ArticleIcon fontSize="large" />,

@@ -14,7 +14,6 @@ import FloatingMessage from "@/components/ui/FloatingMessage";
 export default function ActivosTab() {
     const { activos, loading, error, addAsset, updateAsset, removeAsset } = useAdminAssets();
 
-    // Custom hook for filtering and sorting logic
     const {
         tipos,
         sectores,
@@ -28,7 +27,6 @@ export default function ActivosTab() {
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [selectedId, setSelectedId] = useState<string | null>(null);
 
-    // Dialog State
     const [dialogOpen, setDialogOpen] = useState(false);
     const [dialogMode, setDialogMode] = useState<'create' | 'edit'>('create');
     const [selectedAsset, setSelectedAsset] = useState<ActivoDTO | null>(null);

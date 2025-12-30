@@ -36,7 +36,6 @@ export default function PortafolioTab() {
 
     const handleToggleTop = async (id: string, currentVal: boolean) => {
         if (!currentVal) {
-            // Attempting to make it Top
             const portfolio = portfolios.find(p => p.id === id);
             if (!portfolio?.esDestacado) {
                 setErrorMsg("Un portafolio debe ser Destacado para ser Top.");
@@ -53,11 +52,10 @@ export default function PortafolioTab() {
     };
 
     const handleToggleDestacado = async (id: string, currentVal: boolean) => {
-        // If we are turning OFF destacado (currentVal is true), we must turn OFF Top too if it's on
         if (currentVal) {
             const portfolio = portfolios.find(p => p.id === id);
             if (portfolio?.esTop) {
-                await toggleTop(id, true); // true passes 'currentVal' of top, so it toggles to false
+                await toggleTop(id, true);
             }
         }
         await toggleDestacado(id, currentVal);
@@ -89,14 +87,11 @@ export default function PortafolioTab() {
                         {portfolios.map((row) => {
                             const isARS = currency === 'ARS';
 
-                            // Select values based on currency
                             const totalInvertido = isARS ? (row.totalInvertidoARS ?? 0) : (row.totalInvertidoUSD ?? 0);
                             const totalValuado = isARS ? (row.totalValuadoARS ?? 0) : (row.totalValuadoUSD ?? 0);
 
-                            // Select pre-calculated variation if available
                             const preCalculatedVar = isARS ? row.variacionPorcentajePesos : row.variacionPorcentajeDolares;
 
-                            // Default to pre-calculated, else calculate naive ROI
                             let rentabilidad = preCalculatedVar ?? 0;
 
                             if (preCalculatedVar === undefined && totalInvertido > 0) {

@@ -9,7 +9,7 @@ vi.mock('@/services/OperacionesService');
 vi.mock('@/components/auth/RoleGuard', () => ({
     RoleGuard: ({ children }: any) => <div>{children}</div>
 }));
-// Mock ConfirmDialog to immediately trigger confirm for testing logic or just render simple buttons
+
 vi.mock('@/components/common/ConfirmDialog', () => ({
     ConfirmDialog: ({ open, onConfirm, onClose }: any) => open ? (
         <div>
@@ -88,8 +88,6 @@ describe('MyOperationsPage', () => {
 
         expect(screen.getByText('Editar Operación')).toBeInTheDocument();
 
-        // Change value
-        // Inputs are labelled "Cantidad" and "Precio Unitario"
         const cantInput = screen.getByLabelText('Cantidad');
         fireEvent.change(cantInput, { target: { value: '20' } });
 

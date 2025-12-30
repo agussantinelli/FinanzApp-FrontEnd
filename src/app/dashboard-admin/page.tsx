@@ -69,7 +69,6 @@ export default function AdminDashboardPage() {
     <RoleGuard allowedRoles={[RolUsuario.Admin]}>
       <Box className={styles.container}>
 
-        {/* Header */}
         <Paper className={styles.headerPaper} sx={{ border: '1px solid #FF4081', boxShadow: '0 0 15px rgba(255, 64, 129, 0.2)' }}>
           <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems="center" spacing={2}>
             <Box>
@@ -98,7 +97,6 @@ export default function AdminDashboardPage() {
           </Stack>
         </Paper>
 
-        {/* Tabs */}
         <Box className={styles.tabBox}>
           <Tabs value={tabValue} onChange={handleChange} aria-label="admin tabs" textColor="secondary" indicatorColor="secondary">
             <Tab icon={<DashboardIcon />} iconPosition="start" label="Resumen" />
@@ -110,7 +108,6 @@ export default function AdminDashboardPage() {
           </Tabs>
         </Box>
 
-        {/* Tab Content */}
         <CustomTabPanel value={tabValue} index={0}>
           <ResumenTab />
         </CustomTabPanel>

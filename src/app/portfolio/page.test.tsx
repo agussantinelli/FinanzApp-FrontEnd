@@ -75,7 +75,6 @@ describe('PortfolioPage', () => {
     });
 
     it('renders owner actions', () => {
-        // Valuacion ID 1 matches portfolio ID 1 -> Is Owner
         render(<PortfolioPage />);
         expect(screen.getByText('Registrar Operación')).toBeInTheDocument();
         expect(screen.getByText('Mis Operaciones')).toBeInTheDocument();
@@ -84,8 +83,6 @@ describe('PortfolioPage', () => {
     it('renders loading state', () => {
         (usePortfolioData as any).mockReturnValue({ loading: true });
         render(<PortfolioPage />);
-        // Check for skeleton elements indirectly or just absence of content
         expect(screen.queryByText('Main Portfolio')).not.toBeInTheDocument();
-        // Maybe check for RoleGuard presence since skeletons are inside
     });
 });

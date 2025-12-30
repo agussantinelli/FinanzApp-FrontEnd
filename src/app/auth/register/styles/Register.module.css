@@ -47,14 +47,12 @@
 .sectionTitle {
     font-weight: 700 !important;
     margin-top: 8px !important;
-    /* Stack gap ~ 1 usually but explicit margin is safer */
 }
 
 .formStack {
     display: flex;
     flex-direction: column;
     gap: 17.6px;
-    /* spacing ~ 2.2 * 8px */
 }
 
 .submitButton {

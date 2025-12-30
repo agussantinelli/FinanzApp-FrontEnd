@@ -64,16 +64,15 @@ export default function AssetFormDialog({ open, onClose, onSave, initialData, mo
     useEffect(() => {
         if (initialData && mode === 'edit') {
             setFormData({
-                symbol: initialData.symbol, // Symbol is read-only in edit usually, but kept for state
+                symbol: initialData.symbol,
                 nombre: initialData.nombre,
                 tipoActivoId: initialData.tipoActivoId,
                 monedaBase: initialData.monedaBase,
                 esLocal: initialData.esLocal,
-                sectorId: initialData.sectorId || null as any, // Cast for TS compatibility if needed
+                sectorId: initialData.sectorId || null as any,
                 descripcion: initialData.descripcion
             });
         } else {
-            // Reset for create
             setFormData({
                 symbol: '',
                 nombre: '',
@@ -95,7 +94,6 @@ export default function AssetFormDialog({ open, onClose, onSave, initialData, mo
     };
 
     const handleSubmit = async () => {
-        // Basic Validation
         if (!formData.nombre || !formData.tipoActivoId || !formData.monedaBase || !formData.descripcion) {
             setError("Por favor completa los campos obligatorios.");
             return;

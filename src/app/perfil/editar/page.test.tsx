@@ -37,14 +37,12 @@ describe('EditProfilePage', () => {
         (useAuth as any).mockReturnValue({ user: { id: 1 } });
         (getPersonaById as any).mockResolvedValue(defaultUser);
         (getRegisterGeoData as any).mockResolvedValue(defaultGeo);
-        // We can't easily mock window.alert in jsdom without defining it
         window.alert = vi.fn();
     });
 
     it('renders form with user data', async () => {
         render(<EditProfilePage />);
         await waitFor(() => {
-            // Using regex i to handle "Nombre *" and case insensitivity
             expect((screen.getByLabelText(/Nombre/i) as HTMLInputElement).value).toBe('Juan');
         });
         expect((screen.getByLabelText(/Apellido/i) as HTMLInputElement).value).toBe('Perez');
@@ -69,16 +67,13 @@ describe('EditProfilePage', () => {
 
     it('handles switching residence to not Argentina', async () => {
         render(<EditProfilePage />);
-        // Wait for first render
         await waitFor(() => screen.getByLabelText('Resido en Argentina'));
 
         const switchControl = screen.getByLabelText('Resido en Argentina');
-        fireEvent.click(switchControl); // toggle off
+        fireEvent.click(switchControl);
 
-        // "País de Residencia" might have * so strict match fails. Use regex or loose match.
         expect(await screen.findByLabelText(/País de Residencia/i)).toBeInTheDocument();
 
-        // "Provincia" might also have *
         expect(screen.queryByLabelText(/Provincia/i)).not.toBeInTheDocument();
     });
 });

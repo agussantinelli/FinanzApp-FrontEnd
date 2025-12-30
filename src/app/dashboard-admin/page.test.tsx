@@ -28,7 +28,6 @@ describe('AdminDashboardPage', () => {
         expect(screen.getByText('Panel Administrador')).toBeInTheDocument();
         expect(screen.getByText('Bienvenido, SuperAdmin. Gestiona usuarios, activos y monitorea operaciones.')).toBeInTheDocument();
 
-        // Check tabs exist
         expect(screen.getByText('Resumen')).toBeInTheDocument();
         expect(screen.getByText('Usuarios')).toBeInTheDocument();
     });

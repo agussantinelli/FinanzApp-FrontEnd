@@ -82,12 +82,11 @@ export default function MyOperationsPage() {
 
     const [message, setMessage] = useState<{ text: string, type: "success" | "error" } | null>(null);
 
-    // Import Modal State
     const [importModalOpen, setImportModalOpen] = useState(false);
 
     const handleImportSuccess = () => {
         setMessage({ text: "Operaciones importadas correctamente", type: "success" });
-        refresh(); // Refresh list
+        refresh();
     };
 
 
@@ -243,8 +242,8 @@ export default function MyOperationsPage() {
                                 onClick={() => setImportModalOpen(true)}
                                 sx={{
                                     height: 40,
-                                    flex: 1, // Expand to fill space
-                                    minWidth: '200px', // Ensure it's not too small
+                                    flex: 1,
+                                    minWidth: '200px',
                                     borderRadius: '12px',
                                     textTransform: 'none',
                                     fontSize: '0.95rem',

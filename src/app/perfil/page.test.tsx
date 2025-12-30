@@ -39,9 +39,6 @@ describe('ProfilePage', () => {
     });
 
     it('renders loading state', () => {
-        // mock implementation of getPersonaById that never resolves immediately or we check initial state
-        // But useEffect runs after render. Initially loadingProfile is true.
-        // We can just check initial render
         render(<ProfilePage />);
         expect(screen.getByRole('progressbar')).toBeInTheDocument();
     });

@@ -36,11 +36,10 @@ export default function ExpertPage() {
   const [loading, setLoading] = React.useState(true);
   const [stats, setStats] = React.useState<ExpertoStatsDTO | null>(null);
 
-  // Portfolio Data Integration
   const { valuacion, refresh, loading: portfolioLoading } = usePortfolioData();
 
   React.useEffect(() => {
-    refresh(); // Fetch portfolio data
+    refresh();
     if (user?.rol === RolUsuario.Experto) {
       getExpertoStats()
         .then(data => {
@@ -111,7 +110,6 @@ export default function ExpertPage() {
 
           {loading || portfolioLoading ? (
             <>
-              {/* Portfolio Summary Skeleton */}
               <Grid size={{ xs: 12, md: 8 }}>
                 <Paper className={styles.summaryCard}>
                   <Typography variant="caption"><Skeleton width="30%" /></Typography>
@@ -140,7 +138,6 @@ export default function ExpertPage() {
                 </Paper>
               </Grid>
 
-              {/* Ranking Skeleton */}
               <Grid size={{ xs: 12, md: 4 }}>
                 <Paper className={styles.highlightInfoCard} sx={{ height: '100%' }}>
                   <Typography variant="caption"><Skeleton width="40%" /></Typography>
@@ -153,7 +150,6 @@ export default function ExpertPage() {
                 </Paper>
               </Grid>
 
-              {/* Stats Skeleton */}
               <Grid size={{ xs: 12 }}>
                 <Paper className={styles.summaryCard}>
                   <Typography variant="caption"><Skeleton width="30%" /></Typography>
@@ -169,7 +165,6 @@ export default function ExpertPage() {
             </>
           ) : (
             <>
-              {/* Portfolio Summary Section */}
               <Grid size={{ xs: 12, md: 8 }}>
                 <Paper className={styles.summaryCard}>
                   <Typography variant="caption" color="text.secondary">
@@ -231,7 +226,6 @@ export default function ExpertPage() {
                 </Paper>
               </Grid>
 
-              {/* Ranking Card */}
               <Grid size={{ xs: 12, md: 4 }}>
                 <Paper className={styles.highlightInfoCard} sx={{ height: '100%' }}>
                   <Typography variant="caption" color="text.secondary">
@@ -250,7 +244,6 @@ export default function ExpertPage() {
                 </Paper>
               </Grid>
 
-              {/* Recommendations Stats */}
               <Grid size={{ xs: 12 }}>
                 <Paper className={styles.summaryCard}>
                   <Typography variant="caption" color="text.secondary">

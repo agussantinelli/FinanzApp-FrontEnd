@@ -100,7 +100,6 @@ export default function RecomendacionesTab() {
                                         </IconButton>
                                     </TableCell>
                                     <TableCell>
-                                        {/* Moderation Actions (Pending) */}
                                         {row.estado === EstadoRecomendacion.Pendiente && (
                                             <>
                                                 <IconButton size="small" title="Aprobar" onClick={() => aprobar(row.id)} color="success"><ThumbUpIcon /></IconButton>
@@ -108,7 +107,6 @@ export default function RecomendacionesTab() {
                                             </>
                                         )}
 
-                                        {/* Resolution Actions (Active/Accepted) */}
                                         {row.estado === EstadoRecomendacion.Aceptada && (
                                             <>
                                                 <IconButton size="small" title="Marcar Acertada" onClick={() => handleResolveClick(row.id, true)} color="success"><CheckIcon /></IconButton>

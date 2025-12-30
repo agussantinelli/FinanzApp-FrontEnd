@@ -16,7 +16,6 @@ describe('Noticias Page', () => {
         render(<Noticias />);
         expect(screen.getByText('Noticias')).toBeInTheDocument();
 
-        // Check for specific news sources
         expect(screen.getByText('CoinDesk / CoinMarketCap')).toBeInTheDocument();
         expect(screen.getByText('Bull Market – Claves del Día')).toBeInTheDocument();
         expect(screen.getByText('Ámbito – Criptomonedas')).toBeInTheDocument();
