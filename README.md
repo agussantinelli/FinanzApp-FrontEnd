@@ -238,13 +238,7 @@ pnpm dev
 
 <p>Abrí <a href="http://localhost:3000">http://localhost:3000</a> en tu navegador para ver el resultado.</p>
 
-<h3>🔑 Credenciales de Prueba</h3>
 
-<p>Para probar el flujo de inversor (E2E Tests):</p>
-<ul>
-    <li><strong>Email:</strong> <code>agus@gmail.com</code></li>
-    <li><strong>Password:</strong> <code>agus</code></li>
-</ul>
 
 <h3>⚙️ Variables de Entorno</h3>
 
@@ -441,34 +435,30 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
 
 <hr>
 
-<h2>🧪 Testing y Calidad</h2>
+<h2>🧪 Testing Strategy</h2>
 
-<p>Actualmente el proyecto cuenta con una suite de <strong>Tests Unitarios</strong> implementada con <strong>Vitest</strong> y <strong>React Testing Library</strong>.</p>
+<p>La estrategia de calidad se basa en un enfoque de pirámide de testing moderna, priorizando velocidad en unitariedad y robustez en flujos críticos.</p>
 
+<h3>⚡ Unit & Integration (Vitest)</h3>
+<p>Validación de lógica de negocio, hooks y componentes aislados.</p>
 <ul>
-    <li>
-        <strong>Unit Testing:</strong> Ejecutar con <code>npm run test:unit</code>. Cubre componentes críticos y hooks personalizados usando Vitest.
+    <li><strong>Comando:</strong> <code>npm run test:unit</code></li>
+    <li><strong>Cobertura:</strong>
+        <ul>
+            <li>Algoritmos de valuación y formateo.</li>
+            <li>Lógica de estado (Hooks: <code>useAuth</code>, <code>useImportExcel</code>).</li>
+            <li>Renderizado de componentes base (Buttons, Modals).</li>
+        </ul>
     </li>
-    <li>
-        <strong>Component Testing:</strong> Validación de renderizado y lógica de interacción.
-    </li>
 </ul>
 
-<h3>🎭 End-to-End (E2E) Testing</h3>
-
-<p>Se han implementado tests End-to-End utilizando <strong>Playwright</strong> para asegurar la robustez de los flujos críticos de usuario.</p>
-
-<p><strong>Comandos disponibles:</strong></p>
+<h3>🎭 End-to-End (Playwright)</h3>
+<p>Simulación de usuario real en navegadores (Chromium, Firefox, WebKit).</p>
 <ul>
-    <li><code>npm run test:e2e</code>: Ejecuta los tests en modo visual (headed).</li>
-    <li><code>npx playwright test</code>: Ejecuta los tests en modo headless (CI/CD).</li>
-    <li><code>npx playwright show-report</code>: Visualiza el reporte HTML de la última ejecución.</li>
+    <li><strong>Comando Visual:</strong> <code>npm run test:e2e</code> (Abre la interfaz gráfica)</li>
+    <li><strong>Comando de Sistema:</strong> <code>npx playwright test</code> (Ejecución en segundo plano)</li>
 </ul>
-
-<p><strong>Flujos cubiertos:</strong></p>
-<ul>
-    <li>✅ <strong>Compra de Activos:</strong> Login -> Navegación -> Búsqueda de Activo (BTC) -> Validación de UI -> Compra -> Verificación en Portafolio.</li>
-</ul>
+<p><strong>Cobertura Principal:</strong> El test verifica el camino más importante del usuario: inicia sesión, revisa su saldo en el Dashboard, va a su Portafolio, compra Bitcoin y confirma que la operación se haya guardado correctamente.</p>
 
 <hr>
 
