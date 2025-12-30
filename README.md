@@ -79,6 +79,7 @@
     <li><strong>Cotizaciones Unificadas:</strong> Acceso centralizado a valores de mercado (Dólar, Crypto, BCBA).</li>
     <li><strong>Valuación Inteligente:</strong> Conversión automática ARS/USD aplicando el tipo de cambio más conveniente (MEP/CCL/Blue).</li>
     <li><strong>Dashboard Patrimonial:</strong> Visualización clara del patrimonio total y distribución por tipo de activo.</li>
+    <li><strong>📥 Importación Inteligente:</strong> Carga masiva de operaciones desde Excel analizada por IA, con previsualización editable, detección de duplicados y validación de consistencia (anti-saldos negativos).</li>
     <li><strong>🤖 FinanzAI:</strong> Asistente financiero inteligente flotante, integrado con IA para responder consultas en tiempo real con formato enriquecido.</li>
 </ul>
 
@@ -95,6 +96,7 @@
         </ul>
     </li>
     <li><strong>Seguridad en Administración:</strong> Confirmación explícita para acciones críticas (borrado/edición) en el dashboard de administrador.</li>
+    <li><strong>UX Refinada:</strong> Feedback inmediato con mensajes flotantes, tablas con edición inline y estilos visuales de alto contraste (Neon/Dark).</li>
 </ul>
 
 <hr>
@@ -434,6 +436,7 @@ NEXT_PUBLIC_GOOGLE_CLIENT_ID=tu_client_id_aqui
             <li>✅ Gestión de Recomendaciones: Panel para expertos con estadísticas, ranking y creación de señales.</li>
             <li>✅ Reportes Visuales: Gráficos de composición de cartera y evolución del dólar.</li>
             <li>✅ Reportes Exportables: Descarga de historial de operaciones y portafolio en PDF y Excel.</li>
+            <li>✅ Importación Avanzada: Módulo de carga masiva con IA, edición inline y validaciones de consistencia previo a la confirmación.</li>
         </ul>
     </li>
     <li><strong>En Roadmap</strong>
