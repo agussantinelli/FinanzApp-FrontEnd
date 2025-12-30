@@ -51,7 +51,6 @@ function RegistrarOperacionContent() {
             <Box className={styles.container}>
                 <Container maxWidth="md">
                     <Paper className={styles.paper}>
-                        {/* Header Integrado */}
                         <Box sx={{ mb: 4, textAlign: 'center' }}>
                             <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
                                 Registrar Operación
@@ -60,7 +59,6 @@ function RegistrarOperacionContent() {
                                 Completa los datos de tu compra, venta o dividendo.
                             </Typography>
                         </Box>
-                        {/* 1. Mode Selector */}
                         <Box className={styles.modeSelector}>
                             <ToggleButtonGroup
                                 value={mode}
@@ -81,7 +79,6 @@ function RegistrarOperacionContent() {
                         </Box>
 
                         <Stack spacing={4}>
-                            {/* SECTION 1: ASSET & TYPE */}
                             <Box>
                                 <Typography variant="h6" color="primary" className={styles.sectionTitle}>
                                     <ShoppingCartIcon fontSize="small" /> 1. Datos de la Operación
@@ -141,7 +138,6 @@ function RegistrarOperacionContent() {
                                 </Stack>
                             </Box>
 
-                            {/* SECTION 2: DATE */}
                             <Box>
                                 <Typography variant="h6" color="primary" className={styles.sectionTitle}>
                                     <CalendarTodayIcon fontSize="small" /> 2. Fecha y Hora
@@ -160,7 +156,6 @@ function RegistrarOperacionContent() {
                                 </Stack>
                             </Box>
 
-                            {/* SECTION 3: VALUES */}
                             <Box>
                                 <Typography variant="h6" color="primary" className={styles.sectionTitle}>
                                     <AttachMoneyIcon fontSize="small" /> 3. Valores
@@ -230,7 +225,6 @@ function RegistrarOperacionContent() {
                                 </Stack>
                             </Box>
 
-                            {/* SECTION 4: SUMMARY */}
                             <Paper variant="outlined" className={styles.summaryPaper}>
                                 <Typography variant="subtitle2" color="text.secondary" gutterBottom>TOTAL ESTIMADO</Typography>
                                 <Typography variant="h3" className={styles.totalAmount}>
@@ -241,7 +235,6 @@ function RegistrarOperacionContent() {
                                 </Typography>
                             </Paper>
 
-                            {/* ACTIONS */}
                             <Stack direction="row" justifyContent="flex-end" spacing={2} className={styles.actionStack}>
                                 <Button variant="text" size="large" onClick={() => router.back()}>
                                     Cancelar

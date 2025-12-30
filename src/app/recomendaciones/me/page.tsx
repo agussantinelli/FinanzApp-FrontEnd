@@ -58,7 +58,6 @@ const MisRecomendacionesContent = () => {
 
                 <Paper variant="outlined" sx={{ p: 2, mb: 4, borderRadius: 2 }}>
                     <Grid container spacing={2} alignItems="center">
-                        {/* Sector Filter */}
                         <Grid size={{ xs: 12, md: 4 }}>
                             <FormControl fullWidth size="small">
                                 <InputLabel>Sector</InputLabel>
@@ -75,7 +74,6 @@ const MisRecomendacionesContent = () => {
                             </FormControl>
                         </Grid>
 
-                        {/* Risk Filter */}
                         <Grid size={{ xs: 12, md: 3 }}>
                             <FormControl fullWidth size="small">
                                 <InputLabel>Riesgo</InputLabel>
@@ -93,7 +91,6 @@ const MisRecomendacionesContent = () => {
                             </FormControl>
                         </Grid>
 
-                        {/* Horizon Filter */}
                         <Grid size={{ xs: 12, md: 3 }}>
                             <FormControl fullWidth size="small">
                                 <InputLabel>Horizonte</InputLabel>

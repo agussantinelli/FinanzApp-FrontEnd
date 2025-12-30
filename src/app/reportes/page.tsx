@@ -32,7 +32,6 @@ export default function Reportes() {
         />
 
         <Grid container spacing={3}>
-          {/* Portfolio Chart Section - Visible only to logged in users */}
           {isAuthenticated && (
             <Grid size={{ xs: 12 }}>
               <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>

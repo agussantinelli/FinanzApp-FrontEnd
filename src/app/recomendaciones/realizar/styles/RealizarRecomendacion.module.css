@@ -18,10 +18,8 @@
     align-items: center;
     gap: 0.5rem;
     color: #2cff7d;
-    /* Neon Green */
 }
 
-/* Animations */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -77,9 +75,6 @@
     margin-top: 3rem;
 }
 
-/* Custom Overrides for standard MUI in dark context if needed, 
-   though ideally global theme handles this. 
-   Adding helper utility classes just in case. */
 .neonText {
     color: #2cff7d;
 }

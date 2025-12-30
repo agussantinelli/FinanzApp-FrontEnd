@@ -214,10 +214,6 @@ export default function RecomendacionesPage() {
                         />
                     </Grid>
 
-                    {/* Admin State Filter */}
-
-
-                    {/* Sector Filter - Smaller */}
                     <Grid size={{ xs: 12, md: 2 }} >
                         <FormControl fullWidth size="small">
                             <InputLabel>Sector</InputLabel>
@@ -234,7 +230,6 @@ export default function RecomendacionesPage() {
                         </FormControl>
                     </Grid>
 
-                    {/* Risk Filter - Smaller */}
                     <Grid size={{ xs: 12, md: 2 }}>
                         <FormControl fullWidth size="small">
                             <InputLabel>Riesgo</InputLabel>
@@ -252,7 +247,6 @@ export default function RecomendacionesPage() {
                         </FormControl>
                     </Grid>
 
-                    {/* Horizon Filter - Smaller */}
                     <Grid size={{ xs: 12, md: 2 }}>
                         <FormControl fullWidth size="small">
                             <InputLabel>Horizonte</InputLabel>
@@ -270,7 +264,6 @@ export default function RecomendacionesPage() {
                         </FormControl>
                     </Grid>
 
-                    {/* Author Filter - Smaller */}
                     <Grid size={{ xs: 12, md: 2 }}>
                         <FormControl fullWidth size="small">
                             <InputLabel>Experto</InputLabel>
@@ -287,7 +280,6 @@ export default function RecomendacionesPage() {
                         </FormControl>
                     </Grid>
 
-                    {/* Actions - Larger to fit buttons */}
                     <Grid size={{ xs: 12, md: 3 }} display="flex" gap={1} justifyContent="flex-end">
                         <Button
                             variant="outlined"
@@ -327,7 +319,6 @@ export default function RecomendacionesPage() {
                 </Alert>
             )}
 
-            {/* Remove client-side filtering to allow Admin results (Pending/Rejected) to show */}
             <Grid container spacing={3}>
                 {data.map((item) => (
                     <Grid size={{ xs: 12, md: 6, lg: 4 }} key={item.id}>

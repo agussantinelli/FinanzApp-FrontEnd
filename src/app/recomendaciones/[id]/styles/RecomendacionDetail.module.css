@@ -10,7 +10,6 @@
 .headerPaper {
     padding: 32px;
     border-radius: 16px !important;
-    /* borderRadius: 2 is technically 8px usually, but for papers often looks better slightly larger, keeping 16px based on previous preference or 8px standard? Standard MUI 2 = 8px. Let's stick to 16px as standard often looks boxy. Wait, page had borderRadius: 2. That is 8px. I'll use 8px. */
     border-radius: 8px !important;
     margin-bottom: 32px;
 }
@@ -23,7 +22,6 @@
     display: block;
     margin-bottom: 8px;
     color: #9ca3af;
-    /* text.secondary key */
 }
 
 .headerTitle {
@@ -65,7 +63,6 @@
     white-space: pre-line;
     line-height: 1.8 !important;
     color: #e5e7eb !important;
-    /* text.primary */
     font-size: 1.05rem !important;
 }
 
@@ -85,5 +82,4 @@
 
 .stopLossCell {
     color: #f44336 !important;
-    /* error.main */
 }

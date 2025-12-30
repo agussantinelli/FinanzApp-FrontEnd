@@ -58,7 +58,7 @@ const AssetSearch: React.FC<AssetSearchProps> = ({ value, onChange, error }) => 
             value={value}
             onChange={(_, newValue) => onChange(newValue)}
             onInputChange={(_, newInputValue) => handleSearch(newInputValue)}
-            forcePopupIcon={false} // Make it look like a text input
+            forcePopupIcon={false}
             noOptionsText="Escribe para buscar..."
             renderInput={(params) => (
                 <TextField
@@ -114,7 +114,6 @@ export default function CrearRecomendacionPage() {
 
                 <Paper variant="outlined" className={styles.paper} sx={{ p: 4, borderRadius: 2 }}>
 
-                    {/* General Info Section */}
                     <Box className={styles.formSection}>
                         <Typography variant="h5" className={styles.sectionTitle} gutterBottom>
                             <InfoOutlinedIcon color="secondary" />
@@ -209,7 +208,6 @@ export default function CrearRecomendacionPage() {
 
                     <Divider sx={{ my: 4 }} />
 
-                    {/* Assets Section */}
                     <Box className={styles.formSection}>
                         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                             <Typography variant="h5" className={styles.sectionTitle}>
@@ -232,7 +230,6 @@ export default function CrearRecomendacionPage() {
                         {assetRows.map((row, index) => (
                             <Box key={row.tempId} className={styles.assetCard} sx={{ mb: 3, p: 2 }}>
                                 <Grid container spacing={3} alignItems="center">
-                                    {/* Row 1: Ticker and Action */}
                                     <Grid size={{ xs: 12, md: 8 }}>
                                         <AssetSearch
                                             value={row.activo}
@@ -257,7 +254,6 @@ export default function CrearRecomendacionPage() {
                                         </FormControl>
                                     </Grid>
 
-                                    {/* Row 2: Prices */}
                                     <Grid size={{ xs: 12, md: 4 }}>
                                         <TextField
                                             label="Precio Actual"
@@ -351,14 +347,13 @@ export default function CrearRecomendacionPage() {
                         color: '#fff',
                         zIndex: (theme) => theme.zIndex.drawer + 1,
                         flexDirection: 'column',
-                        backgroundColor: 'rgba(0, 0, 0, 0.9)' // Darker background for better neon contrast
+                        backgroundColor: 'rgba(0, 0, 0, 0.9)'
                     }}
                     open={loading}
                 >
                     <NeonLoader message="Validando con IA..." size={80} />
                 </Backdrop>
 
-                {/* AI Validation Error Dialog */}
                 <Dialog
                     open={!!aiError}
                     onClose={clearAiError}

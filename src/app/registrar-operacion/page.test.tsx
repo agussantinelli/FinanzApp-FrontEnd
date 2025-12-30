@@ -64,9 +64,6 @@ describe('RegistrarOperacionPage', () => {
         render(<RegistrarOperacionPage />);
         const autocomplete = screen.getByLabelText(/Buscar Activo/i);
         fireEvent.change(autocomplete, { target: { value: 'AAPL' } });
-        // Since we mock the hook, we can just verify the hook logic would be called or the input changes
-        // But with Autocomplete interaction in RTL is tricky. 
-        // We verify checking what relies on it.
     });
 
     it('shows loading state when submitting', () => {

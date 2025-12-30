@@ -25,7 +25,6 @@ import styles from './styles/RecomendacionDetail.module.css';
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import FloatingMessage from "@/components/ui/FloatingMessage";
 
-// Helper for Action Action Colors
 const getAccionColor = (accion: AccionRecomendada) => {
     switch (accion) {
         case AccionRecomendada.CompraFuerte: return "success.main";
@@ -69,7 +68,6 @@ const getRiesgoColor = (r: number | string) => {
 };
 
 const getHorizonteStyle = (h: string | number) => {
-    // Mapping matches Card logic, handling both Enum number or String if API varies
     const val = String(h);
     if (val === "1" || val === "Intradia") return { color: colors.neon.magenta, borderColor: colors.neon.magenta, boxShadow: `0 0 5px ${colors.neon.magenta}40` };
     if (val === "2" || val === "CortoPlazo") return { color: colors.neon.cyan, borderColor: colors.neon.cyan, boxShadow: `0 0 5px ${colors.neon.cyan}40` };
@@ -97,16 +95,13 @@ export default function RecomendacionDetallePage() {
     const [error, setError] = useState<string | null>(null);
     const [actionError, setActionError] = useState<string | null>(null);
 
-    const isAdmin = user?.rol === RolUsuario.Admin; // Using Admin based on previous check of type file, but wait, type said Default logic?
-    // Let's check imports. RolUsuario.Admin is correct based on type file I saw.
+    const isAdmin = user?.rol === RolUsuario.Admin;
 
-    // Handlers
     const handleApprove = async () => {
         if (!recomendacion) return;
         setActionError(null);
         try {
             await aprobarRecomendacion(recomendacion.id);
-            // Reload or update state
             window.location.reload();
         } catch (e) {
             console.error(e);
@@ -119,7 +114,7 @@ export default function RecomendacionDetallePage() {
         setActionError(null);
         try {
             await rechazarRecomendacion(recomendacion.id);
-            window.location.reload(); // Simple reload for now
+            window.location.reload();
         } catch (e) {
             console.error(e);
             setActionError("Error al rechazar la recomendación.");
@@ -133,13 +128,11 @@ export default function RecomendacionDetallePage() {
 
             try {
                 const param = id as string;
-                // Check if it's a UUID
                 const isUuid = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(param);
 
                 let realId = param;
 
                 if (!isUuid) {
-                    // It's a slug, we need to find the ID
                     let allRecs;
 
                     if (isAdmin) {
@@ -190,7 +183,6 @@ export default function RecomendacionDetallePage() {
                 </Button>
 
                 <Paper variant="outlined" className={styles.headerPaper}>
-                    {/* Header */}
                     <Box className={styles.headerContentBox}>
                         <Grid container spacing={2} alignItems="center" justifyContent="space-between">
                             <Grid size={{ xs: 12, md: 8 }}>
@@ -225,7 +217,6 @@ export default function RecomendacionDetallePage() {
                                     />
                                 </Stack>
                             </Grid>
-                            {/* Admin Actions for Pending */}
                             {isAdmin && recomendacion.estado === EstadoRecomendacion.Pendiente && (
                                 <Grid size={{ xs: 12, md: 4 }} display="flex" justifyContent="flex-end" gap={2}>
                                     <Button
@@ -252,7 +243,6 @@ export default function RecomendacionDetallePage() {
 
                 <Divider className={styles.tesisDivider} />
 
-                {/* Justification / Content */}
                 <Box className={styles.tesisContainerBox}>
                     <Paper
                         variant="outlined"
@@ -276,7 +266,6 @@ export default function RecomendacionDetallePage() {
 
                 <Divider className={styles.tesisDivider} />
 
-                {/* Recommended Assets */}
                 <Box>
                     <Typography variant="h5" gutterBottom className={styles.assetsTitle}>Activos Recomendados</Typography>
                     <TableContainer component={Paper} variant="outlined">
@@ -295,7 +284,6 @@ export default function RecomendacionDetallePage() {
                                 {recomendacion.detalles.map((detalle, index) => (
                                     <TableRow key={index} hover>
                                         <TableCell>
-                                            {/* Link to Asset Detail Page */}
                                             {detalle.activo ? (
                                                 <MuiLink
                                                     component={Link}
