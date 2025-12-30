@@ -105,8 +105,8 @@ export default function ImportExcelModal({ open, onClose, onSuccess }: ImportExc
             <DialogTitle sx={{ textAlign: 'center', m: 2, fontWeight: 'bold' }}>
                 Importar Operaciones desde Excel
             </DialogTitle>
-            <DialogContent>
-                <Box sx={{ mt: 2, minHeight: 200, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <DialogContent sx={{ overflow: 'hidden', p: 0 }}>
+                <Box sx={{ mt: 2, minHeight: 200, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 3 }}>
 
                     {step === "UPLOAD" && (
                         <Box sx={{ textAlign: 'center', width: '100%', maxWidth: 600, mx: 'auto' }}>
@@ -186,24 +186,51 @@ export default function ImportExcelModal({ open, onClose, onSuccess }: ImportExc
                                 <Alert severity="warning">No se detectaron operaciones válidas.</Alert>
                             )}
 
-                            <TableContainer component={Paper} variant="outlined" sx={{ maxHeight: 500 }}>
+                            <TableContainer component={Paper} variant="outlined" sx={{
+                                maxHeight: 500,
+                                '&::-webkit-scrollbar': {
+                                    width: '10px',
+                                },
+                                '&::-webkit-scrollbar-track': {
+                                    background: '#1a1a1a',
+                                },
+                                '&::-webkit-scrollbar-thumb': {
+                                    background: '#333',
+                                    borderRadius: '5px',
+                                },
+                                '&::-webkit-scrollbar-thumb:hover': {
+                                    background: '#444',
+                                }
+                            }}>
                                 <Table size="small" stickyHeader>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>Estado</TableCell>
-                                            <TableCell align="left">Fecha</TableCell>
-                                            <TableCell align="left">Operación</TableCell>
-                                            <TableCell align="left">Activo</TableCell>
-                                            <TableCell align="left">Cantidad</TableCell>
-                                            <TableCell align="left">Precio Unitario</TableCell>
-                                            <TableCell align="left">Precio Total</TableCell>
-                                            <TableCell align="left">Moneda</TableCell>
-                                            <TableCell align="center">Acciones</TableCell>
+                                            <TableCell sx={{ bgcolor: 'background.paper' }}>Estado</TableCell>
+                                            <TableCell align="left" sx={{ bgcolor: 'background.paper' }}>Fecha</TableCell>
+                                            <TableCell align="left" sx={{ bgcolor: 'background.paper' }}>Operación</TableCell>
+                                            <TableCell align="left" sx={{ bgcolor: 'background.paper' }}>Activo</TableCell>
+                                            <TableCell align="left" sx={{ bgcolor: 'background.paper' }}>Cantidad</TableCell>
+                                            <TableCell align="left" sx={{ bgcolor: 'background.paper' }}>Precio Unitario</TableCell>
+                                            <TableCell align="left" sx={{ bgcolor: 'background.paper' }}>Precio Total</TableCell>
+                                            <TableCell align="left" sx={{ bgcolor: 'background.paper' }}>Moneda</TableCell>
+                                            <TableCell align="center" sx={{ bgcolor: 'background.paper' }}>Acciones</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
                                         {previewData.items.map((item: ImportedItemPreviewDTO, index: number) => (
-                                            <TableRow key={index} sx={{ bgcolor: item.isValid ? 'inherit' : '#fff0f0' }}>
+                                            <TableRow
+                                                key={index}
+                                                sx={{
+                                                    bgcolor: item.isValid ? 'inherit' : '#450a0a', // Dark burgundy for errors
+                                                    '& td': {
+                                                        color: item.isValid ? 'inherit' : '#fff', // White text for errors
+                                                        borderBottom: item.isValid ? undefined : '1px solid #7f1d1d'
+                                                    },
+                                                    '&:hover': {
+                                                        bgcolor: item.isValid ? 'action.hover' : '#7f1d1d' // Slightly lighter burgundy on hover
+                                                    }
+                                                }}
+                                            >
                                                 <TableCell>
                                                     {item.isValid ?
                                                         <Tooltip title="Válido"><CheckCircleIcon color="success" fontSize="small" /></Tooltip>
