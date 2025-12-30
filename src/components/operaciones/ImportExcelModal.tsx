@@ -30,6 +30,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { ImportedItemPreviewDTO } from "@/types/Import";
 import { useImportExcel } from "@/hooks/useImportExcel";
 
@@ -51,7 +52,8 @@ export default function ImportExcelModal({ open, onClose, onSuccess }: ImportExc
         reset,
         setStep,
         retry,
-        updateItem
+        updateItem,
+        deleteItem
     } = useImportExcel(onSuccess);
 
     const [editItemIndex, setEditItemIndex] = React.useState<number | null>(null);
@@ -216,6 +218,11 @@ export default function ImportExcelModal({ open, onClose, onSuccess }: ImportExc
                                                     <Tooltip title="Editar">
                                                         <Button size="small" onClick={() => handleEditClick(item, index)} sx={{ minWidth: 30 }}>
                                                             <EditIcon fontSize="small" />
+                                                        </Button>
+                                                    </Tooltip>
+                                                    <Tooltip title="Eliminar">
+                                                        <Button size="small" onClick={() => deleteItem(index)} color="error" sx={{ minWidth: 30 }}>
+                                                            <DeleteIcon fontSize="small" />
                                                         </Button>
                                                     </Tooltip>
                                                 </TableCell>
