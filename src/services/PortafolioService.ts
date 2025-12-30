@@ -38,13 +38,10 @@ export async function marcarComoPrincipal(id: string): Promise<boolean> {
     return true;
 }
 
-
-
 export async function createPortafolio(dto: PortafolioCreateDTO): Promise<PortafolioDTO> {
     const { data } = await http.post<PortafolioDTO>(ENDPOINT, dto);
     return data;
 }
-
 
 export async function getPortafoliosAdmin(): Promise<PortafolioDTO[]> {
     const { data } = await http.get<PortafolioDTO[]>(`${ENDPOINT}/admin/todos`);
@@ -64,4 +61,3 @@ export async function toggleTopPortafolio(id: string, esTop: boolean): Promise<b
 export async function deletePortafolio(id: string): Promise<void> {
     await http.delete(`${ENDPOINT}/${id}`);
 }
-

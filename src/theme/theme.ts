@@ -24,8 +24,6 @@ declare module '@mui/material/Chip' {
     }
 }
 
-
-
 const theme = createTheme({
     palette: {
         mode: "dark",

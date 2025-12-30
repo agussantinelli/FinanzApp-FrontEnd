@@ -18,5 +18,3 @@ export const getAllOperations = async (): Promise<OperacionResponseDTO[]> => {
     const { data } = await http.get<OperacionResponseDTO[]>('/api/operaciones');
     return data;
 };
-
-

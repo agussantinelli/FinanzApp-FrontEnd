@@ -3,8 +3,6 @@ import { CrearRecomendacionDTO, RecomendacionDTO, RecomendacionResumenDTO } from
 
 const ENDPOINT = "/api/recomendaciones";
 
-
-
 export const aprobarRecomendacion = async (id: string): Promise<void> => {
     await http.patch(`${ENDPOINT}/${id}/aceptar`);
 };

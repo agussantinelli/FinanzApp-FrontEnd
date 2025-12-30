@@ -53,10 +53,6 @@ export function getCurrentUser(): AuthenticatedUser | null {
   }
 }
 
-/**
- * Validates the current session by making a request to a protected endpoint.
- * If the token is invalid (server restart), the global 401 interceptor will trigger logout.
- */
 export async function verifySession() {
   const user = getCurrentUser();
   if (!user) return;
@@ -84,8 +80,6 @@ export function hasRole(rolesPermitidos: RolUsuario[]): boolean {
 
   return rolesPermitidos.includes(user.rol as RolUsuario);
 }
-
-
 
 export async function getRegisterGeoData(): Promise<RegisterGeoDataDTO> {
   const response = await http.get<RegisterGeoDataDTO>("/geo/register-data");
@@ -132,8 +126,6 @@ export async function resetPasswordRequest(data: ResetPasswordRequestDTO): Promi
 export async function resetPasswordConfirm(data: ResetPasswordConfirmDTO): Promise<void> {
   await http.post("/api/auth/reset-password-confirm", data);
 }
-
-
 
 export function getHomePathForRole(rol: string | null | undefined): string {
   const r = rol?.toLowerCase();
