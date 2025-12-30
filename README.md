@@ -261,13 +261,15 @@ pnpm dev
 
 <p>Crea un archivo <code>.env.local</code> en la raíz del proyecto para configurar la conexión al <a href="https://github.com/agussantinelli/FinanzApp-BackEnd.git">Backend</a>:</p>
 
-<pre><code># Base de la API (cambiar por prod al desplegar)
-NEXT_PUBLIC_API_BASE=https://localhost:7088
+<pre><code># URL de la API (Backend)
+NEXT_PUBLIC_API_URL=https://localhost:7209
 # Google Identity Services (Client ID para Login)
 NEXT_PUBLIC_GOOGLE_CLIENT_ID=tu_client_id_aqui
+# Google reCAPTCHA
+NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
 </code></pre>
 
-<p>Todos los <code>fetch</code> / llamadas Axios del frontend apuntan a <code>NEXT_PUBLIC_API_BASE</code> (incluidos los endpoints protegidos con JWT).</p>
+<p>Todos los <code>fetch</code> / llamadas Axios del frontend apuntan a <code>NEXT_PUBLIC_API_URL</code> (incluidos los endpoints protegidos con JWT).</p>
 
 <h3>🔐 Autenticación (JWT)</h3>
 
