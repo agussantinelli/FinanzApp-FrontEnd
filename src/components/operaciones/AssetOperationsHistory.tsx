@@ -49,11 +49,9 @@ export default function AssetOperationsHistory({ activoId, symbol }: AssetOperat
                 } else {
                     const allMyOps = await getOperacionesByPersona(user.id);
                     data = allMyOps.filter(op => {
-                        // Filter by ID if available, otherwise by Symbol (Ticker) which is safer
                         if (op.activoId && activoId) {
                             return op.activoId.toString().toLowerCase() === activoId.toString().toLowerCase();
                         }
-                        // Fallback to symbol match
                         return op.activoSymbol?.toLowerCase() === symbol.toLowerCase();
                     });
                 }
@@ -92,7 +90,7 @@ export default function AssetOperationsHistory({ activoId, symbol }: AssetOperat
     }
 
     if (operations.length === 0) {
-        return null; // Don't show anything if no operations
+        return null;
     }
 
     return (

@@ -116,12 +116,8 @@ export function EditPortfolioDialog({ open, onClose, onSuccess, portfolio }: Edi
         if (!portfolio || !nombre.trim()) return;
         setLoading(true);
         try {
-            // 1. Update basic info
             await updatePortafolio(portfolio.id, nombre, descripcion);
 
-            // 2. Update principal status if changed to TRUE (we can't uncheck principal directly? usually one sets another as principal. 
-            // The endpoint is "markAsPrincipal". If user unchecks it, we probably do nothing or warn them they have to select another one as principal.
-            // Assuming for now we only call it if set to true and it wasn't before.
             if (esPrincipal && !portfolio.esPrincipal) {
                 await marcarComoPrincipal(portfolio.id);
             }
@@ -145,11 +141,10 @@ export function EditPortfolioDialog({ open, onClose, onSuccess, portfolio }: Edi
         setLoading(true);
         try {
             await deletePortafolio(portfolio.id);
-            onSuccess(true); // Param true indicates deletion
+            onSuccess(true);
             onClose();
         } catch (error) {
             console.error("Error deleting portfolio", error);
-            // Could set an error state here specifically for delete failure (e.g. if it's the principal one)
         } finally {
             setLoading(false);
         }
@@ -184,11 +179,6 @@ export function EditPortfolioDialog({ open, onClose, onSuccess, portfolio }: Edi
                         <Checkbox
                             checked={esPrincipal}
                             onChange={(e) => setEsPrincipal(e.target.checked)}
-                            // If it was already principal, maybe we shouldn't allow unchecking it here?
-                            // The backend logic usually ensures there is always one principal.
-                            // If I uncheck it, which one becomes principal?
-                            // Usually you set another one as principal to unset this one.
-                            // But for UI simplicity, let's allow "checking" it.
                             disabled={portfolio?.esPrincipal || loading}
                         />
                     }
@@ -222,7 +212,6 @@ export function EditPortfolioDialog({ open, onClose, onSuccess, portfolio }: Edi
                             color="error"
                             onClick={handleDelete}
                             disabled={loading || portfolio?.esPrincipal}
-                        // Disable delete if it is principal (backend rule)
                         >
                             Eliminar Portafolio
                         </Button>

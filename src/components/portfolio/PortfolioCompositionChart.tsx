@@ -25,35 +25,30 @@ interface Props {
 export default function PortfolioCompositionChart({ activos, totalPesos, totalDolares, currency }: Props) {
     const theme = useTheme();
 
-    // Calculate Implied Exchange Rate (CCL)
     const ccl = (totalPesos && totalDolares) ? totalPesos / totalDolares : 1;
 
-    // Normalize Data based on selected currency
     const normalizedData = activos.map(a => {
         const assetCurrency = a.moneda || "ARS";
         const isAssetUSD = assetCurrency === 'USD' || assetCurrency === 'USDT' || assetCurrency === 'USDC';
 
         if (currency === 'USD') {
-            // Target is USD
             if (isAssetUSD) return a.valorizadoNativo;
             return ccl > 0 ? a.valorizadoNativo / ccl : 0;
         } else {
-            // Target is ARS
             if (!isAssetUSD) return a.valorizadoNativo;
             return a.valorizadoNativo * ccl;
         }
     });
 
-    // Color Palette - Premium Gradients/Shades
     const colors = [
-        '#2196F3', // Blue
-        '#9C27B0', // Purple
-        '#00BCD4', // Cyan
-        '#FF4081', // Pink
-        '#3F51B5', // Indigo
-        '#4CAF50', // Green
-        '#FFC107', // Amber
-        '#607D8B', // Blue Grey
+        '#2196F3',
+        '#9C27B0',
+        '#00BCD4',
+        '#FF4081',
+        '#3F51B5',
+        '#4CAF50',
+        '#FFC107',
+        '#607D8B',
     ];
 
     const data = {
@@ -64,7 +59,7 @@ export default function PortfolioCompositionChart({ activos, totalPesos, totalDo
                 backgroundColor: colors.slice(0, activos.length),
                 borderColor: theme.palette.background.paper,
                 borderWidth: 2,
-                hoverOffset: 12, // 3D-like pop effect
+                hoverOffset: 12,
             },
         ],
     };
@@ -72,17 +67,17 @@ export default function PortfolioCompositionChart({ activos, totalPesos, totalDo
     const options: ChartOptions<'doughnut'> = {
         responsive: true,
         maintainAspectRatio: false,
-        cutout: '65%', // Thinner ring for modern look
+        cutout: '65%',
         plugins: {
             legend: {
                 position: 'right' as const,
                 labels: {
                     font: {
                         family: "'Inter', sans-serif",
-                        size: 15, // Increased from 12
+                        size: 15,
                         weight: 500
                     },
-                    padding: 25, // Increased padding for better spacing
+                    padding: 25,
                     usePointStyle: true,
                     color: theme.palette.text.primary,
                 },
@@ -94,22 +89,17 @@ export default function PortfolioCompositionChart({ activos, totalPesos, totalDo
                 bodyFont: { size: 15 },
                 callbacks: {
                     label: (context) => {
-                        // We show the normalized USD value for consistency
                         const val = context.raw as number;
                         return ` ${formatUSD(val)}`;
                     }
                 }
             },
         },
-        // Optional: add subtle animation
         animation: {
             animateScale: true,
             animateRotate: true
         }
     };
-
-    // Calculate total value for center text if needed, or just strict chart
-    // Center text is tricky in pure ChartJS without plugins, so we overlay a Box.
 
     return (
         <Paper
@@ -117,12 +107,12 @@ export default function PortfolioCompositionChart({ activos, totalPesos, totalDo
             variant="outlined"
             sx={{
                 p: 3,
-                height: 450, // Slightly reduced from 500
+                height: 450,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                position: 'relative' // For overlay
+                position: 'relative'
             }}
         >
             <Typography variant="h6" gutterBottom align="left" width="100%" sx={{ fontWeight: 700, mb: 2, fontSize: '1.5rem' }}>
@@ -138,18 +128,13 @@ export default function PortfolioCompositionChart({ activos, totalPesos, totalDo
                     </Box>
                 )}
 
-                {/* Center Text (Total Value or Tag) - optional 3D effect */}
                 {activos.length > 0 && (
                     <Box
                         sx={{
                             position: 'absolute',
                             top: '50%',
                             left: '0',
-                            width: '100%', // Full width container
-                            // But since legend is right, chart is centered in remaining space? 
-                            // Actually ChartJS centers it generally. 
-                            // We might skip center text to ensure alignment isn't messy with legend.
-                            // Let's just do chart.
+                            width: '100%',
                             display: 'none'
                         }}
                     >

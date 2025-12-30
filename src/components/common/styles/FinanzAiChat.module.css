@@ -133,12 +133,10 @@
     max-height: 100px;
     overflow-y: auto;
     scrollbar-width: none;
-    /* Firefox */
 }
 
 .inputField::-webkit-scrollbar {
     display: none;
-    /* Chrome, Safari, Opera */
 }
 
 .inputField:focus {
@@ -165,7 +163,6 @@
     cursor: not-allowed;
 }
 
-/* Scrollbar styles */
 .messagesContainer::-webkit-scrollbar {
     width: 6px;
 }
@@ -195,9 +192,6 @@
     }
 }
 
-
-
-/* Markdown Styles */
 .markdownContent {
     font-size: 0.95rem;
     line-height: 1.5;

@@ -28,7 +28,6 @@ export default function DolarSection() {
     normalizeName
   } = useDolarData();
 
-  // Persist Dolar Prices to LocalStorage for ActivoDetail to use
   useEffect(() => {
     if ((firstRow.length > 0 || secondRow.length > 0) && typeof window !== 'undefined') {
       const cache: Record<string, { compra: number, venta: number }> = {};

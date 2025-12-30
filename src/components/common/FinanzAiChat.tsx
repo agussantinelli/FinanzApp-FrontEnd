@@ -62,7 +62,6 @@ export default function FinanzAiChat() {
         }
     };
 
-    // Ocultar en auth
     if (pathname?.includes("/auth/login") || pathname?.includes("/auth/register")) {
         return null;
     }

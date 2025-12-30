@@ -34,7 +34,7 @@ export default function UserDistributionChart({ users }: Props) {
             } else if (role === 'experto') {
                 expertoCount++;
             } else {
-                inversorCount++; // Default to inversor
+                inversorCount++;
             }
         });
 
@@ -47,9 +47,9 @@ export default function UserDistributionChart({ users }: Props) {
             {
                 data: userDistribution,
                 backgroundColor: [
-                    '#FF4081', // Pink for Admin
-                    '#7B1FA2', // Purple for Expert
-                    '#2196F3', // Blue for Investor
+                    '#FF4081',
+                    '#7B1FA2',
+                    '#2196F3',
                 ],
                 borderColor: theme.palette.background.paper,
                 borderWidth: 2,

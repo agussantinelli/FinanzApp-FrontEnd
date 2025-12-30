@@ -14,7 +14,6 @@
     }
 }
 
-/* Fallback for color if variable not present */
 .footer {
     color: rgba(255, 255, 255, 0.7);
 }
