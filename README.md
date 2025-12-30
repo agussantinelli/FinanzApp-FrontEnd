@@ -64,7 +64,7 @@
 <ul>
     <li>Unificar datos y cotizaciones en un único lugar.</li>
     <li>Normalizar conversiones entre ARS y USD según clase de activo.</li>
-    <li>Centralizar el seguimiento del portafolio con métricas simples y relevantes.</li>
+    <li>Centralizar el seguimiento del portafolio con métricas relevantes.</li>
     <li>Automatizar actualizaciones mediante adaptadores de datos (gestionados por el Backend).</li>
 </ul>
 
@@ -72,34 +72,20 @@
 
 <p>Que FinanzApp sea el <strong>panel patrimonial de referencia</strong> para el inversor argentino.</p>
 
-<h2>✨ Funcionalidades Destacadas</h2>
+<h2>✨ Funcionalidades & Experiencia</h2>
 
 <ul>
     <li><strong>💼 Gestión Multi-Activo:</strong> Soporte para Criptomonedas, Acciones Locales, CEDEARs y Obligaciones Negociables (ONs).</li>
-    <li><strong>📊 Cotizaciones Unificadas:</strong> Acceso centralizado a valores de mercado (Dólar, Crypto, BCBA).</li>
-    <li><strong>💱 Valuación Inteligente:</strong> Conversión automática ARS/USD aplicando el tipo de cambio más conveniente (MEP/CCL/Blue).</li>
+    <li><strong>📊 Cotizaciones Unificadas:</strong> Acceso centralizado a valores de mercado (Dólar, Crypto, BCBA) con caché local para navegación instantánea.</li>
+    <li><strong>💱 Valuación Inteligente:</strong> Conversión automática ARS/USD aplicando el tipo de cambio más conveniente (MEP/CCL/Blue) y ocultando métricas irrelevantes para divisas.</li>
     <li><strong>📈 Dashboard Patrimonial:</strong> Visualización clara del patrimonio total y distribución por tipo de activo.</li>
+    <li><strong>🔗 Navegación Cruzada:</strong> Enlace directo entre CEDEARs y su Acción Original (y viceversa) para un análisis de arbitraje fluido.</li>
     <li><strong>💡 Recomendaciones AI:</strong> Sistema de sugerencias que vincula activos con oportunidades de mercado, validadas preliminarmente por inteligencia artificial para optimizar decisiones.</li>
     <li><strong>📥 Importación Inteligente:</strong> Carga masiva de operaciones desde Excel analizada por IA, con previsualización editable, detección de duplicados y validación de consistencia (anti-saldos negativos).</li>
     <li><strong>🌐 Inversión Social:</strong> Explora las estrategias más rentables de la comunidad, visualiza sus portafolios y aprende de los mejores inversores.</li>
-    <li><strong>🛡️ Seguridad Integral:</strong> Protección de identidad mediante Google Login y prevención de bots con reCAPTCHA v3 invisible.</li>
+    <li><strong>✨ UX Refinada:</strong> Experiencia premium con mensajes flotantes, tablas con edición inline, filtros rápidos y estilos visuales de alto contraste (Neon/Dark Mode).</li>
+    <li><strong>🛡️ Seguridad Integral:</strong> Protección de identidad mediante Google Login, reCAPTCHA v2 invisible y confirmaciones explícitas para acciones administrativas críticas.</li>
     <li><strong>🤖 FinanzAI:</strong> Asistente financiero inteligente flotante, integrado con IA para responder consultas en tiempo real con formato enriquecido.</li>
-</ul>
-
-<h2>🚀 Novedades</h2>
-
-<ul>
-    <li><strong>Navegación Cruzada de Activos:</strong> Enlace directo entre CEDEARs y su Acción Original (y viceversa) desde el detalle del activo.</li>
-    <li><strong>Persistencia de Cotizaciones:</strong> Caché local de precios de Dólar para navegación instantánea, eliminando tiempos de carga.</li>
-    <li><strong>Experiencia de Usuario Mejorada:</strong>
-        <ul>
-            <li>Ocultamiento inteligente de métricas irrelevantes (Market Cap) para divisas.</li>
-            <li>Panel de cotización Compra/Venta destacado para monedas.</li>
-            <li>Filtros rápidos para alternar entre "Mis Favoritos" y el mercado global.</li>
-        </ul>
-    </li>
-    <li><strong>Seguridad en Administración:</strong> Confirmación explícita para acciones críticas (borrado/edición) en el dashboard de administrador.</li>
-    <li><strong>UX Refinada:</strong> Feedback inmediato con mensajes flotantes, tablas con edición inline y estilos visuales de alto contraste (Neon/Dark).</li>
 </ul>
 
 <hr>
