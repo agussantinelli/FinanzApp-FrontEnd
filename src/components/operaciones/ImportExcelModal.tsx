@@ -33,6 +33,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ImportedItemPreviewDTO } from "@/types/Import";
 import { useImportExcel } from "@/hooks/useImportExcel";
+import FloatingMessage from "@/components/ui/FloatingMessage";
 
 interface ImportExcelModalProps {
     open: boolean;
@@ -53,7 +54,8 @@ export default function ImportExcelModal({ open, onClose, onSuccess }: ImportExc
         setStep,
         retry,
         updateItem,
-        deleteItem
+        deleteItem,
+        setErrorMessage
     } = useImportExcel(onSuccess);
 
     const [editItemIndex, setEditItemIndex] = React.useState<number | null>(null);
@@ -362,6 +364,12 @@ export default function ImportExcelModal({ open, onClose, onSuccess }: ImportExc
                     <Button onClick={handleEditSave} variant="contained" color="primary">Confirmar</Button>
                 </DialogActions>
             </Dialog>
+            <FloatingMessage
+                open={!!errorMessage}
+                message={errorMessage}
+                severity="error"
+                onClose={() => setErrorMessage(null)}
+            />
         </Dialog>
     );
 }

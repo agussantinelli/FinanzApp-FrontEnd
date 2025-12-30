@@ -86,11 +86,15 @@ export function useImportExcel(onSuccess?: () => void) {
         }
 
         setStep("CONFIRMING");
+
+        const payload = {
+            portafolioId: selectedId,
+            items: validItems
+        };
+        console.log("Enviando operaciones a confirmar:", payload);
+
         try {
-            await confirmImport({
-                portafolioId: selectedId,
-                items: validItems
-            });
+            await confirmImport(payload);
             setStep("SUCCESS");
             if (onSuccess) onSuccess();
         } catch (error: any) {
@@ -177,6 +181,7 @@ export function useImportExcel(onSuccess?: () => void) {
         setStep,
         retry,
         updateItem,
-        deleteItem
+        deleteItem,
+        setErrorMessage
     };
 }
