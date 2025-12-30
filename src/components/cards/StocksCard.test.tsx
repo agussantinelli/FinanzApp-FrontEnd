@@ -15,7 +15,7 @@ const mockData: DualQuoteDTO & { name?: string } = {
     usSymbol: "GGAL",
     localPriceARS: 1000,
     usPriceUSD: 10,
-    usPriceARS: 10000, // Derived usually, but simplifying
+    usPriceARS: 10000,
     cedearRatio: 10,
     usedDollarRate: 1000,
     dollarRateName: "CCL",

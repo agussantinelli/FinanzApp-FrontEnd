@@ -35,9 +35,6 @@ describe('HomePage', () => {
 
     it('shows login button when not authenticated', () => {
         render(<HomePage />);
-        // Wait for mounted effect is implicit in RTL usually but checking existence
-        // The component has "mounted" check, usually requires async wait or checking after render
-        // But since we are mocking useAuth and effect runs immediately/fast in jsdom
         expect(screen.getByText('Empezar ahora')).toBeInTheDocument();
     });
 
@@ -48,7 +45,6 @@ describe('HomePage', () => {
         });
 
         render(<HomePage />);
-        // Need to wait for useEffect to set mounted
         expect(await screen.findByText('Ir al panel')).toBeInTheDocument();
     });
 });

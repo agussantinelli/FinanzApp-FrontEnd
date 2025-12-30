@@ -39,7 +39,6 @@ export default function DolarBarChart() {
     const ventas = data.map((d) => d.venta ?? 0);
     const compras = data.map((d) => d.compra ?? 0);
 
-    // KPIs simples
     const maxVenta = Math.max(...ventas.filter((v) => Number.isFinite(v)));
     const minVenta = Math.min(...ventas.filter((v) => Number.isFinite(v)));
     const avgVenta =

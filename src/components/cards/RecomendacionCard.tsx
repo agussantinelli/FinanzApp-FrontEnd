@@ -122,7 +122,6 @@ export default function RecomendacionCard({ item, showStatus = false, isAdmin = 
                 </Box>
             )}
 
-            {/* Main Content Container - acts as the clickable body via Card onClick */}
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', textDecoration: 'none', color: 'inherit' }}>
                 <CardContent sx={{ flex: 1 }}>
                     <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={1}>

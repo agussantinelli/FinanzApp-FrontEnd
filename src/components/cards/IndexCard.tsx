@@ -26,8 +26,6 @@ export default function IndexCard({ data: d }: Props) {
     const router = useRouter();
     const isRiesgo = d.localSymbol === "RIESGO" || d.dollarRateName === "Puntos" || d.localSymbol === "EMBI_AR";
 
-    // Resolve Metadata
-    // Try to match based on US Symbol or Local Symbol
     const key = Object.keys(INDEX_METADATA).find(k =>
         (d.usSymbol && d.usSymbol.includes(k)) ||
         (d.localSymbol && d.localSymbol.includes(k))
@@ -37,7 +35,6 @@ export default function IndexCard({ data: d }: Props) {
     const title = meta?.title || d.usSymbol || d.localSymbol || "Índice";
     const subtitle = meta?.desc || (d.dollarRateName === 'ARS' ? 'Índice Nacional' : 'Índice Internacional');
 
-    // Navigation target
     let targetSymbol = d.usSymbol || d.localSymbol;
     if (isRiesgo) targetSymbol = "EMBI_AR";
 

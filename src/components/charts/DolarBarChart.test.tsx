@@ -21,8 +21,6 @@ describe('DolarBarChart', () => {
     it('renders chart and kpis', async () => {
         render(<DolarBarChart />);
         expect(await screen.findByText('BarChart')).toBeInTheDocument();
-        // Check for calculated KPIs (approximate checks as they might be formatted)
-        // Max venta should be 200. ARS formatting might add decimals or symbol.
         expect(await screen.findByText(/Máximo venta:/)).toBeInTheDocument();
     });
 

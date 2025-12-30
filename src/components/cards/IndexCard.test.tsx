@@ -35,7 +35,6 @@ const mockIndex = {
 describe('IndexCard', () => {
     it('renders Standard & Poor information correctly', () => {
         render(<IndexCard data={mockData} />);
-        // Checks logic for metadata resolution
         expect(screen.getByText("S&P 500")).toBeInTheDocument();
         expect(screen.getByText(/Índice Standard & Poor/)).toBeInTheDocument();
     });

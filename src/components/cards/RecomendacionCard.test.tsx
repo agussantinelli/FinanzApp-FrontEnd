@@ -10,7 +10,6 @@ vi.mock('next/navigation', () => ({
     }),
 }));
 
-// Mock Link since it catches clicks often but we need to ensure it renders children
 vi.mock('next/link', () => {
     return {
         default: ({ children }: { children: React.ReactNode }) => children,
@@ -49,7 +48,6 @@ describe('RecomendacionCard', () => {
 
     it('navigates to detail on click', () => {
         render(<RecomendacionCard item={mockItem} />);
-        // The card uses createSlug(title). "Buy Apple" -> "buy-apple"
         fireEvent.click(screen.getByText("Buy Apple").closest('div[class*="MuiCard-root"]')!);
         expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('/recomendaciones/buy-apple'));
     });

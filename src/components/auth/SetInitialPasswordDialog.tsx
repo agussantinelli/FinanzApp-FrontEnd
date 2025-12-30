@@ -46,19 +46,10 @@ export default function SetInitialPasswordDialog({ open, onClose }: SetInitialPa
             await setInitialPassword({ newPassword });
             setSuccess(true);
 
-            // Update session locally to reflect that password is now configured
             const currentUser = getCurrentUser();
             if (currentUser) {
-                // We need to reconstruct the session roughly or just update the flag. 
-                // Since setAuthSession expects a full UserLoginResponseDTO, we assume we might need to refresh user data from server 
-                // OR we can manually hack it for smooth UX. 
-                // But safer is just notifying user and letting them continue. 
-                // Ideally we should re-fetch profile or update local storage manually if we want immediate UI update.
-
-                // Let's manually update session storage item
                 const updatedUser = { ...currentUser, tieneContrasenaConfigurada: true };
                 sessionStorage.setItem("fa_user", JSON.stringify(updatedUser));
-                // Dispatch event to update UI
                 window.dispatchEvent(new Event("fa-auth-changed"));
             }
 
