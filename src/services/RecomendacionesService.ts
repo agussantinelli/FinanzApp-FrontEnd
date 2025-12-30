@@ -4,7 +4,7 @@ import { CrearRecomendacionDTO, RecomendacionDTO, RecomendacionResumenDTO } from
 const ENDPOINT = "/api/recomendaciones";
 
 
-// Admin
+
 export const aprobarRecomendacion = async (id: string): Promise<void> => {
     await http.patch(`${ENDPOINT}/${id}/aceptar`);
 };
@@ -38,7 +38,7 @@ export const getFiltradasAdmin = async (estado?: number): Promise<RecomendacionR
     const params: any = {};
     if (estado !== undefined) params.estado = estado;
 
-    // Using the same endpoint as getRecomendacionesAdmin but naming it explicitly as requested
+
     const { data } = await http.get<RecomendacionResumenDTO[]>(`${ENDPOINT}/admin/filtro`, { params });
     return data;
 };
@@ -54,7 +54,7 @@ export const getRecomendacionesActivasPendientes = async (): Promise<Recomendaci
     return data;
 };
 
-// Usuario Logueado
+
 export const getRecomendaciones = async (soloActivas: boolean = true): Promise<RecomendacionResumenDTO[]> => {
     const { data } = await http.get<RecomendacionResumenDTO[]>(ENDPOINT, {
         params: { soloActivas }

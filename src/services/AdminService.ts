@@ -14,9 +14,9 @@ export const getAdminPortfolioStats = async (): Promise<AdminPortfolioStatsDTO> 
 };
 
 export const getAllOperations = async (): Promise<OperacionResponseDTO[]> => {
-    // Correct endpoint from docs: /api/operaciones
+
     const { data } = await http.get<OperacionResponseDTO[]>('/api/operaciones');
     return data;
 };
 
-// Persona logic moved to PersonasService.ts
+

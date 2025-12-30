@@ -1,6 +1,6 @@
 import { http } from "@/lib/http";
 import { OperacionDetalleDTO } from "@/types/AdminConsultas";
-import { PortafolioDTO } from "@/types/Portafolio"; // Assuming Admin reuses this or basic DTO
+import { PortafolioDTO } from "@/types/Portafolio";
 
 const ENDPOINT = "/api/admin/consultas";
 

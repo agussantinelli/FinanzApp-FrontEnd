@@ -1,6 +1,5 @@
 import { ActivoDTO } from "@/types/Activo";
 
-// In-memory cache
 const assetsCache = new Map<string, ActivoDTO>();
 let isFullCache = false;
 

@@ -45,7 +45,7 @@ export async function createPortafolio(dto: PortafolioCreateDTO): Promise<Portaf
     return data;
 }
 
-// Admin Endpoints
+
 export async function getPortafoliosAdmin(): Promise<PortafolioDTO[]> {
     const { data } = await http.get<PortafolioDTO[]>(`${ENDPOINT}/admin/todos`);
     return data;

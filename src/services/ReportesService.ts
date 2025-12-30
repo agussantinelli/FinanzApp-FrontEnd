@@ -2,15 +2,13 @@ import { http } from "@/lib/http";
 
 const ENDPOINT = "/api/reportes";
 
-/**
- * Helper to download a Blob as a file in the browser
- */
+
 function downloadBlob(blob: Blob, filename: string) {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = filename;
-    document.body.appendChild(a); // Append to body for Firefox
+    document.body.appendChild(a);
     a.click();
     a.remove();
     window.URL.revokeObjectURL(url);

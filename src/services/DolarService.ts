@@ -8,7 +8,7 @@ export async function getCotizacionesDolar(): Promise<DolarDTO[]> {
     });
     return response.data;
   } catch (error) {
-    console.error("❌ Error al obtener cotizaciones:", error);
+    console.error("Error al obtener cotizaciones:", error);
     return [];
   }
 }
