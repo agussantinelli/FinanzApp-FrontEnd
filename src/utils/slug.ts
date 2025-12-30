@@ -2,10 +2,10 @@ export const createSlug = (text: string): string => {
     return text
         .toString()
         .toLowerCase()
-        .normalize("NFD") // Split accents
-        .replace(/[\u0300-\u036f]/g, "") // Remove accents
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
         .trim()
-        .replace(/\s+/g, '-') // Replace spaces with -
-        .replace(/[^\w\-]+/g, '') // Remove all non-word chars
-        .replace(/\-\-+/g, '-'); // Replace multiple - with single -
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-');
 };

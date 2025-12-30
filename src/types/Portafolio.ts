@@ -1,5 +1,5 @@
 export interface PortafolioDTO {
-    id: string; // Guid
+    id: string;
     nombre: string;
     descripcion?: string;
     esDestacado: boolean;
@@ -19,12 +19,12 @@ export interface PortafolioDTO {
     nombreUsuario: string;
     rolUsuario: string;
     fotoPerfil?: string;
-    personaId?: string; // Owner ID
+    personaId?: string;
     activos?: ActivoEnPortafolioDTO[];
 }
 
 export interface ActivoEnPortafolioDTO {
-    activoId: string; // Guid
+    activoId: string;
     symbol: string;
     tipoActivo: string;
     moneda: string;
@@ -36,7 +36,7 @@ export interface ActivoEnPortafolioDTO {
 }
 
 export interface PortafolioValuadoDTO {
-    id: string; // Guid
+    id: string;
     nombre: string;
     descripcion?: string;
     esPrincipal: boolean;

@@ -1,7 +1,7 @@
 export interface OperacionDetalleDTO {
-    id: string; // Guid
-    fecha: string; // DateTime
-    tipo: string; // "Compra" | "Venta"
+    id: string;
+    fecha: string;
+    tipo: string;
     activoSymbol: string;
     activoNombre: string;
     sectorNombre: string;

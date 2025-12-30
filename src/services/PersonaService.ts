@@ -8,7 +8,7 @@ export const getPersonas = async (): Promise<UserDTO[]> => {
         const { data } = await http.get<UserDTO[]>(ENDPOINT);
         return data;
     } catch (e) {
-        console.warn("Error fetching users", e);
+        console.warn("Error obteniendo usuarios", e);
         return [];
     }
 };

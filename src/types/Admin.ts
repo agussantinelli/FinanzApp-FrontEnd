@@ -3,7 +3,7 @@ export interface AdminStatsDTO {
     nuevosUsuariosMes: number;
     totalActivos: number;
     recomendacionesPendientes: number;
-    efectividadGlobal: string; // "-" default
+    efectividadGlobal: string;
 }
 
 export interface AssetPopularityDTO {

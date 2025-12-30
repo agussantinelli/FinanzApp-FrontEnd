@@ -1,35 +1,35 @@
 export interface ActivoDTO {
-    id: string; // Guid
+    id: string;
     symbol: string;
     nombre: string;
     tipo: string;
     tipoActivoId: number;
-    monedaBase: string; // "USD" | "ARS"
+    monedaBase: string;
     sector: string;
     sectorId?: string | null;
 
     esLocal: boolean;
     descripcion: string;
 
-    // --- PRECIOS Y MERCADO ---
+
     precioActual?: number | null;
     precioUSD?: number | null;
     precioARS?: number | null;
     variacion24h?: number | null;
     marketCap?: number | null;
-    ultimaActualizacion?: string | null; // DateTime ISO
+    ultimaActualizacion?: string | null;
 
-    // --- RELACIÓN CEDEAR <-> USA (Flat) ---
+
     contraparteId?: string | null;
     contraparteSymbol?: string | null;
     contraparteNombre?: string | null;
-    tipoRelacion?: string | null; // "CEDEAR" | "Subyacente"
+    tipoRelacion?: string | null;
     ratioCedear?: number | null;
 
-    // --- ESTADO SOCIAL ---
+
     loSigo: boolean;
 
-    // --- LEGACY / FRONTEND SPECIFIC ---
+
     precioCompra?: number | null;
     precioVenta?: number | null;
 }
@@ -39,7 +39,7 @@ export interface ActivoCreateDTO {
     nombre: string;
     tipoActivoId: number;
     sectorId?: string | null;
-    monedaBase: string; // "USD" | "ARS"
+    monedaBase: string;
     esLocal: boolean;
     descripcion: string;
 }
