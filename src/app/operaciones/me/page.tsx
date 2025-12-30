@@ -45,6 +45,8 @@ import { downloadMisOperacionesPdf, downloadMisOperacionesExcel } from "@/servic
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import DescriptionIcon from '@mui/icons-material/Description';
+import FileUploadIcon from '@mui/icons-material/FileUpload'; // Import Icon
+import ImportExcelModal from "@/components/operaciones/ImportExcelModal"; // Import Modal
 
 import styles from "./styles/MyOperations.module.css";
 
@@ -79,6 +81,14 @@ export default function MyOperationsPage() {
 
 
     const [message, setMessage] = useState<{ text: string, type: "success" | "error" } | null>(null);
+
+    // Import Modal State
+    const [importModalOpen, setImportModalOpen] = useState(false);
+
+    const handleImportSuccess = () => {
+        setMessage({ text: "Operaciones importadas correctamente", type: "success" });
+        refresh(); // Refresh list
+    };
 
 
     const handleDeleteClick = (op: OperacionResponseDTO) => {
@@ -225,6 +235,37 @@ export default function MyOperationsPage() {
                                     <DescriptionIcon />
                                 </Button>
                             </Stack>
+
+                            <Button
+                                variant="contained"
+                                startIcon={<FileUploadIcon />}
+                                size="small"
+                                onClick={() => setImportModalOpen(true)}
+                                sx={{
+                                    height: 40,
+                                    flex: 1, // Expand to fill space
+                                    minWidth: '200px', // Ensure it's not too small
+                                    borderRadius: '12px',
+                                    textTransform: 'none',
+                                    fontSize: '0.95rem',
+                                    fontWeight: 700,
+                                    color: '#fff',
+                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', // Premium Blue-Purple Gradient
+                                    boxShadow: '0 4px 15px rgba(118, 75, 162, 0.4)',
+                                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                    '&:hover': {
+                                        background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
+                                        boxShadow: '0 6px 20px rgba(118, 75, 162, 0.6)',
+                                        transform: 'translateY(-2px)',
+                                    },
+                                    '&:active': {
+                                        transform: 'translateY(1px)',
+                                        boxShadow: '0 2px 10px rgba(118, 75, 162, 0.4)',
+                                    }
+                                }}
+                            >
+                                Importar Excel
+                            </Button>
                         </Box>
                     </Stack>
 
@@ -416,6 +457,12 @@ export default function MyOperationsPage() {
                     message={message?.text || ""}
                     severity={message?.type || "info"}
                     onClose={() => setMessage(null)}
+                />
+
+                <ImportExcelModal
+                    open={importModalOpen}
+                    onClose={() => setImportModalOpen(false)}
+                    onSuccess={handleImportSuccess}
                 />
             </Box>
         </RoleGuard >

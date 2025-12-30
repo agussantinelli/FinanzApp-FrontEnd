@@ -18,6 +18,7 @@ import {
   Button,
   Select,
   MenuItem,
+  Alert,
   CircularProgress,
   Skeleton,
   FormControl,
@@ -222,6 +223,25 @@ const PortfolioContent = () => {
   return (
     <RoleGuard>
       <Box className={styles.container}>
+        {valuacion?.activos?.some(a => a.cantidad < 0) && (
+          <Alert
+            severity="warning"
+            variant="filled"
+            sx={{ mb: 3, borderRadius: 2 }}
+            action={
+              <Button color="inherit" size="small" onClick={() => router.push('/operaciones/me')}>
+                Revisar Operaciones
+              </Button>
+            }
+          >
+            <Typography variant="subtitle2" fontWeight="bold">
+              Portafolio Inconsistente
+            </Typography>
+            <Typography variant="body2">
+              Se detectaron saldos negativos en tus activos. Esto suele ocurrir cuando hay ventas sin compras previas registradas.
+            </Typography>
+          </Alert>
+        )}
         <Grid container spacing={3}>
           <Grid size={{ xs: 12 }}>
             <Paper className={styles.headerPaper}>
