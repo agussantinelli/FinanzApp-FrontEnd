@@ -406,7 +406,8 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
 <h3>⚡ Unit & Integration (Vitest)</h3>
 <p>Validación de lógica de negocio, hooks y componentes aislados.</p>
 <ul>
-    <li><strong>Comando:</strong> <code>npm run test:unit</code></li>
+    <li><strong>Comando Visual:</strong> <code>npm run test:unit</code> (Modo Watch interactivo)</li>
+    <li><strong>Comando de Sistema:</strong> <code>npx vitest run</code> (Ejecución única para CI/CD)</li>
     <li><strong>Cobertura:</strong>
         <ul>
             <li>Algoritmos de valuación y formateo.</li>
@@ -446,7 +447,3 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
 <p>¡Las contribuciones son bienvenidas! Por favor, sentite libre de abrir un <strong>Pull Request</strong> o reportar un <strong>Issue</strong> para mejorar el proyecto.</p>
 
 <hr>
-
-<h2>⚖️ Licencia</h2>
-
-<p>MIT – ver archivo <code>LICENSE</code>.</p>
