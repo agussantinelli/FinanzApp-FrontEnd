@@ -107,58 +107,58 @@
     <tbody>
         <tr>
             <td><strong>Framework</strong></td>
-            <td>Next.js (App Router)</td>
-            <td>Routing moderno, Server/Client Components y SSR/SSG.</td>
+            <td>Next.js 16 (App Router)</td>
+            <td>React 19, Server Actions, SSR/SSG y Optimización de fuentes.</td>
         </tr>
         <tr>
             <td><strong>Lenguaje</strong></td>
-            <td>TypeScript</td>
-            <td>Tipado estricto para escalabilidad.</td>
+            <td>TypeScript 5</td>
+            <td>Tipado estricto, Interfaces y DTOs compartidos.</td>
         </tr>
         <tr>
             <td><strong>UI Library</strong></td>
-            <td>Material UI (MUI)</td>
-            <td>Componentes UI robustos y accesibles.</td>
+            <td>Material UI v7 (MUI)</td>
+            <td>Sistema de diseño robusto, accesible y personalizable.</td>
         </tr>
         <tr>
-            <td><strong>Estilo</strong></td>
-            <td>Tema Oscuro + Verde Flúor (<code>#39ff14</code>)</td>
-            <td>Estética moderna y legible.</td>
+            <td><strong>IA Integration</strong></td>
+            <td>Vercel AI SDK</td>
+            <td>Streaming de respuestas, manejo de estado y conexión con LLMs.</td>
         </tr>
         <tr>
-            <td><strong>Markdown</strong></td>
-            <td>React Markdown</td>
-            <td>Renderizado de respuestas ricas (IA).</td>
-        </tr>
-        <tr>
-            <td><strong>Iconos</strong></td>
-            <td>React Icons + MUI Icons</td>
-            <td>Variedad de iconos modernos.</td>
-        </tr>
-        <tr>
-            <td><strong>Fondo</strong></td>
-            <td>Efecto de partículas neón</td>
-            <td>Ligero y compatible con SSR.</td>
+            <td><strong>Gráficos</strong></td>
+            <td>Chart.js + React-Chartjs-2</td>
+            <td>Visualización de datos (Doughnut, Line, Bar charts) interactivos.</td>
         </tr>
         <tr>
             <td><strong>Validación</strong></td>
             <td>Zod</td>
-            <td>Esquemas estrictos y seguridad de tipos (Runtime).</td>
+            <td>Esquemas estrictos y seguridad de tipos en tiempo de ejecución.</td>
+        </tr>
+        <tr>
+            <td><strong>Testing</strong></td>
+            <td>Vitest + Playwright</td>
+            <td>Tests Unitarios rápidos y E2E para flujos críticos (Login, Importación).</td>
         </tr>
         <tr>
             <td><strong>HTTP Client</strong></td>
             <td>Axios</td>
-            <td>Manejo robusto de requests e interceptores (Auth).</td>
+            <td>Manejo robusto de requests, interceptores para JWT y manejo de errores.</td>
         </tr>
         <tr>
-            <td><strong>Testing</strong></td>
-            <td>Vitest + Testing Library</td>
-            <td>Unit y Component testing de alto rendimiento.</td>
+            <td><strong>Seguridad</strong></td>
+            <td>Google Auth + ReCAPTCHA</td>
+            <td>Autenticación federada y protección contra bots.</td>
         </tr>
         <tr>
-            <td><strong>Gráficos</strong></td>
-            <td>Chart.js</td>
-            <td>Visualización de datos (Doughnut, Line charts).</td>
+            <td><strong>Estilo</strong></td>
+            <td>Emotion + CSS Modules</td>
+            <td>Estilos dinámicos, animaciones y tema oscuro (Dark/Neon).</td>
+        </tr>
+        <tr>
+            <td><strong>Utilidades</strong></td>
+            <td>React Markdown / XLSX</td>
+            <td>Renderizado de texto enriquecido y procesamiento de hojas de cálculo.</td>
         </tr>
     </tbody>
 </table>
