@@ -196,6 +196,7 @@ export default function ImportExcelModal({ open, onClose, onSuccess }: ImportExc
                                             <TableCell align="left">Activo</TableCell>
                                             <TableCell align="left">Cantidad</TableCell>
                                             <TableCell align="left">Precio Unitario</TableCell>
+                                            <TableCell align="left">Precio Total</TableCell>
                                             <TableCell align="left">Moneda</TableCell>
                                             <TableCell align="center">Acciones</TableCell>
                                         </TableRow>
