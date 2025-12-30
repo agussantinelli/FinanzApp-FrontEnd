@@ -16,7 +16,7 @@ export async function updateActivo(id: string, dto: ActivoUpdateDTO): Promise<Ac
 }
 
 export async function deleteActivo(id: string): Promise<void> {
-    // Logical deletion as per requirement
+
     await http.delete(`/api/activos/${id}`);
 }
 
@@ -78,7 +78,7 @@ export async function getActivosByTipoAndSector(tipoId: number, sectorId: string
 
 export async function getActivosFavoritos(): Promise<ActivoDTO[]> {
     const res = await http.get<ActivoDTO[]>("/api/activos/favoritos");
-    cacheActivos(res.data, true); // Cache favorites as important
+    cacheActivos(res.data, true);
     return res.data;
 }
 

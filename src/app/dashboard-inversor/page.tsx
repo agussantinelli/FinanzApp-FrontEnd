@@ -38,7 +38,7 @@ export default function DashboardPage() {
   const [adminPortfolioStats, setAdminPortfolioStats] = useState<AdminPortfolioStatsDTO | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Currency Toggle State (Default USD)
+
   const [currency, setCurrency] = React.useState<'ARS' | 'USD'>('USD');
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export default function DashboardPage() {
         }
       } catch (error) {
         console.error("Error fetching dashboard stats:", error);
-        // 401 errors are handled by http interceptor
+
       } finally {
         setLoading(false);
       }
@@ -72,11 +72,11 @@ export default function DashboardPage() {
     fetchStats();
   }, [user]);
 
-  /* Hook Integration */
+
   const { valuacion, loading: portfolioLoading } = usePortfolioData();
 
   const renderInversorDashboard = () => {
-    // Calculate crypto exposure manually from fresh data if available, else fallback to stats
+
     let cryptoExposure = inversorStats?.exposicionCripto ?? 0;
     if (valuacion?.activos) {
       const cryptoVal = valuacion.activos
@@ -85,7 +85,7 @@ export default function DashboardPage() {
       cryptoExposure = cryptoVal;
     }
 
-    // Dynamic values based on currency
+
     const totalValue = valuacion
       ? (currency === 'ARS' ? valuacion.totalPesos : valuacion.totalDolares)
       : (inversorStats?.valorTotal ?? 0); // Fallback to stats if hook not ready (stats are likely ARS, need caution)
@@ -103,9 +103,7 @@ export default function DashboardPage() {
       ? (currency === 'ARS' ? valuacion.variacionPorcentajePesos : valuacion.variacionPorcentajeDolares)
       : (inversorStats?.rendimientoDiario ?? 0);
 
-    // FIX: If USD gain/variation is 0/missing but we have ARS data, 
-    // calculate an estimated USD gain using the implied exchange rate.
-    // This provides a "Snapshot Gain" (What my ARS gain is worth in USD today).
+
     if (valuacion && currency === 'USD' && dailyGain === 0 && valuacion.gananciaPesos !== 0 && valuacion.totalDolares > 0) {
       const impliedRate = valuacion.totalPesos / valuacion.totalDolares;
       if (impliedRate > 0) {
@@ -349,7 +347,7 @@ export default function DashboardPage() {
                 </Box>
 
                 <Stack direction="row" spacing={1.5} alignItems="center">
-                  {/* Currency Toggle for All Roles */}
+
                   <CurrencyToggle currency={currency} onCurrencyChange={setCurrency} />
 
                   <Button
@@ -368,7 +366,7 @@ export default function DashboardPage() {
           </Grid>
 
           {loading || portfolioLoading ? (
-            // Skeleton Loading State
+
             <>
               <Grid size={{ xs: 12, md: 3 }}>
                 <Paper className={`${styles.card} ${styles.highlightCard}`}>
@@ -407,10 +405,9 @@ export default function DashboardPage() {
             </>
           )}
 
-          {/* Shortcuts for each role (omitted/unchanged for brevity if already correct) */}
-          {/* We assume the rest of the file content (shortcuts) remains below... */}
 
-          {/* Inversor Shortcuts */}
+
+
           {user?.rol === RolUsuario.Inversor && (
             <Grid size={{ xs: 12, md: 6 }}>
               <Paper className={styles.sectionPaper}>
@@ -446,7 +443,7 @@ export default function DashboardPage() {
             </Grid>
           )}
 
-          {/* Experto Shortcuts */}
+
           {user?.rol === RolUsuario.Experto && (
             <Grid size={{ xs: 12, md: 6 }}>
               <Paper className={styles.sectionPaper}>
@@ -490,7 +487,7 @@ export default function DashboardPage() {
             </Grid>
           )}
 
-          {/* Admin Shortcuts */}
+
           {user?.rol === RolUsuario.Admin && (
             <Grid size={{ xs: 12, md: 6 }}>
               <Paper className={styles.sectionPaper}>

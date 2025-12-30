@@ -12,7 +12,7 @@ export type Order = 'asc' | 'desc';
 export type FilterType = 'TODAS' | 'Compra' | 'Venta';
 export type CurrencyFilterType = 'TODAS' | 'ARS' | 'USD';
 
-// Helper to identify CCL
+
 function isCCL(name: string) {
     const n = name.toLowerCase();
     return n.includes("contado") || n.includes("ccl") || n.includes("liqui");
@@ -23,7 +23,7 @@ export function useMyOperations() {
     const [operaciones, setOperaciones] = useState<OperacionResponseDTO[]>([]);
     const [loading, setLoading] = useState(true);
 
-    // Sort & Filter state
+
     const [orderBy, setOrderBy] = useState<keyof OperacionResponseDTO>('fecha');
     const [order, setOrder] = useState<Order>('desc');
     const [filterType, setFilterType] = useState<FilterType>('TODAS');
@@ -47,12 +47,10 @@ export function useMyOperations() {
                 getCotizacionesDolar()
             ])
                 .then(([opsData, dolarData]) => {
-                    // 1. Process Operations (Sort by date desc)
+
                     const sorted = opsData.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
                     setOperaciones(sorted);
 
-                    // 2. Process Dolar CCL
-                    // The user requested: "filtra siempre por el dolar ccl, en TODOS LOS CASOS"
                     const paramDolar = dolarData.find(d => isCCL(d.nombre));
                     if (paramDolar) {
                         setDolarBlue({ compra: paramDolar.compra, venta: paramDolar.venta });
@@ -66,58 +64,55 @@ export function useMyOperations() {
         }
     }, [user, refreshTrigger]);
 
-    // Sorting & Filtering Logic
+
     const processedOperations = useMemo(() => {
         let result = [...operaciones];
 
-        // 1. Filter Type
+
         if (filterType !== 'TODAS') {
             result = result.filter(op => op.tipo === filterType);
         }
 
         if (filterCurrency !== 'TODAS' && dolarBlue) {
             result = result.map(op => {
-                // If operation Moneda matches Filter, keep it number-wise (or maybe ensure strict equality)
+
                 if (op.moneda === filterCurrency) return op;
 
-                // Needs Conversion
-                const isTargetUSD = filterCurrency === 'USD'; // Source is ARS
-                const isTargetARS = filterCurrency === 'ARS'; // Source is USD
+                const isTargetUSD = filterCurrency === 'USD';
+                const isTargetARS = filterCurrency === 'ARS';
 
                 let newPrice = op.precioUnitario;
                 let newTotal = op.totalOperado;
 
-                if (isTargetUSD) { // ARS -> USD
-                    // We divide by 'Venta' (Market price to buy dollars)
+                if (isTargetUSD) {
                     newPrice = op.precioUnitario / dolarBlue.venta;
                     newTotal = op.totalOperado / dolarBlue.venta;
-                } else if (isTargetARS) { // USD -> ARS
-                    // We multiply by 'Compra' (Market price to sell dollars)
+                } else if (isTargetARS) {
                     newPrice = op.precioUnitario * dolarBlue.compra;
                     newTotal = op.totalOperado * dolarBlue.compra;
                 }
 
                 return {
                     ...op,
-                    moneda: filterCurrency, // Update currency to match the target filter for correct UI formatting
+                    moneda: filterCurrency,
                     precioUnitario: newPrice,
                     totalOperado: newTotal,
                 };
             });
         }
 
-        // 3. Sort
+
         result.sort((a, b) => {
             let aValue = a[orderBy];
             let bValue = b[orderBy];
 
-            // Handle dates if sorting by date
+
             if (orderBy === 'fecha') {
                 aValue = new Date(a.fecha as string).getTime();
                 bValue = new Date(b.fecha as string).getTime();
             }
 
-            // Handle string comparison (case-insensitive)
+
             if (typeof aValue === 'string' && typeof bValue === 'string') {
                 aValue = aValue.toLowerCase();
                 bValue = bValue.toLowerCase();
@@ -150,15 +145,12 @@ export function useMyOperations() {
         action: 'DELETE' | 'EDIT',
         newValues?: { cantidad: number }
     ): { valid: boolean; message?: string } => {
-        // 1. Get all operations for this asset
+
         const assetOps = operaciones.filter(o => o.activoSymbol === op.activoSymbol);
 
-        // 4. Validate using Temporal Consistency Logic
         const targetOpEvent = {
             id: op.id,
-            fecha: op.fecha, // For DELETE/EDIT, usually date is same unless edited. 
-            // If editing, we need new date? The current EDIT implementation in MyOperationsPage only edits Quantity/Price, NOT Date.
-            // So op.fecha is correct.
+            fecha: op.fecha,
             tipo: op.tipo,
             cantidad: newValues ? newValues.cantidad : op.cantidad,
             activoSymbol: op.activoSymbol

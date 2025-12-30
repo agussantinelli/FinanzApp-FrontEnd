@@ -40,7 +40,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { CurrencyToggle } from "@/components/common/CurrencyToggle";
 import PortfolioCompositionChart from "@/components/portfolio/PortfolioCompositionChart";
-// Helper for dynamic formatting
 import { usePortfolioSort, Order, OrderBy } from "@/hooks/usePortfolioSort";
 import { CreatePortfolioDialog, EditPortfolioDialog } from "@/components/portfolio/PortfolioDialogs";
 import FloatingMessage from "@/components/ui/FloatingMessage";
@@ -53,23 +52,22 @@ const PortfolioContent = () => {
   const searchParams = useSearchParams();
   const urlId = searchParams.get('id');
   const showBackButton = !!urlId;
-  // refreshPortfolios updates the list, refresh updates the current selected portfolio details
   const { portfolios, selectedId, valuacion, loading, error, handlePortfolioChange, refreshPortfolios, refresh } = usePortfolioData();
   const [currency, setCurrency] = React.useState<'ARS' | 'USD'>('USD');
 
-  // UI State
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [createOpen, setCreateOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
 
-  // Handle URL ID change
+
   React.useEffect(() => {
     if (urlId && urlId !== selectedId) {
       handlePortfolioChange(urlId);
     }
   }, [urlId, handlePortfolioChange, selectedId]);
 
-  // Sorting State
+
   const { order, orderBy, handleRequestSort, sortedActivos } = usePortfolioSort({
     activos: valuacion?.activos,
     currency,
@@ -77,7 +75,7 @@ const PortfolioContent = () => {
     totalDolares: valuacion?.totalDolares
   });
 
-  // Security Check
+
   const isOwner = React.useMemo(() => {
     if (!valuacion || !portfolios) return false;
     return portfolios.some(p => p.id === valuacion.id);
@@ -99,8 +97,8 @@ const PortfolioContent = () => {
   };
 
   const handleEditSuccess = () => {
-    refreshPortfolios(); // Update name/desc in list dropdown
-    refresh(); // Update name/desc in current view header
+    refreshPortfolios();
+    refresh();
   };
 
 
@@ -109,7 +107,6 @@ const PortfolioContent = () => {
       <RoleGuard>
         <Box className={styles.container}>
           <Grid container spacing={3}>
-            {/* Header Skeleton */}
             <Grid size={{ xs: 12 }}>
               <Paper className={styles.headerPaper}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -124,7 +121,6 @@ const PortfolioContent = () => {
                 </Stack>
               </Paper>
             </Grid>
-            {/* Cards Skeleton */}
             {[1, 2, 3].map((i) => (
               <Grid key={i} size={{ xs: 12, md: 4 }}>
                 <Paper className={styles.card}>
@@ -134,7 +130,6 @@ const PortfolioContent = () => {
                 </Paper>
               </Grid>
             ))}
-            {/* Chart Skeleton */}
             <Grid size={{ xs: 12 }}>
               <Paper className={styles.card} sx={{ height: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Skeleton variant="circular" width={250} height={250} />
@@ -145,7 +140,6 @@ const PortfolioContent = () => {
                 </Box>
               </Paper>
             </Grid>
-            {/* Table Skeleton */}
             <Grid size={{ xs: 12 }}>
               <Paper className={styles.tablePaper}>
                 <Skeleton height={40} width="30%" sx={{ mb: 2 }} />
@@ -229,7 +223,6 @@ const PortfolioContent = () => {
     <RoleGuard>
       <Box className={styles.container}>
         <Grid container spacing={3}>
-          {/* HEADER */}
           <Grid size={{ xs: 12 }}>
             <Paper className={styles.headerPaper}>
               {showBackButton && (
@@ -249,7 +242,6 @@ const PortfolioContent = () => {
                       {valuacion?.nombre || "Mi Portafolio"}
                     </Typography>
 
-                    {/* Change Portfolio - Only Owner */}
                     {isOwner && (
                       <>
                         <Tooltip title="Cambiar de portafolio">
@@ -275,7 +267,6 @@ const PortfolioContent = () => {
                       </>
                     )}
 
-                    {/* Edit Portfolio - Only Owner */}
                     {isOwner && (
                       <Tooltip title="Editar detalles">
                         <IconButton size="small" onClick={() => setEditOpen(true)}>
@@ -284,8 +275,6 @@ const PortfolioContent = () => {
                       </Tooltip>
                     )}
 
-                    {/* Create Portfolio - Only Owner context (kept visible in My Portfolios view) */}
-                    {/* User requested hiding "create" when viewing others. It's confusing context. */}
                     {isOwner && (
                       <Tooltip title="Crear nuevo portafolio">
                         <IconButton size="small" onClick={() => setCreateOpen(true)}>
@@ -357,7 +346,6 @@ const PortfolioContent = () => {
             />
           </Grid>
 
-          {/* CARDS */}
           <Grid size={{ xs: 12, md: 4 }}>
             <Paper className={`${styles.card} ${styles.highlightCard}`}>
               <Typography variant="caption" color="text.secondary">Valor Total ({currency})</Typography>
@@ -385,7 +373,6 @@ const PortfolioContent = () => {
 
                   let gain = currency === 'ARS' ? valuacion.gananciaPesos : valuacion.gananciaDolares;
 
-                  // Fix for potentially missing USD gain
                   if (currency === 'USD' && gain === 0 && valuacion.gananciaPesos !== 0 && valuacion.totalDolares > 0) {
                     const impliedRate = valuacion.totalPesos / valuacion.totalDolares;
                     if (impliedRate > 0) {
@@ -403,7 +390,6 @@ const PortfolioContent = () => {
                   let pct = currency === 'ARS' ? valuacion.variacionPorcentajePesos : valuacion.variacionPorcentajeDolares;
                   let gain = currency === 'ARS' ? valuacion.gananciaPesos : valuacion.gananciaDolares;
 
-                  // Fix for missing USD data
                   if (currency === 'USD' && gain === 0 && valuacion.gananciaPesos !== 0 && valuacion.totalDolares > 0) {
                     const impliedRate = valuacion.totalPesos / valuacion.totalDolares;
                     if (impliedRate > 0) {
@@ -431,7 +417,6 @@ const PortfolioContent = () => {
             </Paper>
           </Grid>
 
-          {/* COMPOSITION CHART */}
           <Grid size={{ xs: 12 }}>
             <PortfolioCompositionChart
               activos={valuacion?.activos || []}
@@ -441,7 +426,6 @@ const PortfolioContent = () => {
             />
           </Grid>
 
-          {/* TABLE */}
           <Grid size={{ xs: 12 }}>
             <Paper className={styles.tablePaper}>
               <Typography variant="h6" className={styles.sectionTitle} gutterBottom sx={{ fontSize: '1.5rem', fontWeight: 700 }}>
@@ -488,7 +472,6 @@ const PortfolioContent = () => {
                       ? valuacion.totalPesos / valuacion.totalDolares
                       : 0;
 
-                    // Normalize Prices
                     let priceARS = 0;
                     let priceUSD = 0;
                     let ppcARS = 0;
@@ -515,7 +498,6 @@ const PortfolioContent = () => {
                     const totalToShow = currency === 'ARS' ? totalARS : totalUSD;
                     const ppcToShow = currency === 'ARS' ? ppcARS : ppcUSD;
 
-                    // New Calculation: Total Purchase Cost (Costo Total)
                     const totalCostToShow = ppcToShow * a.cantidad;
 
                     const formatFn = currency === 'ARS' ? formatARS : formatUSD;
@@ -536,16 +518,12 @@ const PortfolioContent = () => {
                         </TableCell>
                         <TableCell align="left" sx={{ fontSize: '1rem' }}>{formatQuantity(a.cantidad)}</TableCell>
 
-                        {/* PPC */}
                         <TableCell align="left" sx={{ fontSize: '1rem' }}>{formatFn(ppcToShow)}</TableCell>
 
-                        {/* Costo Total */}
                         <TableCell align="left" sx={{ fontSize: '1rem' }}>{formatFn(totalCostToShow)}</TableCell>
 
-                        {/* Precio Actual */}
                         <TableCell align="left" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>{formatFn(priceToShow)}</TableCell>
 
-                        {/* Valor Actual */}
                         <TableCell align="left" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>{formatFn(totalToShow)}</TableCell>
 
                         <TableCell align="left" sx={{ fontSize: '1rem' }}>{formatPercentage(a.porcentajeCartera)}%</TableCell>
@@ -582,7 +560,7 @@ const PortfolioContent = () => {
           open={!!error && portfolios.length > 0}
           message={error || ""}
           severity="error"
-          onClose={() => { /* No close handler needed for persistent error state from hook, but maybe we should allow dismissing? Hook state is persistent unless retry. We can just let it sit or auto-hide. Let's auto-hide visually but state remains. */ }}
+          onClose={() => { }}
         />
       </Box>
     </RoleGuard >

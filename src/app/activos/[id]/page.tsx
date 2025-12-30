@@ -42,7 +42,7 @@ import { getCurrentUser } from "@/services/AuthService";
 import { createSlug } from "@/utils/slug";
 import { AccionRecomendada } from "@/types/Recomendacion";
 
-// Helpers
+
 const getAccionLabel = (accion: AccionRecomendada) => {
     switch (accion) {
         case AccionRecomendada.CompraFuerte: return "Compra Fuerte";
@@ -81,7 +81,7 @@ export default function ActivoDetalle() {
             return;
         }
 
-        // Optimistic Update
+
         const updatedAsset = { ...activo, loSigo: !activo.loSigo };
         updateActivoState(updatedAsset);
 
@@ -89,7 +89,7 @@ export default function ActivoDetalle() {
             await toggleSeguirActivo(activo.id);
         } catch (error) {
             console.error("Error toggling follow:", error);
-            // Revert on error
+
             updateActivoState(activo);
         }
     };
@@ -176,9 +176,9 @@ export default function ActivoDetalle() {
 
     return (
         <Box className={styles.mainBox}>
-            {/* Hero Section */}
+
             <Box className={styles.heroSection}>
-                {/* Decorative generic background blob */}
+
                 <Box
                     className={styles.decorativeBlob}
                     sx={{ bgcolor: brandColor }}
@@ -307,7 +307,7 @@ export default function ActivoDetalle() {
 
             <Container maxWidth="lg" className={styles.contentContainer}>
                 <Grid container spacing={4}>
-                    {/* Left Column: Details */}
+
                     <Grid size={{ xs: 12, md: 8 }}>
                         <Paper
                             elevation={0}

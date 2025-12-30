@@ -12,7 +12,7 @@ export function usePortfolioData() {
 
     const { isAuthenticated } = useAuth();
 
-    // 1. Fetch Portfolio List (Only once when auth ready)
+
     useEffect(() => {
         if (!isAuthenticated) return;
 
@@ -24,10 +24,10 @@ export function usePortfolioData() {
                 if (!isMounted) return;
                 setPortfolios(data);
                 if (data.length > 0 && !selectedId) {
-                    // Set default selected ID if none selected
+
                     setSelectedId(data[0].id);
                 } else if (data.length === 0) {
-                    setLoading(false); // Nothing to load for details
+                    setLoading(false);
                 }
             })
             .catch(err => {
@@ -36,9 +36,9 @@ export function usePortfolioData() {
             });
 
         return () => { isMounted = false; };
-    }, [isAuthenticated]); // Removed selectedId dependency
+    }, [isAuthenticated]);
 
-    // 2. Fetch Portfolio Details (Whenever selectedId changes)
+
     const fetchDetails = useCallback(async (id: string) => {
         if (!id) return;
         setLoading(true);
@@ -71,7 +71,7 @@ export function usePortfolioData() {
         getMisPortafolios()
             .then(data => {
                 setPortfolios(data);
-                // If the selected ID is no longer in the list (deleted), or if we had none, select the first one
+
                 if (data.length > 0) {
                     if (!selectedId || !data.find(p => p.id === selectedId)) {
                         setSelectedId(data[0].id);

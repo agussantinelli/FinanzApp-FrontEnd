@@ -21,7 +21,7 @@ import styles from "./styles/Register.module.css";
 
 export default function RegisterPage() {
   const {
-    // State
+
     nombre, setNombre,
     apellido, setApellido,
     email, setEmail,
@@ -33,7 +33,7 @@ export default function RegisterPage() {
     provinciaResidenciaId, setProvinciaResidenciaId,
     localidadResidenciaId, setLocalidadResidenciaId,
 
-    // Geo Data
+
     geoData,
     loadingGeo,
     errorGeo,
@@ -41,13 +41,13 @@ export default function RegisterPage() {
     localidadesParaCombo,
     esResidenciaArgentina,
 
-    // Status
+
     submitting,
     fieldErrors,
     apiError,
     successSubmit,
 
-    // Handlers
+
     handleSubmit,
     clearFieldError,
     clearApiError,

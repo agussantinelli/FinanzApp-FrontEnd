@@ -66,21 +66,21 @@ export default function MyOperationsPage() {
         checkValidation
     } = useMyOperations();
 
-    // Delete State
+
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [opToDelete, setOpToDelete] = useState<OperacionResponseDTO | null>(null);
     const [deleting, setDeleting] = useState(false);
 
-    // Edit State
+
     const [editDialogOpen, setEditDialogOpen] = useState(false);
     const [editingOp, setEditingOp] = useState<OperacionResponseDTO | null>(null);
     const [editValues, setEditValues] = useState({ cantidad: "", precio: "" });
     const [updating, setUpdating] = useState(false);
 
-    // Feedback
+
     const [message, setMessage] = useState<{ text: string, type: "success" | "error" } | null>(null);
 
-    // DELETE HANDLERS
+
     const handleDeleteClick = (op: OperacionResponseDTO) => {
         setOpToDelete(op);
         setDeleteDialogOpen(true);
@@ -89,7 +89,7 @@ export default function MyOperationsPage() {
     const confirmDelete = async () => {
         if (!opToDelete) return;
 
-        // Validation check
+
         const validation = checkValidation(opToDelete, 'DELETE');
         if (!validation.valid) {
             setMessage({ text: validation.message || "Error de validación", type: "error" });
@@ -113,7 +113,7 @@ export default function MyOperationsPage() {
         }
     };
 
-    // EDIT HANDLERS
+
     const handleEditClick = (op: OperacionResponseDTO) => {
         setEditingOp(op);
         setEditValues({
@@ -129,19 +129,10 @@ export default function MyOperationsPage() {
         const newCantidad = parseFloat(editValues.cantidad);
         const newPrecio = parseFloat(editValues.precio);
 
-        // Validation check
+
         const validation = checkValidation(editingOp, 'EDIT', { cantidad: newCantidad });
         if (!validation.valid) {
             setMessage({ text: validation.message || "Error de validación", type: "error" });
-            setEditDialogOpen(false); // Should we close it or keep it open so they can fix it? 
-            // Ideally keep it open, but user UX might prefer seeing the error. 
-            // With FloatingMessage, it's fine.
-            // But if I close the dialog they lose their input.
-            // Let's close it for safety as per other flow, or keep it. 
-            // The user code closes it on error in catch, so let's match that behavior or improve.
-            // Actually, catch doesn't close on error... wait lines 123-126.
-            // catch sets Error, then finally sets Updating false and EditingOp null.
-            // So it closes. I will follow suit.
             setEditingOp(null);
             return;
         }
@@ -372,7 +363,7 @@ export default function MyOperationsPage() {
                     </Paper>
                 </Container>
 
-                {/* DELETE CONFIRMATION */}
+
                 <ConfirmDialog
                     open={deleteDialogOpen}
                     title="Eliminar Operación"
@@ -384,7 +375,7 @@ export default function MyOperationsPage() {
                     confirmColor="error"
                 />
 
-                {/* EDIT DIALOG */}
+
                 <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)} maxWidth="xs" fullWidth>
                     <DialogTitle>Editar Operación</DialogTitle>
                     <DialogContent>
@@ -419,7 +410,7 @@ export default function MyOperationsPage() {
                     </DialogActions>
                 </Dialog>
 
-                {/* FEEDBACK */}
+
                 <FloatingMessage
                     open={!!message}
                     message={message?.text || ""}

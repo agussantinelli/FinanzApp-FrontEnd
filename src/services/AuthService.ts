@@ -64,8 +64,7 @@ export async function verifySession() {
   try {
     let endpoint = "/api/dashboard/inversor/stats";
 
-    // Check role to call the correct protected endpoint
-    // This avoids 403 errors if an Admin tries to access Inversor stats
+
     if (user.rol === RolUsuario.Experto) {
       endpoint = "/api/dashboard/experto/stats";
     } else if (user.rol === RolUsuario.Admin) {
@@ -74,7 +73,7 @@ export async function verifySession() {
 
     await http.get(endpoint);
   } catch (error) {
-    // Ignore other errors, we only care about 401 which is handled by interceptor
+
     console.error("Session verification probe failed", error);
   }
 }
@@ -82,11 +81,11 @@ export async function verifySession() {
 export function hasRole(rolesPermitidos: RolUsuario[]): boolean {
   const user = getCurrentUser();
   if (!user) return false;
-  // Cast string role to RolUsuario for check if necessary, or ensure types align
+
   return rolesPermitidos.includes(user.rol as RolUsuario);
 }
 
-// Llamadas HTTP
+
 
 export async function getRegisterGeoData(): Promise<RegisterGeoDataDTO> {
   const response = await http.get<RegisterGeoDataDTO>("/geo/register-data");
@@ -103,8 +102,7 @@ export async function register(
   data: UserRegisterRequest
 ): Promise<UserLoginResponseDTO> {
   const response = await http.post<UserLoginResponseDTO>("/api/auth/register", data);
-  // Disabled auto-session to require manual login after registration per user request
-  // setAuthSession(response.data); 
+
   return response.data;
 }
 
@@ -136,13 +134,13 @@ export async function resetPasswordConfirm(data: ResetPasswordConfirmDTO): Promi
 }
 
 
-// Ruta home según rol
+
 export function getHomePathForRole(rol: string | null | undefined): string {
   const r = rol?.toLowerCase();
 
   if (r === "admin") return "/dashboard-admin";
   if (r === "experto") return "/dashboard-experto";
 
-  // por defecto, inversor o cualquier otro
+
   return "/dashboard-inversor";
 }

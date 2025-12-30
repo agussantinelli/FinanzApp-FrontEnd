@@ -79,10 +79,9 @@ export function useLogin() {
         const scope = "openid email profile";
         const nonce = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
 
-        // Construct Implicit Flow URL (response_type=id_token)
         const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=id_token&scope=${encodeURIComponent(scope)}&nonce=${nonce}&prompt=select_account`;
 
-        // Open popup
+
         const width = 500;
         const height = 600;
         const left = window.screen.width / 2 - width / 2;
@@ -95,7 +94,7 @@ export function useLogin() {
         );
     };
 
-    // Listen for messages from popup
+
     useEffect(() => {
         const handleMessage = async (event: MessageEvent) => {
             if (event.origin !== window.location.origin) return;

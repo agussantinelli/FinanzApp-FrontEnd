@@ -23,7 +23,7 @@ export type RegisterFieldErrors = {
 export function useRegister() {
     const router = useRouter();
 
-    // Form Fields
+
     const [nombre, setNombre] = useState("");
     const [apellido, setApellido] = useState("");
     const [email, setEmail] = useState("");
@@ -36,23 +36,21 @@ export function useRegister() {
     const [provinciaResidenciaId, setProvinciaResidenciaId] = useState<string>("");
     const [localidadResidenciaId, setLocalidadResidenciaId] = useState<string>("");
 
-    // Captcha
     const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
 
-    // Geo Data State
+
     const [geoData, setGeoData] = useState<RegisterGeoDataDTO | null>(null);
     const [loadingGeo, setLoadingGeo] = useState(true);
     const [errorGeo, setErrorGeo] = useState<string | null>(null);
 
-    // Submission State
+
     const [submitting, setSubmitting] = useState(false);
     const [fieldErrors, setFieldErrors] = useState<RegisterFieldErrors>({});
     const [apiError, setApiError] = useState<string | null>(null);
     const [successSubmit, setSuccessSubmit] = useState<string | null>(null);
 
-    // Load Geo Data
+
     useEffect(() => {
-        // Clear any stale session to avoid 401 on registration if a bad token exists
         if (typeof window !== "undefined") {
             sessionStorage.clear();
         }
@@ -81,7 +79,7 @@ export function useRegister() {
         return () => { mounted = false; };
     }, []);
 
-    // Derived State
+
     const argentinaId = useMemo(() => {
         if (!geoData) return "";
         const ar = geoData.paises.find((p) => p.codigoIso2 === "AR");
@@ -103,7 +101,7 @@ export function useRegister() {
         );
     }, [geoData, esResidenciaArgentina, provinciaResidenciaId]);
 
-    // Validation
+
     const validate = (): boolean => {
         const errors: RegisterFieldErrors = {};
         const emailTrim = email.trim();
@@ -139,19 +137,14 @@ export function useRegister() {
         }
 
         if (!recaptchaToken) {
-            // Ideally we show a global error or field error. 
-            // Since it's not a field in the visual form list (it's separate), we might set a generic error or just fail logic.
-            // Let's set a generic apiError or similar if user tries to submit without it?
-            // Or better, return false and let the UI show "Falta validar captcha" if we had a dedicated error slot.
-            // For now, let's treat it as a blocker but maybe not strictly a 'fieldError' unless we map it.
-            // I'll leave it as is, but handle it in handleSubmit check.
+
         }
 
         setFieldErrors(errors);
         return Object.keys(errors).length === 0;
     };
 
-    // Handlers
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setApiError(null);
@@ -206,7 +199,7 @@ export function useRegister() {
     };
 
     return {
-        // State
+
         nombre, setNombre,
         apellido, setApellido,
         email, setEmail,
@@ -218,10 +211,9 @@ export function useRegister() {
         provinciaResidenciaId, setProvinciaResidenciaId,
         localidadResidenciaId, setLocalidadResidenciaId,
 
-        // Captcha
         recaptchaToken, setRecaptchaToken,
 
-        // Geo Data
+
         geoData,
         loadingGeo,
         errorGeo,
@@ -229,13 +221,13 @@ export function useRegister() {
         localidadesParaCombo,
         esResidenciaArgentina,
 
-        // Status
+
         submitting,
         fieldErrors,
         apiError,
         successSubmit,
 
-        // Handlers
+
         handleSubmit,
         clearFieldError,
         clearApiError: () => setApiError(null),
