@@ -80,6 +80,8 @@
     <li><strong>Valuación Inteligente:</strong> Conversión automática ARS/USD aplicando el tipo de cambio más conveniente (MEP/CCL/Blue).</li>
     <li><strong>Dashboard Patrimonial:</strong> Visualización clara del patrimonio total y distribución por tipo de activo.</li>
     <li><strong>📥 Importación Inteligente:</strong> Carga masiva de operaciones desde Excel analizada por IA, con previsualización editable, detección de duplicados y validación de consistencia (anti-saldos negativos).</li>
+    <li><strong>🌐 Inversión Social:</strong> Explora las estrategias más rentables de la comunidad, visualiza sus portafolios y aprende de los mejores inversores.</li>
+    <li><strong>🛡️ Seguridad Integral:</strong> Protección de identidad mediante Google Login y prevención de bots con reCAPTCHA v3 invisible.</li>
     <li><strong>🤖 FinanzAI:</strong> Asistente financiero inteligente flotante, integrado con IA para responder consultas en tiempo real con formato enriquecido.</li>
 </ul>
 
