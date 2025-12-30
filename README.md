@@ -24,7 +24,8 @@
     <img src="https://img.shields.io/badge/Material%20UI-7.3.4-007FFF?style=for-the-badge&logo=mui&logoColor=white" alt="MUI Badge"/>
     <img src="https://img.shields.io/badge/React_Markdown-9.0.3-000000?style=for-the-badge&logo=markdown&logoColor=white" alt="React Markdown Badge"/>
     <img src="https://img.shields.io/badge/React_Icons-5.5.0-E91E63?style=for-the-badge&logo=react&logoColor=white" alt="React Icons Badge"/>
-    <img src="https://img.shields.io/badge/Rect_Scan-Recaptcha-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="reCAPTCHA Badge"/>
+    <img src="https://img.shields.io/badge/Google_reCAPTCHA-v2-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="reCAPTCHA Badge"/>
+    <img src="https://img.shields.io/badge/Google_Identity-OAuth_2.0-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Google Identity Badge"/>
     <img src="https://img.shields.io/badge/Playwright-1.57.0-2EAD33?style=for-the-badge&logo=playwright&logoColor=white" alt="Playwright Badge"/>
     <img src="https://img.shields.io/badge/tsParticles-2.12-000000?style=for-the-badge&logo=javascript&logoColor=white" alt="tsParticles Badge"/>
     <img src="https://img.shields.io/badge/JWT%20Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT Badge"/>
@@ -262,14 +263,14 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
     <li>
         <strong>🏰 Identidad & Acceso:</strong>
         <ul>
-            <li><strong>Google Login (OIDC):</strong> Integración nativa con <code>@react-oauth/google</code> para autenticación sin contraseña.</li>
+            <li><strong>Google Login (OIDC):</strong> Integración nativa OAuth 2.0 (Pop-up Flow) para autenticación segura.</li>
             <li><strong>JWT Tradicional:</strong> Soporte completo para Email/Password con hashing robusto en backend.</li>
         </ul>
     </li>
     <li>
         <strong>🤖 Protección Anti-Bots:</strong>
         <ul>
-            <li><strong>ReCAPTCHA v2 Invisible:</strong> Bloqueo proactivo de tráfico automatizado en Login y Registro.</li>
+            <li><strong>ReCAPTCHA v2:</strong> Bloqueo proactivo de tráfico automatizado en Login y Registro.</li>
         </ul>
     </li>
     <li>
