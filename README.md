@@ -366,49 +366,35 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
 
 <h2>👥 Roles y Seguridad</h2>
 
-<p>La aplicación implementa un sistema de control de acceso basado en roles (RBAC) asegurado por <code>RoleGuard</code>.</p>
+<h3>🛡️ Arquitectura de Roles (RBAC)</h3>
 
-<h3>Flujos de Navegación por Rol</h3>
+<p>La aplicación implementa un sistema estricto de control de acceso basado en roles, asegurado por el componente <code>RoleGuard</code> que envuelve las rutas protegidas.</p>
 
 <ul>
-    <li><strong>Inversor (Rol Default)</strong>
+    <li>
+        <strong>👤 Inversor (Default)</strong>
         <ul>
-            <li><strong>Inicio:</strong> Redirige a <code>/dashboard-inversor</code>.</li>
-            <li><strong>Permisos:</strong>
-                <ul>
-                    <li>Ver su propio portafolio y valuación en tiempo real.</li>
-                    <li>Registrar operaciones de compra/venta.</li>
-                    <li>Consultar cotizaciones de mercado.</li>
-                </ul>
-            </li>
-            <li><strong>Restricciones:</strong> No tiene acceso a paneles de métricas globales.</li>
+            <li><strong>Acceso:</strong> <code>/dashboard-inversor</code>, <code>/portfolio</code>, <code>/operaciones</code>.</li>
+            <li><strong>Alcance:</strong> Gestión de patrimonio personal y consulta de mercado.</li>
         </ul>
     </li>
-    <li><strong>Administrador (Admin)</strong>
+    <li>
+        <strong>👮 Administrador (Admin)</strong>
         <ul>
-            <li><strong>Inicio:</strong> Redirige a <code>/dashboard-admin</code>.</li>
-            <li><strong>Permisos:</strong>
-                <ul>
-                    <li>Acceso total a métricas de negocio (Usuarios, Volumen Operado).</li>
-                    <li>Gestión de la plataforma.</li>
-                </ul>
-            </li>
+            <li><strong>Acceso:</strong> <code>/dashboard-admin</code>.</li>
+            <li><strong>Alcance:</strong> Visión global del negocio, gestión de usuarios (ABM) y auditoría de operaciones.</li>
         </ul>
     </li>
-    <li><strong>Experto Financiero</strong>
+    <li>
+        <strong>🧠 Experto Financiero</strong>
         <ul>
-            <li><strong>Inicio:</strong> Redirige a <code>/dashboard-experto</code>.</li>
-            <li><strong>Permisos:</strong>
-                <ul>
-                    <li>Emitir recomendaciones de inversión (Señales de compra/venta).</li>
-                    <li>Gestionar su track record de sugerencias.</li>
-                </ul>
-            </li>
+            <li><strong>Acceso:</strong> <code>/dashboard-experto</code>.</li>
+            <li><strong>Alcance:</strong> Creación de señales de inversión y gestión de reputación pública.</li>
         </ul>
     </li>
 </ul>
 
-<p><strong>Seguridad Check:</strong> Si un usuario intenta acceder a una ruta no autorizada (ej. Inversor entrando a <code>/dashboard-admin</code>), el sistema lo intercepta y redirige automáticamente a <code>/access-denied</code>.</p>
+<p><strong>🚫 Control de Acceso:</strong> Intento de acceso no autorizado (ej. Inversor &rarr; ruta Admin) dispara una redirección automática a <code>/access-denied</code>.</p>
 
 <hr>
 
