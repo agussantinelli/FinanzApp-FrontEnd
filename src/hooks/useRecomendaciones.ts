@@ -45,15 +45,13 @@ export function useRecomendaciones(initialOptions?: { soloActivas?: boolean; ena
         if (isGenericFetch) {
             const cached = getAllRecomendacionesFromCache();
             if (cached && cached.length > 0) {
-                // Logic to use cache if valid? Assuming cache strategy handles this
-                // For now, let's keep it simple and just re-fetch to ensure fresh active data
+
             }
         }
 
         try {
             let res: RecomendacionResumenDTO[] = [];
 
-            // Pass filters.soloActivas (defaults true) to all
             if (filters.sectorId) {
                 res = await service.getRecomendacionesBySector(filters.sectorId, filters.soloActivas);
             } else if (filters.autorId) {
@@ -68,7 +66,6 @@ export function useRecomendaciones(initialOptions?: { soloActivas?: boolean; ena
                 res = await service.getRecomendacionesByHorizonte(filters.horizonteId, filters.soloActivas);
             } else if (filters.riesgoId) {
                 res = await service.getRecomendacionesByRiesgo(filters.riesgoId, filters.soloActivas);
-                // Admin specific filter
             } else if (filters.adminStateFilter !== undefined) {
                 if (filters.adminStateFilter === -1) {
                     res = await service.getRecomendacionesActivasPendientes();

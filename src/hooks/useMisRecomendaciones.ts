@@ -40,17 +40,17 @@ export function useMisRecomendaciones(targetUserId?: string) {
 
     const [sectores, setSectores] = useState<SectorDTO[]>([]);
 
-    // Dropdown States
+
     const [selectedSector, setSelectedSector] = useState("");
     const [selectedHorizonte, setSelectedHorizonte] = useState("");
     const [selectedRiesgo, setSelectedRiesgo] = useState("");
 
-    // Applied Filters State (Client-side)
+
     const [activeRiesgo, setActiveRiesgo] = useState("");
     const [activeHorizonte, setActiveHorizonte] = useState("");
     const [activeSector, setActiveSector] = useState("");
 
-    // Initial load
+
     useEffect(() => {
         console.log("useMisRecomendaciones Effect - Calling applyFilters with User:", effectiveUserId);
         if (effectiveUserId) {
@@ -62,16 +62,15 @@ export function useMisRecomendaciones(targetUserId?: string) {
     const handleApply = () => {
         if (!effectiveUserId) return;
 
-        // Update Hook Filters (Force Author Fetch always)
         applyFilters({
             autorId: effectiveUserId,
             soloActivas: false,
-            sectorId: undefined, // Force undefined so hook uses autorId
+            sectorId: undefined,
             horizonteId: undefined,
             riesgoId: undefined
         });
 
-        // Update Client-Side Filters
+
         setActiveRiesgo(selectedRiesgo);
         setActiveHorizonte(selectedHorizonte);
         setActiveSector(selectedSector);
@@ -86,7 +85,6 @@ export function useMisRecomendaciones(targetUserId?: string) {
         setActiveSector("");
 
         if (effectiveUserId) {
-            // Reset to just ME + inactive
             applyFilters({
                 autorId: effectiveUserId,
                 soloActivas: false,
@@ -98,33 +96,25 @@ export function useMisRecomendaciones(targetUserId?: string) {
         }
     };
 
-    // Filter Logic
     const displayedData = useMemo(() => {
         if (!data) return [];
 
         return data.filter(item => {
-            // Data is strictly fetched by Author now, so we trust ownership.
-
-            // 1. Sector Check (Client Side)
             if (activeSector) {
                 const anyItem = item as any;
-                // Check possible field names for sectors in DTO
                 const itemSectores = anyItem.sectoresObjetivo || anyItem.sectores;
 
-                // If data is missing sector info, we can't filter positively, so we hide it to respect the filter.
                 if (!itemSectores || !Array.isArray(itemSectores)) return false;
 
                 const hasSector = itemSectores.some((s: any) => s.id === activeSector);
                 if (!hasSector) return false;
             }
 
-            // 2. Risk Check
             if (activeRiesgo) {
                 const riesgoStr = getRiesgoString(activeRiesgo);
                 if (item.riesgo !== riesgoStr) return false;
             }
 
-            // 3. Horizon Check
             if (activeHorizonte) {
                 const horizonStr = getHorizonteString(activeHorizonte);
                 if (item.horizonte !== horizonStr) return false;

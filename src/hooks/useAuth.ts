@@ -15,10 +15,7 @@ export function useAuth() {
         setUser(u);
         setLoading(false);
 
-        // Verify session validity with backend if local user exists
-        if (u) {
-            verifySession();
-        }
+        verifySession();
     }, []);
 
     useEffect(() => {

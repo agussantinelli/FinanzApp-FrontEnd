@@ -7,7 +7,7 @@ import { getSectores } from '@/services/SectorService';
 
 export type Order = 'asc' | 'desc';
 
-// Simple in-memory cache for metadata to avoid re-fetching on tab switches
+
 let cachedTipos: TipoActivoDTO[] | null = null;
 let cachedSectores: SectorDTO[] | null = null;
 
@@ -15,12 +15,12 @@ export function useActivosFilterAndSort(activos: ActivoDTO[]) {
     const [tipos, setTipos] = useState<TipoActivoDTO[]>(cachedTipos || []);
     const [sectores, setSectores] = useState<SectorDTO[]>(cachedSectores || []);
 
-    // Filter State
+
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedType, setSelectedType] = useState<string | number>("Todos");
     const [selectedSector, setSelectedSector] = useState<string>("Todos");
 
-    // Sort State
+
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof ActivoDTO>('symbol');
 
@@ -49,19 +49,19 @@ export function useActivosFilterAndSort(activos: ActivoDTO[]) {
 
     const filteredAndSortedActivos = useMemo(() => {
         const filtered = activos.filter(activo => {
-            // Search Filter
+
             const lowerTerm = searchTerm.toLowerCase();
             const matchesSearch = activo.symbol.toLowerCase().includes(lowerTerm) ||
                 activo.nombre.toLowerCase().includes(lowerTerm);
 
-            // Type Filter
+
             let matchesType = true;
             if (selectedType !== "Todos") {
                 const tObj = tipos.find(t => t.id === Number(selectedType));
                 matchesType = tObj ? activo.tipo === tObj.nombre : true;
             }
 
-            // Sector Filter
+
             let matchesSector = true;
             if (selectedSector !== "Todos") {
                 const sObj = sectores.find(s => s.id === selectedSector);
@@ -71,19 +71,19 @@ export function useActivosFilterAndSort(activos: ActivoDTO[]) {
             return matchesSearch && matchesType && matchesSector;
         });
 
-        // Sorting
+
         return filtered.sort((a, b) => {
             let valueA = a[orderBy];
             let valueB = b[orderBy];
 
-            // Handle null/undefined for Sector or other optional fields
+
             if (orderBy === 'sector') {
                 valueA = valueA || '';
                 valueB = valueB || '';
             }
 
             if (typeof valueA === 'string' && typeof valueB === 'string') {
-                // Case insensitive sort
+
                 valueA = valueA.toLowerCase();
                 valueB = valueB.toLowerCase();
                 if (valueB < valueA) {

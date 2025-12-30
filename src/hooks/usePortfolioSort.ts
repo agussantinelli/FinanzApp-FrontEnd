@@ -32,7 +32,7 @@ export function usePortfolioSort({ activos, currency, totalPesos, totalDolares }
             let valA: number | string = 0;
             let valB: number | string = 0;
 
-            // Helper to get normalized prices for sorting
+
             const getValues = (asset: ActivoEnPortafolioDTO) => {
                 const assetCurrency = asset.moneda || "ARS";
                 const isAssetUSD = assetCurrency === 'USD' || assetCurrency === 'USDT' || assetCurrency === 'USDC';

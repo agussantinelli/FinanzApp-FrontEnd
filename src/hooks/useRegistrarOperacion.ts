@@ -22,18 +22,18 @@ export function useRegistrarOperacion() {
     const [asset, setAsset] = useState<ActivoDTO | null>(null);
     const [options, setOptions] = useState<ActivoDTO[]>([]);
 
-    // Portfolio State
+
     const [portfolios, setPortfolios] = useState<PortafolioDTO[]>([]);
     const [portfolioId, setPortfolioId] = useState<string>("");
     const [detailedPortfolio, setDetailedPortfolio] = useState<PortafolioValuadoDTO | null>(null);
 
-    // Form States
+
     const [tipo, setTipo] = useState<TipoOperacion>(TipoOperacion.Compra);
     const [cantidad, setCantidad] = useState<string>("");
     const [precio, setPrecio] = useState<string>("");
     const [moneda, setMoneda] = useState<string>("ARS");
 
-    // Initial date handling
+
     const getLocalISOString = () => {
         const now = new Date();
         now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -45,7 +45,7 @@ export function useRegistrarOperacion() {
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
 
-    // Initial Load: Check for URL Params
+
     useEffect(() => {
         const activoIdParam = searchParams.get('activoId');
         const tipoParam = searchParams.get('tipo');
@@ -66,7 +66,7 @@ export function useRegistrarOperacion() {
         }
     }, [searchParams]);
 
-    // Fetch Portfolios
+
     useEffect(() => {
         getMisPortafolios()
             .then(data => {
@@ -81,24 +81,18 @@ export function useRegistrarOperacion() {
             });
     }, []);
 
-    // Fetch Detailed Portfolio when ID changes
+
     useEffect(() => {
         if (!portfolioId) return;
         getPortafolioValuado(portfolioId)
             .then(data => setDetailedPortfolio(data))
             .catch(err => {
                 console.error("Error fetching detailed portfolio:", err);
-                // Don't block everything, but warn
-                // setError("Error al cargar detalles del portafolio."); 
-                // Actually maybe better to just log or show a non-blocking toast. 
-                // Since we use the same 'error' state for specific form validation, 
-                // setting it here might be annoying if it persists.
-                // Let's set it but maybe the user can dismiss it.
                 setError("No se pudo cargar el detalle del portafolio seleccionado.");
             });
     }, [portfolioId]);
 
-    // Asset Search Logic
+
     const handleSearch = useMemo(
         () => debounce(async (input: string) => {
             if (input.length < 2) return;
@@ -112,28 +106,27 @@ export function useRegistrarOperacion() {
         []
     );
 
-    // Dynamic Updates based on Mode/Asset
+
     useEffect(() => {
         if (mode === "actual") {
             setFecha(getLocalISOString());
-            // Updated to be just a suggestion, user can edit
             if (asset?.precioActual) {
                 setPrecio(asset.precioActual.toString());
             }
         }
 
-        // Auto-set currency based on asset
+
         if (asset) {
-            // Check both properties as legacy/new dtos might vary, default to ARS
+
             const assetCurrency = (asset as any).moneda || asset.monedaBase || "ARS";
             setMoneda(assetCurrency);
         }
 
-        // Clear portfolio-specific errors when asset changes
+
         setError(prev => prev?.includes("en este portafolio") ? null : prev);
     }, [mode, asset]);
 
-    // Real-time Sell Validation
+
     useEffect(() => {
         if (tipo === TipoOperacion.Venta && asset && detailedPortfolio) {
             const hasAsset = detailedPortfolio.activos.some(a => a.symbol === asset.symbol);
@@ -141,7 +134,7 @@ export function useRegistrarOperacion() {
                 setError(`No tienes ${asset.symbol} en este portafolio para vender.`);
                 setTipo(TipoOperacion.Compra);
             } else {
-                // Clear error if it was this specific error and check passes
+
                 setError(prev => prev?.includes("en este portafolio") ? null : prev);
             }
         }
@@ -150,7 +143,7 @@ export function useRegistrarOperacion() {
     const handleSubmit = async () => {
         console.log("HandleSubmit Triggered");
 
-        // Granular validation for easier debugging
+
         if (!user) {
             setError("Error: Usuario no identificado. Recarga la página.");
             return;
@@ -176,7 +169,7 @@ export function useRegistrarOperacion() {
             return;
         }
 
-        // SELL VALIDATION
+
         if (tipo === TipoOperacion.Venta) {
             if (!detailedPortfolio) {
                 setError("No se pudo verificar el saldo del portafolio. Intenta nuevamente.");
@@ -194,13 +187,13 @@ export function useRegistrarOperacion() {
         setLoading(true);
         setError(null);
 
-        // TEMPORAL CONSISTENCY VALIDATION
+
         try {
             const allOps = await getOperacionesByPersona(user.id);
             const assetOps = allOps.filter(o => o.activoSymbol === asset.symbol);
 
             const targetOpEvent = {
-                fecha: new Date(fecha).toISOString(), // Ensure ISO format for comparison
+                fecha: new Date(fecha).toISOString(),
                 tipo: tipo,
                 cantidad: qty,
                 activoSymbol: asset.symbol
@@ -214,9 +207,6 @@ export function useRegistrarOperacion() {
             }
         } catch (valErr) {
             console.error("Validation error:", valErr);
-            // Non-blocking? Or blocking? Blocking is safer.
-            // If fetch fails, we might proceed with risk or block.
-            // Let's block to be safe as per user request "que no puedas..."
             setError("Error al validar consistencia de operaciones. Intenta nuevamente.");
             setLoading(false);
             return;
@@ -230,7 +220,7 @@ export function useRegistrarOperacion() {
                 tipo: tipo,
                 cantidad: qty,
                 precioUnitario: price,
-                monedaOperacion: moneda, // Use state instead of dynamic inference
+                monedaOperacion: moneda,
                 fechaOperacion: new Date(fecha).toISOString(),
             };
 

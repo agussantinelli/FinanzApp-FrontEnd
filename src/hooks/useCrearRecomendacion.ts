@@ -20,7 +20,7 @@ export const useCrearRecomendacion = () => {
     const router = useRouter();
     const { user } = useAuth();
 
-    // Form States
+
     const [titulo, setTitulo] = useState("");
     const [justificacion, setJustificacion] = useState("");
     const [fuente, setFuente] = useState("");
@@ -31,7 +31,7 @@ export const useCrearRecomendacion = () => {
     const [availableSectores, setAvailableSectores] = useState<SectorDTO[]>([]);
     const [assetRows, setAssetRows] = useState<AssetRow[]>([]);
 
-    // UI States
+
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [apiError, setApiError] = useState<string | null>(null);
@@ -57,7 +57,6 @@ export const useCrearRecomendacion = () => {
 
             const updated = { ...r, [field]: value };
 
-            // Auto-fill price if active changes
             if (field === 'activo') {
                 const activo = value as ActivoDTO | null;
                 if (activo && activo.precioActual !== undefined && activo.precioActual !== null) {
@@ -130,7 +129,6 @@ export const useCrearRecomendacion = () => {
             const data = error.response?.data;
             const msg = data?.mensaje || data?.message || "Error al crear la recomendación.";
 
-            // AI Validation Error Handling
             if (error.response?.status === 400 && data?.error === "Validación IA Fallida") {
                 setAiError(msg);
             } else {
@@ -142,7 +140,7 @@ export const useCrearRecomendacion = () => {
     };
 
     return {
-        // States
+
         titulo, setTitulo,
         justificacion, setJustificacion,
         fuente, setFuente,
@@ -155,7 +153,7 @@ export const useCrearRecomendacion = () => {
         errors,
         apiError, aiError, success,
 
-        // Handlers
+
         handleAddRow,
         handleRemoveRow,
         updateRow,

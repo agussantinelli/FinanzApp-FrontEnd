@@ -9,7 +9,7 @@ import { getCurrentUser } from '@/services/AuthService';
 
 export interface ActiveRecommendation {
     summary: RecomendacionResumenDTO;
-    detail?: RecomendacionDetalleDTO; // Specific detail for this asset
+    detail?: RecomendacionDetalleDTO;
 }
 
 export function useActivoDetail(id: string) {
@@ -23,11 +23,11 @@ export function useActivoDetail(id: string) {
             try {
                 let currentActivo: ActivoDTO | null = null;
 
-                // If ID is valid UUID, fetch by ID
+
                 const isUuid = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(id);
 
                 if (isUuid) {
-                    // Try to get from cache first
+
                     const cached = getActivoFromCache(id);
                     if (cached) {
                         currentActivo = cached;
@@ -35,14 +35,14 @@ export function useActivoDetail(id: string) {
                         currentActivo = await getActivoById(id);
                     }
                 } else {
-                    // It's a Ticker/Symbol
+
                     const params = decodeURIComponent(id);
                     try {
                         currentActivo = await getActivoByTicker(params);
                     } catch (err) {
                         console.warn(`Direct ticker fetch failed for ${params}, trying search fallback...`);
 
-                        // Fallback to search if direct ticker fails (e.g. slight mismatch)
+
                         const results = await searchActivos(params);
                         if (results && results.length > 0) {
                             const exactMatch = results.find((a: ActivoDTO) => a.symbol.toLowerCase() === params.toLowerCase());
@@ -53,17 +53,16 @@ export function useActivoDetail(id: string) {
 
                 setActivo(currentActivo);
 
-                // Fetch Recommendations if asset found AND user is logged in
+
                 if (currentActivo) {
                     const user = getCurrentUser();
                     if (user) {
-                        const recs = await getRecomendacionesByActivo(currentActivo.id, true); // true = active only
+                        const recs = await getRecomendacionesByActivo(currentActivo.id, true);
 
-                        // Fetch details for each recommendation to get the specific target/action for THIS asset
+
                         const detailedRecs = await Promise.all(recs.map(async (r) => {
                             try {
-                                // We need the full detail to know the Action/Target for this specific asset
-                                // Optimization idea: The backend could return this in the summary if we asked, but for now we fetch detail.
+
                                 const fullRec = await getRecomendacionById(r.id);
                                 const specificDetail = fullRec.detalles.find(d => d.activoId === currentActivo!.id);
 

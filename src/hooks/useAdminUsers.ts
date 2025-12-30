@@ -41,7 +41,7 @@ export function useAdminUsers() {
                 return;
             }
 
-            await loadUsers(); // Reload list
+            await loadUsers();
         } catch (error) {
             console.error("Error changing role", error);
             setError("Error al cambiar el rol. Intente nuevamente.");
@@ -56,7 +56,7 @@ export function useAdminUsers() {
         try {
             const { deletePersona } = await import('@/services/PersonaService');
             await deletePersona(id);
-            await loadUsers(); // Reload list
+            await loadUsers();
         } catch (error) {
             console.error("Error deleting user", error);
             setError("Error al eliminar el usuario. Intente nuevamente.");

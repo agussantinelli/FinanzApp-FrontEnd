@@ -35,7 +35,7 @@ export function useActivosFilters() {
 
     const [onlyFavorites, setOnlyFavorites] = useState<boolean>(false);
 
-    // Initial load: Check auth and set default filter
+
     useEffect(() => {
         const token = typeof window !== 'undefined' ? sessionStorage.getItem("fa_token") : null;
         if (token) {
@@ -43,7 +43,7 @@ export function useActivosFilters() {
         }
     }, []);
 
-    // Load tipos and sectores on mount
+
     useEffect(() => {
         const loadTiposAndSectores = async () => {
             try {
@@ -60,7 +60,7 @@ export function useActivosFilters() {
         loadTiposAndSectores();
     }, []);
 
-    // Search suggestions with debounce
+
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             if (searchTerm.length >= 2) {
@@ -97,7 +97,6 @@ export function useActivosFilters() {
                     data = await getActivosByTipoId(Number(selectedType));
                 }
             }
-            // Apply currency filter if searching
             if (selectedCurrency !== "Todos") {
                 data = data.filter(a => a.monedaBase === selectedCurrency);
             }
@@ -122,7 +121,6 @@ export function useActivosFilters() {
             };
 
             if (onlyFavorites) {
-                // Fetch Favorites
                 try {
                     data = await getActivosFavoritos();
                 } catch (e) {
@@ -131,7 +129,6 @@ export function useActivosFilters() {
                     data = await getActivosNoMoneda();
                 }
             } else {
-                // Standard Logic
                 const cache = getAllActivosFromCache();
 
                 if (cache && cache.length > 0) {
@@ -146,13 +143,11 @@ export function useActivosFilters() {
                             data = await getActivosByTipoId(Number(selectedType));
                         }
                     } else {
-                        // Use workaround fallback
                         data = await getRankingActivos(criterioMap[orderBy] || "variacion", orderDesc, selectedType !== "Todos" ? Number(selectedType) : undefined);
                     }
                 }
             }
 
-            // Client-Side Filtering (common filter logic)
             if (selectedType !== "Todos") {
                 const tObj = tipos.find(t => t.id === Number(selectedType));
                 if (tObj) {
@@ -167,7 +162,7 @@ export function useActivosFilters() {
                 }
             }
 
-            // Apply Currency Filter
+
             if (selectedCurrency !== "Todos") {
                 data = data.filter(a => a.monedaBase === selectedCurrency);
             }
@@ -212,7 +207,7 @@ export function useActivosFilters() {
         }
     }, [onlyFavorites, selectedType, selectedSector, selectedCurrency, orderBy, orderDesc, tipos, sectores]);
 
-    // Initial load and filter changes
+
     useEffect(() => {
         if (searchTerm === "") {
             fetchActivos();

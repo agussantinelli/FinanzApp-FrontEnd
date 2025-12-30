@@ -65,6 +65,6 @@ export function useDolarData() {
         loading,
         updatedAt,
         fetchData,
-        normalizeName // Exporting if needed by component for individual card logic
+        normalizeName
     };
 }

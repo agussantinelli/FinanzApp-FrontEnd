@@ -4,7 +4,7 @@ import { getRecomendacionesAdmin, destacarRecomendacion, resolverRecomendacion, 
 
 export function useAdminRecommendations() {
     const [recommendations, setRecommendations] = useState<RecomendacionResumenDTO[]>([]);
-    const [filter, setFilter] = useState<number | ''>(''); // '' = All
+    const [filter, setFilter] = useState<number | ''>('');
     const [loading, setLoading] = useState(false);
 
     const [error, setError] = useState<string | null>(null);
