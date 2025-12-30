@@ -12,7 +12,7 @@
     </a>
 </div>
 
-<p align="center">
+<div align="center">
     <img src="https://img.shields.io/badge/React-19.2.0-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React Badge"/>
     <img src="https://img.shields.io/badge/Next.js-16.0.7-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js Badge"/>
     <img src="https://img.shields.io/badge/TypeScript-5-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript Badge"/>
@@ -28,10 +28,13 @@
     <img src="https://img.shields.io/badge/JWT%20Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT Badge"/>
     <img src="https://img.shields.io/badge/Vitest-2.1.8-6E9F18?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest Badge"/>
     <img src="https://img.shields.io/badge/Testing%20Library-16.1.0-E33332?style=for-the-badge&logo=testing-library&logoColor=white" alt="Testing Library Badge"/>
+</div>
+
+<div align="center">
     <a href="https://drive.google.com/drive/folders/1b5H8fDgOKmrxfY4RXfi4oYA3CvXy4ot6?usp=drive_link" target="_blank">
         <img src="https://img.shields.io/badge/📂%20Documentación%20Proyecto-4285F4?style=for-the-badge&logo=googledrive&logoColor=white" alt="Carpeta TPI Drive Badge"/>
     </a>
-</p>
+</div>
 
 <hr>
 
