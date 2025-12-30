@@ -12,7 +12,6 @@ export function usePortfolioData() {
 
     const { isAuthenticated } = useAuth();
 
-
     useEffect(() => {
         if (!isAuthenticated) return;
 

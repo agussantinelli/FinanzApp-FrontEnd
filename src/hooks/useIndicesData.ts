@@ -11,8 +11,6 @@ function findIndex(data: DualQuoteDTO[], queries: string[]) {
     });
 }
 
-
-
 export function useIndicesData() {
     const [data, setData] = useState<DualQuoteDTO[]>([]);
     const [loading, setLoading] = useState(false);

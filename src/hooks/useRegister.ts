@@ -23,7 +23,6 @@ export type RegisterFieldErrors = {
 export function useRegister() {
     const router = useRouter();
 
-
     const [nombre, setNombre] = useState("");
     const [apellido, setApellido] = useState("");
     const [email, setEmail] = useState("");
@@ -38,11 +37,9 @@ export function useRegister() {
 
     const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
 
-
     const [geoData, setGeoData] = useState<RegisterGeoDataDTO | null>(null);
     const [loadingGeo, setLoadingGeo] = useState(true);
     const [errorGeo, setErrorGeo] = useState<string | null>(null);
-
 
     const [submitting, setSubmitting] = useState(false);
     const [fieldErrors, setFieldErrors] = useState<RegisterFieldErrors>({});
@@ -137,7 +134,6 @@ export function useRegister() {
         }
 
         if (!recaptchaToken) {
-
         }
 
         setFieldErrors(errors);
@@ -213,7 +209,6 @@ export function useRegister() {
 
         recaptchaToken, setRecaptchaToken,
 
-
         geoData,
         loadingGeo,
         errorGeo,
@@ -221,12 +216,10 @@ export function useRegister() {
         localidadesParaCombo,
         esResidenciaArgentina,
 
-
         submitting,
         fieldErrors,
         apiError,
         successSubmit,
-
 
         handleSubmit,
         clearFieldError,

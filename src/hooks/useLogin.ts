@@ -81,7 +81,6 @@ export function useLogin() {
 
         const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=id_token&scope=${encodeURIComponent(scope)}&nonce=${nonce}&prompt=select_account`;
 
-
         const width = 500;
         const height = 600;
         const left = window.screen.width / 2 - width / 2;

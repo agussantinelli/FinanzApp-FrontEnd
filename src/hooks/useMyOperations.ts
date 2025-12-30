@@ -23,7 +23,6 @@ export function useMyOperations() {
     const [operaciones, setOperaciones] = useState<OperacionResponseDTO[]>([]);
     const [loading, setLoading] = useState(true);
 
-
     const [orderBy, setOrderBy] = useState<keyof OperacionResponseDTO>('fecha');
     const [order, setOrder] = useState<Order>('desc');
     const [filterType, setFilterType] = useState<FilterType>('TODAS');
@@ -100,7 +99,6 @@ export function useMyOperations() {
                 };
             });
         }
-
 
         result.sort((a, b) => {
             let aValue = a[orderBy];

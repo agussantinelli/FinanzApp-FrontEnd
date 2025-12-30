@@ -40,16 +40,13 @@ export function useMisRecomendaciones(targetUserId?: string) {
 
     const [sectores, setSectores] = useState<SectorDTO[]>([]);
 
-
     const [selectedSector, setSelectedSector] = useState("");
     const [selectedHorizonte, setSelectedHorizonte] = useState("");
     const [selectedRiesgo, setSelectedRiesgo] = useState("");
 
-
     const [activeRiesgo, setActiveRiesgo] = useState("");
     const [activeHorizonte, setActiveHorizonte] = useState("");
     const [activeSector, setActiveSector] = useState("");
-
 
     useEffect(() => {
         console.log("useMisRecomendaciones Effect - Calling applyFilters with User:", effectiveUserId);
@@ -69,7 +66,6 @@ export function useMisRecomendaciones(targetUserId?: string) {
             horizonteId: undefined,
             riesgoId: undefined
         });
-
 
         setActiveRiesgo(selectedRiesgo);
         setActiveHorizonte(selectedHorizonte);

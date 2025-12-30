@@ -153,7 +153,6 @@ export const useCrearRecomendacion = () => {
         errors,
         apiError, aiError, success,
 
-
         handleAddRow,
         handleRemoveRow,
         updateRow,
