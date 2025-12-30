@@ -214,7 +214,10 @@ export default function ImportExcelModal({ open, onClose, onSuccess }: ImportExc
                                                 <TableCell align="left">{item.tipoOperacion}</TableCell>
                                                 <TableCell align="left">{item.symbol}</TableCell>
                                                 <TableCell align="left">{item.cantidad}</TableCell>
-                                                <TableCell align="left">{item.precioUnitario}</TableCell>
+                                                <TableCell align="left">{item.precioUnitario?.toLocaleString()}</TableCell>
+                                                <TableCell align="left" sx={{ fontWeight: 'bold' }}>
+                                                    {(item.cantidad * item.precioUnitario).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                </TableCell>
                                                 <TableCell align="left">{item.moneda}</TableCell>
                                                 <TableCell align="center">
                                                     <Tooltip title="Editar">
