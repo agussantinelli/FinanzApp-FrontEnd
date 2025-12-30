@@ -51,11 +51,9 @@ export function useImportExcel(onSuccess?: () => void) {
 
         const validItems = previewData.items.filter((i: ImportedItemPreviewDTO) => i.isValid);
 
-        // Pre-Import Consistency Check
         if (valuacion && valuacion.activos) {
             const changes: Record<string, number> = {};
 
-            // 1. Calculate impact of new operations
             validItems.forEach(item => {
                 const symbol = item.symbol.toUpperCase();
                 if (!changes[symbol]) changes[symbol] = 0;
@@ -67,10 +65,8 @@ export function useImportExcel(onSuccess?: () => void) {
                 }
             });
 
-            // 2. Verify against current holdings
             for (const [symbol, change] of Object.entries(changes)) {
 
-                // Find asset case-insensitively
                 const currentAsset = valuacion.activos.find(a =>
                     a.symbol && a.symbol.toUpperCase() === symbol
                 );
@@ -116,14 +112,12 @@ export function useImportExcel(onSuccess?: () => void) {
         setErrorMessage(null);
     };
 
-    // Single Item Update Function
     const updateItem = (index: number, updatedFields: Partial<ImportedItemPreviewDTO>) => {
         if (!previewData) return;
 
         const currentItem = previewData.items[index];
         const newItem = { ...currentItem, ...updatedFields };
 
-        // Re-validate this specific item
         let isValid = true;
         let validationMessage = null;
 
