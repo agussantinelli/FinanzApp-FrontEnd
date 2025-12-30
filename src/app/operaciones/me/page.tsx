@@ -243,10 +243,11 @@ export default function MyOperationsPage() {
                                 onClick={() => setImportModalOpen(true)}
                                 sx={{
                                     height: 40,
-                                    px: 3,
+                                    flex: 1, // Expand to fill space
+                                    minWidth: '200px', // Ensure it's not too small
                                     borderRadius: '12px',
                                     textTransform: 'none',
-                                    fontSize: '0.9rem',
+                                    fontSize: '0.95rem',
                                     fontWeight: 700,
                                     color: '#fff',
                                     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', // Premium Blue-Purple Gradient
