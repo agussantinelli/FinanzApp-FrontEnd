@@ -16,7 +16,6 @@ export function validateTemporalConsistency(
     targetOpId?: string
 ): { valid: boolean; message?: string } {
 
-    // 1. Prepare the timeline
     let timeline = [...currentOps];
 
     if (action === 'DELETE') {

@@ -5,11 +5,9 @@ export interface ImportedItemPreviewDTO {
     cantidad: number;
     precioUnitario: number;
     moneda: string;
-    fecha: string; // ISO DateTime
-
+    fecha: string;
     isValid: boolean;
     validationMessage?: string | null;
-
     activoIdResolved?: string | null;
 }
 

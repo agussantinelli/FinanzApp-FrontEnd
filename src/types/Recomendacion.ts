@@ -1,4 +1,3 @@
-// Enum mappings for UI helpers
 export enum Riesgo {
     Conservador = 1,
     Moderado = 2,
@@ -7,10 +6,10 @@ export enum Riesgo {
 }
 
 export enum Horizonte {
-    Intradia = 1, // < 1 día
-    Corto = 2, // < 6 meses
-    Mediano = 3, // 6-18 meses
-    Largo = 4 // > 18 meses
+    Intradia = 1,
+    Corto = 2,
+    Mediano = 3,
+    Largo = 4
 }
 
 export enum AccionRecomendada {
@@ -43,14 +42,14 @@ export interface RecomendacionDetalleDTO {
 }
 
 export interface RecomendacionDTO {
-    id: string; // uuid
+    id: string;
     titulo: string;
     justificacionLogica: string;
     fuente: string;
-    fechaInforme: string; // date-time string
+    fechaInforme: string;
     riesgo: Riesgo;
     horizonte: Horizonte;
-    estado: number; // Enum: EstadoRecomendacion
+    estado: number;
     persona?: {
         id: string;
         nombre: string;
@@ -68,15 +67,15 @@ export interface RecomendacionResumenDTO {
     titulo: string;
     fuente: string;
     fecha: string; // DateTime
-    riesgo: string; // String from backend
-    horizonte: string; // String from backend
-    autorId: string; // Added to keys for filtering
+    riesgo: string;
+    horizonte: string;
+    autorId: string;
     autorNombre: string;
     fotoPerfil?: string;
     cantidadActivos: number;
-    estado: number; // Enum
+    estado: number;
     esDestacada: boolean;
-    esAcertada?: boolean; // null=pendiente/n/a, true=acertada, false=fallida
+    esAcertada?: boolean;
 }
 
 export interface CrearRecomendacionDTO {
