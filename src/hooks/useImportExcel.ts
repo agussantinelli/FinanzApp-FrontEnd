@@ -10,6 +10,11 @@ export function useImportExcel(onSuccess?: () => void) {
     const [file, setFile] = useState<File | null>(null);
     const [previewData, setPreviewData] = useState<ImportPreviewDTO | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+    // Editing State
+    const [isEditing, setIsEditing] = useState(false);
+    const [editingItems, setEditingItems] = useState<ImportedItemPreviewDTO[]>([]);
+
     const { selectedId } = usePortfolioData();
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,11 +73,74 @@ export function useImportExcel(onSuccess?: () => void) {
         setFile(null);
         setPreviewData(null);
         setErrorMessage(null);
+        setIsEditing(false);
+        setEditingItems([]);
     };
 
     const retry = () => {
         setStep("UPLOAD");
         setErrorMessage(null);
+        setIsEditing(false);
+    };
+
+    // Editing Functions
+    const startEdit = () => {
+        if (previewData) {
+            setEditingItems([...previewData.items]); // Deep copy if needed, but shallow copy of array is usually enough for 1st level
+            setIsEditing(true);
+        }
+    };
+
+    const cancelEdit = () => {
+        setIsEditing(false);
+        setEditingItems([]);
+    };
+
+    const updateEditingItem = (index: number, field: keyof ImportedItemPreviewDTO, value: any) => {
+        const newItems = [...editingItems];
+        newItems[index] = { ...newItems[index], [field]: value };
+        setEditingItems(newItems);
+    };
+
+    const saveEdit = () => {
+        if (!previewData) return;
+
+        // Apply changes and potentially re-validate locally
+        const updatedItems = editingItems.map(item => {
+            // Basic Local Validation
+            let isValid = true;
+            let validationMessage = null;
+
+            // Force Uppercase Symbol
+            const symbol = item.symbol ? item.symbol.toUpperCase() : "";
+
+            if (!symbol) {
+                isValid = false;
+                validationMessage = "Falta el símbolo (Ticker)";
+            } else if (item.cantidad <= 0) {
+                isValid = false;
+                validationMessage = "La cantidad debe ser mayor a 0";
+            } else if (item.precioUnitario < 0) {
+                isValid = false;
+                validationMessage = "El precio no puede ser negativo";
+            } else if (!item.fecha || isNaN(Date.parse(item.fecha))) {
+                isValid = false;
+                validationMessage = "Fecha inválida";
+            }
+
+            return {
+                ...item,
+                symbol: symbol, // Save uppercased
+                isValid,
+                validationMessage
+            };
+        });
+
+        setPreviewData({
+            ...previewData,
+            items: updatedItems
+        });
+        setIsEditing(false);
     };
 
     return {
@@ -85,6 +153,13 @@ export function useImportExcel(onSuccess?: () => void) {
         confirm,
         reset,
         setStep,
-        retry
+        retry,
+        // Edit exports
+        isEditing,
+        editingItems,
+        startEdit,
+        cancelEdit,
+        updateEditingItem,
+        saveEdit
     };
 }
