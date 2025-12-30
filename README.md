@@ -202,7 +202,6 @@
 │   │   ├── reportes/            # Análisis de mercado y tendencias
 │   │   ├── styles/              # Estilos globales de páginas
 │   │   └── page.tsx             # Landing Page pública
-│   ├── app-theme/               # Tema y configuración de Material UI
 │   ├── components/              # Componentes React Reutilizables
 │   │   ├── auth/                # Componentes de seguridad (RoleGuard)
 │   │   ├── cards/               # Tarjetas de UI (Activos, Noticias)
@@ -217,6 +216,7 @@
 │   ├── lib/                     # Utilidades Core (Cliente HTTP, Caché)
 │   ├── services/                # Comunicación con API Backend (Axios + DTOs)
 │   ├── test/                    # Configuración de Vitest y utilidades de test
+│   ├── theme/                   # Tema y configuración de Material UI
 │   ├── types/                   # Definiciones TypeScript (Interfaces)
 │   └── utils/                   # Helpers de formateo y strings
 ├── .env.local                   # Variables de entorno
