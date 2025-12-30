@@ -24,6 +24,8 @@
     <img src="https://img.shields.io/badge/Material%20UI-7.3.4-007FFF?style=for-the-badge&logo=mui&logoColor=white" alt="MUI Badge"/>
     <img src="https://img.shields.io/badge/React_Markdown-9.0.3-000000?style=for-the-badge&logo=markdown&logoColor=white" alt="React Markdown Badge"/>
     <img src="https://img.shields.io/badge/React_Icons-5.5.0-E91E63?style=for-the-badge&logo=react&logoColor=white" alt="React Icons Badge"/>
+    <img src="https://img.shields.io/badge/Rect_Scan-Recaptcha-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="reCAPTCHA Badge"/>
+    <img src="https://img.shields.io/badge/Playwright-1.57.0-2EAD33?style=for-the-badge&logo=playwright&logoColor=white" alt="Playwright Badge"/>
     <img src="https://img.shields.io/badge/tsParticles-2.12-000000?style=for-the-badge&logo=javascript&logoColor=white" alt="tsParticles Badge"/>
     <img src="https://img.shields.io/badge/JWT%20Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT Badge"/>
     <img src="https://img.shields.io/badge/Vitest-2.1.8-6E9F18?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest Badge"/>
@@ -122,11 +124,6 @@
             <td><strong>UI Library</strong></td>
             <td>Material UI v7 (MUI)</td>
             <td>Sistema de diseño robusto, accesible y personalizable.</td>
-        </tr>
-        <tr>
-            <td><strong>IA Integration</strong></td>
-            <td>Vercel AI SDK</td>
-            <td>Streaming de respuestas, manejo de estado y conexión con LLMs.</td>
         </tr>
         <tr>
             <td><strong>Gráficos</strong></td>
