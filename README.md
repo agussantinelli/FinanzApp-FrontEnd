@@ -254,29 +254,33 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
 
 <p>Todos los <code>fetch</code> / llamadas Axios del frontend apuntan a <code>NEXT_PUBLIC_API_URL</code> (incluidos los endpoints protegidos con JWT).</p>
 
-<h3>🔐 Autenticación (JWT)</h3>
+<h3>🔐 Autenticación</h3>
 
-<p>El backend utiliza <strong>JWT Bearer</strong> para proteger los endpoints de la API. El flujo actual es:</p>
-<ol>
-    <li>El usuario se registra o inicia sesión contra los endpoints:
+<p>El sistema de seguridad implementa una arquitectura de defensa en profundidad:</p>
+
+<ul>
+    <li>
+        <strong>🏰 Identidad & Acceso:</strong>
         <ul>
-            <li><code>POST /auth/register</code></li>
-            <li><code>POST /auth/login</code></li>
-            <li><code>GET /auth/me</code> (información del usuario autenticado)</li>
+            <li><strong>Google Login (OIDC):</strong> Integración nativa con <code>@react-oauth/google</code> para autenticación sin contraseña.</li>
+            <li><strong>JWT Tradicional:</strong> Soporte completo para Email/Password con hashing robusto en backend.</li>
         </ul>
     </li>
-    <li>El backend devuelve un <strong>token JWE (Encrypted JWT)</strong> opaco, asegurando que la información sensible del usuario permanezca protegida.</li>
-    <li>El frontend guarda:
+    <li>
+        <strong>🤖 Protección Anti-Bots:</strong>
         <ul>
-            <li><code>fa_token</code>: token JWE para autenticación.</li>
-            <li><code>fa_user</code>: detalles de la sesión (expiración, rol) obtenidos explícitamente del login.</li>
+            <li><strong>ReCAPTCHA v2 Invisible:</strong> Bloqueo proactivo de tráfico automatizado en Login y Registro.</li>
         </ul>
     </li>
-    <li>Las llamadas posteriores usan el cliente configurado en <code>Http.ts</code>, que adjunta:
-        <pre><code>Authorization: Bearer &lt;fa_token&gt;</code></pre>
-        en los endpoints protegidos.
+    <li>
+        <strong>🔒 Manejo de Sesiones:</strong>
+        <ul>
+            <li><strong>JWE (Encrypted JWT):</strong> Tokens opacos que ocultan claims sensibles del usuario.</li>
+            <li><strong>Persistencia Segura:</strong> Almacenamiento local de tokens (<code>fa_token</code>) y metadata de usuario (<code>fa_user</code>).</li>
+            <li><strong>Interceptores Axios:</strong> Inyección automática de headers <code>Authorization: Bearer</code> en cada request.</li>
+        </ul>
     </li>
-</ol>
+</ul>
 
 <hr>
 
@@ -319,7 +323,6 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
     <li>Motor de búsqueda de activos integrado (Acciones, Bonos, CEDEARs, Cripto).</li>
     <li>Formulario de alta de operaciones con validación de stock y precios de referencia.</li>
     <li><strong>📥 Importación Inteligente:</strong> Módulo de carga masiva desde Excel analizado por IA, con edición previa y detección de errores.</li>
-    <li><strong>Filtro de Favoritos:</strong> Alterná rápidamente entre tu lista de seguimiento y el mercado global.</li>
 </ul>
 
 <h3>📊 Reportes y Análisis</h3>
