@@ -241,7 +241,27 @@ export default function MyOperationsPage() {
                                 startIcon={<FileUploadIcon />}
                                 size="small"
                                 onClick={() => setImportModalOpen(true)}
-                                sx={{ height: 40 }}
+                                sx={{
+                                    height: 40,
+                                    px: 3,
+                                    borderRadius: '12px',
+                                    textTransform: 'none',
+                                    fontSize: '0.9rem',
+                                    fontWeight: 700,
+                                    color: '#fff',
+                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', // Premium Blue-Purple Gradient
+                                    boxShadow: '0 4px 15px rgba(118, 75, 162, 0.4)',
+                                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                    '&:hover': {
+                                        background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
+                                        boxShadow: '0 6px 20px rgba(118, 75, 162, 0.6)',
+                                        transform: 'translateY(-2px)',
+                                    },
+                                    '&:active': {
+                                        transform: 'translateY(1px)',
+                                        boxShadow: '0 2px 10px rgba(118, 75, 162, 0.4)',
+                                    }
+                                }}
                             >
                                 Importar Excel
                             </Button>
