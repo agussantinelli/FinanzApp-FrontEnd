@@ -56,16 +56,16 @@
 <ul>
     <li>Información financiera <strong>fragmentada</strong> entre brokers, exchanges y sitios de cotizaciones.</li>
     <li>Dificultad para aplicar el <strong>tipo de cambio correcto</strong> para valuar cada activo.</li>
-    <li>Falta de una vista <strong>consolidada y en tiempo (casi) real</strong> del patrimonio total.</li>
+    <li>Falta de una vista <strong>dinámica, consolidada y en tiempo  real</strong> del patrimonio total.</li>
 </ul>
 
 <h2>🚀 Propuesta de Valor</h2>
 
 <ul>
-    <li>Unificar datos y cotizaciones en un único lugar.</li>
-    <li>Normalizar conversiones entre ARS y USD según clase de activo.</li>
-    <li>Centralizar el seguimiento del portafolio con métricas relevantes.</li>
-    <li>Automatizar actualizaciones mediante adaptadores de datos (gestionados por el Backend).</li>
+    <li><strong>🎯 Centralización Total:</strong> Unifica Criptos, CEDEARs, Bonos y Acciones en un solo panel, eliminando la necesidad de múltiples apps o planillas de Excel.</li>
+    <li><strong>🧠 Inteligencia Financiera:</strong> Integra IA (FinanzAI) no solo para responder dudas, sino para analizar importaciones, detectar errores y validar recomendaciones de inversión.</li>
+    <li><strong>🇦🇷 Contexto Local Argentino:</strong> Diseñado nativamente para manejar la complejidad del mercado local: múltiples tipos de cambio (MEP/CCL/Blue) e inflación.</li>
+    <li><strong>🤝 Comunidad & Estrategias:</strong> Transforma la inversión solitaria en una experiencia social, permitiendo descubrir y seguir las carteras más exitosas de la comunidad.</li>
 </ul>
 
 <h2>🧮 Meta</h2>
