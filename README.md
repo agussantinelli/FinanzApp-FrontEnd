@@ -317,15 +317,18 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
 
 <ul>
     <li>Motor de búsqueda de activos integrado (Acciones, Bonos, CEDEARs, Cripto).</li>
-    <li>Formulario de alta de operaciones (Compra/Venta) con validación en tiempo real:
-        <ul>
-            <li>Validación de stock disponible al vender.</li>
-            <li>Precios de referencia automáticos según mercado.</li>
-            <li>Selección de portafolio destino.</li>
-        </ul>
-    </li>
-    <li>Historial completo de transacciones.</li>
-    <li><strong>Filtro de Favoritos:</strong> Alterná rápidamente entre tu lista de seguimiento ("Mis Favoritos") y el mercado global con un solo clic.</li>
+    <li>Formulario de alta de operaciones con validación de stock y precios de referencia.</li>
+    <li><strong>📥 Importación Inteligente:</strong> Módulo de carga masiva desde Excel analizado por IA, con edición previa y detección de errores.</li>
+    <li><strong>Filtro de Favoritos:</strong> Alterná rápidamente entre tu lista de seguimiento y el mercado global.</li>
+</ul>
+
+<h3>📊 Reportes y Análisis</h3>
+
+<p>Ruta principal: <code>/reportes</code></p>
+
+<ul>
+    <li><strong>Visualización Avanzada:</strong> Gráficos de evolución del tipo de cambio y composición histórica de la cartera.</li>
+    <li><strong>Exportación:</strong> Descarga de historial de operaciones y estado del portafolio en formatos <strong>PDF</strong> y <strong>Excel</strong>.</li>
 </ul>
 
 <h3>📈 Estrategias de Inversión</h3>
@@ -333,19 +336,18 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
 <p>Ruta principal: <code>/estrategias</code></p>
 
 <ul>
-    <li>Explorador de portafolios destacados de otros usuarios.</li>
+    <li>Explorador de portafolios destacados de otros usuarios ("Copy Trading").</li>
     <li>Métricas de rendimiento y composición para inspiración.</li>
-    <li>Filtrado automático para excluir el propio portafolio.</li>
 </ul>
+
 
 <h3>🛠️ Panel de Administración y Expertos</h3>
 
 <p>Rutas: <code>/dashboard-admin</code> y <code>/dashboard-experto</code></p>
 
 <ul>
-    <li>Dashboards específicos por rol protegidos por <code>RoleGuard</code>.</li>
-    <li>Gestión de usuarios y métricas globales de la plataforma.</li>
-    <li>Módulo para expertos: carga de señales, cálculo de efectividad y ranking global.</li>
+    <li><strong>Admin:</strong> Gestión integral de usuarios y métricas globales de negocio.</li>
+    <li><strong>Expertos:</strong> Panel exclusivo para emitir recomendaciones, con cálculo automático de efectividad y ranking público.</li>
 </ul>
 
 <h3>⚙️ Gestión de Perfil</h3>
@@ -353,9 +355,8 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
 <p>Ruta principal: <code>/perfil</code></p>
 
 <ul>
-    <li>Visualización y edición de datos personales (Nombre, Apellido, Fecha de nacimiento).</li>
-    <li><strong>Foto de Perfil:</strong> Carga y actualización de imagen de usuario.</li>
-    <li>Gestión de ubicación (País, Provincia, Localidad) para personalizar la experiencia.</li>
+    <li>Edición de datos personales y gestión de ubicación.</li>
+    <li><strong>Foto de Perfil:</strong> Carga y actualización de avatar de usuario.</li>
 </ul>
 
 <hr>
@@ -408,32 +409,6 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
 
 <hr>
 
-<h2>📌 Estado actual de implementación (Frontend)</h2>
-
-<ul>
-    <li><strong>Completado (V1.0)</strong>
-        <ul>
-            <li>✅ Autenticación Full (JWT, Google Login, Persistencia, Logout).</li>
-            <li>✅ Flow de Inversión Completo: Buscar Activo -> Registrar Operación -> Ver en Portafolio.</li>
-            <li>✅ Lógica Multimoneda: Manejo robusto de pares ARS/USD en tablas y gráficos.</li>
-            <li>✅ Dashboards Responsivos: UI adaptada a Móvil/Tablet/Desktop con Material UI.</li>
-            <li>✅ Integración Backend: Consumo de endpoints reales para Valuación, Operaciones y Cotizaciones.</li>
-            <li>✅ Gestión de Recomendaciones: Panel para expertos con estadísticas, ranking y creación de señales.</li>
-            <li>✅ Reportes Visuales: Gráficos de composición de cartera y evolución del dólar.</li>
-            <li>✅ Reportes Exportables: Descarga de historial de operaciones y portafolio en PDF y Excel.</li>
-            <li>✅ Importación Avanzada: Módulo de carga masiva con IA, edición inline y validaciones de consistencia previo a la confirmación.</li>
-        </ul>
-    </li>
-    <li><strong>En Roadmap</strong>
-        <ul>
-
-            <li>Notificaciones en tiempo real (WebSockets) para cambios de precio.</li>
-            <li>Expansión del módulo de "Comunidad" y "Noticias".</li>
-        </ul>
-    </li>
-</ul>
-
-<hr>
 
 <h2>🧪 Testing Strategy</h2>
 
