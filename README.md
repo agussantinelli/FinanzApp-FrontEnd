@@ -53,7 +53,7 @@
     <li>Consolidación de cripto, acciones locales, CEDEARs y ONs en una sola interfaz.</li>
     <li>Conversión ARS ↔ USD aplicando el tipo de dólar adecuado por clase de activo.</li>
     <li>Indicadores clave: patrimonio total, distribución por clase de activo y evolución.</li>
-    <li>UI moderna, tema oscuro y acentos verde neón para una experiencia clara y agradable.</li>
+    <li>UI moderna, tema oscuro y detalles verde neón para una experiencia clara y agradable.</li>
 </ul>
 
 <h2>💼 Problema</h2>
