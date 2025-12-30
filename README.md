@@ -75,10 +75,11 @@
 <h2>✨ Funcionalidades Destacadas</h2>
 
 <ul>
-    <li><strong>Gestión Multi-Activo:</strong> Soporte para Criptomonedas, Acciones Locales, CEDEARs y Obligaciones Negociables (ONs).</li>
-    <li><strong>Cotizaciones Unificadas:</strong> Acceso centralizado a valores de mercado (Dólar, Crypto, BCBA).</li>
-    <li><strong>Valuación Inteligente:</strong> Conversión automática ARS/USD aplicando el tipo de cambio más conveniente (MEP/CCL/Blue).</li>
-    <li><strong>Dashboard Patrimonial:</strong> Visualización clara del patrimonio total y distribución por tipo de activo.</li>
+    <li><strong>💼 Gestión Multi-Activo:</strong> Soporte para Criptomonedas, Acciones Locales, CEDEARs y Obligaciones Negociables (ONs).</li>
+    <li><strong>📊 Cotizaciones Unificadas:</strong> Acceso centralizado a valores de mercado (Dólar, Crypto, BCBA).</li>
+    <li><strong>💱 Valuación Inteligente:</strong> Conversión automática ARS/USD aplicando el tipo de cambio más conveniente (MEP/CCL/Blue).</li>
+    <li><strong>📈 Dashboard Patrimonial:</strong> Visualización clara del patrimonio total y distribución por tipo de activo.</li>
+    <li><strong>💡 Recomendaciones AI:</strong> Sistema de sugerencias que vincula activos con oportunidades de mercado, validadas preliminarmente por inteligencia artificial para optimizar decisiones.</li>
     <li><strong>📥 Importación Inteligente:</strong> Carga masiva de operaciones desde Excel analizada por IA, con previsualización editable, detección de duplicados y validación de consistencia (anti-saldos negativos).</li>
     <li><strong>🌐 Inversión Social:</strong> Explora las estrategias más rentables de la comunidad, visualiza sus portafolios y aprende de los mejores inversores.</li>
     <li><strong>🛡️ Seguridad Integral:</strong> Protección de identidad mediante Google Login y prevención de bots con reCAPTCHA v3 invisible.</li>
