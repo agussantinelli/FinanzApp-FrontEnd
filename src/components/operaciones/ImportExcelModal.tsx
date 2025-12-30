@@ -195,7 +195,7 @@ export default function ImportExcelModal({ open, onClose, onSuccess }: ImportExc
                                             <TableCell align="left">Operación</TableCell>
                                             <TableCell align="left">Activo</TableCell>
                                             <TableCell align="left">Cantidad</TableCell>
-                                            <TableCell align="left">Precio</TableCell>
+                                            <TableCell align="left">Precio Unitario</TableCell>
                                             <TableCell align="left">Moneda</TableCell>
                                             <TableCell align="center">Acciones</TableCell>
                                         </TableRow>
@@ -324,7 +324,7 @@ export default function ImportExcelModal({ open, onClose, onSuccess }: ImportExc
                                 label="Activo (Ticker)"
                                 size="small"
                                 value={editItemData.symbol}
-                                onChange={(e) => setEditItemData({ ...editItemData, symbol: e.target.value })}
+                                disabled
                                 fullWidth
                             />
                             <TextField
