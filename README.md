@@ -465,3 +465,6 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
     ⚠️ <b>Restricción Firme:</b> Queda terminantemente prohibida la copia, reproducción, distribución o modificación de este código sin autorización expresa del autor. Este repositorio se publica exclusivamente como exhibición de portafolio profesional.
   </i>
 </p>
+
+<hr>
+<p align="center">Desarrollado con ❤️ y mucho 🧉 para la comunidad inversora.</p>
