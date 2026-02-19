@@ -451,17 +451,17 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
 
 <p>¡Las contribuciones son bienvenidas! Por favor, sentite libre de abrir un <strong>Pull Request</strong> o reportar un <strong>Issue</strong> para mejorar el proyecto.</p>
 
-<hr/>
-<h2 align="left">⚖️ Licencia</h2>
+<hr />
+
+<h2 align="left">⚖️ Licencia y Propiedad Intelectual</h2>
 
 <p align="left">
-  Este proyecto está bajo la <b>Licencia MIT</b>. Para más detalles, puedes consultar el archivo 
-  <a href="LICENSE"><code>LICENSE</code></a> incluido en la raíz de este repositorio.
+  Este proyecto es <b>propiedad intelectual privada</b> de Agustín Santinelli. No se otorga ninguna licencia de uso abierto. Puedes consultar los términos detallados en el archivo 
+  <a href="LICENSE"><code>LICENSE</code></a> incluido en este repositorio.
 </p>
 
 <p align="left">
   <i>
-    La licencia MIT permite el uso, copia, modificación y distribución del software de forma gratuita, 
-    siempre que se incluya el aviso de copyright original.
+    ⚠️ <b>Restricción Firme:</b> Queda terminantemente prohibida la copia, reproducción, distribución o modificación de este código sin autorización expresa del autor. Este repositorio se publica exclusivamente como exhibición de portafolio profesional.
   </i>
 </p>
