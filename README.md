@@ -447,12 +447,6 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
 
 <hr>
 
-<h2>🤝 Contribuciones</h2>
-
-<p>¡Las contribuciones son bienvenidas! Por favor, sentite libre de abrir un <strong>Pull Request</strong> o reportar un <strong>Issue</strong> para mejorar el proyecto.</p>
-
-<hr />
-
 <h2 align="left">⚖️ Licencia y Propiedad Intelectual</h2>
 
 <p align="left">
@@ -465,6 +459,18 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
     ⚠️ <b>Restricción Firme:</b> Queda terminantemente prohibida la copia, reproducción, distribución o modificación de este código sin autorización expresa del autor. Este repositorio se publica exclusivamente como exhibición de portafolio profesional.
   </i>
 </p>
+<hr />
 
-<hr>
+<h2 align="left">🚫 Copyright Total</h2>
+
+<p align="left">
+  Este proyecto es propiedad intelectual exclusiva de <b>Agustín Santinelli</b>. No se aceptan contribuciones externas o forks para su uso público sin previo acuerdo por escrito.
+</p>
+
+<p align="left">
+  Si tienes sugerencias directas o deseas explorar colaboraciones comerciales, por favor contacta al autor: 
+  <a href="mailto:agustinsantinelli@gmail.com">agustinsantinelli@gmail.com</a>.
+</p>
+
+<hr />
 <p align="center">Desarrollado con ❤️ y mucho 🧉 para la comunidad inversora.</p>
