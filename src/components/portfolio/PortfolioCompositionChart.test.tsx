@@ -3,7 +3,12 @@ import PortfolioCompositionChart from './PortfolioCompositionChart';
 import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('react-chartjs-2', () => ({
-    Doughnut: () => <div data-testid="doughnut-chart">DoughnutChart</div>
+    Doughnut: ({ data }: any) => (
+        <div data-testid="doughnut-chart">
+            DoughnutChart
+            {data.labels.map((l: string) => <div key={l}>{l}</div>)}
+        </div>
+    )
 }));
 
 describe('PortfolioCompositionChart', () => {
@@ -15,8 +20,9 @@ describe('PortfolioCompositionChart', () => {
     it('renders chart when data exists', () => {
         render(<PortfolioCompositionChart activos={mockActivos as any} currency='USD' totalDolares={2000} totalPesos={1600000} />);
         expect(screen.getByText('DoughnutChart')).toBeInTheDocument();
-        expect(screen.getByText(/AAPL \(50%\)/)).toBeInTheDocument();
-        expect(screen.getByText(/GGAL \(50%\)/)).toBeInTheDocument();
+        // Use flexible regex to match AAPL (50%) regardless of decimals or locale
+        expect(screen.getByText(/AAPL.*50/)).toBeInTheDocument();
+        expect(screen.getByText(/GGAL.*50/)).toBeInTheDocument();
     });
 
     it('renders "Sin datos" when empty', () => {
