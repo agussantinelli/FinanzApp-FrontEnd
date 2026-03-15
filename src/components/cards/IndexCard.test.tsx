@@ -1,6 +1,6 @@
-import { render, screen, fireEvent, waitFor } from '@/test/test-utils';
+import { render, screen, fireEvent } from '@/test/test-utils';
 import IndexCard from './IndexCard';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { DualQuoteDTO } from '@/types/Market';
 
 const mockPush = vi.fn();
@@ -10,40 +10,57 @@ vi.mock('next/navigation', () => ({
     }),
 }));
 
-const mockData: DualQuoteDTO = {
-    localSymbol: "^GSPC",
-    usSymbol: "^GSPC",
-    localPriceARS: 0,
-    usPriceUSD: 4500,
-    usPriceARS: 0,
-    localPriceUSD: 4500,
-    cedearRatio: undefined,
-    usedDollarRate: 1,
-    dollarRateName: "USD",
-    localChangePct: undefined,
-    usChangePct: 0.5,
-};
-
-const mockIndex = {
-    symbol: 'SPY',
-    price: 450,
-    change: undefined,
-    changePercent: undefined,
-    lastUpdate: '2023-01-01'
-} as any;
-
 describe('IndexCard', () => {
-    it('renders Standard & Poor information correctly', () => {
+    const mockData: DualQuoteDTO = {
+        localSymbol: "^GSPC",
+        usSymbol: "^GSPC",
+        localPriceARS: 0,
+        usPriceUSD: 4500.5,
+        usPriceARS: 4500000,
+        localPriceUSD: 4500.5,
+        cedearRatio: undefined,
+        usedDollarRate: 1000,
+        dollarRateName: "USD",
+        localChangePct: undefined,
+        usChangePct: 0.5,
+    };
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
+    it('renders Index information correctly (S&P 500)', () => {
         render(<IndexCard data={mockData} />);
         expect(screen.getByText("S&P 500")).toBeInTheDocument();
         expect(screen.getByText(/Índice Standard & Poor/)).toBeInTheDocument();
+        expect(screen.getByText("$ 4.500.500,00")).toBeInTheDocument(); // ARS
+        expect(screen.getByText("U$S 4.500,50")).toBeInTheDocument(); // USD
     });
 
+    it('renders as Risk Card for EMBI_AR', () => {
+        const riskData = { ...mockData, localSymbol: 'EMBI_AR' };
+        render(<IndexCard data={riskData} />);
+        expect(screen.getByText("Riesgo País")).toBeInTheDocument();
+        expect(screen.getByText("4501")).toBeInTheDocument(); // Math.round(4500.5)
+        expect(screen.getByText("Puntos Básicos (pbs)")).toBeInTheDocument();
+    });
 
-
-    it('navigates to symbol', () => {
+    it('applies positive variation style', () => {
         render(<IndexCard data={mockData} />);
-        fireEvent.click(screen.getByText("S&P 500").closest('div[class*="MuiCard-root"]')!);
+        const change = screen.getAllByText("+0,50%")[0];
+        expect(change.className).toContain('positive');
+    });
+
+    it('applies negative variation style', () => {
+        render(<IndexCard data={{ ...mockData, usChangePct: -1.2 }} />);
+        const change = screen.getAllByText("-1,20%")[0];
+        expect(change.className).toContain('negative');
+    });
+
+    it('navigates to detail on click', () => {
+        render(<IndexCard data={mockData} />);
+        const card = screen.getByText("S&P 500").closest('.MuiPaper-root')!;
+        fireEvent.click(card);
         expect(mockPush).toHaveBeenCalledWith('/activos/^GSPC');
     });
 });

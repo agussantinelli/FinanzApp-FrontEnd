@@ -5,24 +5,52 @@ import { getCotizacionesDolar } from '@/services/DolarService';
 
 vi.mock('@/services/DolarService');
 vi.mock('react-chartjs-2', () => ({
-    Bar: () => <div>BarChart</div>
+    Bar: () => <div data-testid="bar-chart">BarChart</div>
 }));
 
 describe('DolarBarChart', () => {
     const mockData = [
         { nombre: 'Oficial', venta: 100, compra: 90 },
-        { nombre: 'Blue', venta: 200, compra: 190 }
+        { nombre: 'Blue', venta: 200, compra: 190 },
+        { nombre: 'Bolsa', venta: 150, compra: 140 }
     ];
 
     beforeEach(() => {
+        vi.clearAllMocks();
         (getCotizacionesDolar as any).mockResolvedValue(mockData);
     });
 
-    it('renders chart and kpis', async () => {
+    it('renders loading skeletons initially', () => {
+        (getCotizacionesDolar as any).mockReturnValue(new Promise(() => {}));
         render(<DolarBarChart />);
-        expect(await screen.findByText('BarChart')).toBeInTheDocument();
-        expect(await screen.findByText(/Máximo venta:/)).toBeInTheDocument();
+        expect(screen.getByText('Cargando…')).toBeInTheDocument();
+        expect(screen.getAllByRole('progressbar', { hidden: true }).length).toBe(0); // Skeletons don't use role=progressbar
     });
 
+    it('renders chart and kpis after load', async () => {
+        render(<DolarBarChart />);
+        expect(await screen.findByTestId('bar-chart')).toBeInTheDocument();
+        expect(screen.getByText(/Máximo venta: \$ 200/)).toBeInTheDocument();
+        expect(screen.getByText(/Mínimo venta: \$ 100/)).toBeInTheDocument();
+        expect(screen.getByText(/Promedio venta: \$ 150/)).toBeInTheDocument();
+    });
 
+    it('renders error state', async () => {
+        (getCotizacionesDolar as any).mockRejectedValue(new Error('API Failure'));
+        render(<DolarBarChart />);
+        expect(await screen.findByText('API Failure')).toBeInTheDocument();
+    });
+
+    it('displays last update time', async () => {
+        render(<DolarBarChart />);
+        expect(await screen.findByText(/Actualizado:/)).toBeInTheDocument();
+    });
+
+    it('shortens long names in labels', async () => {
+        (getCotizacionesDolar as any).mockResolvedValue([
+            { nombre: 'A very long name that should be shortened', venta: 100, compra: 90 }
+        ]);
+        render(<DolarBarChart />);
+        expect(await screen.findByText(/A very long name t…/)).toBeInTheDocument();
+    });
 });

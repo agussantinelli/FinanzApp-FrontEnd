@@ -8,22 +8,35 @@ describe('FormStatus', () => {
         expect(container).toBeEmptyDOMElement();
     });
 
-    it('renders success message', () => {
+    it('renders nothing if messages are empty strings', () => {
+        const { container } = render(<FormStatus successMessage="" errorMessage="" />);
+        expect(container).toBeEmptyDOMElement();
+    });
+
+    it('renders success message with correct severity', () => {
         render(<FormStatus successMessage="Success!" />);
-        expect(screen.getByText('Success!')).toBeInTheDocument();
-        expect(screen.getByRole('alert')).toHaveTextContent('Success!');
+        const alert = screen.getByRole('alert');
+        expect(alert).toHaveTextContent('Success!');
+        expect(alert.className).toContain('MuiAlert-filledSuccess');
     });
 
-    it('renders error message', () => {
+    it('renders error message with correct severity', () => {
         render(<FormStatus errorMessage="Error!" />);
-        expect(screen.getByText('Error!')).toBeInTheDocument();
-        expect(screen.getByRole('alert')).toHaveTextContent('Error!');
+        const alert = screen.getByRole('alert');
+        expect(alert).toHaveTextContent('Error!');
+        expect(alert.className).toContain('MuiAlert-filledError');
     });
 
-    it('renders both messages', () => {
-        render(<FormStatus successMessage="Success!" errorMessage="Error!" />);
-        expect(screen.getByText('Success!')).toBeInTheDocument();
-        expect(screen.getByText('Error!')).toBeInTheDocument();
+    it('renders both messages simultaneously', () => {
+        render(<FormStatus successMessage="Saved" errorMessage="Invalid" />);
+        expect(screen.getByText('Saved')).toBeInTheDocument();
+        expect(screen.getByText('Invalid')).toBeInTheDocument();
         expect(screen.getAllByRole('alert')).toHaveLength(2);
+    });
+
+    it('does not render success block if only error provided', () => {
+        render(<FormStatus errorMessage="Only error" />);
+        expect(screen.queryByText('Only error')).toBeInTheDocument();
+        expect(screen.getAllByRole('alert')).toHaveLength(1);
     });
 });
