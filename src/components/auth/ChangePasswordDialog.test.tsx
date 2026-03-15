@@ -22,13 +22,14 @@ describe('ChangePasswordDialog', () => {
 
     it('shows error if passwords do not match', async () => {
         render(<ChangePasswordDialog open={true} onClose={onClose} />);
-        
+
         fireEvent.change(screen.getByLabelText(/Contraseña Actual/i), { target: { value: 'oldpass' } });
-        fireEvent.change(screen.getByLabelText(/Nueva Contraseña/i), { target: { value: 'newpass1' } });
+        // Usamos ^ para indicar que el texto debe EMPEZAR con "Nueva Contraseña"
+        fireEvent.change(screen.getByLabelText(/^Nueva Contraseña/i), { target: { value: 'newpass1' } });
         fireEvent.change(screen.getByLabelText(/Confirmar Nueva Contraseña/i), { target: { value: 'newpass2' } });
-        
+
         await act(async () => {
-            fireEvent.click(screen.getByText('Cambiar'));
+            fireEvent.click(screen.getByRole('button', { name: /Cambiar/i }));
         });
 
         expect(await screen.findByText('Las contraseñas nuevas no coinciden.')).toBeInTheDocument();
@@ -38,13 +39,13 @@ describe('ChangePasswordDialog', () => {
     it('calls changePassword and shows success on valid submit', async () => {
         (changePassword as any).mockResolvedValue({});
         render(<ChangePasswordDialog open={true} onClose={onClose} />);
-        
+
         fireEvent.change(screen.getByLabelText(/Contraseña Actual/i), { target: { value: 'oldpass' } });
-        fireEvent.change(screen.getByLabelText(/Nueva Contraseña/i), { target: { value: 'newpass' } });
+        fireEvent.change(screen.getByLabelText(/^Nueva Contraseña/i), { target: { value: 'newpass' } });
         fireEvent.change(screen.getByLabelText(/Confirmar Nueva Contraseña/i), { target: { value: 'newpass' } });
-        
+
         await act(async () => {
-            fireEvent.click(screen.getByText('Cambiar'));
+            fireEvent.click(screen.getByRole('button', { name: /Cambiar/i }));
         });
 
         await waitFor(() => {
@@ -58,12 +59,12 @@ describe('ChangePasswordDialog', () => {
             response: { data: { message: 'Invalid old password' } }
         });
         render(<ChangePasswordDialog open={true} onClose={onClose} />);
-        
+
         fireEvent.change(screen.getByLabelText(/Contraseña Actual/i), { target: { value: 'wrong' } });
-        fireEvent.change(screen.getByLabelText('Nueva Contraseña'), { target: { value: 'newpass' } });
+        fireEvent.change(screen.getByLabelText(/^Nueva Contraseña/i), { target: { value: 'newpass' } });
         fireEvent.change(screen.getByLabelText(/Confirmar Nueva Contraseña/i), { target: { value: 'newpass' } });
-        
-        fireEvent.click(screen.getByText('Cambiar'));
+
+        fireEvent.click(screen.getByRole('button', { name: /Cambiar/i }));
 
         expect(await screen.findByText('Invalid old password')).toBeInTheDocument();
     });
