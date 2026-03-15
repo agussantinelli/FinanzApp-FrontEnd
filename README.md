@@ -221,7 +221,21 @@
 ├── package.json                                 # Dependencias y scripts
 ├── tsconfig.json                                # Configuración de TypeScript
 ├── vitest.config.mts                             # Configuración de Tests Unitarios
+└── .agent/skills/                                # 🧠 Directorio de Skills (Guías Avanzadas para IA)
 </code></pre>
+
+<h3>🧠 Skills Especializadas</h3>
+
+<p>Este proyecto utiliza un sistema de <strong>Skills</strong> (guías avanzadas) para asegurar que cualquier desarrollo (humano o por IA) siga estrictamente los estándares arquitectónicos del proyecto:</p>
+
+<ul>
+    <li><strong>🏗️ Arquitectura Modular:</strong> Reglas estrictas sobre la separación de capas (Types, Services, Hooks, Components).</li>
+    <li><strong>🎣 React Hooks:</strong> Mejores prácticas para hooks personalizados, fomentando la extracción de lógica a <code>utils</code>.</li>
+    <li><strong>🧪 Test Enforcement:</strong> Regla "One-to-One" que exige un archivo de test por cada archivo de lógica o componente.</li>
+    <li><strong>📡 API Communication:</strong> Prohibición de <code>fetch</code> nativo; uso obligatorio del cliente HTTP centralizado con interceptores.</li>
+    <li><strong>🧹 Clean Structure:</strong> Organización basada en el App Router de Next.js y principios de diseño limpio.</li>
+    <li><strong>🎨 CSS Modules:</strong> Estándar para el encapsulamiento de estilos y mantenibilidad visual.</li>
+</ul>
 
 
 <h3> Empezar (Setup Local)</h3>
