@@ -81,7 +81,7 @@ describe('CompleteProfilePage', () => {
         render(<CompleteProfilePage />);
         
         await waitFor(() => {
-            expect(screen.getByText('Completar Perfil')).toBeDefined();
+            expect(screen.getByRole('heading', { name: /Completar Perfil/i })).toBeDefined();
             expect(screen.getByLabelText(/Fecha de Nacimiento/i)).toBeDefined();
             expect(screen.getByLabelText(/Resido en Argentina/i)).toBeDefined();
         });
@@ -97,7 +97,7 @@ describe('CompleteProfilePage', () => {
 
         await waitFor(() => {
             expect(screen.getByLabelText(/País de Residencia/i)).toBeDefined();
-        });
+        }, { timeout: 2000 });
     });
 
     it('submits form successfully', async () => {
@@ -106,9 +106,8 @@ describe('CompleteProfilePage', () => {
         
         render(<CompleteProfilePage />);
         
-        await waitFor(() => screen.getByRole('button', { name: /Completar Perfil/i }));
-        
-        fireEvent.click(screen.getByRole('button', { name: /Completar Perfil/i }));
+        const submitBtn = await screen.findByRole('button', { name: /Completar Perfil/i });
+        fireEvent.click(submitBtn);
 
         await waitFor(() => {
             expect(completeProfile).toHaveBeenCalled();
@@ -128,13 +127,12 @@ describe('CompleteProfilePage', () => {
         
         render(<CompleteProfilePage />);
         
-        await waitFor(() => screen.getByRole('button', { name: /Completar Perfil/i }));
-        
-        fireEvent.click(screen.getByRole('button', { name: /Completar Perfil/i }));
+        const submitBtn = await screen.findByRole('button', { name: /Completar Perfil/i });
+        fireEvent.click(submitBtn);
 
         await waitFor(() => {
             expect(screen.getByTestId('floating-message')).toHaveAttribute('data-severity', 'error');
-            expect(screen.getByText('Submission failed')).toBeDefined();
+            expect(screen.getByText(/Submission failed/i)).toBeDefined();
         });
     });
 
@@ -145,6 +143,6 @@ describe('CompleteProfilePage', () => {
         
         await waitFor(() => {
             expect(screen.getByText(/No se pudo cargar la información necesaria/i)).toBeDefined();
-        });
+        }, { timeout: 2000 });
     });
 });

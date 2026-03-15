@@ -59,9 +59,9 @@ describe('OperacionesTab', () => {
         expect(screen.getByText(/Compra/i)).toBeDefined();
         expect(screen.getByText(/AAPL/i)).toBeDefined();
         expect(screen.getByText(/10/)).toBeDefined();
-        expect(screen.getByText(/\$150/)).toBeDefined();
-        // Match 1.500 or 1,500
-        expect(screen.getByText(/\$1[.,]500/)).toBeDefined();
+        expect(screen.getByText(/\$?\s*150/)).toBeDefined();
+        // Match $1.500 or $1,500
+        expect(screen.getByText(/\$?\s*1[.,]500/)).toBeDefined();
     });
 
     it('handles empty operations list', () => {

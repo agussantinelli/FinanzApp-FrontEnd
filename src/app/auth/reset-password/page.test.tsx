@@ -68,7 +68,7 @@ describe('ResetPasswordPage', () => {
         render(<ResetPasswordPage />);
         
         fireEvent.change(screen.getByLabelText(/Nueva Contraseña/i), { target: { value: 'password123' } });
-        fireEvent.change(screen.getByLabelText('Confirmar Contraseña'), { target: { value: 'password456' } });
+        fireEvent.change(screen.getByLabelText(/Confirmar Contraseña/i), { target: { value: 'password456' } });
         fireEvent.click(screen.getByRole('button', { name: /Guardar Nueva Contraseña/i }));
 
         await waitFor(() => {

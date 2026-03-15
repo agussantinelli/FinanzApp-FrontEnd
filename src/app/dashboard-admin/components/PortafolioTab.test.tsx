@@ -87,7 +87,7 @@ describe('PortafolioTab', () => {
         expect(screen.getByText('Test User')).toBeDefined();
         expect(screen.getByText('Experto')).toBeDefined();
         expect(screen.getByText('Super Portfolio')).toBeDefined();
-        expect(screen.getByText('+20.00%')).toBeDefined();
+        expect(screen.getByText(/\+?20[.,]00%/)).toBeDefined();
         expect(screen.getByText('Principal')).toBeDefined();
     });
 

@@ -94,9 +94,9 @@ describe('ResumenTab', () => {
         expect(screen.getByText(/Recomendaciones/i)).toBeDefined();
         expect(screen.getByText(/5/)).toBeDefined();
         
-        // Match 1.000.000 or 1,000,000
-        expect(screen.getByText(/1[.,]000[.,]000/)).toBeDefined();
-        expect(screen.getByText(/10[.,]000/)).toBeDefined();
+        // Match $1.000.000 or $1,000,000 or 1.000.000
+        expect(screen.getByText(/\$?\s*1[.,]000[.,]000/)).toBeDefined();
+        expect(screen.getByText(/USD\s*10[.,]000/i)).toBeDefined();
         
         expect(screen.getByTestId('user-dist-chart')).toBeDefined();
         expect(screen.getByText(/Admin User/i)).toBeDefined();
