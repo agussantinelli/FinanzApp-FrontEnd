@@ -46,4 +46,30 @@ describe('RecomendacionesService', () => {
         await createRecomendacion(mockDto as any);
         expect(http.post).toHaveBeenCalledWith('/api/recomendaciones', mockDto);
     });
+
+    it('rechazarRecomendacion calls patch', async () => {
+        await rechazarRecomendacion('1');
+        expect(http.patch).toHaveBeenCalledWith('/api/recomendaciones/1/rechazar');
+    });
+
+    it('handles error in aprobarRecomendacion', async () => {
+        (http.patch as any).mockRejectedValue({ response: { status: 403 } });
+        await expect(aprobarRecomendacion('1')).rejects.toBeDefined();
+    });
+
+    it('handles error in createRecomendacion', async () => {
+        (http.post as any).mockRejectedValue(new Error('Validation failed'));
+        await expect(createRecomendacion({} as any)).rejects.toThrow('Validation failed');
+    });
+
+    it('getRecomendaciones handles empty data gracefully', async () => {
+        (http.get as any).mockResolvedValue({ data: null });
+        const result = await getRecomendaciones(true);
+        expect(result).toBeNull();
+    });
+
+    it('getRecomendacionById handles 404', async () => {
+        (http.get as any).mockRejectedValue({ response: { status: 404 } });
+        await expect(getRecomendacionById('999')).rejects.toBeDefined();
+    });
 });
