@@ -78,7 +78,6 @@ describe('ResetPasswordPage', () => {
     });
 
     it('submits correctly and redirects on success', async () => {
-        vi.useFakeTimers();
         (useSearchParams as any).mockReturnValue({
             get: vi.fn((key) => (key === 'token' ? 'test-token' : 'test@example.com')),
         });
@@ -97,11 +96,12 @@ describe('ResetPasswordPage', () => {
                 newPassword: 'password123',
             });
             expect(screen.getByTestId('floating-message')).toHaveAttribute('data-severity', 'success');
-        });
+        }, { timeout: 2000 });
 
-        vi.runAllTimers();
-        expect(mockRouter.push).toHaveBeenCalledWith('/auth/login');
-        vi.useRealTimers();
+        // Component has a setTimeout of 2000ms. We wait for it.
+        await waitFor(() => {
+            expect(mockRouter.push).toHaveBeenCalledWith('/auth/login');
+        }, { timeout: 3000 });
     });
 
     it('handles server error on submission', async () => {

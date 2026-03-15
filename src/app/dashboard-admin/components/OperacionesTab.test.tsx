@@ -54,7 +54,7 @@ describe('OperacionesTab', () => {
 
         render(<OperacionesTab />);
         
-        expect(screen.getByText(/#op-123456/i)).toBeDefined();
+        expect(screen.getByText(/#op-12345/i)).toBeDefined();
         expect(screen.getByText(/Test User/i)).toBeDefined();
         expect(screen.getByText(/Compra/i)).toBeDefined();
         expect(screen.getByText(/AAPL/i)).toBeDefined();

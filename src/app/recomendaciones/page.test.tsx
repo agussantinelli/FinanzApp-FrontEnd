@@ -16,6 +16,14 @@ vi.mock('next/navigation', () => ({
     useRouter: () => ({ push: mockPush }),
 }));
 
+// Mock window.location
+if (typeof window !== 'undefined') {
+    Object.defineProperty(window, 'location', {
+        value: { reload: vi.fn() },
+        writable: true
+    });
+}
+
 vi.mock('@/components/cards/RecomendacionCard', () => ({
     default: ({ item, onApprove, onReject, isAdmin }: any) => (
         <div data-testid="rec-card">

@@ -101,7 +101,6 @@ describe('CompleteProfilePage', () => {
     });
 
     it('submits form successfully', async () => {
-        vi.useFakeTimers();
         (completeProfile as any).mockResolvedValue({ token: 'new-token' });
         
         render(<CompleteProfilePage />);
@@ -113,11 +112,11 @@ describe('CompleteProfilePage', () => {
             expect(completeProfile).toHaveBeenCalled();
             expect(setAuthSession).toHaveBeenCalledWith({ token: 'new-token' });
             expect(screen.getByTestId('floating-message')).toHaveAttribute('data-severity', 'success');
-        });
+        }, { timeout: 2000 });
 
-        vi.runAllTimers();
-        expect(mockRouter.push).toHaveBeenCalledWith('/perfil');
-        vi.useRealTimers();
+        await waitFor(() => {
+            expect(mockRouter.push).toHaveBeenCalledWith('/perfil');
+        }, { timeout: 3000 });
     });
 
     it('handles submission error', async () => {

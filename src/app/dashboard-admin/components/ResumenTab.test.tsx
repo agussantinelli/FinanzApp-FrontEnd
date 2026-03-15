@@ -89,7 +89,9 @@ describe('ResumenTab', () => {
         
         expect(screen.getByText(/Total Usuarios/i)).toBeDefined();
         expect(screen.getByText(/100/)).toBeDefined();
-        expect(screen.getByText(/\+10/)).toBeDefined();
+        expect(screen.getByText((content, element) => {
+            return element?.tagName.toLowerCase() === 'p' && content.includes('+10') && content.includes('este mes');
+        })).toBeDefined();
         
         expect(screen.getByText(/Recomendaciones/i)).toBeDefined();
         expect(screen.getByText(/5/)).toBeDefined();

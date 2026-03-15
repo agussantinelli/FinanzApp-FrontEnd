@@ -88,7 +88,7 @@ describe('PortafolioTab', () => {
         expect(screen.getByText('Experto')).toBeDefined();
         expect(screen.getByText('Super Portfolio')).toBeDefined();
         expect(screen.getByText(/\+?20[.,]00%/)).toBeDefined();
-        expect(screen.getByText('Principal')).toBeDefined();
+        expect(screen.getByRole('cell', { name: /Principal/i })).toBeDefined();
     });
 
     it('handles toggle destacado', async () => {
