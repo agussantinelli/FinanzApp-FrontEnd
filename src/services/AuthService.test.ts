@@ -1,17 +1,24 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { 
     setAuthSession, 
     clearAuthSession, 
     getCurrentUser, 
-    hasRole, 
-    getHomePathForRole,
+    verifySession,
+    hasRole,
+    getRegisterGeoData,
     login,
-    clearAuthSession as clearAuthMock
+    register,
+    googleLogin,
+    completeProfile,
+    setInitialPassword,
+    changePassword,
+    resetPasswordRequest,
+    resetPasswordConfirm,
+    getHomePathForRole
 } from './AuthService';
 import { http } from '@/lib/http';
 import { RolUsuario } from '@/types/Usuario';
 
-// Mock http client
 vi.mock('@/lib/http', () => ({
     http: {
         get: vi.fn(),
@@ -19,78 +26,104 @@ vi.mock('@/lib/http', () => ({
     }
 }));
 
-// Mock activos-cache
 vi.mock('@/lib/activos-cache', () => ({
     clearCache: vi.fn(),
 }));
 
 describe('AuthService', () => {
+    const mockStorage: Record<string, string> = {};
+
     beforeEach(() => {
         vi.clearAllMocks();
-        sessionStorage.clear();
+        Object.keys(mockStorage).forEach(k => delete mockStorage[k]);
+        
+        // Mock sessionStorage
+        global.sessionStorage = {
+            getItem: vi.fn((key) => mockStorage[key] || null),
+            setItem: vi.fn((key, value) => { mockStorage[key] = value; }),
+            clear: vi.fn(() => { Object.keys(mockStorage).forEach(k => delete mockStorage[k]); }),
+            removeItem: vi.fn((key) => { delete mockStorage[key]; }),
+            length: 0,
+            key: vi.fn(),
+        } as any;
+
+        // Mock dispatchEvent
+        global.dispatchEvent = vi.fn();
     });
 
-    describe('Session Management', () => {
-        it('setAuthSession stores user data in sessionStorage', () => {
-            const mockResp = {
-                personaId: 1,
-                nombre: 'Agus',
-                apellido: 'Test',
-                email: 'test@test.com',
-                token: 'fake-token',
-                rol: RolUsuario.Inversor,
-                expiraUtc: '2024-01-01',
-                perfilCompletado: true,
-                tieneContrasenaConfigurada: true
-            };
+    it('setAuthSession stores token and user in sessionStorage', () => {
+        const mockResp = {
+            token: 't123',
+            personaId: 'u1',
+            nombre: 'Juan',
+            rol: 'Inversor'
+        } as any;
 
-            setAuthSession(mockResp as any);
+        setAuthSession(mockResp);
 
-            expect(sessionStorage.getItem('fa_token')).toBe('fake-token');
-            const storedUser = JSON.parse(sessionStorage.getItem('fa_user')!);
-            expect(storedUser.nombre).toBe('Agus');
-            expect(storedUser.rol).toBe(RolUsuario.Inversor);
-        });
-
-        it('clearAuthSession clears sessionStorage', () => {
-            sessionStorage.setItem('fa_token', 'token');
-            clearAuthSession();
-            expect(sessionStorage.getItem('fa_token')).toBeNull();
-        });
-
-        it('getCurrentUser retrieves user from sessionStorage', () => {
-            const user = { nombre: 'Agus', rol: 'Admin' };
-            sessionStorage.setItem('fa_user', JSON.stringify(user));
-            expect(getCurrentUser()).toEqual(user);
-        });
+        expect(sessionStorage.setItem).toHaveBeenCalledWith('fa_token', 't123');
+        const storedUser = JSON.parse(mockStorage['fa_user']);
+        expect(storedUser.nombre).toBe('Juan');
+        expect(global.dispatchEvent).toHaveBeenCalledWith(expect.any(Event));
     });
 
-    describe('Authorization', () => {
-        it('hasRole returns true if user has required role', () => {
-            sessionStorage.setItem('fa_user', JSON.stringify({ rol: RolUsuario.Admin }));
-            expect(hasRole([RolUsuario.Admin])).toBe(true);
-            expect(hasRole([RolUsuario.Inversor])).toBe(false);
-        });
-
-        it('getHomePathForRole returns correct paths', () => {
-            expect(getHomePathForRole('Admin')).toBe('/dashboard-admin');
-            expect(getHomePathForRole('Experto')).toBe('/dashboard-experto');
-            expect(getHomePathForRole('Inversor')).toBe('/dashboard-inversor');
-            expect(getHomePathForRole(null)).toBe('/dashboard-inversor');
-        });
+    it('clearAuthSession clears storage and cache', () => {
+        clearAuthSession();
+        expect(sessionStorage.clear).toHaveBeenCalled();
+        expect(global.dispatchEvent).toHaveBeenCalled();
     });
 
-    describe('API Actions', () => {
-        it('login calls API and sets session', async () => {
-            const mockData = { email: 'test@test.com', password: 'password' };
-            const mockResp = { data: { token: 't', nombre: 'Agus' } };
-            (http.post as any).mockResolvedValue(mockResp);
+    it('getCurrentUser returns parsed user from storage', () => {
+        const user = { id: '1', nombre: 'Test' };
+        mockStorage['fa_user'] = JSON.stringify(user);
 
-            const result = await login(mockData);
+        const result = getCurrentUser();
+        expect(result).toEqual(user);
+    });
 
-            expect(http.post).toHaveBeenCalledWith('/api/auth/login', mockData);
-            expect(result).toEqual(mockResp.data);
-            expect(sessionStorage.getItem('fa_token')).toBe('t');
-        });
+    it('verifySession calls correct dashboard based on role', async () => {
+        mockStorage['fa_user'] = JSON.stringify({ rol: RolUsuario.Admin });
+        (http.get as any).mockResolvedValue({});
+
+        await verifySession();
+        expect(http.get).toHaveBeenCalledWith('/api/dashboard/admin/stats');
+    });
+
+    it('hasRole returns true if role matches', () => {
+        mockStorage['fa_user'] = JSON.stringify({ rol: RolUsuario.Experto });
+        expect(hasRole([RolUsuario.Experto, RolUsuario.Admin])).toBe(true);
+        expect(hasRole([RolUsuario.Inversor])).toBe(false);
+    });
+
+    it('login calls post and sets session', async () => {
+        const mockResp = { token: 'tk', nombre: 'Log' };
+        (http.post as any).mockResolvedValue({ data: mockResp });
+
+        const result = await login({ email: 'e', password: 'p' });
+        expect(http.post).toHaveBeenCalledWith('/api/auth/login', { email: 'e', password: 'p' });
+        expect(sessionStorage.setItem).toHaveBeenCalledWith('fa_token', 'tk');
+        expect(result).toEqual(mockResp);
+    });
+
+    it('googleLogin calls post and sets session', async () => {
+        const mockResp = { token: 'tk-goog' };
+        (http.post as any).mockResolvedValue({ data: mockResp });
+
+        await googleLogin('token-id');
+        expect(http.post).toHaveBeenCalledWith('/api/auth/google', { idToken: 'token-id' });
+        expect(sessionStorage.setItem).toHaveBeenCalledWith('fa_token', 'tk-goog');
+    });
+
+    it('getHomePathForRole returns correct paths', () => {
+        expect(getHomePathForRole('Admin')).toBe('/dashboard-admin');
+        expect(getHomePathForRole('Experto')).toBe('/dashboard-experto');
+        expect(getHomePathForRole('Inversor')).toBe('/dashboard-inversor');
+        expect(getHomePathForRole(null)).toBe('/dashboard-inversor');
+    });
+
+    it('resetPasswordConfirm calls post', async () => {
+        (http.post as any).mockResolvedValue({});
+        await resetPasswordConfirm({ email: 'e', token: 't', newPassword: 'p' });
+        expect(http.post).toHaveBeenCalledWith('/api/auth/reset-password-confirm', expect.any(Object));
     });
 });

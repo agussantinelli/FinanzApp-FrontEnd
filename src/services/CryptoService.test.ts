@@ -13,15 +13,37 @@ describe('CryptoService', () => {
         vi.clearAllMocks();
     });
 
-    it('getTopCryptos calls correct endpoint with limit', async () => {
-        (http.get as any).mockResolvedValue({ data: [] });
+    it('getTopCryptos calls API with default limit', async () => {
+        const mockData = [{ symbol: 'BTC', price: 60000 }];
+        (http.get as any).mockResolvedValue({ data: mockData });
+
+        const result = await getTopCryptos();
+
+        expect(http.get).toHaveBeenCalledWith('/api/crypto/top', {
+            params: { limit: 10 },
+        });
+        expect(result).toEqual(mockData);
+    });
+
+    it('getTopCryptos calls API with custom limit', async () => {
         await getTopCryptos(5);
-        expect(http.get).toHaveBeenCalledWith('/api/crypto/top', { params: { limit: 5 } });
+        expect(http.get).toHaveBeenCalledWith('/api/crypto/top', {
+            params: { limit: 5 },
+        });
     });
 
     it('getCryptoBySymbol calls correct endpoint', async () => {
-        (http.get as any).mockResolvedValue({ data: { symbol: 'BTC' } });
-        await getCryptoBySymbol('BTC');
-        expect(http.get).toHaveBeenCalledWith('/api/crypto/BTC');
+        const mockData = { symbol: 'ETH', price: 3000 };
+        (http.get as any).mockResolvedValue({ data: mockData });
+
+        const result = await getCryptoBySymbol('ETH');
+
+        expect(http.get).toHaveBeenCalledWith('/api/crypto/ETH');
+        expect(result).toEqual(mockData);
+    });
+
+    it('handles crypto API errors', async () => {
+        (http.get as any).mockRejectedValue(new Error('API Error'));
+        await expect(getCryptoBySymbol('BTC')).rejects.toThrow('API Error');
     });
 });

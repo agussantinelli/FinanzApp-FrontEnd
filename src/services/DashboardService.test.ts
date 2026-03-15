@@ -18,7 +18,7 @@ describe('DashboardService', () => {
         vi.clearAllMocks();
     });
 
-    it('getInversorStats calls API', async () => {
+    it('getInversorStats calls API and returns data', async () => {
         const mockData = { valorTotal: 1000 };
         (http.get as any).mockResolvedValue({ data: mockData });
 
@@ -28,7 +28,14 @@ describe('DashboardService', () => {
         expect(result).toEqual(mockData);
     });
 
-    it('getExpertoStats calls API', async () => {
+    it('getInversorStats handles 401 error', async () => {
+        const error = { response: { status: 401 } };
+        (http.get as any).mockRejectedValue(error);
+
+        await expect(getInversorStats()).rejects.toEqual(error);
+    });
+
+    it('getExpertoStats calls API and returns data', async () => {
         const mockData = { totalRecomendaciones: 5 };
         (http.get as any).mockResolvedValue({ data: mockData });
 
@@ -38,7 +45,12 @@ describe('DashboardService', () => {
         expect(result).toEqual(mockData);
     });
 
-    it('getAdminStats calls API', async () => {
+    it('getExpertoStats handles 500 server error', async () => {
+        (http.get as any).mockRejectedValue(new Error('Internal Server Error'));
+        await expect(getExpertoStats()).rejects.toThrow('Internal Server Error');
+    });
+
+    it('getAdminStats calls API and returns data', async () => {
         const mockData = { totalUsuarios: 100 };
         (http.get as any).mockResolvedValue({ data: mockData });
 
@@ -48,7 +60,13 @@ describe('DashboardService', () => {
         expect(result).toEqual(mockData);
     });
 
-    it('getAdminPortfolioStats calls API', async () => {
+    it('getAdminStats handles empty response', async () => {
+        (http.get as any).mockResolvedValue({ data: null });
+        const result = await getAdminStats();
+        expect(result).toBeNull();
+    });
+
+    it('getAdminPortfolioStats calls API and returns data', async () => {
         const mockData = { valorGlobalPesos: 1000000 };
         (http.get as any).mockResolvedValue({ data: mockData });
 
@@ -56,5 +74,11 @@ describe('DashboardService', () => {
 
         expect(http.get).toHaveBeenCalledWith('/api/dashboard/admin/portafolios/stats');
         expect(result).toEqual(mockData);
+    });
+
+    it('getAdminPortfolioStats handles 403 Forbidden', async () => {
+        const error = { response: { status: 403 } };
+        (http.get as any).mockRejectedValue(error);
+        await expect(getAdminPortfolioStats()).rejects.toEqual(error);
     });
 });

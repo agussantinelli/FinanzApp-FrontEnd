@@ -18,21 +18,37 @@ describe('AdminService', () => {
     });
 
     it('getDashboardStats calls correct endpoint', async () => {
-        (http.get as any).mockResolvedValue({ data: { totalUsuarios: 10 } });
-        const res = await getDashboardStats();
+        const mockData = { totalUsuarios: 10 };
+        (http.get as any).mockResolvedValue({ data: mockData });
+
+        const result = await getDashboardStats();
+
         expect(http.get).toHaveBeenCalledWith('/api/dashboard/admin/stats');
-        expect(res.totalUsuarios).toBe(10);
+        expect(result).toEqual(mockData);
     });
 
     it('getAdminPortfolioStats calls correct endpoint', async () => {
-        (http.get as any).mockResolvedValue({ data: { totalPortafolios: 5 } });
-        await getAdminPortfolioStats();
+        const mockData = { valorGlobalPesos: 123456 };
+        (http.get as any).mockResolvedValue({ data: mockData });
+
+        const result = await getAdminPortfolioStats();
+
         expect(http.get).toHaveBeenCalledWith('/api/dashboard/admin/portafolios/stats');
+        expect(result).toEqual(mockData);
     });
 
     it('getAllOperations calls correct endpoint', async () => {
-        (http.get as any).mockResolvedValue({ data: [] });
-        await getAllOperations();
+        const mockData = [{ id: 'op1', symbol: 'BTC' }];
+        (http.get as any).mockResolvedValue({ data: mockData });
+
+        const result = await getAllOperations();
+
         expect(http.get).toHaveBeenCalledWith('/api/operaciones');
+        expect(result).toEqual(mockData);
+    });
+
+    it('handles failure in admin operations', async () => {
+        (http.get as any).mockRejectedValue(new Error('Forbidden'));
+        await expect(getAllOperations()).rejects.toThrow('Forbidden');
     });
 });

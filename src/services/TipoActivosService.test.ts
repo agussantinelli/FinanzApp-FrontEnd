@@ -13,15 +13,28 @@ describe('TipoActivosService', () => {
         vi.clearAllMocks();
     });
 
-    it('getTiposActivo calls correct endpoint', async () => {
-        (http.get as any).mockResolvedValue({ data: [] });
-        await getTiposActivo();
+    it('getTiposActivo calls API', async () => {
+        const mockData = [{ id: 1, nombre: 'Acción' }];
+        (http.get as any).mockResolvedValue({ data: mockData });
+
+        const result = await getTiposActivo();
+
         expect(http.get).toHaveBeenCalledWith('/api/tipos-activo');
+        expect(result).toEqual(mockData);
     });
 
     it('getTiposActivoNoMoneda calls correct endpoint', async () => {
-        (http.get as any).mockResolvedValue({ data: [] });
-        await getTiposActivoNoMoneda();
+        const mockData = [{ id: 1, nombre: 'Acción' }];
+        (http.get as any).mockResolvedValue({ data: mockData });
+
+        const result = await getTiposActivoNoMoneda();
+
         expect(http.get).toHaveBeenCalledWith('/api/tipos-activo/no-moneda');
+        expect(result).toEqual(mockData);
+    });
+
+    it('handles type service errors', async () => {
+        (http.get as any).mockRejectedValue(new Error('Server Error'));
+        await expect(getTiposActivo()).rejects.toThrow('Server Error');
     });
 });

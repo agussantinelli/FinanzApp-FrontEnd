@@ -13,17 +13,26 @@ describe('DolarService', () => {
         vi.clearAllMocks();
     });
 
-    it('getCotizacionesDolar calls correct endpoint with no-cache', async () => {
-        (http.get as any).mockResolvedValue({ data: [] });
-        await getCotizacionesDolar();
+    it('getCotizacionesDolar calls API with cache-control header', async () => {
+        const mockData = [{ nombre: 'Oficial', compra: 800, venta: 850 }];
+        (http.get as any).mockResolvedValue({ data: mockData });
+
+        const result = await getCotizacionesDolar();
+
         expect(http.get).toHaveBeenCalledWith('/api/dolar/cotizaciones', {
-            headers: { "Cache-Control": "no-cache" }
+            headers: { "Cache-Control": "no-cache" },
         });
+        expect(result).toEqual(mockData);
     });
 
-    it('returns empty array on error', async () => {
-        (http.get as any).mockRejectedValue(new Error('Fail'));
-        const res = await getCotizacionesDolar();
-        expect(res).toEqual([]);
+    it('getCotizacionesDolar returns empty array and logs error on failure', async () => {
+        const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+        (http.get as any).mockRejectedValue(new Error('Network Fail'));
+
+        const result = await getCotizacionesDolar();
+
+        expect(result).toEqual([]);
+        expect(errorSpy).toHaveBeenCalled();
+        errorSpy.mockRestore();
     });
 });

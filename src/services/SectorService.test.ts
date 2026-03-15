@@ -13,16 +13,28 @@ describe('SectorService', () => {
         vi.clearAllMocks();
     });
 
-    it('getSectores calls correct endpoint', async () => {
-        (http.get as any).mockResolvedValue({ data: [{ id: '1', nombre: 'Tech' }] });
-        const res = await getSectores();
+    it('getSectores calls API', async () => {
+        const mockData = [{ id: '1', nombre: 'Tecnología' }];
+        (http.get as any).mockResolvedValue({ data: mockData });
+
+        const result = await getSectores();
+
         expect(http.get).toHaveBeenCalledWith('/api/sectores');
-        expect(res).toHaveLength(1);
+        expect(result).toEqual(mockData);
     });
 
     it('getSectorById calls correct endpoint', async () => {
-        (http.get as any).mockResolvedValue({ data: { id: '1' } });
-        await getSectorById('1');
+        const mockData = { id: '1', nombre: 'Tecnología' };
+        (http.get as any).mockResolvedValue({ data: mockData });
+
+        const result = await getSectorById('1');
+
         expect(http.get).toHaveBeenCalledWith('/api/sectores/1');
+        expect(result).toEqual(mockData);
+    });
+
+    it('handles sector service errors', async () => {
+        (http.get as any).mockRejectedValue(new Error('Fetch failed'));
+        await expect(getSectores()).rejects.toThrow('Fetch failed');
     });
 });
