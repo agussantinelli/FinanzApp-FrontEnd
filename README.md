@@ -124,6 +124,11 @@
             <td>Tipado estricto, Interfaces y DTOs compartidos.</td>
         </tr>
         <tr>
+            <td><strong>Package Manager</strong></td>
+            <td>pnpm 10+</td>
+            <td>Gestión de dependencias eficiente, rápida y determinista.</td>
+        </tr>
+        <tr>
             <td><strong>UI Library</strong></td>
             <td>Material UI v7 (MUI)</td>
             <td>Sistema de diseño robusto, accesible y personalizable.</td>
