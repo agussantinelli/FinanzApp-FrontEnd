@@ -20,11 +20,10 @@ describe('DolarBarChart', () => {
         (getCotizacionesDolar as any).mockResolvedValue(mockData);
     });
 
-    it('renders loading skeletons initially', () => {
+    it('renders loading state initially', () => {
         (getCotizacionesDolar as any).mockReturnValue(new Promise(() => {}));
         render(<DolarBarChart />);
-        expect(screen.getByText('Cargando…')).toBeInTheDocument();
-        expect(screen.getAllByRole('progressbar', { hidden: true }).length).toBe(0); // Skeletons don't use role=progressbar
+        expect(screen.getByText('Cargando...')).toBeInTheDocument();
     });
 
     it('renders chart and kpis after load', async () => {

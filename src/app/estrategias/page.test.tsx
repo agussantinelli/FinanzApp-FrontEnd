@@ -36,10 +36,10 @@ describe('StrategiesPage', () => {
     it('renders top and regular strategies correctly', async () => {
         render(<StrategiesPage />);
         
-        await waitFor(() => expect(screen.getByText('Top Strategy')).toBeInTheDocument());
-        expect(screen.getByText('TOP SELECTION')).toBeInTheDocument();
-        expect(screen.getByText('Regular Strategy')).toBeInTheDocument();
-        expect(screen.getByText('OTRAS ESTRATEGIAS DESTACADAS')).toBeInTheDocument();
+        await waitFor(() => expect(screen.getByText(/Top Strategy/i)).toBeInTheDocument());
+        expect(screen.getByText(/TOP SELECTION/i)).toBeInTheDocument();
+        expect(screen.getByText(/Regular Strategy/i)).toBeInTheDocument();
+        expect(screen.getByText(/Otras Estrategias Destacadas/i)).toBeInTheDocument();
     });
 
     it('handles empty strategies state', async () => {

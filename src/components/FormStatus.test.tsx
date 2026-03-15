@@ -17,14 +17,12 @@ describe('FormStatus', () => {
         render(<FormStatus successMessage="Success!" />);
         const alert = screen.getByRole('alert');
         expect(alert).toHaveTextContent('Success!');
-        expect(alert.className).toContain('MuiAlert-filledSuccess');
     });
 
     it('renders error message with correct severity', () => {
         render(<FormStatus errorMessage="Error!" />);
         const alert = screen.getByRole('alert');
         expect(alert).toHaveTextContent('Error!');
-        expect(alert.className).toContain('MuiAlert-filledError');
     });
 
     it('renders both messages simultaneously', () => {

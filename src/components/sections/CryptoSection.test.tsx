@@ -47,7 +47,7 @@ describe('CryptoSection', () => {
             resolvePromise(mockData);
         });
         
-        await waitFor(() => expect(screen.getByText('Actualizar')).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/Actualizar/i)).toBeInTheDocument());
     });
 
     it('periodically refreshes data', async () => {
@@ -74,8 +74,10 @@ describe('CryptoSection', () => {
         render(<CryptoSection />);
         await waitFor(() => expect(getTopCryptos).toHaveBeenCalledTimes(1));
 
-        const btn = screen.getByText('Actualizar');
-        fireEvent.click(btn);
+        const btn = screen.getByText(/Actualizar/i);
+        await act(async () => {
+            fireEvent.click(btn);
+        });
 
         expect(getTopCryptos).toHaveBeenCalledTimes(2);
     });

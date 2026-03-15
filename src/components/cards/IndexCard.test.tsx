@@ -48,13 +48,13 @@ describe('IndexCard', () => {
     it('applies positive variation style', () => {
         render(<IndexCard data={mockData} />);
         const change = screen.getAllByText("+0,50%")[0];
-        expect(change.className).toContain('positive');
+        expect(change).toHaveClass(/positive/);
     });
 
     it('applies negative variation style', () => {
         render(<IndexCard data={{ ...mockData, usChangePct: -1.2 }} />);
         const change = screen.getAllByText("-1,20%")[0];
-        expect(change.className).toContain('negative');
+        expect(change).toHaveClass(/negative/);
     });
 
     it('navigates to detail on click', () => {

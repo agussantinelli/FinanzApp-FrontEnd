@@ -97,7 +97,7 @@ describe('RecomendacionesPage', () => {
         expect(aprobarRecomendacion).toHaveBeenCalledWith('1');
     });
 
-    it('shows empty state message', () => {
+    it('shows empty state message', async () => {
         (useRecomendaciones as any).mockReturnValue({
             data: [],
             loading: false,
@@ -108,6 +108,8 @@ describe('RecomendacionesPage', () => {
             refresh: mockRefresh
         });
         render(<RecomendacionesPage />);
-        expect(screen.getByText(/No hay recomendaciones encontradas/)).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText(/No hay recomendaciones encontradas/)).toBeInTheDocument();
+        });
     });
 });

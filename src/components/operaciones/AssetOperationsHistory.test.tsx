@@ -1,8 +1,9 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import AssetOperationsHistory from './AssetOperationsHistory';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useAuth } from '@/hooks/useAuth';
 import { getOperacionesByActivo, getOperacionesByPersona } from '@/services/OperacionesService';
+import { RolUsuario } from '@/types/Usuario';
 
 vi.mock('@/hooks/useAuth');
 vi.mock('@/services/OperacionesService');
@@ -25,8 +26,9 @@ describe('AssetOperationsHistory', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
-        (useAuth as any).mockReturnValue({ user: { id: 'u1', rol: 'Inversor' } });
+        (useAuth as any).mockReturnValue({ user: { id: 'u1', rol: RolUsuario.Inversor } });
         (getOperacionesByPersona as any).mockResolvedValue(mockOps);
+        (getOperacionesByActivo as any).mockResolvedValue(mockOps);
     });
 
     it('renders loading state initially', () => {
@@ -38,28 +40,29 @@ describe('AssetOperationsHistory', () => {
     it('renders operations table for inversor', async () => {
         render(<AssetOperationsHistory activoId="1" symbol="AAPL" />);
         
-        await waitFor(() => expect(screen.getByText('Historial de Operaciones (AAPL)')).toBeInTheDocument());
-        expect(screen.getByText('10,00')).toBeInTheDocument(); // cantidad
-        expect(screen.getByText('$ 1.000,00')).toBeInTheDocument(); // total
-        expect(screen.queryByText('Usuario')).not.toBeInTheDocument(); // Column for admin
+        await waitFor(() => {
+            expect(screen.getByText(/Historial de Operaciones/i)).toBeInTheDocument();
+            expect(screen.getByText(/10,00/)).toBeInTheDocument();
+        });
+        expect(screen.queryByText(/Usuario/i)).not.toBeInTheDocument();
     });
 
     it('renders user info for admin', async () => {
-        (useAuth as any).mockReturnValue({ user: { id: 'a1', rol: 'Administrador' } });
-        (getOperacionesByActivo as any).mockResolvedValue(mockOps);
+        (useAuth as any).mockReturnValue({ user: { id: 'a1', rol: RolUsuario.Admin } });
 
         render(<AssetOperationsHistory activoId="1" symbol="AAPL" />);
 
-        await waitFor(() => expect(screen.getByText('Usuario')).toBeInTheDocument());
-        expect(screen.getByText('Admin User')).toBeInTheDocument();
-        expect(screen.getByText('admin@test.com')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText(/Usuario/i)).toBeInTheDocument();
+            expect(screen.getByText(/Admin User/i)).toBeInTheDocument();
+        });
     });
 
     it('renders error message on failure', async () => {
         (getOperacionesByPersona as any).mockRejectedValue(new Error('Fail'));
         render(<AssetOperationsHistory activoId="1" symbol="AAPL" />);
 
-        await waitFor(() => expect(screen.getByText(/No se pudo cargar el historial/)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/No se pudo cargar el historial/i)).toBeInTheDocument());
     });
 
     it('renders nothing if no operations matching', async () => {

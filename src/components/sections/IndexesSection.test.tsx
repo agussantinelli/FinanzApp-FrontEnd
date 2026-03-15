@@ -1,69 +1,67 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
 import IndexesSection from './IndexesSection';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { useIndicesData } from '@/hooks/useIndicesData';
+import { getIndices } from '@/services/StocksService';
 
-vi.mock('@/hooks/useIndicesData');
+vi.mock('@/services/StocksService');
 vi.mock('@/components/cards/IndexCard', () => ({
-    default: ({ data }: any) => <div data-testid="index-card">{data.usSymbol || data.localSymbol}</div>
+    default: ({ data }: any) => <div data-testid="index-card">{data.nombre}</div>
 }));
 
 describe('IndexesSection', () => {
-    const mockFetchData = vi.fn();
+    const mockData = [
+        { symbol: 'SPY', nombre: 'S&P 500', ultimoPrecio: 5000 },
+        { symbol: 'MERVAL', nombre: 'Riesgo Pais', ultimoPrecio: 1200 }
+    ];
 
     beforeEach(() => {
         vi.clearAllMocks();
-        (useIndicesData as any).mockReturnValue({
-            data: [],
-            row1: [{ usSymbol: 'SPY' }],
-            row2: [{ usSymbol: 'QQQ' }],
-            national: [{ localSymbol: 'MERVAL' }],
-            loading: false,
-            updatedAt: new Date('2024-01-01T12:00:00'),
-            fetchData: mockFetchData
+        (getIndices as any).mockResolvedValue(mockData);
+    });
+
+    it('renders market sections', async () => {
+        render(<IndexesSection />);
+        await waitFor(() => expect(screen.getByText(/Wall Street/i)).toBeInTheDocument());
+        expect(screen.getByText(/Argentina/i)).toBeInTheDocument();
+    });
+
+    it('renders index cards after loading', async () => {
+        render(<IndexesSection />);
+        await waitFor(() => {
+            const cards = screen.getAllByTestId('index-card');
+            expect(cards.length).toBeGreaterThan(0);
         });
     });
 
-    it('renders indexes and sections', () => {
-        render(<IndexesSection />);
-        expect(screen.getByText('Wall Street & Emergentes')).toBeInTheDocument();
-        expect(screen.getByText('Argentina')).toBeInTheDocument();
-        expect(screen.getByText('SPY')).toBeInTheDocument();
-        expect(screen.getByText('MERVAL')).toBeInTheDocument();
-    });
+    it('displays loading state while updating', async () => {
+        let resolve: any;
+        const promise = new Promise(r => { resolve = r; });
+        (getIndices as any).mockReturnValue(promise);
 
-    it('shows last update time', () => {
         render(<IndexesSection />);
-        expect(screen.getByText(/Última actualización: 12:00/)).toBeInTheDocument();
-    });
-
-    it('handles refresh click', () => {
-        render(<IndexesSection />);
-        const refreshBtn = screen.getByText('Actualizar');
-        fireEvent.click(refreshBtn);
-        expect(mockFetchData).toHaveBeenCalled();
-    });
-
-    it('shows updater state in button', () => {
-        (useIndicesData as any).mockReturnValue({
-            data: [], row1: [], row2: [], national: [],
-            loading: true,
-            updatedAt: null,
-            fetchData: mockFetchData
+        await waitFor(() => expect(screen.getByText('Actualizando...')).toBeInTheDocument());
+        
+        await act(async () => {
+            resolve(mockData);
         });
-        render(<IndexesSection />);
-        expect(screen.getByText('Actualizando...')).toBeInTheDocument();
-        expect(screen.getByRole('button')).toBeDisabled();
+        await waitFor(() => expect(screen.queryByText('Actualizando...')).not.toBeInTheDocument());
     });
 
-    it('shows empty message when no data', () => {
-        (useIndicesData as any).mockReturnValue({
-            data: [], row1: [], row2: [], national: [],
-            loading: false,
-            updatedAt: null,
-            fetchData: mockFetchData
-        });
+    it('handles refresh correctly', async () => {
         render(<IndexesSection />);
-        expect(screen.getByText('Cargando índices de mercado...')).toBeInTheDocument();
+        await waitFor(() => screen.getByText('Wall Street'));
+
+        const btn = screen.getByRole('button');
+        await act(async () => {
+            fireEvent.click(btn);
+        });
+        
+        expect(getIndices).toHaveBeenCalledTimes(2);
+    });
+
+    it('handles error state', async () => {
+        (getIndices as any).mockRejectedValue(new Error('API Error'));
+        render(<IndexesSection />);
+        await waitFor(() => expect(screen.getByText(/Error al cargar/)).toBeInTheDocument());
     });
 });

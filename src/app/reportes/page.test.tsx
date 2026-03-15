@@ -4,6 +4,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useAuth } from '@/hooks/useAuth';
 import { usePortfolioData } from '@/hooks/usePortfolioData';
 
+import { RolUsuario } from '@/types/Usuario';
+
 vi.mock('@/hooks/useAuth');
 vi.mock('@/hooks/usePortfolioData');
 vi.mock('@/components/charts/DolarBarChart', () => ({

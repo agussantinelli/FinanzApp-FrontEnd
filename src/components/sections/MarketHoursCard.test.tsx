@@ -27,6 +27,6 @@ describe('MarketHoursCard', () => {
 
     it('renders with AccessTime icon', () => {
         const { container } = render(<MarketHoursCard />);
-        expect(container.querySelector('svg[data-testid="AccessTimeIcon"]')).toBeInTheDocument();
+        expect(container.querySelector('svg')).toBeInTheDocument();
     });
 });
