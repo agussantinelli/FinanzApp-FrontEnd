@@ -41,7 +41,7 @@ describe('Navbar', () => {
         expect(screen.getByText('Registrarse')).toBeInTheDocument();
     });
 
-    it('renders authenticated elements when logged in', async () => {
+    it('renders authenticated elements when logged in as Inversor', async () => {
         (useAuth as any).mockReturnValue({
             user: { nombre: 'Agus', apellido: 'Test', rol: 'Inversor' },
             isAuthenticated: true,
@@ -57,6 +57,25 @@ describe('Navbar', () => {
         expect(screen.queryByText('Iniciar sesión')).not.toBeInTheDocument();
         expect(screen.getByText('Dashboard')).toBeInTheDocument();
         expect(screen.getByText('Portafolio')).toBeInTheDocument();
+        expect(screen.queryByText('Admin Panel')).not.toBeInTheDocument();
+    });
+
+    it('renders admin elements when logged in as Admin', async () => {
+        (useAuth as any).mockReturnValue({
+            user: { nombre: 'Admin', apellido: 'User', rol: 'Admin' },
+            isAuthenticated: true,
+            logout: mockLogout,
+        });
+
+        render(<Navbar />);
+
+        await waitFor(() => {
+            expect(screen.getByText('Dashboard')).toBeInTheDocument();
+        });
+
+        // We could add checks for admin specific links if they existed in the navbar
+        // For now, confirming base auth links are there
+        expect(screen.getByText(/Admin User/)).toBeInTheDocument();
     });
 
     it('opens user menu and verifies logout', async () => {

@@ -2,6 +2,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import FloatingMessage from './FloatingMessage';
 import NeonLoader from './NeonLoader';
+import PageHeader from './PageHeader';
+import { TypingIndicator } from './TypingIndicator';
 
 
 describe('UI Components', () => {
@@ -15,5 +17,15 @@ describe('UI Components', () => {
         expect(screen.getByText('Loading...')).toBeInTheDocument();
     });
 
+    it('PageHeader renders title and description', () => {
+        render(<PageHeader title="Main Title" description="Helpful description" />);
+        expect(screen.getByText('Main Title')).toBeInTheDocument();
+        expect(screen.getByText('Helpful description')).toBeInTheDocument();
+    });
 
+    it('TypingIndicator renders dots', () => {
+        const { container } = render(<TypingIndicator />);
+        // Checking for the existence of the dots via class or structure
+        expect(container.querySelectorAll(`div[class*="dot"]`)).toHaveLength(3);
+    });
 });

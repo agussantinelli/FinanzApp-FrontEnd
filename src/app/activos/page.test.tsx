@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@/test/test-utils';
+import { render, screen, fireEvent, waitFor, within } from '@/test/test-utils';
 import Activos from './page';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useActivosFilters } from '@/hooks/useActivosFilters';
@@ -104,5 +104,15 @@ describe('Activos Page', () => {
         render(<Activos />);
         expect(screen.getByText('No se encontraron activos')).toBeInTheDocument();
         expect(screen.getByText('"XYZ"')).toBeInTheDocument();
+    });
+    it('handles toggle follow/unfollow', async () => {
+        render(<Activos />);
+        const unfollowedAsset = screen.getByText('AAPL').closest('tr');
+        const followButton = within(unfollowedAsset!).getByRole('button');
+        
+        fireEvent.click(followButton);
+        
+        expect(toggleSeguirActivo).toHaveBeenCalledWith(1);
+        expect(mockUpdateAssetInList).toHaveBeenCalled();
     });
 });
