@@ -56,9 +56,9 @@ describe('ResetPasswordPage', () => {
             get: vi.fn((key) => (key === 'token' ? 'test-token' : 'test@example.com')),
         });
         render(<ResetPasswordPage />);
-        expect(screen.getByText('Nueva Contraseña')).toBeDefined();
-        expect(screen.getByLabelText('Nueva Contraseña')).toBeDefined();
-        expect(screen.getByLabelText('Confirmar Contraseña')).toBeDefined();
+        expect(screen.getByRole('heading', { name: /Nueva Contraseña/i })).toBeDefined();
+        expect(screen.getByLabelText(/Nueva Contraseña/i)).toBeDefined();
+        expect(screen.getByLabelText(/Confirmar Contraseña/i)).toBeDefined();
     });
 
     it('shows error if passwords do not match', async () => {
@@ -67,7 +67,7 @@ describe('ResetPasswordPage', () => {
         });
         render(<ResetPasswordPage />);
         
-        fireEvent.change(screen.getByLabelText('Nueva Contraseña'), { target: { value: 'password123' } });
+        fireEvent.change(screen.getByLabelText(/Nueva Contraseña/i), { target: { value: 'password123' } });
         fireEvent.change(screen.getByLabelText('Confirmar Contraseña'), { target: { value: 'password456' } });
         fireEvent.click(screen.getByRole('button', { name: /Guardar Nueva Contraseña/i }));
 
@@ -86,8 +86,8 @@ describe('ResetPasswordPage', () => {
         
         render(<ResetPasswordPage />);
         
-        fireEvent.change(screen.getByLabelText('Nueva Contraseña'), { target: { value: 'password123' } });
-        fireEvent.change(screen.getByLabelText('Confirmar Contraseña'), { target: { value: 'password123' } });
+        fireEvent.change(screen.getByLabelText(/Nueva Contraseña/i), { target: { value: 'password123' } });
+        fireEvent.change(screen.getByLabelText(/Confirmar Contraseña/i), { target: { value: 'password123' } });
         fireEvent.click(screen.getByRole('button', { name: /Guardar Nueva Contraseña/i }));
 
         await waitFor(() => {
@@ -114,8 +114,8 @@ describe('ResetPasswordPage', () => {
         
         render(<ResetPasswordPage />);
         
-        fireEvent.change(screen.getByLabelText('Nueva Contraseña'), { target: { value: 'password123' } });
-        fireEvent.change(screen.getByLabelText('Confirmar Contraseña'), { target: { value: 'password123' } });
+        fireEvent.change(screen.getByLabelText(/Nueva Contraseña/i), { target: { value: 'password123' } });
+        fireEvent.change(screen.getByLabelText(/Confirmar Contraseña/i), { target: { value: 'password123' } });
         fireEvent.click(screen.getByRole('button', { name: /Guardar Nueva Contraseña/i }));
 
         await waitFor(() => {

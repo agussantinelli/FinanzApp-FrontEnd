@@ -106,7 +106,8 @@ describe('RecomendacionesTab', () => {
 
         render(<RecomendacionesTab />);
         
-        fireEvent.click(screen.getByTitle('Marcar Acertada'));
+        const resolveButtons = screen.getAllByTitle(/Marcar Acertada/i);
+        fireEvent.click(resolveButtons[0]);
         expect(screen.getByTestId('confirm-dialog')).toBeDefined();
         
         fireEvent.click(screen.getByText('Confirm'));

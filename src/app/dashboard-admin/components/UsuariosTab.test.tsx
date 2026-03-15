@@ -99,7 +99,9 @@ describe('UsuariosTab', () => {
 
         render(<UsuariosTab />);
         
-        fireEvent.click(screen.getByTitle('Ascender a Experto'));
+        // Find all buttons with this title and click the first one (John Doe)
+        const ascendButtons = screen.getAllByTitle(/Ascender a Experto/i);
+        fireEvent.click(ascendButtons[0]);
         expect(screen.getByTestId('confirm-dialog')).toBeDefined();
         
         fireEvent.click(screen.getByText('Confirm'));
@@ -111,7 +113,9 @@ describe('UsuariosTab', () => {
 
         render(<UsuariosTab />);
         
-        fireEvent.click(screen.getByTitle('Descender a Inversor'));
+        // Jane Expert is the second user, which has "Experto" role and thus should have this button enabled
+        const descendButtons = screen.getAllByTitle(/Descender a Inversor/i);
+        fireEvent.click(descendButtons[1]);
         expect(screen.getByTestId('confirm-dialog')).toBeDefined();
         
         fireEvent.click(screen.getByText('Confirm'));
@@ -123,7 +127,8 @@ describe('UsuariosTab', () => {
 
         render(<UsuariosTab />);
         
-        fireEvent.click(screen.getAllByTitle('Eliminar usuario')[0]);
+        const deleteButtons = screen.getAllByTitle(/Eliminar usuario/i);
+        fireEvent.click(deleteButtons[0]);
         expect(screen.getByTestId('confirm-dialog')).toBeDefined();
         
         fireEvent.click(screen.getByText('Confirm'));

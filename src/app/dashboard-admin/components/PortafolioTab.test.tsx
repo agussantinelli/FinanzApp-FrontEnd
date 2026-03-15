@@ -118,7 +118,8 @@ describe('PortafolioTab', () => {
 
         render(<PortafolioTab />);
         
-        fireEvent.click(screen.getByTitle('Ver Detalle'));
+        const detailButton = screen.getByTitle(/Ver Detalle/i);
+        fireEvent.click(detailButton);
         expect(mockRouter.push).toHaveBeenCalledWith('/dashboard-admin/portfolio/port-1');
     });
 

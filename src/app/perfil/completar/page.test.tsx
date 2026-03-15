@@ -144,7 +144,7 @@ describe('CompleteProfilePage', () => {
         render(<CompleteProfilePage />);
         
         await waitFor(() => {
-            expect(screen.getByText('No se pudo cargar la información necesaria.')).toBeDefined();
+            expect(screen.getByText(/No se pudo cargar la información necesaria/i)).toBeDefined();
         });
     });
 });
