@@ -239,35 +239,53 @@
 
 <hr>
 
-<h2> Empezar (Setup Local)</h2>
+<h2>🚀 Empezar (Setup Local)</h2>
 
-<p>Este es un proyecto <a href="https://nextjs.org">Next.js</a> inicializado con <code>create-next-app</code>.</p>
+<p>
+  Este es un proyecto <a href="https://nextjs.org">Next.js</a> inicializado con <code>create-next-app</code>. 
+  Sigue estos pasos para configurar tu entorno de desarrollo local:
+</p>
 
-<p>Instalá dependencias y levantá el servidor de desarrollo:</p>
+<table>
+  <tr>
+    <td>
+      <b>1. Instalar dependencias</b><br>
+      <code>pnpm install</code>
+    </td>
+    <td>
+      <b>2. Levantar el servidor</b><br>
+      <code>pnpm dev</code>
+    </td>
+  </tr>
+</table>
 
-<pre><code>pnpm install
-pnpm dev
-</code></pre>
+<p>
+  🌐 Abrí <a href="http://localhost:3000">http://localhost:3000</a> en tu navegador para ver el resultado.
+</p>
 
-<p>Abrí <a href="http://localhost:3000">http://localhost:3000</a> en tu navegador para ver el resultado.</p>
+<hr />
 
+<h2>⚙️ Variables de Entorno</h2>
 
+<p>
+  Para que el frontend funcione correctamente, crea un archivo <code>.env.local</code> en la raíz del proyecto. 
+  Este archivo configurará la comunicación con el <a href="https://github.com/agussantinelli/FinanzApp-BackEnd.git">Backend</a> y los servicios externos:
+</p>
 
-<h3>⚙️ Variables de Entorno</h3>
-
-<p>Crea un archivo <code>.env.local</code> en la raíz del proyecto para configurar la conexión al <a href="https://github.com/agussantinelli/FinanzApp-BackEnd.git">Backend</a>:</p>
-
-<pre><code># URL de la API (Backend)
+<pre><code># 🔌 URL de la API (Backend)
 NEXT_PUBLIC_API_URL=https://localhost:7209
-# Google Identity Services (Client ID para Login)
+
+# 🔑 Google Identity Services (Client ID para Login)
 NEXT_PUBLIC_GOOGLE_CLIENT_ID=tu_client_id_aqui
-# Google reCAPTCHA
-NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
-</code></pre>
 
-<p>Todos los <code>fetch</code> / llamadas Axios del frontend apuntan a <code>NEXT_PUBLIC_API_URL</code> (incluidos los endpoints protegidos con JWT).</p>
+# 🛡️ Google reCAPTCHA
+NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui</code></pre>
 
-<hr>
+<blockquote>
+  <b>💡 Nota de Integración:</b> Todos los <code>fetch</code> y llamadas de Axios del frontend apuntan dinámicamente a <code>NEXT_PUBLIC_API_URL</code>, incluyendo los endpoints protegidos mediante JWT.
+</blockquote>
+
+<hr />
 
 <h2>🔐 Autenticación</h2>
 
