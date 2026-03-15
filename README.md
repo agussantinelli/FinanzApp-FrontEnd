@@ -16,6 +16,7 @@
     <img src="https://img.shields.io/badge/React-19.2.0-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React Badge"/>
     <img src="https://img.shields.io/badge/Next.js-16.0.7-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js Badge"/>
     <img src="https://img.shields.io/badge/TypeScript-5-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript Badge"/>
+    <img src="https://img.shields.io/badge/pnpm-10+-F69220?style=for-the-badge&logo=pnpm&logoColor=white" alt="pnpm Badge">
     <img src="https://img.shields.io/badge/Chart.js-4.5.1-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white" alt="Chart.js Badge"/>
     <img src="https://img.shields.io/badge/Axios-1.13.1-5A29E4?style=for-the-badge&logo=axios&logoColor=white" alt="Axios Badge"/>
     <img src="https://img.shields.io/badge/Zod-4.1.12-3E67B1?style=for-the-badge&logo=zod&logoColor=white" alt="Zod Badge"/>
