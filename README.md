@@ -440,7 +440,7 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui</code></pre>
 <p>Validación de lógica de negocio, hooks y componentes aislados.</p>
 <ul>
     <li><strong>Comando Visual:</strong> <code>pnpm test</code> o <code>pnpm test:unit</code> (Modo Watch interactivo)</li>
-    <li><strong>Estado Actual:</strong> 343 tests unitarios pasando exitosamente en 96 archivos.</li>
+    <li><strong>Estado Actual:</strong> 374 tests unitarios pasando exitosamente en 108 archivos.</li>
     <li><strong>Cobertura:</strong>
         <ul>
             <li>Algoritmos de valuación y formateo.</li>
