@@ -38,7 +38,11 @@
         <img src="https://img.shields.io/badge/📂%20Documentación%20Proyecto-4285F4?style=for-the-badge&logo=googledrive&logoColor=white" alt="Carpeta TPI Drive Badge"/>
     </a>
 </div>
+<div align="center">
+  <img src="https://img.shields.io/badge/Copyright-All_Rights_Reserved-red?style=for-the-badge&logo=copyright&logoColor=white" alt="Copyright Badge"/>
+</div>
 
+</div>
 <hr>
 
 <h2>🎯 Objetivo</h2>
@@ -443,8 +447,30 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
 
 <hr>
 
-<h2>🤝 Contribuciones</h2>
+<h2 align="left">⚖️ Licencia y Propiedad Intelectual</h2>
 
-<p>¡Las contribuciones son bienvenidas! Por favor, sentite libre de abrir un <strong>Pull Request</strong> o reportar un <strong>Issue</strong> para mejorar el proyecto.</p>
+<p align="left">
+  Este proyecto es <b>propiedad intelectual privada</b> de Agustín Santinelli. No se otorga ninguna licencia de uso abierto. Puedes consultar los términos detallados en el archivo 
+  <a href="LICENSE"><code>LICENSE</code></a> incluido en este repositorio.
+</p>
 
-<hr>
+<p align="left">
+  <i>
+    ⚠️ <b>Restricción Firme:</b> Queda terminantemente prohibida la copia, reproducción, distribución o modificación de este código sin autorización expresa del autor. Este repositorio se publica exclusivamente como exhibición de portafolio profesional.
+  </i>
+</p>
+<hr />
+
+<h2 align="left">🚫 Copyright Total</h2>
+
+<p align="left">
+  Este proyecto es propiedad intelectual exclusiva de <b>Agustín Santinelli</b>. No se aceptan contribuciones externas o forks para su uso público sin previo acuerdo por escrito.
+</p>
+
+<p align="left">
+  Si tienes sugerencias directas o deseas explorar colaboraciones comerciales, por favor contacta al autor: 
+  <a href="mailto:agustinsantinelli@gmail.com">agustinsantinelli@gmail.com</a>.
+</p>
+
+<hr />
+<p align="center">Desarrollado con ❤️ y mucho 🧉 para la comunidad inversora.</p>
