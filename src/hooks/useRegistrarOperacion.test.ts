@@ -38,7 +38,7 @@ describe('useRegistrarOperacion hook', () => {
     it('should initialize with default values', () => {
         const { result } = renderHook(() => useRegistrarOperacion());
         expect(result.current.mode).toBe('actual');
-        expect(result.current.tipo).toBe('Compra');
+        expect(result.current.tipo).toBe(0); // TipoOperacion.Compra is 0
     });
 
     it('should validate before submit', async () => {

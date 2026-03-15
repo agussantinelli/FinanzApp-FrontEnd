@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { useMyOperations } from './useMyOperations';
 import { useAuth } from '@/hooks/useAuth';
 import { getOperacionesByPersona } from '@/services/OperacionesService';
@@ -27,20 +27,20 @@ describe('useMyOperations hook', () => {
     it('should load operations on mount', async () => {
         const { result } = renderHook(() => useMyOperations());
 
-        await act(async () => { /* wait */ });
+        await waitFor(() => expect(result.current.loading).toBe(false));
 
         expect(getOperacionesByPersona).toHaveBeenCalledWith('u1');
     });
 
     it('should filter operations', async () => {
         (getOperacionesByPersona as any).mockResolvedValue([
-            { id: '1', tipo: 'Compra' },
-            { id: '2', tipo: 'Venta' },
+            { id: '1', tipo: 'Compra', fecha: '2024-01-01', precioUnitario: 100, totalOperado: 1000, moneda: 'ARS' },
+            { id: '2', tipo: 'Venta', fecha: '2024-01-02', precioUnitario: 200, totalOperado: 2000, moneda: 'ARS' },
         ]);
         
         const { result } = renderHook(() => useMyOperations());
 
-        await act(async () => { /* wait items load */ });
+        await waitFor(() => expect(result.current.loading).toBe(false));
 
         act(() => {
             result.current.setFilterType('Compra');

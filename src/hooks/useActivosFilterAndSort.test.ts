@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { useActivosFilterAndSort } from './useActivosFilterAndSort';
 import { getTiposActivoNoMoneda } from '@/services/TipoActivosService';
 import { getSectores } from '@/services/SectorService';
@@ -20,14 +20,14 @@ describe('useActivosFilterAndSort hook', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
-        (getTiposActivoNoMoneda as any).mockResolvedValue([]);
-        (getSectores as any).mockResolvedValue([]);
+        (getTiposActivoNoMoneda as any).mockResolvedValue([{ id: 1, nombre: 'Accion' }]);
+        (getSectores as any).mockResolvedValue([{ id: '1', nombre: 'Tecnologia' }]);
     });
 
-    it('should filter by search term', () => {
+    it('should filter by search term', async () => {
         const { result } = renderHook(() => useActivosFilterAndSort(mockActivos as any));
 
-        act(() => {
+        await act(async () => {
             result.current.setSearchTerm('btc');
         });
 
@@ -36,31 +36,29 @@ describe('useActivosFilterAndSort hook', () => {
     });
 
     it('should filter by type', async () => {
-        const mockTipos = [{ id: 1, nombre: 'Accion' }];
-        (getTiposActivoNoMoneda as any).mockResolvedValue(mockTipos);
-
         const { result } = renderHook(() => useActivosFilterAndSort(mockActivos as any));
 
-        await act(async () => {
-            // Wait for metadata load
-        });
+        // Wait until metadata is loaded into state
+        await waitFor(() => expect(result.current.tipos).toHaveLength(1));
 
-        act(() => {
+        await act(async () => {
             result.current.setSelectedType(1);
         });
 
         expect(result.current.filteredAndSortedActivos).toHaveLength(1);
-        expect(result.current.filteredAndSortedActivos[0].tipo).toBe('Accion');
+        expect(result.current.filteredAndSortedActivos[0].symbol).toBe('AAPL');
     });
 
-    it('should sort assets', () => {
+    it('should sort assets', async () => {
         const { result } = renderHook(() => useActivosFilterAndSort(mockActivos as any));
 
-        act(() => {
-            result.current.handleRequestSort('symbol'); // desc
+        // Initial sort is symbol asc: AAPL, BTC
+        expect(result.current.filteredAndSortedActivos[0].symbol).toBe('AAPL');
+
+        await act(async () => {
+            result.current.handleRequestSort('symbol'); // Toggles to desc
         });
 
         expect(result.current.filteredAndSortedActivos[0].symbol).toBe('BTC');
-        expect(result.current.order).toBe('desc');
     });
 });

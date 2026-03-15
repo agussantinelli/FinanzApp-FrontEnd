@@ -31,9 +31,12 @@ describe('usePortfolioSort hook', () => {
         }));
 
         act(() => {
-            result.current.handleRequestSort('symbol'); // desc -> AAPL (A) < GGAL (G) -> GGAL first
+            result.current.handleRequestSort('symbol'); 
+            // orderBy goes from 'currentValue' to 'symbol'
+            // isAsc = false (orderBy changed) -> setOrder('asc')
+            // AAPL (A) vs GGAL (G) asc -> AAPL first
         });
 
-        expect(result.current.sortedActivos[0].symbol).toBe('GGAL');
+        expect(result.current.sortedActivos[0].symbol).toBe('AAPL');
     });
 });

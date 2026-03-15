@@ -32,6 +32,7 @@ describe('useLogin hook', () => {
     });
 
     it('should validate empty fields', async () => {
+        mockGet.mockReturnValue(null); // Ensure empty email
         const { result } = renderHook(() => useLogin());
         
         await act(async () => {
