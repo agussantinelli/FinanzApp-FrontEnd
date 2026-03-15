@@ -80,6 +80,16 @@ export default function StrategiesPage() {
                         <Box display="flex" justifyContent="center" py={10}>
                             <CircularProgress />
                         </Box>
+                    ) : error && portfolios.length === 0 ? (
+                        <Paper sx={{ p: 6, textAlign: 'center', borderRadius: 4 }}>
+                            <Typography variant="h5" color="error" gutterBottom>
+                                Error al cargar
+                            </Typography>
+                            <Typography variant="body1" color="text.secondary">
+                                {error}
+                            </Typography>
+                            <Button sx={{ mt: 2 }} variant="outlined" onClick={fetchPortfolios}>Reintentar</Button>
+                        </Paper>
                     ) : portfolios.length === 0 ? (
                         <Paper sx={{ p: 6, textAlign: 'center', borderRadius: 4 }}>
                             <TrendingUpIcon sx={{ fontSize: 60, color: 'text.secondary', mb: 2, opacity: 0.5 }} />
@@ -89,16 +99,6 @@ export default function StrategiesPage() {
                             <Typography variant="body1" color="text.secondary" paragraph>
                                 Vuelve más tarde para ver nuevas oportunidades.
                             </Typography>
-                        </Paper>
-                    ) : (loading || portfolios.length === 0) && error ? (
-                        <Paper sx={{ p: 6, textAlign: 'center', borderRadius: 4 }}>
-                            <Typography variant="h5" color="error" gutterBottom>
-                                Error al cargar
-                            </Typography>
-                            <Typography variant="body1" color="text.secondary">
-                                {error}
-                            </Typography>
-                            <Button sx={{ mt: 2 }} variant="outlined" onClick={fetchPortfolios}>Reintentar</Button>
                         </Paper>
                     ) : (
                         <>
