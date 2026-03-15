@@ -21,17 +21,11 @@ vi.mock('next/navigation', () => ({
     useParams: () => ({ id: '550e8400-e29b-41d4-a716-446655440000' }), // Use a UUID
     useRouter: () => ({ back: mockBack, push: mockPush }),
 }));
-// Mocking window.location
-const originalLocation = window.location;
 beforeAll(() => {
-    // @ts-ignore - Mocking window.location
-    delete (window as any).location;
-    // @ts-ignore - Mocking window.location
-    window.location = { ...originalLocation, reload: vi.fn() } as any;
+    vi.stubGlobal('location', { ...window.location, reload: vi.fn() });
 });
 afterAll(() => {
-    // @ts-ignore - Mocking window.location
-    window.location = originalLocation;
+    vi.unstubAllGlobals();
 });
 vi.mock('next/link', () => ({
     default: ({ children, href }: any) => <a href={href}>{children}</a>,
