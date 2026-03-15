@@ -102,11 +102,7 @@
 
 <hr>
 
-<h2>🌐 Frontend (este repositorio)</h2>
-
-<p>Este repositorio contiene la <strong>interfaz de usuario (UI)</strong> y la lógica de presentación, construida para ser una aplicación web de alto rendimiento y completamente responsiva.</p>
-
-<h3>⚙️ Stack Tecnológico</h3>
+<h2>⚙️ Stack Tecnológico</h2>
 
 <table>
     <thead>
@@ -170,7 +166,9 @@
     </tbody>
 </table>
 
-<h3>📁 Estructura del Proyecto</h3>
+<hr>
+
+<h2>📁 Estructura del Proyecto</h2>
 
 <pre><code>FinanzApp-FrontEnd/
 ├── public/                                      # Archivos estáticos accesibles públicamente
@@ -224,7 +222,9 @@
 └── .agent/skills/                                # 🧠 Directorio de Skills (Guías Avanzadas para IA)
 </code></pre>
 
-<h3>🧠 Skills Especializadas</h3>
+<hr>
+
+<h2>🧠 Skills Especializadas</h2>
 
 <p>Este proyecto utiliza un sistema de <strong>Skills</strong> (guías avanzadas) para asegurar que cualquier desarrollo (humano o por IA) siga estrictamente los estándares arquitectónicos del proyecto:</p>
 
@@ -237,8 +237,9 @@
     <li><strong>🎨 CSS Modules:</strong> Estándar para el encapsulamiento de estilos y mantenibilidad visual.</li>
 </ul>
 
+<hr>
 
-<h3> Empezar (Setup Local)</h3>
+<h2> Empezar (Setup Local)</h2>
 
 <p>Este es un proyecto <a href="https://nextjs.org">Next.js</a> inicializado con <code>create-next-app</code>.</p>
 
@@ -266,7 +267,9 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
 
 <p>Todos los <code>fetch</code> / llamadas Axios del frontend apuntan a <code>NEXT_PUBLIC_API_URL</code> (incluidos los endpoints protegidos con JWT).</p>
 
-<h3>🔐 Autenticación</h3>
+<hr>
+
+<h2>🔐 Autenticación</h2>
 
 <p>El sistema de seguridad implementa una arquitectura de defensa en profundidad:</p>
 
