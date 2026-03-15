@@ -7,9 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "vitest",
     "test:unit": "vitest",
-    "test:e2e": "playwright test --headed",
-    "test": "vitest"
+    "test:e2e": "playwright test --headed"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.59",
