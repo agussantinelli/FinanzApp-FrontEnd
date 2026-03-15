@@ -443,9 +443,12 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui</code></pre>
     <li><strong>Estado Actual:</strong> 510 tests unitarios pasando exitosamente en 123 archivos.</li>
     <li><strong>Cobertura:</strong>
         <ul>
-            <li>Algoritmos de valuación y formateo.</li>
-            <li>Lógica de estado (Hooks: <code>useAuth</code>, <code>useImportExcel</code>).</li>
-            <li>Renderizado de componentes base (Buttons, Modals).</li>
+            <li>Servicios Core (Auth, Activos, Operaciones, Portafolio, Dashboard).</li>
+            <li>Mercado y Cotizaciones (Dólar, Crypto, Stocks, Cedears).</li>
+            <li>Administración y Consultas (AdminService, AdminConsultasService).</li>
+            <li>Algoritmos de valuación, formateo y lógica de IA (AiService).</li>
+            <li>Lógica de estado (Hooks: <code>useAuth</code>, <code>useActivosFilters</code>).</li>
+            <li>Renderizado de componentes base (Buttons, Modals, Navbar).</li>
         </ul>
     </li>
 </ul>
