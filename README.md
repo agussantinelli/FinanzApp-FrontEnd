@@ -31,6 +31,8 @@
     <img src="https://img.shields.io/badge/JWT%20Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT Badge"/>
     <img src="https://img.shields.io/badge/Vitest-2.1.8-6E9F18?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest Badge"/>
     <img src="https://img.shields.io/badge/Testing%20Library-16.1.0-E33332?style=for-the-badge&logo=testing-library&logoColor=white" alt="Testing Library Badge"/>
+    <img src="https://img.shields.io/badge/GitHub%20Actions-CI%2FCD-2088FF?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Actions Badge"/>
+
 </div>
 
 <div align="center">
