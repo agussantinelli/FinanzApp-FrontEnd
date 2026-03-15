@@ -167,6 +167,7 @@ export default function PortafolioTab() {
                                             <IconButton
                                                 onClick={() => router.push(`/dashboard-admin/portfolio/${row.id}`)}
                                                 color="primary"
+                                                title="Ver Detalle"
                                             >
                                                 <VisibilityIcon />
                                             </IconButton>
@@ -175,6 +176,7 @@ export default function PortafolioTab() {
                                             <IconButton
                                                 onClick={() => deletePortafolio(row.id)}
                                                 color="error"
+                                                title="Eliminar portafolio"
                                             >
                                                 <DeleteOutlineIcon />
                                             </IconButton>
