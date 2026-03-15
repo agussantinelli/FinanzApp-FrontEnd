@@ -29,7 +29,7 @@ jobs:
       run: pnpm install
 
     - name: Run lint
-      run: pnpm run lint
+      run: pnpm run lint -- .
 
     - name: Run unit tests (Vitest)
       run: pnpm exec vitest run
