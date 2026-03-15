@@ -10,13 +10,17 @@ describe('MarketHoursCard', () => {
 
     it('renders NYSE hours (11:30 to 18:00)', async () => {
         render(<MarketHoursCard />);
-        expect(await screen.findByText('NYSE', { selector: 'strong' })).toBeInTheDocument();
-        expect(screen.getByText(/11:30.*18:00/)).toBeInTheDocument();
+        const elements = await screen.findAllByText(/NYSE/i);
+        expect(elements.some(el => el.tagName === 'STRONG')).toBe(true);
+        // NYSE and Nasdaq share this time, plus footer note
+        expect(screen.getAllByText(/11:30.*18:00/)[0]).toBeInTheDocument();
     });
     it('renders BYMA hours (10:30 to 17:00)', async () => {
         render(<MarketHoursCard />);
-        expect(await screen.findByText('BYMA', { selector: 'strong' })).toBeInTheDocument();
-        expect(screen.getByText(/10:30.*17:00/)).toBeInTheDocument();
+        const elements = await screen.findAllByText(/BYMA/i);
+        expect(elements.some(el => el.tagName === 'STRONG')).toBe(true);
+        // BYMA share time with footer note
+        expect(screen.getAllByText(/10:30.*17:00/)[0]).toBeInTheDocument();
     });
 
     it('renders daylight saving note', () => {

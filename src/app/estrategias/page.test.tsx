@@ -53,7 +53,8 @@ describe('StrategiesPage', () => {
         (getPortafoliosDestacados as any).mockRejectedValue(new Error('Fail'));
         render(<StrategiesPage />);
         
-        expect(await screen.findByText(/Error al cargar/i)).toBeInTheDocument();
+        // The component renders "Error al cargar" in a Typography H5
+        expect(await screen.findByText(/^Error al cargar$/i)).toBeInTheDocument();
         
         const retryBtn = screen.getByText(/Reintentar/i);
         (getPortafoliosDestacados as any).mockResolvedValue(mockData);

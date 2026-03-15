@@ -1,22 +1,25 @@
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import CryptoSection from './CryptoSection';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { getTopCryptos } from '@/services/CryptoService';
 
-vi.mock('@/services/CryptoService');
+vi.mock('@/services/CryptoService', () => ({
+    getTopCryptos: vi.fn(),
+}));
+
 vi.mock('@/components/cards/CryptoCard', () => ({
     default: ({ data }: any) => <div data-testid="crypto-card">{data.name}</div>
 }));
 
-describe('CryptoSection', () => {
-    const mockData = [
-        { symbol: 'BTC', name: 'Bitcoin', priceUsd: 50000 },
-        { symbol: 'ETH', name: 'Ethereum', priceUsd: 3000 }
-    ];
+const mockData = [
+    { symbol: 'BTC', name: 'Bitcoin', priceUsd: 50000, changePct24h: 2.5, rank: 1, source: 'coingecko', timestampUtc: '2024-01-01' },
+    { symbol: 'ETH', name: 'Ethereum', priceUsd: 3000, changePct24h: -1.2, rank: 2, source: 'coingecko', timestampUtc: '2024-01-01' },
+];
 
+describe('CryptoSection', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        vi.useFakeTimers();
+        vi.useRealTimers();
         (getTopCryptos as any).mockResolvedValue(mockData);
     });
 
@@ -28,9 +31,8 @@ describe('CryptoSection', () => {
         render(<CryptoSection />);
         expect(getTopCryptos).toHaveBeenCalled();
         
-        await waitFor(() => {
-            expect(screen.getAllByTestId('crypto-card')).toHaveLength(2);
-        });
+        const cards = await screen.findAllByTestId('crypto-card');
+        expect(cards).toHaveLength(2);
         expect(screen.getByText('Bitcoin')).toBeInTheDocument();
     });
 
@@ -40,6 +42,7 @@ describe('CryptoSection', () => {
         (getTopCryptos as any).mockReturnValue(slowPromise);
 
         render(<CryptoSection />);
+        
         await waitFor(() => expect(screen.getByText('Actualizando...')).toBeInTheDocument());
         expect(screen.getByRole('button')).toBeDisabled();
 
@@ -51,11 +54,14 @@ describe('CryptoSection', () => {
     });
 
     it('periodically refreshes data', async () => {
+        vi.useFakeTimers();
         render(<CryptoSection />);
-        await waitFor(() => expect(getTopCryptos).toHaveBeenCalledTimes(1));
+        
+        // Initial call on mount
+        expect(getTopCryptos).toHaveBeenCalledTimes(1);
 
         await act(async () => {
-            vi.advanceTimersByTime(300000); // 5 minutes
+            vi.advanceTimersByTime(300_000);
         });
 
         expect(getTopCryptos).toHaveBeenCalledTimes(2);
@@ -64,21 +70,24 @@ describe('CryptoSection', () => {
     it('displays last update time', async () => {
         const now = new Date();
         render(<CryptoSection />);
-        await waitFor(() => screen.getByText(/Última actualización/));
+        
+        expect(await screen.findByText(/Última actualización/)).toBeInTheDocument();
         
         const timeStr = now.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
-        expect(screen.getByText(new RegExp(timeStr))).toBeInTheDocument();
+        // Use a flexible regex to handle potential non-breaking spaces or different space chars
+        const flexibleRegex = new RegExp(timeStr.replace(/[\s\u202f]/g, '.*'));
+        expect(screen.getByText(flexibleRegex)).toBeInTheDocument();
     });
 
     it('handles manual refresh', async () => {
         render(<CryptoSection />);
-        await waitFor(() => expect(getTopCryptos).toHaveBeenCalledTimes(1));
-
+        
+        // Wait for initial load
+        await screen.findAllByTestId('crypto-card');
+        
         const btn = screen.getByText(/Actualizar/i);
-        await act(async () => {
-            fireEvent.click(btn);
-        });
+        fireEvent.click(btn);
 
-        expect(getTopCryptos).toHaveBeenCalledTimes(2);
+        await waitFor(() => expect(getTopCryptos).toHaveBeenCalledTimes(2));
     });
 });

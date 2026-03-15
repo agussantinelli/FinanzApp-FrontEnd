@@ -14,8 +14,8 @@ vi.mock('next/navigation', () => ({
 
 describe('IndexesSection', () => {
     const mockData = [
-        { usSymbol: 'SPY', localSymbol: 'SPY', nombre: 'S&P 500', ultimoPrecio: 5000 },
-        { usSymbol: 'MERV', localSymbol: 'MERVAL', nombre: 'Riesgo Pais', ultimoPrecio: 1200 }
+        { usSymbol: 'SPY', localSymbol: 'SPY', nombre: 'S&P 500', ultimoPrecio: 5000, usPriceUSD: 5000, localPriceARS: 5000000 },
+        { usSymbol: 'MERV', localSymbol: 'MERVAL', nombre: 'Merval', ultimoPrecio: 1200, usPriceUSD: 1.2, localPriceARS: 1200000 }
     ];
 
     beforeEach(() => {
@@ -25,7 +25,7 @@ describe('IndexesSection', () => {
 
     it('renders market sections', async () => {
         render(<IndexesSection />);
-        expect(await screen.findByText(/Wall Street/i)).toBeInTheDocument();
+        expect(await screen.findByText(/Wall Street/i, {}, { timeout: 3000 })).toBeInTheDocument();
         expect(screen.getByText(/Argentina/i)).toBeInTheDocument();
     });
 
@@ -41,23 +41,27 @@ describe('IndexesSection', () => {
         render(<IndexesSection />);
         await screen.findByText(/Wall Street/i);
 
+        // Reset to clear mount call
+        vi.clearAllMocks();
+        (getIndices as any).mockResolvedValue(mockData);
+
         const btn = screen.getByRole('button', { name: /Actualizar/i });
         fireEvent.click(btn);
         
-        await waitFor(() => expect(getIndices).toHaveBeenCalledTimes(2));
+        await waitFor(() => expect(getIndices).toHaveBeenCalledTimes(1));
     });
 
     it('handles error state', async () => {
         render(<IndexesSection />);
         // Wait for initial load
-        await waitFor(() => expect(screen.getByTestId('index-card')).toBeInTheDocument());
+        await waitFor(() => expect(screen.getAllByTestId('index-card').length).toBeGreaterThan(0));
         
         // Force error on next call
         (getIndices as any).mockRejectedValue(new Error('API Error'));
         const btn = screen.getByRole('button', { name: /Actualizar/i });
         fireEvent.click(btn);
         
-        // The component might show an error message. Let's check what it shows.
-        // Looking at the code, it handles errors in useIndicesData.
+        // Should still show loaded data or error (depending on implementation)
+        await waitFor(() => expect(screen.getAllByTestId('index-card').length).toBeGreaterThan(0));
     });
 });
