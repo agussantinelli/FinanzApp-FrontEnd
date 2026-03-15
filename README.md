@@ -218,7 +218,7 @@
 ├── next.config.ts                               # Configuración del framework
 ├── package.json                                 # Dependencias y scripts
 ├── tsconfig.json                                # Configuración de TypeScript
-└── vitest.config.ts                             # Configuración de Tests Unitarios
+├── vitest.config.mts                             # Configuración de Tests Unitarios
 </code></pre>
 
 
@@ -228,16 +228,7 @@
 
 <p>Instalá dependencias y levantá el servidor de desarrollo:</p>
 
-<pre><code>npm install
-npm run dev
-npm run dev
-# o
-npm run lint  # Para verificar estilo de código
-# o
-yarn install
-yarn dev
-# o
-pnpm install
+<pre><code>pnpm install
 pnpm dev
 </code></pre>
 
@@ -411,8 +402,7 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
 <h3>⚡ Unit & Integration (Vitest)</h3>
 <p>Validación de lógica de negocio, hooks y componentes aislados.</p>
 <ul>
-    <li><strong>Comando Visual:</strong> <code>npm run test:unit</code> (Modo Watch interactivo)</li>
-    <li><strong>Comando de Sistema:</strong> <code>npx vitest run</code> (Ejecución única para CI/CD)</li>
+    <li><strong>Comando Visual:</strong> <code>pnpm test</code> o <code>pnpm test:unit</code> (Modo Watch interactivo)</li>
     <li><strong>Cobertura:</strong>
         <ul>
             <li>Algoritmos de valuación y formateo.</li>
@@ -425,8 +415,7 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui
 <h3>🎭 End-to-End (Playwright)</h3>
 <p>Simulación de usuario real en navegadores (Chromium, Firefox, WebKit).</p>
 <ul>
-    <li><strong>Comando Visual:</strong> <code>npm run test:e2e</code> (Abre la interfaz gráfica)</li>
-    <li><strong>Comando de Sistema:</strong> <code>npx playwright test</code> (Ejecución en segundo plano)</li>
+    <li><strong>Comando Visual:</strong> <code>pnpm test:e2e</code> (Abre la interfaz gráfica)</li>
 </ul>
 <p><strong>Cobertura Principal:</strong> El test verifica el camino más importante del usuario: inicia sesión, revisa su saldo en el Dashboard, va a su Portafolio, compra Bitcoin y confirma que la operación se haya guardado correctamente.</p>
 
