@@ -100,4 +100,81 @@ describe('Navbar', () => {
         fireEvent.click(logoutButton);
         await waitFor(() => expect(mockLogout).toHaveBeenCalled(), { timeout: 1500 });
     });
+
+    it('opens and closes the "Mas" menu', async () => {
+        (useAuth as any).mockReturnValue({
+            user: { nombre: 'Agus', apellido: 'Test', rol: 'Inversor' },
+            isAuthenticated: true,
+            logout: mockLogout,
+        });
+
+        render(<Navbar />);
+        await waitFor(() => {
+            expect(screen.getByText('Más')).toBeInTheDocument();
+        });
+
+        const moreButton = screen.getByText('Más');
+        fireEvent.click(moreButton);
+
+        expect(screen.getByText('Mis Operaciones')).toBeInTheDocument();
+    });
+
+    it('opens mobile drawer on menu icon click', async () => {
+        render(<Navbar />);
+        const menuIcon = screen.getByLabelText('menu');
+        fireEvent.click(menuIcon);
+
+        // Drawer items (unauth)
+        expect(screen.getAllByText('Inicio')).toHaveLength(2); // One in desktop, one in mobile
+        expect(screen.getAllByText('Activos')).toHaveLength(2);
+    });
+
+    it('navigates to login when clicking "Iniciar sesión"', () => {
+        render(<Navbar />);
+        
+        const loginBtn = screen.getByText('Iniciar sesión');
+        expect(loginBtn.closest('a')).toHaveAttribute('href', '/auth/login');
+    });
+
+    it('shows Experto label when user is Experto', async () => {
+        (useAuth as any).mockReturnValue({
+            user: { nombre: 'Exp', apellido: 'User', rol: 'Experto' },
+            isAuthenticated: true,
+            logout: mockLogout,
+        });
+
+        render(<Navbar />);
+        await waitFor(() => {
+            expect(screen.getByText(/Experto •/)).toBeInTheDocument();
+        });
+    });
+
+    it('redirects to correct home path based on role logo click', async () => {
+        (useAuth as any).mockReturnValue({
+            user: { nombre: 'Adm', apellido: 'User', rol: 'Admin' },
+            isAuthenticated: true,
+            logout: mockLogout,
+        });
+        
+        render(<Navbar />);
+        const logoLink = screen.getByText('FinanzApp').closest('a');
+        // Based on getHomePathForRole mock
+        expect(logoLink).toHaveAttribute('href', '/dashboard-admin');
+    });
+
+    it('verifies mobile drawer contains auth items for Inversor', async () => {
+        (useAuth as any).mockReturnValue({
+            user: { nombre: 'Agus', apellido: 'Test', rol: 'Inversor' },
+            isAuthenticated: true,
+            logout: mockLogout,
+        });
+
+        render(<Navbar />);
+        const menuIcon = screen.getByLabelText('menu');
+        fireEvent.click(menuIcon);
+
+        // Auth more items in mobile
+        expect(screen.getByText('Mis Operaciones')).toBeInTheDocument();
+        expect(screen.getAllByText('Cerrar sesión')).toHaveLength(1);
+    });
 });
