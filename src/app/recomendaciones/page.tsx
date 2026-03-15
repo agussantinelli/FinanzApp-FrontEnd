@@ -284,6 +284,7 @@ export default function RecomendacionesPage() {
                         <Button
                             variant="outlined"
                             onClick={handleClear}
+                            aria-label="Limpiar filtros"
                             sx={{ minWidth: 'auto', px: 2 }}
                         >
                             <CleaningServicesIcon />
