@@ -1,6 +1,6 @@
 # API Communication Skill
 
-This skill enforces the use of the centralized API client for all HTTP communications in the MarketFlex Frontend.
+This skill enforces the use of the centralized API client for all HTTP communications in the FinanzApp Frontend.
 
 ## Core Rule
 **TERMINANTEMENTE PROHIBIDO** el uso de `fetch` nativo o cualquier otro cliente HTTP que no sea el definido en `src/lib/http.ts`.
