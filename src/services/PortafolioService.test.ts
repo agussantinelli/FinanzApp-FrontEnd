@@ -1,10 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { 
-    getPortafolios, 
-    getPortafolioById, 
+    getMisPortafolios, 
+    getPortafolioValuado, 
     createPortafolio,
-    deletePortafolio,
-    getValuacionPortafolio
+    deletePortafolio
 } from './PortafolioService';
 import { http } from '@/lib/http';
 
@@ -12,6 +11,8 @@ vi.mock('@/lib/http', () => ({
     http: {
         get: vi.fn(),
         post: vi.fn(),
+        patch: vi.fn(),
+        put: vi.fn(),
         delete: vi.fn(),
     }
 }));
@@ -21,21 +22,21 @@ describe('PortafolioService', () => {
         vi.clearAllMocks();
     });
 
-    it('getPortafolios calls API', async () => {
+    it('getMisPortafolios calls correct endpoint', async () => {
         const mockData = [{ id: '1', nombre: 'Main' }];
         (http.get as any).mockResolvedValue({ data: mockData });
 
-        const result = await getPortafolios();
+        const result = await getMisPortafolios();
 
-        expect(http.get).toHaveBeenCalledWith('/api/portafolios');
+        expect(http.get).toHaveBeenCalledWith('/api/portafolios/mis-portafolios');
         expect(result).toEqual(mockData);
     });
 
-    it('getPortafolioById calls API', async () => {
+    it('getPortafolioValuado calls correct endpoint', async () => {
         const mockData = { id: '1', nombre: 'Main' };
         (http.get as any).mockResolvedValue({ data: mockData });
 
-        const result = await getPortafolioById('1');
+        const result = await getPortafolioValuado('1');
 
         expect(http.get).toHaveBeenCalledWith('/api/portafolios/1');
         expect(result).toEqual(mockData);
@@ -52,13 +53,4 @@ describe('PortafolioService', () => {
         expect(result).toEqual(mockResp);
     });
 
-    it('getValuacionPortafolio calls API', async () => {
-        const mockVal = { totalPesos: 1000 };
-        (http.get as any).mockResolvedValue({ data: mockVal });
-
-        const result = await getValuacionPortafolio('1');
-
-        expect(http.get).toHaveBeenCalledWith('/api/portafolios/1/valuacion');
-        expect(result).toEqual(mockVal);
-    });
 });

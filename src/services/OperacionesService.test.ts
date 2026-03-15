@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { 
     getOperaciones, 
+    getOperacionesByPersona,
     createOperacion, 
     deleteOperacion 
 } from './OperacionesService';
@@ -19,13 +20,13 @@ describe('OperacionesService', () => {
         vi.clearAllMocks();
     });
 
-    it('getOperaciones calls API with portfolioId', async () => {
+    it('getOperaciones calls API', async () => {
         const mockData = [{ id: '1', symbol: 'AAPL' }];
         (http.get as any).mockResolvedValue({ data: mockData });
 
-        const result = await getOperaciones('port-123');
+        const result = await getOperaciones();
 
-        expect(http.get).toHaveBeenCalledWith('/api/operaciones/portfolio/port-123');
+        expect(http.get).toHaveBeenCalledWith('/api/operaciones');
         expect(result).toEqual(mockData);
     });
 

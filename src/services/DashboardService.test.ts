@@ -24,7 +24,7 @@ describe('DashboardService', () => {
 
         const result = await getInversorStats();
 
-        expect(http.get).toHaveBeenCalledWith('/api/dashboard/inversor');
+        expect(http.get).toHaveBeenCalledWith('/api/dashboard/inversor/stats');
         expect(result).toEqual(mockData);
     });
 
@@ -34,7 +34,7 @@ describe('DashboardService', () => {
 
         const result = await getExpertoStats();
 
-        expect(http.get).toHaveBeenCalledWith('/api/dashboard/experto');
+        expect(http.get).toHaveBeenCalledWith('/api/dashboard/experto/stats');
         expect(result).toEqual(mockData);
     });
 
@@ -44,7 +44,7 @@ describe('DashboardService', () => {
 
         const result = await getAdminStats();
 
-        expect(http.get).toHaveBeenCalledWith('/api/dashboard/admin');
+        expect(http.get).toHaveBeenCalledWith('/api/dashboard/admin/stats');
         expect(result).toEqual(mockData);
     });
 
@@ -54,7 +54,7 @@ describe('DashboardService', () => {
 
         const result = await getAdminPortfolioStats();
 
-        expect(http.get).toHaveBeenCalledWith('/api/dashboard/admin/portfolio');
+        expect(http.get).toHaveBeenCalledWith('/api/dashboard/admin/portafolios/stats');
         expect(result).toEqual(mockData);
     });
 });
