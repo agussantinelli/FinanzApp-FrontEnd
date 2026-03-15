@@ -83,7 +83,7 @@ describe('RecomendacionesPage', () => {
 
     it('handles filter clearing', () => {
         render(<RecomendacionesPage />);
-        fireEvent.click(screen.getByLabelText(/CleaningServices/i).closest('button')!);
+        fireEvent.click(screen.getByLabelText(/Limpiar filtros/i));
         expect(mockClear).toHaveBeenCalled();
     });
 

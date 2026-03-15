@@ -33,12 +33,13 @@ describe('IndexCard', () => {
         render(<IndexCard data={mockData} />);
         expect(screen.getByText("S&P 500")).toBeInTheDocument();
         expect(screen.getByText(/Índice Standard & Poor/)).toBeInTheDocument();
-        expect(screen.getByText("$ 4.500.500,00")).toBeInTheDocument(); // ARS
-        expect(screen.getByText("U$S 4.500,50")).toBeInTheDocument(); // USD
+        // Corrected ARS value (mock is 4.500.000) and US$ prefix
+        expect(screen.getByText(/\$\s*4\.500\.000,00/)).toBeInTheDocument(); 
+        expect(screen.getByText(/US\$\s*4\.500,50/)).toBeInTheDocument();
     });
 
     it('renders as Risk Card for EMBI_AR', () => {
-        const riskData = { ...mockData, localSymbol: 'EMBI_AR' };
+        const riskData = { ...mockData, localSymbol: 'EMBI_AR', usSymbol: 'EMBI_AR' };
         render(<IndexCard data={riskData} />);
         expect(screen.getByText("Riesgo País")).toBeInTheDocument();
         expect(screen.getByText("4501")).toBeInTheDocument(); // Math.round(4500.5)
