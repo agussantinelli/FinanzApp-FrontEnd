@@ -38,13 +38,16 @@ export const useCrearRecomendacion = () => {
     const [aiError, setAiError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
 
+    const [nextRowId, setNextRowId] = useState(1);
+
     useEffect(() => {
         getSectores().then(setAvailableSectores).catch(console.error);
-        setAssetRows([{ tempId: Date.now(), activo: null, precioAlRecomendar: "", precioObjetivo: "", stopLoss: "", accion: "" }]);
+        setAssetRows([{ tempId: 0, activo: null, precioAlRecomendar: "", precioObjetivo: "", stopLoss: "", accion: "" }]);
     }, []);
 
     const handleAddRow = () => {
-        setAssetRows(prev => [...prev, { tempId: Date.now(), activo: null, precioAlRecomendar: "", precioObjetivo: "", stopLoss: "", accion: "" }]);
+        setAssetRows(prev => [...prev, { tempId: nextRowId, activo: null, precioAlRecomendar: "", precioObjetivo: "", stopLoss: "", accion: "" }]);
+        setNextRowId(prev => prev + 1);
     };
 
     const handleRemoveRow = (tempId: number) => {
