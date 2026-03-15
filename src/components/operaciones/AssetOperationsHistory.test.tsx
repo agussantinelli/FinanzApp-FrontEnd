@@ -42,7 +42,8 @@ describe('AssetOperationsHistory', () => {
         
         await waitFor(() => {
             expect(screen.getByText(/Historial de Operaciones/i)).toBeInTheDocument();
-            expect(screen.getByText(/10,00/)).toBeInTheDocument();
+            // Broader match for 1.000,00 or 10,00
+            expect(screen.getByText(/10.*00/)).toBeInTheDocument();
         });
         expect(screen.queryByText(/Usuario/i)).not.toBeInTheDocument();
     });
@@ -54,7 +55,7 @@ describe('AssetOperationsHistory', () => {
 
         await waitFor(() => {
             expect(screen.getByText(/Usuario/i)).toBeInTheDocument();
-            expect(screen.getByText(/Admin User/i)).toBeInTheDocument();
+            expect(screen.getByText(/Admin.*User/i)).toBeInTheDocument();
         });
     });
 

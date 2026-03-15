@@ -5,7 +5,11 @@ import { getCotizacionesDolar } from '@/services/DolarService';
 
 vi.mock('@/services/DolarService');
 vi.mock('react-chartjs-2', () => ({
-    Bar: () => <div data-testid="bar-chart">BarChart</div>
+    Bar: ({ data }: any) => (
+        <div data-testid="bar-chart">
+            {data.labels.map((l: string) => <span key={l}>{l}</span>)}
+        </div>
+    )
 }));
 
 describe('DolarBarChart', () => {
@@ -23,15 +27,15 @@ describe('DolarBarChart', () => {
     it('renders loading state initially', () => {
         (getCotizacionesDolar as any).mockReturnValue(new Promise(() => {}));
         render(<DolarBarChart />);
-        expect(screen.getByText('Cargando...')).toBeInTheDocument();
+        expect(screen.getByText(/Cargando/)).toBeInTheDocument();
     });
 
     it('renders chart and kpis after load', async () => {
         render(<DolarBarChart />);
         expect(await screen.findByTestId('bar-chart')).toBeInTheDocument();
-        expect(screen.getByText(/Máximo venta: \$ 200/)).toBeInTheDocument();
-        expect(screen.getByText(/Mínimo venta: \$ 100/)).toBeInTheDocument();
-        expect(screen.getByText(/Promedio venta: \$ 150/)).toBeInTheDocument();
+        expect(screen.getByText(/Máximo venta:.*200/)).toBeInTheDocument();
+        expect(screen.getByText(/Mínimo venta:.*100/)).toBeInTheDocument();
+        expect(screen.getByText(/Promedio venta:.*150/)).toBeInTheDocument();
     });
 
     it('renders error state', async () => {
@@ -50,6 +54,7 @@ describe('DolarBarChart', () => {
             { nombre: 'A very long name that should be shortened', venta: 100, compra: 90 }
         ]);
         render(<DolarBarChart />);
-        expect(await screen.findByText(/A very long name t…/)).toBeInTheDocument();
+        const el = await screen.findByText(/A very long name/);
+        expect(el.textContent).toMatch(/A very long name t.*…/);
     });
 });

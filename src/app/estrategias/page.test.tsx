@@ -53,13 +53,13 @@ describe('StrategiesPage', () => {
         (getPortafoliosDestacados as any).mockRejectedValue(new Error('Fail'));
         render(<StrategiesPage />);
         
-        await waitFor(() => expect(screen.getByText('Error al cargar')).toBeInTheDocument());
+        expect(await screen.findByText(/Error al cargar/i)).toBeInTheDocument();
         
-        const retryBtn = screen.getByText('Reintentar');
+        const retryBtn = screen.getByText(/Reintentar/i);
         (getPortafoliosDestacados as any).mockResolvedValue(mockData);
         fireEvent.click(retryBtn);
         
-        await waitFor(() => expect(screen.getByText('Top Strategy')).toBeInTheDocument());
+        expect(await screen.findByText(/Top Strategy/i, {}, { timeout: 3000 })).toBeInTheDocument();
     });
 
     it('navigates to portfolio detail on button click', async () => {

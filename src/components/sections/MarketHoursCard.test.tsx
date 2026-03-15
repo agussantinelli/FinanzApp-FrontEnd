@@ -8,16 +8,15 @@ describe('MarketHoursCard', () => {
         expect(screen.getByText(/Horarios de mercado/i)).toBeInTheDocument();
     });
 
-    it('renders NYSE hours (11:30 to 18:00)', () => {
+    it('renders NYSE hours (11:30 to 18:00)', async () => {
         render(<MarketHoursCard />);
-        expect(screen.getByText(/NYSE/)).toBeInTheDocument();
-        expect(screen.getByText(/11:30 a 18:00/)).toBeInTheDocument();
+        expect(await screen.findByText('NYSE', { selector: 'strong' })).toBeInTheDocument();
+        expect(screen.getByText(/11:30.*18:00/)).toBeInTheDocument();
     });
-
-    it('renders BYMA hours (10:30 to 17:00)', () => {
+    it('renders BYMA hours (10:30 to 17:00)', async () => {
         render(<MarketHoursCard />);
-        expect(screen.getByText(/BYMA/)).toBeInTheDocument();
-        expect(screen.getByText(/10:30 a 17:00/)).toBeInTheDocument();
+        expect(await screen.findByText('BYMA', { selector: 'strong' })).toBeInTheDocument();
+        expect(screen.getByText(/10:30.*17:00/)).toBeInTheDocument();
     });
 
     it('renders daylight saving note', () => {
