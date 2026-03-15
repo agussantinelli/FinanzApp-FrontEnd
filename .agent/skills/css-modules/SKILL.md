@@ -1,12 +1,12 @@
 ---
 name: css-modules
-description: Guidelines for implementing CSS Modules in Astro components for better maintainability and scoped styling.
+description: Guidelines for implementing CSS Modules in Next.js components for better maintainability and scoped styling.
 ---
 
 # CSS Modules Skill
 
 ## Context
-Astro provides scoped styles by default. However, to maintain a clean directory structure and standard modularity, complex CSS should be extracted to CSS Module files (`.module.css`).
+Next.js provides built-in support for CSS Modules. To maintain a clean directory structure and standard modularity, complex CSS should be extracted to CSS Module files (`.module.css`).
 
 ## Guidelines
 
@@ -14,32 +14,36 @@ Astro provides scoped styles by default. However, to maintain a clean directory 
 2. **Directory Structure**: 
     - Create a `styles/` subdirectory within the component's folder.
     - Path: `src/components/[category]/styles/[ComponentName].module.css`.
-    - For pages: `src/app/styles/[PageName].module.css`.
+    - For pages: `src/app/[page]/styles/[PageName].module.css`.
 3. **Naming Convention**: 
     - Use `PascalCase` or `kebab-case` matching the component name.
     - Always use the `.module.css` extension.
 4. **Integration**:
-    - Import the styles in the frontmatter of the `.astro` file:
+    - Import the styles in the `.tsx` file:
       `import styles from './styles/MyComponent.module.css';`
-    - Apply classes using the `class={styles.className}` syntax.
-    - For multiple classes, use template literals: `class={`${styles.base} ${styles.active}`}`.
+    - Apply classes using the `className={styles.className}` syntax.
+    - For multiple classes, use template literals or a utility like `clsx`: `className={`${styles.base} ${styles.active}`}`.
 
 ## Example
 
 ### Component Structure
 ```
 src/components/products/
-├── ProductCard.astro
+├── ProductCard.tsx
 └── styles/
     └── ProductCard.module.css
 ```
 
-### `ProductCard.astro`
-```astro
----
+### `ProductCard.tsx`
+```tsx
 import styles from './styles/ProductCard.module.css';
----
-<article class={styles.card}>
-  <h3 class={styles.title}>Product Title</h3>
-</article>
+
+export default function ProductCard() {
+  return (
+    <article className={styles.card}>
+      <h3 className={styles.title}>Product Title</h3>
+    </article>
+  );
+}
+```
 ```
