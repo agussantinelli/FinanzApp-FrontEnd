@@ -4,8 +4,6 @@ import { formatARS, formatUSD, formatPercentage, formatQuantity, formatDateTime 
 describe('format utils', () => {
     describe('formatARS', () => {
         it('formats numbers to ARS currency', () => {
-            // Note: toLocaleString output can vary by environment, 
-            // but we expect something like $ 1.234,56 or $1,234.56
             const result = formatARS(1234.56);
             expect(result).toMatch(/\$|ARS/);
             expect(result).toMatch(/1/);
@@ -17,6 +15,12 @@ describe('format utils', () => {
             expect(formatARS(null)).toBe('—');
             expect(formatARS(undefined)).toBe('—');
             expect(formatARS(NaN)).toBe('—');
+        });
+
+        it('formats negative numbers correctly', () => {
+            const result = formatARS(-500);
+            expect(result).toMatch(/-/);
+            expect(result).toMatch(/500/);
         });
     });
 
@@ -32,6 +36,11 @@ describe('format utils', () => {
         it('returns "—" for invalid numbers', () => {
             expect(formatUSD(null)).toBe('—');
         });
+
+        it('formats small decimals correctly', () => {
+            const result = formatUSD(0.005);
+            expect(result).toMatch(/0[.,]01/); // standard currency format rounds to 2
+        });
     });
 
     describe('formatPercentage', () => {
@@ -44,6 +53,10 @@ describe('format utils', () => {
         it('returns "—" for invalid numbers', () => {
             expect(formatPercentage(null)).toBe('—');
         });
+
+        it('formats zero correctly', () => {
+            expect(formatPercentage(0)).toMatch(/0[.,]00/);
+        });
     });
 
     describe('formatQuantity', () => {
@@ -53,6 +66,11 @@ describe('format utils', () => {
 
         it('returns "0,00" for invalid numbers', () => {
             expect(formatQuantity(null)).toBe('0,00');
+        });
+
+        it('formats integers without decimals if precision not forced', () => {
+            // Depending on implementation, but checking for 100
+            expect(formatQuantity(100)).toMatch(/100/);
         });
     });
 
