@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useActivosFilters } from './useActivosFilters';
-import { getActivosNoMoneda, searchActivos } from '@/services/ActivosService';
+import { getActivosNoMoneda, searchActivos, getRankingActivos } from '@/services/ActivosService';
 import { getTiposActivoNoMoneda } from '@/services/TipoActivosService';
 import { getSectores } from '@/services/SectorService';
 
@@ -72,7 +72,8 @@ describe('useActivosFilters hook', () => {
 
         act(() => {
             result.current.setSearchTerm('test');
-            result.current.setSelectedCurrency('USD');
+            // use handleCurrencyChange since setSelectedCurrency is not exported
+            result.current.handleCurrencyChange({ target: { value: 'USD' } });
         });
 
         expect(result.current.searchTerm).toBe('test');
