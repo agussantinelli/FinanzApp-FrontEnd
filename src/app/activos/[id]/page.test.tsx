@@ -3,14 +3,20 @@ import ActivoDetalle from './page';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useActivoDetail } from '@/hooks/useActivoDetail';
 import { useAuth } from '@/hooks/useAuth';
+import { usePortfolioData } from '@/hooks/usePortfolioData';
 import { toggleSeguirActivo } from '@/services/ActivosService';
+import { getCurrentUser } from '@/services/AuthService';
 
 vi.mock('@/hooks/useActivoDetail');
 vi.mock('@/hooks/useAuth');
+vi.mock('@/hooks/usePortfolioData');
 vi.mock('@/services/ActivosService');
+vi.mock('@/services/AuthService');
+const mockPush = vi.fn();
+const mockBack = vi.fn();
 vi.mock('next/navigation', () => ({
     useParams: () => ({ id: 'AAPL' }),
-    useRouter: () => ({ back: vi.fn(), push: vi.fn() }),
+    useRouter: () => ({ back: mockBack, push: mockPush }),
 }));
 vi.mock('@/components/operaciones/AssetOperationsHistory', () => ({
     default: () => <div data-testid="ops-history">History</div>
@@ -29,8 +35,11 @@ describe('ActivoDetalle Page', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
-        (useAuth as any).mockReturnValue({ user: { rol: 'Inversor' } });
+        const user = { id: 'u1', rol: 'Inversor', nombre: 'Juan', apellido: 'Perez' };
+        (useAuth as any).mockReturnValue({ user, isAuthenticated: true });
+        (getCurrentUser as any).mockReturnValue(user);
         (useActivoDetail as any).mockReturnValue({ activo: mockActivo, activeRecommendations: [], loading: false, updateActivoState: vi.fn() });
+        (usePortfolioData as any).mockReturnValue({ valuacion: { activos: [] } });
     });
 
     it('renders loading state', () => {
@@ -59,8 +68,6 @@ describe('ActivoDetalle Page', () => {
     });
 
     it('navigates back', async () => {
-        const { useRouter } = await import('next/navigation');
-        const mockBack = useRouter().back;
         render(<ActivoDetalle />);
         
         const btn = screen.getByLabelText('Volver');
@@ -69,11 +76,9 @@ describe('ActivoDetalle Page', () => {
     });
 
     it('navigates to buy form', async () => {
-        const { useRouter } = await import('next/navigation');
-        const mockPush = useRouter().push;
         render(<ActivoDetalle />);
         
-        const btn = screen.getByText(/Comprar/i);
+        const btn = screen.getByText(/Comprar AAPL/i);
         fireEvent.click(btn);
         expect(mockPush).toHaveBeenCalledWith(expect.stringMatching(/registrar-operacion.*AAPL.*COMPRA/i));
     });

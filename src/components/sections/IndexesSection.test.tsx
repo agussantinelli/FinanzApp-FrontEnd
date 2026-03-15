@@ -7,11 +7,15 @@ vi.mock('@/services/StocksService');
 vi.mock('@/components/cards/IndexCard', () => ({
     default: ({ data }: any) => <div data-testid="index-card">{data.nombre}</div>
 }));
+const mockPush = vi.fn();
+vi.mock('next/navigation', () => ({
+    useRouter: () => ({ push: mockPush }),
+}));
 
 describe('IndexesSection', () => {
     const mockData = [
-        { symbol: 'SPY', nombre: 'S&P 500', ultimoPrecio: 5000 },
-        { symbol: 'MERVAL', nombre: 'Riesgo Pais', ultimoPrecio: 1200 }
+        { usSymbol: 'SPY', localSymbol: 'SPY', nombre: 'S&P 500', ultimoPrecio: 5000 },
+        { usSymbol: 'MERV', localSymbol: 'MERVAL', nombre: 'Riesgo Pais', ultimoPrecio: 1200 }
     ];
 
     beforeEach(() => {

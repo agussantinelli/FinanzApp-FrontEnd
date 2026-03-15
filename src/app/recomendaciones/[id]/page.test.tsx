@@ -15,24 +15,23 @@ vi.mock('@/services/RecomendacionesService', () => ({
     rechazarRecomendacion: vi.fn(),
 }));
 vi.mock('@/hooks/useAuth');
+const mockPush = vi.fn();
+const mockBack = vi.fn();
 vi.mock('next/navigation', () => ({
     useParams: () => ({ id: '550e8400-e29b-41d4-a716-446655440000' }), // Use a UUID
-    useRouter: () => ({ back: vi.fn(), push: vi.fn() }),
+    useRouter: () => ({ back: mockBack, push: mockPush }),
 }));
-vi.mock('@/components/auth/RoleGuard', () => ({
-    RoleGuard: ({ children }: any) => <div>{children}</div>
-}));
-
+// Mocking window.location
 const originalLocation = window.location;
 beforeAll(() => {
-    // @ts-ignore
+    // @ts-ignore - Mocking window.location
     delete (window as any).location;
-    // @ts-ignore
+    // @ts-ignore - Mocking window.location
     window.location = { ...originalLocation, reload: vi.fn() } as any;
 });
 afterAll(() => {
-    // @ts-ignore
-    window.location = originalLocation as any;
+    // @ts-ignore - Mocking window.location
+    window.location = originalLocation;
 });
 vi.mock('next/link', () => ({
     default: ({ children, href }: any) => <a href={href}>{children}</a>,
