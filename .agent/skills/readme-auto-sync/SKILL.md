@@ -1,24 +1,24 @@
 ---
 name: readme-auto-sync
-description: Reglas obligatorias para actualizar el README.md automáticamente al crear archivos o tests.
+description: Mandatory rules for automatically updating README.md when creating files or tests.
 ---
 
 # README Auto-Sync
 
-Esta skill define el comportamiento obligatorio del agente AI respecto al mantenimiento del archivo `README.md` del proyecto Frontend.
+This skill defines the mandatory behavior of the AI agent regarding the maintenance of the project's `README.md` file.
 
-## Contexto
-Para asegurar que la documentación del proyecto nunca quede obsoleta, es mandatorio que el agente actualice el `README.md` de manera proactiva y automática cada vez que realice cambios estructurales o agregue cobertura de pruebas.
+## Context
+To ensure the project documentation never becomes obsolete, the agent must proactively and automatically update the `README.md` whenever structural changes are made or test coverage is added.
 
-## Reglas Obligatorias (Guidelines)
+## Mandatory Rules (Guidelines)
 
-1. **Estructura del Proyecto (Árbol de Directorios)**:
-   - **CUÁNDO**: Cada vez que crees, muevas o elimines un archivo (`.ts`, `.tsx`, `.astro`, `.css`, etc.) o un directorio.
-   - **QUÉ HACER**: Debes ejecutar un comando para listar los archivos relevantes (`find` o tu herramienta interna) y sobrescribir la sección "Project Structure" o "Estructura del Proyecto" en el `README.md` para que refleje el estado exacto actual. Omite carpetas irrelevantes como `node_modules` o `.agent`.
+1. **Project Structure (Directory Tree)**:
+   - **WHEN**: Every time you create, move, or delete a file (`.ts`, `.tsx`, `.css`, etc.) or a directory.
+   - **WHAT TO DO**: You must run a command to list relevant files (like `find` or your internal tool) and overwrite the "Project Structure" section in the `README.md` to reflect the exact current state. Ignore irrelevant folders like `node_modules` or `.agent`.
 
-2. **Contador de Tests**:
-   - **CUÁNDO**: Cada vez que crees un nuevo archivo de test (`.test.tsx`, `.spec.ts`) o agregues/elimines tests (Vitest) dentro de un archivo existente.
-   - **QUÉ HACER**: Debes ejecutar la suite de testing (`npx vitest run`), leer la salida de la consola para obtener el número exacto de tests que han pasado, y actualizar el badge o la sección de "Tests Pasando" en el encabezado del `README.md`.
+2. **Test Counter**:
+   - **WHEN**: Every time you create a new test file (`.test.tsx`, `.spec.ts`) or add/remove tests (Vitest) within an existing file.
+   - **WHAT TO DO**: You must run the testing suite (`npx vitest run`), read the console output to get the exact number of passed tests, and update the badge or the "Tests Passing" section in the `README.md` header.
 
-## Proactividad
-**NO ESPERES** a que el usuario te pida que actualices el README. Si tus acciones en una tarea implican crear o modificar la estructura o los tests, tu último paso de esa tarea debe ser obligatoriamente actualizar el README.md para reflejar los cambios antes de devolverle el control al usuario.
+## Proactivity
+**DO NOT WAIT** for the user to ask you to update the README. If your actions in a task involve creating or modifying the structure or tests, your final step in that task must be to update the `README.md` to reflect those changes before returning control to the user.
