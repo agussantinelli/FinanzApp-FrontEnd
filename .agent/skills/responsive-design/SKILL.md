@@ -6,7 +6,7 @@ description: Mobile-first and fluid layout best practices.
 # Responsive Design Skill
 
 ## Context
-MarketFlex must look great on all devices, from mobile phones to high-res monitors.
+FinanzApp must look great on all devices, from mobile phones to high-res monitors.
 
 ## Guidelines
 1. **Mobile-First**: Always start with mobile styles and add enhancements via `@media` queries for larger screens.

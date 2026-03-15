@@ -13,7 +13,7 @@ This skill ensures that all custom hooks follow best practices for maintainabili
 2.  **One Hook per File**: Each hook must reside in its own file named after the hook (e.g., `src/hooks/useAuth.ts`).
 3.  **Separation of Concerns**:
     *   Hooks should focus on state management and side effects.
-    *   **Extracción de Lógica**: Any complex business logic, data transformation, or validation should be extracted to `src/utils/` to keep the hook clean and easily testable.
+    *   **Logic Extraction**: Any complex business logic, data transformation, or validation should be extracted to `src/utils/` to keep the hook clean and easily testable.
     *   Hooks should use services from `src/services/` for API interactions.
 4.  **Mandatory Testing**: Every hook MUST have a corresponding `.test.ts` file in the same directory.
 5.  **State Management**: Avoid deep nesting of state. Use `useReducer` for complex state logic or break the hook into smaller, specialized hooks.
