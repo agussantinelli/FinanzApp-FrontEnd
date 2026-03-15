@@ -189,6 +189,7 @@ export default function ActivoDetalle() {
                         startIcon={<ArrowBackIcon />}
                         onClick={() => router.back()}
                         className={styles.backButton}
+                        aria-label="Volver"
                     >
                         Volver
                     </Button>
@@ -210,7 +211,7 @@ export default function ActivoDetalle() {
                                         {activo.symbol}
                                     </Typography>
                                     {isAuthenticated && (
-                                        <IconButton onClick={handleToggleSeguir} sx={{ color: 'white' }}>
+                                        <IconButton onClick={handleToggleSeguir} sx={{ color: 'white' }} aria-label="Seguir">
                                             {activo.loSigo ? <StarIcon color="warning" /> : <StarBorderIcon />}
                                         </IconButton>
                                     )}
