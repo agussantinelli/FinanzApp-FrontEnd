@@ -29,10 +29,12 @@ describe('SetInitialPasswordDialog', () => {
     it('validates password length', async () => {
         render(<SetInitialPasswordDialog open={true} onClose={onClose} />);
         
-        fireEvent.change(screen.getByLabelText('Nueva Contraseña'), { target: { value: '123' } });
+        fireEvent.change(screen.getByLabelText(/Nueva Contraseña/i), { target: { value: '123' } });
         fireEvent.change(screen.getByLabelText(/Confirmar Contraseña/i), { target: { value: '123' } });
         
-        fireEvent.click(screen.getByText('Guardar'));
+        await act(async () => {
+            fireEvent.click(screen.getByText('Guardar'));
+        });
 
         expect(await screen.findByText(/al menos 6 caracteres/)).toBeInTheDocument();
         expect(setInitialPassword).not.toHaveBeenCalled();
