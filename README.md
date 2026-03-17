@@ -218,6 +218,9 @@
 │   ├── theme/                                   # Tema y configuración de Material UI
 │   ├── types/                                   # Definiciones TypeScript (Interfaces)
 │   └── utils/                                   # Helpers de formateo y strings
+├── tests/                                       # Tests de sistema
+│   └── e2e/                                     # Tests End-to-End (Playwright)
+│   └── integration/                             # Tests de integración (Hooks + UI + Services)
 ├── .env.local                                   # Variables de entorno
 ├── eslint.config.mjs                            # Configuración de Linter
 ├── next.config.ts                               # Configuración del framework
@@ -240,7 +243,8 @@
     <li><strong>📡 API Communication:</strong> Prohibición de <code>fetch</code> nativo; uso obligatorio del cliente HTTP centralizado con interceptores.</li>
     <li><strong>🧹 Clean Structure:</strong> Organización basada en el App Router de Next.js y principios de diseño limpio.</li>
     <li><strong>🎨 CSS Modules:</strong> Estándar para el encapsulamiento de estilos y mantenibilidad visual.</li>
-    <li><strong>🧪 Integration Testing:</strong> Guidelines para testing de capas cruzadas (Hooks + UI + Services) con MSW.</li>
+    <li><strong>🧪 Integration Testing:</strong> Capas cruzadas (Hooks + UI + Services) con MSW.</li>
+    <li><strong>🎭 E2E Testing:</strong> Flujos críticos de usuario validados con Playwright.</li>
 </ul>
 
 <hr>
