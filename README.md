@@ -240,6 +240,7 @@
     <li><strong>📡 API Communication:</strong> Prohibición de <code>fetch</code> nativo; uso obligatorio del cliente HTTP centralizado con interceptores.</li>
     <li><strong>🧹 Clean Structure:</strong> Organización basada en el App Router de Next.js y principios de diseño limpio.</li>
     <li><strong>🎨 CSS Modules:</strong> Estándar para el encapsulamiento de estilos y mantenibilidad visual.</li>
+    <li><strong>🧪 Integration Testing:</strong> Guidelines para testing de capas cruzadas (Hooks + UI + Services) con MSW.</li>
 </ul>
 
 <hr>
