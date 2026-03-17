@@ -13,6 +13,7 @@ This skill serves as a central index for all architectural and development guide
 - **[clean-structure](file:///c:/Users/Agus/Documents/FinanzApp/FinanzApp-FrontEnd/.agent/skills/clean-structure/SKILL.md)**: Component organization and modern React principles for the FrontEnd.
 - **[code-quality](file:///c:/Users/Agus/Documents/FinanzApp/FinanzApp-FrontEnd/.agent/skills/code-quality/SKILL.md)**: Guidelines for clean code, readability, and the "No Comments" policy.
 - **[css-modules](file:///c:/Users/Agus/Documents/FinanzApp/FinanzApp-FrontEnd/.agent/skills/css-modules/SKILL.md)**: Rules for extracting CSS to `.module.css` files.
+- **[e2e-testing](file:///c:/Users/Agus/Documents/FinanzApp/FinanzApp-FrontEnd/.agent/skills/e2e-testing/SKILL.md)**: End-to-end testing standards using Playwright.
 - **[integration-testing](file:///c:/Users/Agus/Documents/FinanzApp/FinanzApp-FrontEnd/.agent/skills/integration-testing/SKILL.md)**: Guidelines for cross-layer testing (Hooks + UI + Services) with MSW.
 - **[modular-architecture](file:///c:/Users/Agus/Documents/FinanzApp/FinanzApp-FrontEnd/.agent/skills/modular-architecture/SKILL.md)**: Maintaining the modular structure of the frontend.
 - **[react-hooks](file:///c:/Users/Agus/Documents/FinanzApp/FinanzApp-FrontEnd/.agent/skills/react-hooks/SKILL.md)**: Best practices and mandatory testing for custom React hooks.
