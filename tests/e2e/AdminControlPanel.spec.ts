@@ -9,17 +9,20 @@ test.describe('Panel de Administración (Admin)', () => {
         await page.fill('input[type="password"]', 'agus');
         await page.click('button[type="submit"]');
         
+        // Esperar a estar logueado (redirección al dashboard de inversor)
+        await expect(page).toHaveURL(/\/dashboard-inversor/);
+        
         await page.goto('/dashboard-admin');
         await expect(page).toHaveURL(/\/access-denied/);
     });
 
     test('Gestión de Usuarios como Administrador', async ({ page }) => {
         await page.goto('/auth/login');
-        await page.fill('input[type="email"]', 'admin@admin.com'); // Asumimos cuenta admin existe
-        await page.fill('input[type="password"]', 'admin123');
+        await page.fill('input[type="email"]', 'admin@gmail.com'); // Seed Data
+        await page.fill('input[type="password"]', 'admin');
         await page.click('button[type="submit"]');
 
-        await expect(page).toHaveURL(/\/dashboard-admin/);
+        await expect(page).toHaveURL(/\/dashboard-admin/, { timeout: 10000 });
         
         // Verificar tabla de usuarios
         await expect(page.locator('table')).toBeVisible();

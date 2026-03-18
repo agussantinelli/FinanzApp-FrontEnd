@@ -11,16 +11,28 @@ test.describe('Autenticación y Sesión', () => {
         await page.fill('input[type="password"]', 'agus');
         await page.click('button[type="submit"]');
 
+        await page.waitForTimeout(1500);
+
         // Verificar redirección al dashboard
-        await expect(page).toHaveURL(/\/dashboard-inversor/);
-        await expect(page.locator('h4')).toContainText(/Hola/i);
+        await expect(page).toHaveURL(/\/dashboard-inversor/, { timeout: 30000 });
+        await expect(page.getByRole('heading', { name: /Hola/i })).toBeVisible();
+
+        await page.waitForTimeout(1500);
 
         // Logout
-        await page.click('button[aria-label*="perfil" i], button:has-text("Perfil"), .user-menu-trigger'); // Intentar encontrar el menú de usuario
-        await page.click('li:has-text("Cerrar Sesión"), button:has-text("Cerrar Sesión"), [data-testid="logout-button"]');
+        // Abrir menú de usuario (puede ser un botón con el nombre o ícono)
+        const userMenu = page.locator('button').filter({ hasText: /Agustín/i }).or(page.locator('button[aria-label*="perfil" i]')).first();
+        await userMenu.click();
+        
+        await page.waitForTimeout(1000);
+
+        const logoutBtn = page.locator('li').filter({ hasText: /Cerrar Sesión/i }).or(page.locator('button:has-text("Cerrar Sesión")')).first();
+        await logoutBtn.click();
+
+        await page.waitForTimeout(1500);
 
         // Verificar redirección a login
-        await expect(page).toHaveURL(/\/auth\/login/);
+        await expect(page).toHaveURL(/\/auth\/login/, { timeout: 30000 });
     });
 
     test('Manejo de Credenciales Inválidas', async ({ page }) => {

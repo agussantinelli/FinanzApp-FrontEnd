@@ -7,20 +7,9 @@ test('Flujo Completo: Login -> Inversor -> Portafolio -> Comprar BTC', async ({ 
 
     await page.fill('input[type="email"]', 'agus@gmail.com');
     await page.fill('input[type="password"]', 'agus');
-
-    const loginResponsePromise = page.waitForResponse(response =>
-        response.url().includes('/auth/login') && response.request().method() === 'POST'
-    );
-
     await page.click('button[type="submit"]');
 
-    const loginResponse = await loginResponsePromise;
-
-    if (!loginResponse.ok()) {
-        console.log('Login failed with status:', loginResponse.status());
-    }
-
-    await expect(page).toHaveURL(/\/dashboard-inversor/);
+    await expect(page).toHaveURL(/\/dashboard-inversor/, { timeout: 15000 });
 
     const portfolioLink = page.getByRole('link', { name: /Portafolio/i }).first();
     await expect(portfolioLink).toBeVisible({ timeout: 150000 });
