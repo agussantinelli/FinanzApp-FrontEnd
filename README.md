@@ -200,6 +200,26 @@
 
 <hr>
 
+<h2>🤖 Arquitectura de FinanzAI</h2>
+
+<p>El asistente inteligente de FinanzApp es un motor de asesoramiento integrado que utiliza el contexto del usuario para brindar respuestas personalizadas y dinámicas.</p>
+
+<h3>🗣️ Interfaz y Experiencia (Frontend)</h3>
+<ul>
+    <li><strong>Componente Flotante (FAB):</strong> Implementado en <code>FinanzAiChat.tsx</code>, permite acceso inmediato desde cualquier sección del dashboard sin interrumpir la navegación.</li>
+    <li><strong>Renderizado Enriquecido:</strong> Soporte completo para <strong>Markdown</strong> mediante <code>react-markdown</code>, permitiendo que la IA responda con tablas, listas y énfasis visual para mejor claridad financiera.</li>
+    <li><strong>Indicadores de UX:</strong> Sistema de <code>TypingIndicator</code> que gestiona la percepción de tiempo de respuesta mientras el LLM procesa la consulta.</li>
+</ul>
+
+<h3>📡 Comunicación y Backend</h3>
+<ul>
+    <li><strong>Capa de Servicio:</strong> Todas las peticiones se centralizan en <code>AiService.ts</code>, desacoplando la lógica de UI de la comunicación con el endpoint <code>/api/ai/chat</code>.</li>
+    <li><strong>Inyección de Contexto:</strong> El sistema está diseñado para enviar no solo el prompt, sino metadata relevante que permite al modelo de lenguaje contextualizar las recomendaciones a la situación patrimonial del usuario.</li>
+    <li><strong>Manejo de Errores:</strong> Gestión robusta de timeouts y fallos de API para asegurar que el chat siempre brinde una respuesta de contingencia amigable.</li>
+</ul>
+
+<hr>
+
 <h2>📁 Estructura del Proyecto</h2>
 
 <pre><code>FinanzApp-FrontEnd/
