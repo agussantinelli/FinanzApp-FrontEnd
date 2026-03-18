@@ -7,26 +7,8 @@ import React from 'react';
 // Force API URL for tests
 process.env.NEXT_PUBLIC_API_URL = 'http://localhost';
 
-// Mock AuthService globally for RoleGuards and general usage
-vi.mock('@/services/AuthService', async (importOriginal) => {
-    const original = await importOriginal<typeof import('@/services/AuthService')>();
-    return {
-        ...original,
-        hasRole: vi.fn((roles) => {
-            // By default, if we are in a test that mocks useAuth, we probably want this to pass.
-            // We can check if any roles are required. If not, true.
-            if (!roles || roles.length === 0) return true;
-            // Otherwise, we'll try to get the context from the test or just return true for simplicity in integration tests
-            // unless the test specifically overrides this mock.
-            return true;
-        }),
-        getCurrentUser: vi.fn(() => ({
-            id: 1,
-            nombre: 'Agus',
-            rol: 'Experto', // Default for expert tests, others can override if needed
-        })),
-    };
-});
+// Force API URL for tests
+process.env.NEXT_PUBLIC_API_URL = 'http://localhost';
 
 Object.assign(global, { TextDecoder, TextEncoder });
 
