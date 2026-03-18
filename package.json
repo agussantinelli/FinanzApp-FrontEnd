@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "test": "vitest",
     "test:unit": "vitest",
+    "test:integration": "vitest run src/test/integration",
     "test:e2e": "playwright test --headed"
   },
   "dependencies": {
