@@ -221,15 +221,15 @@
 ├── tests/                                       # Infraestructura y Tests de Sistema
 │   ├── e2e/                                     # Tests End-to-End (Playwright)
 │   ├── integration/                             # Tests de Integración (Hooks + UI + Services)
-│   │   ├── activos/
-│   │   ├── admin/
-│   │   ├── auth/
-│   │   ├── common/
-│   │   ├── dashboard/
-│   │   ├── operaciones/
-│   │   ├── portfolio/
-│   │   ├── profile/
-│   │   └── recomendaciones/
+│   │   ├── activos/                             # Búsqueda, filtrado y detalles de activos
+│   │   ├── admin/                               # Gestión de usuarios y estadísticas de plataforma
+│   │   ├── auth/                                # Flujos de login, registro y seguridad de sesión
+│   │   ├── common/                              # Componentes transversales e IA (Chat)
+│   │   ├── dashboard/                           # Vistas de Inversor y Experto (Resumen)
+│   │   ├── operaciones/                         # Registro e importación de transacciones
+│   │   ├── portfolio/                           # Valuación, historia y gestión de carteras
+│   │   ├── profile/                             # Gestión de perfil y datos de usuario
+│   │   └── recomendaciones/                     # Creación y visualización de señales
 │   ├── msw/                                     # Mocking de API (Handlers & Server)
 │   └── setup.ts                                 # Configuración global de Vitest
 ├── .env.local                                   # Variables de entorno
