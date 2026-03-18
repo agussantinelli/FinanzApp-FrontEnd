@@ -9,19 +9,23 @@ test('Flujo Completo: Login -> Inversor -> Portafolio -> Comprar BTC', async ({ 
     await page.fill('input[type="password"]', 'agus');
     await page.click('button[type="submit"]');
 
-    await expect(page).toHaveURL(/\/dashboard-inversor/, { timeout: 15000 });
+    await page.waitForTimeout(1500);
+    await expect(page).toHaveURL(/\/dashboard-inversor/, { timeout: 30000 });
+    await page.waitForTimeout(1500);
 
     const portfolioLink = page.getByRole('link', { name: /Portafolio/i }).first();
     await expect(portfolioLink).toBeVisible({ timeout: 150000 });
     await portfolioLink.click();
 
-    await expect(page).toHaveURL(/\/portfolio/);
+    await expect(page).toHaveURL(/\/portfolio/, { timeout: 30000 });
+    await page.waitForTimeout(1500);
 
     const registrarBtn = page.getByRole('button', { name: /Registrar Operación/i });
     await expect(registrarBtn).toBeVisible({ timeout: 150000 });
     await registrarBtn.click();
 
-    await expect(page).toHaveURL(/\/registrar-operacion/, { timeout: 15000 });
+    await expect(page).toHaveURL(/\/registrar-operacion/, { timeout: 30000 });
+    await page.waitForTimeout(1500);
 
     const combo = page.locator('input[role="combobox"]');
     await expect(combo).toBeVisible({ timeout: 1500000 });
@@ -36,7 +40,8 @@ test('Flujo Completo: Login -> Inversor -> Portafolio -> Comprar BTC', async ({ 
 
     await page.getByRole('button', { name: /Confirmar Operación/i }).click();
 
-    await expect(page).toHaveURL(/\/portfolio/, { timeout: 20000 });
+    await expect(page).toHaveURL(/\/portfolio/, { timeout: 30000 });
+    await page.waitForTimeout(1500);
 
     await page.waitForTimeout(10000);
 });

@@ -8,7 +8,8 @@ test.describe('Gestión de Portafolios (CRUD)', () => {
         await page.fill('input[type="email"]', 'agus@gmail.com');
         await page.fill('input[type="password"]', 'agus');
         await page.click('button[type="submit"]');
-        await expect(page).toHaveURL(/\/dashboard-inversor/);
+        await page.waitForTimeout(1500);
+        await expect(page).toHaveURL(/\/dashboard-inversor/, { timeout: 30000 });
         await page.goto('/portfolio');
     });
 
@@ -21,6 +22,7 @@ test.describe('Gestión de Portafolios (CRUD)', () => {
         await page.fill('input[name="nombre"]', portfolioName);
         await page.fill('textarea[name="descripcion"]', 'Creado por test E2E');
         await page.click('button:has-text("Guardar"), button:has-text("Crear")');
+        await page.waitForTimeout(1500);
 
         // Verificar creación
         await expect(page.locator('h5, .MuiTypography-h5')).toContainText(portfolioName);

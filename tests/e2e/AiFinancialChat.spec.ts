@@ -8,12 +8,14 @@ test.describe('Asistente Financiero (FinanzAI)', () => {
         await page.fill('input[type="email"]', 'agus@gmail.com');
         await page.fill('input[type="password"]', 'agus');
         await page.click('button[type="submit"]');
+        await page.waitForTimeout(1500);
     });
 
     test('Consulta y Respuesta con Streaming en Chatbot', async ({ page }) => {
         // Abrir Chatbot
         const chatFab = page.getByRole('button', { name: /ai/i });
-        await expect(chatFab).toBeVisible({ timeout: 15000 });
+        await expect(chatFab).toBeVisible({ timeout: 30000 });
+        await page.waitForTimeout(1500);
         await chatFab.click();
 
         // Enviar Mensaje

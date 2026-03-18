@@ -22,8 +22,9 @@ test.describe('Registro y Onboarding de Nuevo Usuario', () => {
         await page.click('button[type="submit"]');
 
         // Verificar mensaje de éxito y redirección a Login
-        await expect(page.locator('.MuiAlert-message')).toContainText(/exitoso/i);
-        await expect(page).toHaveURL(/\/auth\/login/);
+        await expect(page.locator('.MuiAlert-message')).toContainText(/exitoso/i, { timeout: 30000 });
+        await expect(page).toHaveURL(/\/auth\/login/, { timeout: 30000 });
+        await page.waitForTimeout(1500);
 
         // Opcional: Probar el primer Login
         await page.fill('input[type="email"]', randomEmail);

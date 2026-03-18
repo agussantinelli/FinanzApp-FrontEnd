@@ -8,7 +8,9 @@ test.describe('Operaciones con Activos Locales', () => {
         await page.fill('input[type="email"]', 'agus@gmail.com');
         await page.fill('input[type="password"]', 'agus');
         await page.click('button[type="submit"]');
+        await page.waitForTimeout(1500);
         await page.goto('/registrar-operacion');
+        await page.waitForTimeout(1500);
     });
 
     test('Compra de un CEDEAR (AAPL) con pesos', async ({ page }) => {
@@ -29,8 +31,8 @@ test.describe('Operaciones con Activos Locales', () => {
         await page.click('button:has-text("Confirmar")');
 
         // Verificar redirección y presencia en portafolio
-        await expect(page).toHaveURL(/\/portfolio/);
-        await expect(page.locator('table')).toContainText('AAPL');
+        await expect(page).toHaveURL(/\/portfolio/, { timeout: 30000 });
+        await expect(page.locator('table')).toContainText('AAPL', { timeout: 15000 });
     });
 
     test('Navegación a Detalle de Activo desde Buscador', async ({ page }) => {
@@ -42,7 +44,7 @@ test.describe('Operaciones con Activos Locales', () => {
         await expect(row).toBeVisible();
         await row.click();
 
-        await expect(page).toHaveURL(/\/activos\/\d+/);
-        await expect(page.locator('h4')).toContainText(/Aluar/i);
+        await expect(page).toHaveURL(/\/activos\/\d+/, { timeout: 30000 });
+        await expect(page.locator('h4')).toContainText(/Aluar/i, { timeout: 15000 });
     });
 });

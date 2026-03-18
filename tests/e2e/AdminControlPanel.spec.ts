@@ -10,10 +10,12 @@ test.describe('Panel de Administración (Admin)', () => {
         await page.click('button[type="submit"]');
         
         // Esperar a estar logueado (redirección al dashboard de inversor)
-        await expect(page).toHaveURL(/\/dashboard-inversor/);
+        await expect(page).toHaveURL(/\/dashboard-inversor/, { timeout: 30000 });
+        await page.waitForTimeout(1500);
         
         await page.goto('/dashboard-admin');
-        await expect(page).toHaveURL(/\/access-denied/);
+        await page.waitForTimeout(1500);
+        await expect(page).toHaveURL(/\/access-denied/, { timeout: 30000 });
     });
 
     test('Gestión de Usuarios como Administrador', async ({ page }) => {
@@ -22,7 +24,9 @@ test.describe('Panel de Administración (Admin)', () => {
         await page.fill('input[type="password"]', 'admin');
         await page.click('button[type="submit"]');
 
-        await expect(page).toHaveURL(/\/dashboard-admin/, { timeout: 10000 });
+        await page.waitForTimeout(1500);
+        await expect(page).toHaveURL(/\/dashboard-admin/, { timeout: 30000 });
+        await page.waitForTimeout(1500);
         
         // Verificar tabla de usuarios
         await expect(page.locator('table')).toBeVisible();

@@ -9,7 +9,9 @@ test.describe('Importación Inteligente (Excel + IA)', () => {
         await page.fill('input[type="email"]', 'agus@gmail.com');
         await page.fill('input[type="password"]', 'agus');
         await page.click('button[type="submit"]');
+        await page.waitForTimeout(1500);
         await page.goto('/operaciones');
+        await page.waitForTimeout(1500);
     });
 
     test('Flujo de Carga de Excel y Validación IA', async ({ page }) => {
