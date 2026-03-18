@@ -240,6 +240,47 @@
 
 <hr>
 
+<h2>📈 Glosario del Inversor Argentino</h2>
+
+<p>Para facilitar la comprensión del dominio de FinanzApp a desarrolladores y usuarios avanzados, definimos los términos clave del mercado local utilizados en el proyecto:</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Término</th>
+            <th>Significado y Uso en la App</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Ticker / Símbolo</strong></td>
+            <td>Identificador alfanumérico único para cada activo (ej. <code>ALUA</code>, <code>AAPL</code>, <code>BTC</code>).</td>
+        </tr>
+        <tr>
+            <td><strong>CEDEARs</strong></td>
+            <td>Certificados de Depósito Argentinos. Representan acciones de empresas extranjeras (ej. Google, Apple) que se pueden comprar en Pesos pero su valor está atado al dólar.</td>
+        </tr>
+        <tr>
+            <td><strong>Dólar MEP</strong></td>
+            <td>"Mercado Electrónico de Pagos". Es el tipo de cambio financiero que se obtiene operando bonos locales. FinanzApp lo usa para valuar la tenencia en USD.</td>
+        </tr>
+        <tr>
+            <td><strong>Dólar CCL</strong></td>
+            <td>"Contado con Liqui". Tipo de cambio para mover fondos al exterior. Se utiliza para la valuación implícita de los CEDEARs en el dashboard.</td>
+        </tr>
+        <tr>
+            <td><strong>Ratio de Conversión</strong></td>
+            <td>La cantidad de CEDEARs que equivalen a una acción real en el exterior (ej. Apple tiene ratio 20:1). Fundamental para el cálculo de valuación real.</td>
+        </tr>
+        <tr>
+            <td><strong>Orden de Compra/Venta</strong></td>
+            <td>Registro manual o automático de una transacción, con su respectiva fecha, cantidad y precio de ejecución.</td>
+        </tr>
+    </tbody>
+</table>
+
+<hr>
+
 <h2>📁 Estructura del Proyecto</h2>
 
 <pre><code>FinanzApp-FrontEnd/
