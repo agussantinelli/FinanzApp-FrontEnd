@@ -7,10 +7,11 @@ export default defineConfig({
     test: {
         environment: 'jsdom',
         globals: true,
-        setupFiles: ['./src/test/setup.ts'],
+        setupFiles: ['./tests/setup.ts'],
         testTimeout: 15000,
-        exclude: ['**/node_modules/**', '**/dist/**', '**/tests/**', '**/e2e/**'],
+        exclude: ['**/node_modules/**', '**/dist/**', '**/tests/e2e/**'],
         alias: {
+            '@/test': path.resolve(__dirname, './tests'),
             '@': path.resolve(__dirname, './src'),
         },
     },
