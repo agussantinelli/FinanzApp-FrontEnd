@@ -46,7 +46,7 @@ describe('PortfolioManagement Integration', () => {
             http.post('*/portafolios', () => {
                 return HttpResponse.json({ id: '2', nombre: 'Nueva Cartera' });
             }),
-            http.patch('*/portafolios/1', () => {
+            http.put('*/portafolios/1', () => {
                 return HttpResponse.json({ id: '1', nombre: 'Cartera Editada' });
             })
         );
