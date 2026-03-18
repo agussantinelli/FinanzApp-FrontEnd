@@ -114,7 +114,12 @@ export default function FinanzAiChat() {
                             disabled={loading}
                             rows={1}
                         />
-                        <button type="submit" className={styles.sendButton} disabled={loading || !inputValue.trim()}>
+                        <button 
+                            type="submit" 
+                            className={styles.sendButton} 
+                            disabled={loading || !inputValue.trim()}
+                            aria-label="Enviar mensaje"
+                        >
                             <SendIcon fontSize="small" />
                         </button>
                     </form>
