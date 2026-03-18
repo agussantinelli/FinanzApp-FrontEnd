@@ -15,12 +15,12 @@ Unlike unit tests that mock functions, integration tests in FinanzApp use:
 
 ## Organization
 All integration tests MUST be located in the global integration directory:
-- **Path**: `src/test/integration/[module]/[Feature].test.tsx`
+- **Path**: `tests/integration/[module]/[Feature].test.tsx`
 
 ## Guidelines
 1.  **Scope**: Test full business flows (e.g., Login -> Store Token -> Redirect).
 2.  **No Manual Mocks**: Avoid `vi.mock()` for internal services or hooks; test their real interaction.
-3.  **MSW Handlers**: Define shared handlers in `src/test/msw/handlers.ts` and use `server.use()` for test-specific overrides.
+3.  **MSW Handlers**: Define shared handlers in `tests/msw/handlers.ts` and use `server.use()` for test-specific overrides.
 4.  **DOM Validation**: Use React Testing Library to verify that the UI updates correctly based on the real hook/service state.
 5.  **Clean State**: Ensure `localStorage`, `sessionStorage`, and MSW handlers are cleared between tests.
 
