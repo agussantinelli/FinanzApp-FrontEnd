@@ -31,6 +31,7 @@
     <img src="https://img.shields.io/badge/tsParticles-2.12-000000?style=for-the-badge&logo=javascript&logoColor=white" alt="tsParticles Badge"/>
     <img src="https://img.shields.io/badge/JWT%20Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT Badge"/>
     <img src="https://img.shields.io/badge/Vitest-2.1.8-6E9F18?style=for-the-badge&logo=vitest&logoColor=white" alt="Vitest Badge"/>
+    <img src="https://img.shields.io/badge/MSW-2.12.13-FF6944?style=for-the-badge&logo=mockserviceworker&logoColor=white" alt="MSW Badge"/>
     <img src="https://img.shields.io/badge/Testing%20Library-16.1.0-E33332?style=for-the-badge&logo=testing-library&logoColor=white" alt="Testing Library Badge"/>
     <img src="https://img.shields.io/badge/GitHub%20Actions-CI%2FCD-2088FF?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Actions Badge"/>
 </div>
@@ -144,9 +145,9 @@
             <td>Esquemas estrictos y seguridad de tipos en tiempo de ejecución.</td>
         </tr>
         <tr>
-            <td><strong>Testing</strong></td>
-            <td>Vitest + Playwright</td>
-            <td>Tests Unitarios rápidos y E2E para flujos críticos (Login, Importación).</td>
+            <td><strong>Testing + Mocking</strong></td>
+            <td>Vitest + MSW + Playwright</td>
+            <td>Tests Unitarios rápidos, Mocking de API robusto y E2E para flujos críticos.</td>
         </tr>
         <tr>
             <td><strong>HTTP Client</strong></td>
