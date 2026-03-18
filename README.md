@@ -177,6 +177,7 @@
 <h2>📁 Estructura del Proyecto</h2>
 
 <pre><code>FinanzApp-FrontEnd/
+├── .agent/skills/                               # Directorio de Skills (Guías Avanzadas para IA)
 ├── public/                                      # Archivos estáticos accesibles públicamente
 ├── src/                                         # Código fuente principal
 │   ├── app/                                     # App Router (Next.js 16+)
@@ -237,8 +238,7 @@
 ├── next.config.ts                               # Configuración del framework
 ├── package.json                                 # Dependencias y scripts
 ├── tsconfig.json                                # Configuración de TypeScript
-├── vitest.config.mts                             # Configuración de Tests Unitarios
-└── .agent/skills/                                # 🧠 Directorio de Skills (Guías Avanzadas para IA)
+└── vitest.config.mts                            # Configuración de Tests Unitarios
 </code></pre>
 
 <hr>
