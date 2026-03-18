@@ -184,11 +184,11 @@
 │   │   ├── access-denied/                       # Página de acceso denegado
 │   │   ├── activos/                             # Buscador y detalles de Activos
 │   │   ├── auth/                                # Módulos de Login, Registro y Recuperación
-│   │   │   ├── forgot-password/
-│   │   │   ├── google-callback/
-│   │   │   ├── login/
-│   │   │   ├── register/
-│   │   │   └── reset-password/
+│   │   │   ├── forgot-password/                 # Formulario para solicitar recuperación de cuenta
+│   │   │   ├── google-callback/                 # Manejador del token retornado por Google Auth
+│   │   │   ├── login/                           # Pantalla de acceso con email/password y reCAPTCHA
+│   │   │   ├── register/                        # Registro de nuevos usuarios inversores
+│   │   │   └── reset-password/                  # Pantalla final de cambio de contraseña con token
 │   │   ├── dashboard-admin/                     # Panel de Administración (Guard: Admin)
 │   │   ├── dashboard-experto/                   # Dashboard para Expertos Financieros
 │   │   ├── dashboard-inversor/                  # Home del Inversor (Resumen)
