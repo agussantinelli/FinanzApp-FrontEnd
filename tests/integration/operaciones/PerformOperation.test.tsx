@@ -61,7 +61,7 @@ describe('PerformOperation Integration', () => {
         fireEvent.change(autocomplete, { target: { value: 'AAPL' } });
         
         // Wait for suggestion and click it
-        const option = await screen.findByText('AAPL');
+        const option = await screen.findByText(/AAPL - Apple Inc\./i); 
         fireEvent.click(option);
 
         // 2. Select Portfolio

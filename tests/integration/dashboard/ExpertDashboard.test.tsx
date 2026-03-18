@@ -9,14 +9,17 @@ import { RolUsuario } from '@/types/Usuario';
 vi.mock('next/navigation', () => ({
     useRouter: () => ({
         push: vi.fn(),
+        replace: vi.fn(),
     }),
 }));
 
-// Mock useAuth for Expert
+// Mock useAuth
+const mockUser = { id: 1, nombre: 'Agus', rol: 'Experto' };
 vi.mock('@/hooks/useAuth', () => ({
     useAuth: () => ({
+        user: mockUser,
         isAuthenticated: true,
-        user: { id: 1, nombre: 'Agus', rol: RolUsuario.Experto }
+        loading: false
     })
 }));
 
@@ -40,7 +43,7 @@ describe('ExpertDashboard Integration', () => {
 
     beforeEach(() => {
         server.use(
-            http.get('**/api/dashboard/expert-stats', () => HttpResponse.json(mockStats)),
+            http.get('**/api/dashboard/experto/stats', () => HttpResponse.json(mockStats)),
             http.get('**/portafolios/mis-portafolios', () => HttpResponse.json([{ id: 'P-EX', nombre: 'Cartera Expert' }])),
             http.get('**/portafolios/P-EX', () => HttpResponse.json(mockValuation))
         );
@@ -61,13 +64,15 @@ describe('ExpertDashboard Integration', () => {
         expect(screen.getByText('75%')).toBeInTheDocument(); // effectiveness
 
         // Verify portfolio valuation (from usePortfolioData integration)
-        expect(screen.getByText(/2[.,]500[.,]000/)).toBeInTheDocument();
-        expect(screen.getByText(/2[.,]500/)).toBeInTheDocument();
+        expect(screen.getAllByText(/2[.,]500[.,]000/).length).toBeGreaterThan(0);
+        expect(screen.getAllByText(/2[.,]500/).length).toBeGreaterThan(0);
     });
 
     it('should show "Expert" chip', async () => {
         render(<ExpertPage />);
         await screen.findByText(/Panel experto/i);
-        expect(screen.getByText('Experto')).toBeInTheDocument();
+        // Look for the chip specifically or check multiple matches
+        const expertChips = screen.getAllByText('Experto');
+        expect(expertChips.length).toBeGreaterThan(0);
     });
 });

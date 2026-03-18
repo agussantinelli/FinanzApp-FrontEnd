@@ -138,15 +138,9 @@ describe('AssetSearch Integration', () => {
         // Wait for filtered results
         await waitFor(() => {
             expect(screen.queryByTestId('neon-loader')).not.toBeInTheDocument();
-        }, { timeout: 10000 });
-
-        try {
             expect(screen.getByText(/AAPL/i)).toBeInTheDocument();
             expect(screen.queryByText(/GGAL/i)).not.toBeInTheDocument();
-        } catch (e) {
-            screen.debug();
-            throw e;
-        }
+        }, { timeout: 10000 });
     });
 
     it('should clear filters and restore initial list', async () => {

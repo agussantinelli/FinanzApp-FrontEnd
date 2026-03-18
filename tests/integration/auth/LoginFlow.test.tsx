@@ -19,7 +19,7 @@ describe('LoginFlow Integration', () => {
   it('should complete the login process and show success message', async () => {
     // 1. Setup mock response for this specific test
     server.use(
-      http.post('*/api/auth/login', () => {
+      http.post('**/api/auth/login', () => {
         return HttpResponse.json({
           token: 'vaild-token',
           user: { id: 1, nombre: 'Agus Test', rol: 'INVERSOR' }
@@ -52,7 +52,7 @@ describe('LoginFlow Integration', () => {
   it('should show error message on invalid credentials', async () => {
     // 1. Setup mock error response (Backend returns error)
     server.use(
-      http.post('*/api/auth/login', () => {
+      http.post('**/api/auth/login', () => {
         return new HttpResponse(
           JSON.stringify({ message: 'Email o contraseña incorrectos.' }), 
           { status: 401 }

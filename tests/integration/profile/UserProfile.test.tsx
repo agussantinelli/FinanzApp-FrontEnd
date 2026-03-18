@@ -42,9 +42,10 @@ describe('UserProfile Integration', () => {
 
     beforeEach(() => {
         server.use(
-            http.get('**/api/persona/1', () => HttpResponse.json(mockPersona)),
+            http.get('**/api/personas/1', () => HttpResponse.json(mockPersona)),
+            http.get('**/geo/register-data', () => HttpResponse.json(mockGeoData)),
             http.get('**/api/auth/geo-data', () => HttpResponse.json(mockGeoData)),
-            http.put('**/api/persona/1', () => HttpResponse.json({ success: true }))
+            http.put('**/api/personas/1', () => HttpResponse.json({ success: true }))
         );
     });
 

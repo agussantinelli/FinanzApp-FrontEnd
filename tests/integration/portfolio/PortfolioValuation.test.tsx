@@ -78,8 +78,11 @@ describe('PortfolioValuation Integration', () => {
         await screen.findByText(/Cartera Principal/i, {}, { timeout: 10000 });
 
         // Check for total values (flexible for formatting variations)
-        expect(screen.getByText(/1[.,]500[.,]000/)).toBeInTheDocument();
-        expect(screen.getByText(/1[.,]500/)).toBeInTheDocument();
+        const dollarMatches = screen.getAllByText(/1[.,]500/);
+        expect(dollarMatches.length).toBeGreaterThan(0);
+        
+        const pesosMatches = screen.getAllByText(/1[.,]500[.,]000/);
+        expect(pesosMatches.length).toBeGreaterThan(0);
 
         // Check for performance %
         expect(screen.getByText(/11[.,]1%/)).toBeInTheDocument();

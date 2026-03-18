@@ -65,6 +65,7 @@ describe('AssetDetail Integration', () => {
             http.get('**/api/recomendaciones/activo/1', () => HttpResponse.json(mockRecommendations)),
             http.get('**/api/recomendaciones/1', () => HttpResponse.json(mockRecDetail)),
             http.get('**/api/operaciones/historial/1', () => HttpResponse.json([])),
+            http.get('**/api/operaciones/persona/1', () => HttpResponse.json([])),
             http.get('**/portafolios/mis-portafolios', () => HttpResponse.json([])),
             http.post('**/api/activos/seguir/1', () => HttpResponse.json({ success: true }))
         );
