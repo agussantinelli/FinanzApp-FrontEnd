@@ -8,6 +8,9 @@ import { http, HttpResponse } from 'msw';
 vi.mock('next/navigation', () => ({
     useRouter: () => ({
         push: vi.fn(),
+        replace: vi.fn(),
+        prefetch: vi.fn(),
+        back: vi.fn(),
     }),
     useSearchParams: () => new URLSearchParams(),
 }));
@@ -37,8 +40,8 @@ describe('SessionSecurity Integration', () => {
         render(<PortfolioPage />);
 
         await waitFor(() => {
-            // Depending on implementation, error message might appear
-            expect(screen.getByText(/Error/i)).toBeInTheDocument();
+            const { logout } = require('@/services/AuthService');
+            expect(logout).toHaveBeenCalled();
         });
     });
 });

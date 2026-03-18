@@ -4,7 +4,6 @@ import ActivoDetalle from '@/app/activos/[id]/page';
 import { server } from '@/test/msw/server';
 import { http, HttpResponse } from 'msw';
 
-// Mock navigation
 vi.mock('next/navigation', () => ({
     useParams: () => ({ id: 'AAPL' }),
     useRouter: () => ({
@@ -13,7 +12,6 @@ vi.mock('next/navigation', () => ({
     }),
 }));
 
-// Mock useAuth
 const mockUser = { id: 1, nombre: 'Agus', rol: 'Inversor' };
 vi.mock('@/hooks/useAuth', () => ({
     useAuth: () => ({
@@ -85,21 +83,17 @@ describe('AssetDetail Integration', () => {
     it('should render asset details correctly', async () => {
         render(<ActivoDetalle />);
 
-        // Wait for loading to finish
         await waitFor(() => {
             expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
         }, { timeout: 10000 });
 
-        // Verify basic info
         expect(screen.getByText('AAPL')).toBeInTheDocument();
         expect(screen.getByText('Apple Inc.')).toBeInTheDocument();
         expect(screen.getByText(/Apple Inc. is an American multinational technology company/i)).toBeInTheDocument();
 
-        // Verify price (flexible for formatting)
         expect(screen.getByText(/150/)).toBeInTheDocument();
         expect(screen.getByText(/1,25%/)).toBeInTheDocument();
 
-        // Verify tags
         expect(screen.getByText('Acciones')).toBeInTheDocument();
         expect(screen.getByText('USD')).toBeInTheDocument();
     });
@@ -114,24 +108,17 @@ describe('AssetDetail Integration', () => {
         const followButton = screen.getByLabelText(/Seguir/i);
         fireEvent.click(followButton);
 
-        // In a real integration test, we'd check if the icon changes or if the service was called.
-        // Since we mocked the service success, and the component updates optimistically.
         await waitFor(() => {
-            // After click, it should show StarIcon (Warning color) instead of StarBorder
-            // We can't easily check the color here without more complex selectors, 
-            // but we can verify the mock was hit if we used a spy.
         });
     });
 
     it('should display expert recommendations', async () => {
         render(<ActivoDetalle />);
 
-        // Wait for the whole detail page to load
         await waitFor(() => {
             expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
         }, { timeout: 10000 });
 
-        // Wait for the recommendations section to appear
         await waitFor(() => {
             expect(screen.getByText(/Recomendaciones de Expertos/i)).toBeInTheDocument();
         }, { timeout: 10000 });

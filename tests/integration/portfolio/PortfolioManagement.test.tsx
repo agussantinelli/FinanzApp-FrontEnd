@@ -4,10 +4,12 @@ import PortfolioPage from '@/app/portfolio/page';
 import { server } from '@/test/msw/server';
 import { http, HttpResponse } from 'msw';
 
-// Mock navigation
 vi.mock('next/navigation', () => ({
     useRouter: () => ({
         push: vi.fn(),
+        replace: vi.fn(),
+        prefetch: vi.fn(),
+        back: vi.fn(),
     }),
     useSearchParams: () => new URLSearchParams(),
 }));
@@ -64,8 +66,8 @@ describe('PortfolioManagement Integration', () => {
 
         const nameInput = screen.getByLabelText(/Nombre/i);
         fireEvent.change(nameInput, { target: { value: 'Nueva Cartera' } });
-        
-        const createBtn = screen.getByRole('button', { name: /Crear Portafolio/i });
+
+        const createBtn = screen.getByRole('button', { name: /^Crear$/i });
         fireEvent.click(createBtn);
 
         // 2. Edit Portfolio
@@ -74,10 +76,10 @@ describe('PortfolioManagement Integration', () => {
 
         const editNameInput = screen.getByLabelText(/Nombre/i);
         fireEvent.change(editNameInput, { target: { value: 'Cartera Editada' } });
-        
+
         const saveBtn = screen.getByRole('button', { name: /Guardar Cambios/i });
         fireEvent.click(saveBtn);
-        
+
         await waitFor(() => {
             expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         });
