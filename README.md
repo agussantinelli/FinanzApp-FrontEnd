@@ -460,8 +460,102 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui</code></pre>
 <p>Validación del "Contrato Interno" entre Hooks, UI y Servicios con red mockeada. Se ejecutan automáticamente junto a los unitarios con <code>pnpm test</code>.</p>
 <ul>
     <li><strong>Comando específico:</strong> <code>pnpm test:integration</code></li>
+    <li><strong>Estado Actual:</strong> 16 tests de integración pasando exitosamente.</li>
+    <li><strong>Misión:</strong> Garantizar que la interacción entre la interfaz de usuario, los hooks de lógica y las llamadas a servicios (con interceptado de red vía MSW) sea consistente y libre de errores de integración antes de llegar a E2E.</li>
     <li><strong>Enfoque:</strong> Flujos completos de Auth, Dashboard y Portafolio sin depender del backend real.</li>
 </ul>
+
+<table>
+    <thead>
+        <tr>
+            <th>Módulo</th>
+            <th>Archivo de Test</th>
+            <th>Descripción del Flujo</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Autenticación</strong></td>
+            <td><code>LoginFlow.test.tsx</code></td>
+            <td>Inicio de sesión, manejo de tokens y redirección.</td>
+        </tr>
+        <tr>
+            <td><strong>Autenticación</strong></td>
+            <td><code>PasswordResetFlow.test.tsx</code></td>
+            <td>Recuperación de contraseña y flujo de reset.</td>
+        </tr>
+        <tr>
+            <td><strong>Autenticación</strong></td>
+            <td><code>SessionSecurity.test.tsx</code></td>
+            <td>Expiración de sesión (401) y limpieza de storage.</td>
+        </tr>
+        <tr>
+            <td><strong>Portafolio</strong></td>
+            <td><code>PortfolioManagement.test.tsx</code></td>
+            <td>Creación, edición y borrado de carteras.</td>
+        </tr>
+        <tr>
+            <td><strong>Portafolio</strong></td>
+            <td><code>PortfolioValuation.test.tsx</code></td>
+            <td>Cálculo de valores totales, ganancias y porcentajes.</td>
+        </tr>
+        <tr>
+            <td><strong>Portafolio</strong></td>
+            <td><code>PortfolioHistory.test.tsx</code></td>
+            <td>Visualización de composición y rendimientos históricos.</td>
+        </tr>
+        <tr>
+            <td><strong>Operaciones</strong></td>
+            <td><code>PerformOperation.test.tsx</code></td>
+            <td>Registro de compra/venta y validación de formularios.</td>
+        </tr>
+        <tr>
+            <td><strong>Operaciones</strong></td>
+            <td><code>ImportFlow.test.tsx</code></td>
+            <td>Carga masiva desde Excel con validación de IA.</td>
+        </tr>
+        <tr>
+            <td><strong>Activos</strong></td>
+            <td><code>AssetSearch.test.tsx</code></td>
+            <td>Buscador, filtros por tipo y paginación.</td>
+        </tr>
+        <tr>
+            <td><strong>Activos</strong></td>
+            <td><code>AssetDetail.test.tsx</code></td>
+            <td>Detalle técnico, seguimiento y cotizaciones.</td>
+        </tr>
+        <tr>
+            <td><strong>Dashboards</strong></td>
+            <td><code>InversorDashboard.test.tsx</code></td>
+            <td>Resumen patrimonial y métricas para inversores.</td>
+        </tr>
+        <tr>
+            <td><strong>Dashboards</strong></td>
+            <td><code>ExpertDashboard.test.tsx</code></td>
+            <td>Panel de experto, estadísticas y rankings.</td>
+        </tr>
+        <tr>
+            <td><strong>Administración</strong></td>
+            <td><code>UserManagement.test.tsx</code></td>
+            <td>Gestión de usuarios y métricas de plataforma.</td>
+        </tr>
+        <tr>
+            <td><strong>Común / IA</strong></td>
+            <td><code>FinanzAiChat.test.tsx</code></td>
+            <td>Interacción con el asistente inteligente.</td>
+        </tr>
+        <tr>
+            <td><strong>Perfil</strong></td>
+            <td><code>UserProfile.test.tsx</code></td>
+            <td>Gestión de datos de usuario y preferencias.</td>
+        </tr>
+        <tr>
+            <td><strong>Recomendaciones</strong></td>
+            <td><code>CreateRec.test.tsx</code></td>
+            <td>Creación y publicación de señales de inversión.</td>
+        </tr>
+    </tbody>
+</table>
 
 <h3>🎭 End-to-End Tests (Playwright)</h3>
 <p>Simulación de usuario real en navegadores (Chromium, Firefox, WebKit).</p>
