@@ -215,15 +215,14 @@
 │   ├── hooks/                                   # Custom Hooks (Lógica de negocio encapsulada)
 │   ├── lib/                                     # Utilidades Core (Cliente HTTP, Caché)
 │   ├── services/                                # Comunicación con API Backend (Axios + DTOs)
-│   ├── test/                                    # Infraestructura de Testing
-│   │   ├── integration/                         # Tests de Integración (Hooks + UI + Services)
-│   │   ├── msw/                                 # Mocking de API (Handlers & Server)
-│   │   └── setup.ts                             # Configuración global de Vitest
 │   ├── theme/                                   # Tema y configuración de Material UI
 │   ├── types/                                   # Definiciones TypeScript (Interfaces)
 │   └── utils/                                   # Helpers de formateo y strings
-├── tests/                                       # Tests de sistema
-│   └── e2e/                                     # Tests End-to-End (Playwright)
+├── tests/                                       # Infraestructura y Tests de Sistema
+│   ├── e2e/                                     # Tests End-to-End (Playwright)
+│   ├── integration/                             # Tests de Integración (Hooks + UI + Services)
+│   ├── msw/                                     # Mocking de API (Handlers & Server)
+│   └── setup.ts                                 # Configuración global de Vitest
 ├── .env.local                                   # Variables de entorno
 ├── eslint.config.mjs                            # Configuración de Linter
 ├── next.config.ts                               # Configuración del framework
