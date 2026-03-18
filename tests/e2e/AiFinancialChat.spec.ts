@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Asistente Financiero (FinanzAI)', () => {
-    test.setTimeout(120000);
+    // test.setTimeout(120000); // Removido para usar timeout global de 60s
 
     test.beforeEach(async ({ page }) => {
         await page.goto('/auth/login');
@@ -19,7 +19,8 @@ test.describe('Asistente Financiero (FinanzAI)', () => {
         await chatFab.click();
 
         // Enviar Mensaje
-        const input = page.locator('textarea[placeholder*="mensaje" i], input[aria-label="Enviar mensaje"]');
+        const input = page.locator('textarea[placeholder*="consulta" i], textarea[placeholder*="Escribe" i]').first();
+        await expect(input).toBeVisible();
         await input.fill('¿Cómo está compuesto mi portafolio hoy?');
         await page.keyboard.press('Enter');
 

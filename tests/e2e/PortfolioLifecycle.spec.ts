@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Gestión de Portafolios (CRUD)', () => {
-    test.setTimeout(90000);
+    // test.setTimeout(90000); // Usar global 60s
 
     test.beforeEach(async ({ page }) => {
         await page.goto('/auth/login');

@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Registro y Onboarding de Nuevo Usuario', () => {
-    test.setTimeout(90000);
+    // test.setTimeout(90000); // Usar global 60s
 
     test('Flujo de Registro Completo', async ({ page }) => {
         await page.goto('/');
