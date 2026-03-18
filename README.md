@@ -281,6 +281,24 @@
 
 <hr>
 
+<h2>🛡️ Seguridad & Role-Based Access Control (RBAC)</h2>
+
+<p>FinanzApp implementa un modelo de seguridad multicapa para proteger la información financiera y asegurar que los usuarios accedan solo a las funciones permitidas por su cargo.</p>
+
+<h3>🔐 Gestión de Sesión (JWT)</h3>
+<ul>
+    <li><strong>Interceptores de Red:</strong> Implementados en <code>http.ts</code>, inyectan automáticamente el token de portador (Bearer Token) del <code>sessionStorage</code> en el header de cada petición saliente.</li>
+    <li><strong>Control de Expiración:</strong> Ante un error <code>401 Unauthorized</code> (token vencido o inválido), el sistema limpia la sesión local y redirige al usuario a la pantalla de login con un mensaje informativo.</li>
+</ul>
+
+<h3>👥 Modelo de Roles y Permisos</h3>
+<ul>
+    <li><strong><code>RoleGuard</code>:</strong> Componente protector de rutas en el App Router. Valida en tiempo real si el usuario autenticado posee uno de los roles permitidos (<code>Admin</code>, <code>Experto</code>, <code>Inversor</code>) para visualizar una vista específica.</li>
+    <li><strong>Default Deny:</strong> Por defecto, el sistema bloquea el acceso a rutas profundas si no existe una sesión activa, redirigiendo al flujo de autenticación.</li>
+</ul>
+
+<hr>
+
 <h2>📁 Estructura del Proyecto</h2>
 
 <pre><code>FinanzApp-FrontEnd/
