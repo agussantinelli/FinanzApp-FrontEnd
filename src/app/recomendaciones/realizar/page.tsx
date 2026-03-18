@@ -172,8 +172,10 @@ export default function CrearRecomendacionPage() {
 
                             <Grid size={{ xs: 12 }}>
                                 <FormControl fullWidth error={!!errors.riesgo}>
-                                    <InputLabel>Nivel de Riesgo</InputLabel>
+                                    <InputLabel id="riesgo-label">Nivel de Riesgo</InputLabel>
                                     <Select
+                                        labelId="riesgo-label"
+                                        id="riesgo-select"
                                         value={riesgo}
                                         label="Nivel de Riesgo"
                                         onChange={(e) => setRiesgo(e.target.value as Riesgo)}
@@ -189,8 +191,10 @@ export default function CrearRecomendacionPage() {
 
                             <Grid size={{ xs: 12 }}>
                                 <FormControl fullWidth error={!!errors.horizonte}>
-                                    <InputLabel>Horizonte de Inversión</InputLabel>
+                                    <InputLabel id="horizonte-label">Horizonte de Inversión</InputLabel>
                                     <Select
+                                        labelId="horizonte-label"
+                                        id="horizonte-select"
                                         value={horizonte}
                                         label="Horizonte de Inversión"
                                         onChange={(e) => setHorizonte(e.target.value as Horizonte)}
@@ -240,8 +244,10 @@ export default function CrearRecomendacionPage() {
 
                                     <Grid size={{ xs: 12, md: 4 }}>
                                         <FormControl fullWidth error={!!errors[`asset_${index}_acc`]}>
-                                            <InputLabel>Acción</InputLabel>
+                                            <InputLabel id={`accion-label-${index}`}>Acción</InputLabel>
                                             <Select
+                                                labelId={`accion-label-${index}`}
+                                                id={`accion-select-${index}`}
                                                 value={row.accion}
                                                 label="Acción"
                                                 onChange={(e) => updateRow(row.tempId, 'accion', e.target.value)}
