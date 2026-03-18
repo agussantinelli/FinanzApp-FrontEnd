@@ -221,6 +221,15 @@
 ├── tests/                                       # Infraestructura y Tests de Sistema
 │   ├── e2e/                                     # Tests End-to-End (Playwright)
 │   ├── integration/                             # Tests de Integración (Hooks + UI + Services)
+│   │   ├── activos/
+│   │   ├── admin/
+│   │   ├── auth/
+│   │   ├── common/
+│   │   ├── dashboard/
+│   │   ├── operaciones/
+│   │   ├── portfolio/
+│   │   ├── profile/
+│   │   └── recomendaciones/
 │   ├── msw/                                     # Mocking de API (Handlers & Server)
 │   └── setup.ts                                 # Configuración global de Vitest
 ├── .env.local                                   # Variables de entorno
