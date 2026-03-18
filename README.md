@@ -291,11 +291,34 @@
     <li><strong>Control de Expiración:</strong> Ante un error <code>401 Unauthorized</code> (token vencido o inválido), el sistema limpia la sesión local y redirige al usuario a la pantalla de login con un mensaje informativo.</li>
 </ul>
 
-<h3>👥 Modelo de Roles y Permisos</h3>
+<h3>👥 Arquitectura de Roles (RBAC)</h3>
+<p>La aplicación implementa un sistema estricto de control de acceso basado en roles, asegurado por el componente <code>RoleGuard</code> que envuelve las rutas protegidas.</p>
+
 <ul>
-    <li><strong><code>RoleGuard</code>:</strong> Componente protector de rutas en el App Router. Valida en tiempo real si el usuario autenticado posee uno de los roles permitidos (<code>Admin</code>, <code>Experto</code>, <code>Inversor</code>) para visualizar una vista específica.</li>
-    <li><strong>Default Deny:</strong> Por defecto, el sistema bloquea el acceso a rutas profundas si no existe una sesión activa, redirigiendo al flujo de autenticación.</li>
+    <li>
+        <strong>👤 Inversor (Default)</strong>
+        <ul>
+            <li><strong>Acceso:</strong> <code>/dashboard-inversor</code>, <code>/portfolio</code>, <code>/operaciones</code>.</li>
+            <li><strong>Alcance:</strong> Gestión de patrimonio personal y consulta de mercado.</li>
+        </ul>
+    </li>
+    <li>
+        <strong>👮 Administrador (Admin)</strong>
+        <ul>
+            <li><strong>Acceso:</strong> <code>/dashboard-admin</code>.</li>
+            <li><strong>Alcance:</strong> Visión global del negocio, gestión de usuarios (ABM) y auditoría de operaciones.</li>
+        </ul>
+    </li>
+    <li>
+        <strong>🧠 Experto Financiero</strong>
+        <ul>
+            <li><strong>Acceso:</strong> <code>/dashboard-experto</code>.</li>
+            <li><strong>Alcance:</strong> Creación de señales de inversión y gestión de reputación pública.</li>
+        </ul>
+    </li>
 </ul>
+
+<p><strong>🚫 Control de Acceso:</strong> Intento de acceso no autorizado (ej. Inversor &rarr; ruta Admin) dispara una redirección automática a <code>/access-denied</code>.</p>
 
 <hr>
 
@@ -542,40 +565,6 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui</code></pre>
     <li>Edición de datos personales y gestión de ubicación.</li>
     <li><strong>Foto de Perfil:</strong> Carga y actualización de avatar de usuario.</li>
 </ul>
-
-<hr>
-
-<h2>👥 Roles y Seguridad</h2>
-
-<h3>🛡️ Arquitectura de Roles (RBAC)</h3>
-
-<p>La aplicación implementa un sistema estricto de control de acceso basado en roles, asegurado por el componente <code>RoleGuard</code> que envuelve las rutas protegidas.</p>
-
-<ul>
-    <li>
-        <strong>👤 Inversor (Default)</strong>
-        <ul>
-            <li><strong>Acceso:</strong> <code>/dashboard-inversor</code>, <code>/portfolio</code>, <code>/operaciones</code>.</li>
-            <li><strong>Alcance:</strong> Gestión de patrimonio personal y consulta de mercado.</li>
-        </ul>
-    </li>
-    <li>
-        <strong>👮 Administrador (Admin)</strong>
-        <ul>
-            <li><strong>Acceso:</strong> <code>/dashboard-admin</code>.</li>
-            <li><strong>Alcance:</strong> Visión global del negocio, gestión de usuarios (ABM) y auditoría de operaciones.</li>
-        </ul>
-    </li>
-    <li>
-        <strong>🧠 Experto Financiero</strong>
-        <ul>
-            <li><strong>Acceso:</strong> <code>/dashboard-experto</code>.</li>
-            <li><strong>Alcance:</strong> Creación de señales de inversión y gestión de reputación pública.</li>
-        </ul>
-    </li>
-</ul>
-
-<p><strong>🚫 Control de Acceso:</strong> Intento de acceso no autorizado (ej. Inversor &rarr; ruta Admin) dispara una redirección automática a <code>/access-denied</code>.</p>
 
 <hr>
 
