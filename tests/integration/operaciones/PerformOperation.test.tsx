@@ -14,12 +14,23 @@ vi.mock('next/navigation', () => ({
 }));
 
 // Mock useAuth
+const mockUser = { id: 1, nombre: 'Agus', rol: 'Inversor' };
 vi.mock('@/hooks/useAuth', () => ({
     useAuth: () => ({
         isAuthenticated: true,
-        user: { id: 1, nombre: 'Agus' }
+        user: mockUser
     })
 }));
+
+// Mock AuthService so RoleGuard passes
+vi.mock('@/services/AuthService', async (importOriginal) => {
+    const original = await importOriginal<typeof import('@/services/AuthService')>();
+    return {
+        ...original,
+        hasRole: vi.fn(() => true),
+        getCurrentUser: vi.fn(() => mockUser),
+    };
+});
 
 describe('PerformOperation Integration', () => {
     const mockActivo = {
@@ -61,7 +72,7 @@ describe('PerformOperation Integration', () => {
         fireEvent.change(autocomplete, { target: { value: 'AAPL' } });
         
         // Wait for suggestion and click it
-        const option = await screen.findByText(/AAPL - Apple Inc\./i); 
+        const option = await screen.findByRole('option', { name: /AAPL/i });
         fireEvent.click(option);
 
         // 2. Select Portfolio

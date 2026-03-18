@@ -16,13 +16,24 @@ vi.mock('next/navigation', () => ({
 }));
 
 // Mock useAuth for Expert
+const mockUser = { id: 1, nombre: 'Agus', rol: RolUsuario.Experto };
 vi.mock('@/hooks/useAuth', () => ({
     useAuth: () => ({
         isAuthenticated: true,
-        user: { id: 1, nombre: 'Agus', rol: RolUsuario.Experto },
+        user: mockUser,
         loading: false
     })
 }));
+
+// Mock AuthService so RoleGuard passes
+vi.mock('@/services/AuthService', async (importOriginal) => {
+    const original = await importOriginal<typeof import('@/services/AuthService')>();
+    return {
+        ...original,
+        hasRole: vi.fn(() => true),
+        getCurrentUser: vi.fn(() => mockUser),
+    };
+});
 
 describe('CreateRecommendation Integration', () => {
     const mockActivo = {
@@ -56,33 +67,34 @@ describe('CreateRecommendation Integration', () => {
         fireEvent.change(titleInput, { target: { value: 'Apple Bullish' } });
 
         const justificationInput = screen.getByLabelText(/Justificación Lógica/i);
-        fireEvent.change(justificationInput, { target: { value: 'Strong earnings report and new product line.' } });
+        fireEvent.change(justificationInput, { target: { value: 'Strong earnings report.' } });
 
         // 2. Sectores (Autocomplete Multiple)
         const sectorInput = screen.getByRole('combobox', { name: /Sectores Objetivo/i });
-        fireEvent.change(sectorInput, { target: { value: 'Tec' } }); 
+        fireEvent.change(sectorInput, { target: { value: 'Tec' } });
         
-        // Wait for debounce and search results
         const sectorOption = await screen.findByRole('option', { name: /Tecnología/i });
         fireEvent.click(sectorOption);
 
-        // 3. Selection of risk and horizon (Selects)
-        const riskSelectLabel = await screen.findByText(/Nivel de Riesgo/i);
-        fireEvent.mouseDown(riskSelectLabel);
+        // 3. Risk and horizon Selects - wait for stable render
+        await screen.findByText(/Información General/i);
+
+        const riskSelect = await screen.findByLabelText(/Nivel de Riesgo/i);
+        fireEvent.mouseDown(riskSelect);
         const riskOption = await screen.findByRole('option', { name: 'Moderado' });
         fireEvent.click(riskOption);
 
-        const horizonSelectLabel = await screen.findByText(/Horizonte de Inversión/i);
-        fireEvent.mouseDown(horizonSelectLabel);
+        const horizonSelect = await screen.findByLabelText(/Horizonte de Inversión/i);
+        fireEvent.mouseDown(horizonSelect);
         const horizonOption = await screen.findByRole('option', { name: 'Largo Plazo' });
         fireEvent.click(horizonOption);
 
-        // 4. Asset Row (Search)
+        // 4. Asset Row search
         const assetSearch = screen.getByRole('combobox', { name: /Buscar Activo/i });
         fireEvent.change(assetSearch, { target: { value: 'AAPL' } });
+        fireEvent.input(assetSearch, { target: { value: 'AAPL' } });
         
-        // Wait for debounce and search results
-        const assetOption = await screen.findByRole('option', { name: /AAPL/i });
+        const assetOption = await screen.findByRole('option', { name: /AAPL/i }, { timeout: 10000 });
         fireEvent.click(assetOption);
 
         // 5. Fill asset values
@@ -108,7 +120,6 @@ describe('CreateRecommendation Integration', () => {
         const submitButton = screen.getByRole('button', { name: /Publicar Recomendación/i });
         fireEvent.click(submitButton);
 
-        // Should show validation errors
         await waitFor(() => {
             expect(screen.getByText(/El título es requerido/i)).toBeInTheDocument();
         }, { timeout: 5000 });

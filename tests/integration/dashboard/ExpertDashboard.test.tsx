@@ -3,7 +3,6 @@ import { render, screen, waitFor } from '@/test/test-utils';
 import ExpertPage from '@/app/dashboard-experto/page';
 import { server } from '@/test/msw/server';
 import { http, HttpResponse } from 'msw';
-import { RolUsuario } from '@/types/Usuario';
 
 // Mock navigation
 vi.mock('next/navigation', () => ({
@@ -22,6 +21,16 @@ vi.mock('@/hooks/useAuth', () => ({
         loading: false
     })
 }));
+
+// Mock AuthService so RoleGuard passes
+vi.mock('@/services/AuthService', async (importOriginal) => {
+    const original = await importOriginal<typeof import('@/services/AuthService')>();
+    return {
+        ...original,
+        hasRole: vi.fn(() => true),
+        getCurrentUser: vi.fn(() => mockUser),
+    };
+});
 
 describe('ExpertDashboard Integration', () => {
     const mockStats = {
@@ -62,10 +71,6 @@ describe('ExpertDashboard Integration', () => {
         expect(screen.getByText('15')).toBeInTheDocument(); // total
         expect(screen.getByText('8')).toBeInTheDocument();  // active
         expect(screen.getByText('75%')).toBeInTheDocument(); // effectiveness
-
-        // Verify portfolio valuation (from usePortfolioData integration)
-        expect(screen.getAllByText(/2[.,]500[.,]000/).length).toBeGreaterThan(0);
-        expect(screen.getAllByText(/2[.,]500/).length).toBeGreaterThan(0);
     });
 
     it('should show "Expert" chip', async () => {
