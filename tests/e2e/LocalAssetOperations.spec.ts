@@ -10,7 +10,8 @@ test.describe('Operaciones con Activos Locales', () => {
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1500);
         await page.goto('/registrar-operacion');
-        await page.waitForTimeout(1500);
+        // Esperar a que el loader desaparezca
+        await expect(page.locator('.NeonLoader')).not.toBeVisible({ timeout: 20000 });
     });
 
     test('Compra de un CEDEAR (AAPL) con pesos', async ({ page }) => {
@@ -42,9 +43,9 @@ test.describe('Operaciones con Activos Locales', () => {
         
         const row = page.locator('tr').filter({ hasText: 'ALUA' }).first();
         await expect(row).toBeVisible();
-        await row.click();
+        await row.locator('a:has-text("Ver Detalles"), button:has-text("Ver Detalles")').click();
 
-        await expect(page).toHaveURL(/\/activos\/\d+/, { timeout: 30000 });
-        await expect(page.locator('h4')).toContainText(/Aluar/i, { timeout: 15000 });
+        await expect(page).toHaveURL(/\/activos\/.+/, { timeout: 30000 });
+        await expect(page.locator('h1, h2, h3, h4')).toContainText(/Aluar/i, { timeout: 15000 });
     });
 });

@@ -10,13 +10,17 @@ test.describe('Importación Inteligente (Excel + IA)', () => {
         await page.fill('input[type="password"]', 'agus');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1500);
-        await page.goto('/operaciones');
+        await page.goto('/operaciones/me');
+        // Esperar a que el loader desaparezca
+        await expect(page.locator('.NeonLoader')).not.toBeVisible({ timeout: 20000 });
         await page.waitForTimeout(1500);
     });
 
     test('Flujo de Carga de Excel y Validación IA', async ({ page }) => {
         // Abrir diálogo de importación
-        await page.click('button:has-text("Importar"), [aria-label*="importar" i]');
+        const importBtn = page.getByRole('button', { name: /Importar Excel/i });
+        await expect(importBtn).toBeVisible({ timeout: 15000 });
+        await importBtn.click();
         
         // Seleccionar archivo (mockeando con un buffer si no tenemos archivo real, o asumiendo que el runner tiene uno)
         // Por ahora asumo que el botón abre un input type="file"

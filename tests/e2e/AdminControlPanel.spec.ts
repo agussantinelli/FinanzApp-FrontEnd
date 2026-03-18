@@ -40,17 +40,17 @@ test.describe('Panel de Administración (Admin)', () => {
         const table = page.locator('table');
         await expect(table).toBeVisible({ timeout: 20000 });
         
-        const row = page.locator('tr').filter({ hasText: '@gmail.com' }).first();
+        // Buscar un usuario con rol Inversor para poder ascenderlo
+        const row = page.locator('tr').filter({ hasText: 'Inversor' }).first();
         await expect(row).toBeVisible();
 
         // Cambiar rol de un usuario (Ascender a experto)
         const ascendBtn = row.locator('button[title*="Ascender" i]');
-        if (await ascendBtn.isVisible()) {
-            await ascendBtn.click();
-            await page.waitForTimeout(1000);
-            await page.click('button:has-text("Confirmar")');
-            await page.waitForTimeout(1500);
-            await expect(page.locator('.MuiAlert-message')).toContainText(/exitosamente/i);
-        }
+        await expect(ascendBtn).toBeEnabled({ timeout: 10000 });
+        await ascendBtn.click();
+        await page.waitForTimeout(1000);
+        await page.click('button:has-text("Confirmar")');
+        await page.waitForTimeout(1500);
+        await expect(page.locator('.MuiAlert-message')).toContainText(/exitosamente/i);
     });
 });

@@ -13,9 +13,9 @@ test.describe('Asistente Financiero (FinanzAI)', () => {
 
     test('Consulta y Respuesta con Streaming en Chatbot', async ({ page }) => {
         // Abrir Chatbot
-        const chatFab = page.getByRole('button', { name: /ai/i });
+        const chatFab = page.locator('button[aria-label="Abrir asistente IA"], .finanz-ai-fab').first();
         await expect(chatFab).toBeVisible({ timeout: 30000 });
-        await page.waitForTimeout(1500);
+        await page.waitForTimeout(2000); // Dar tiempo a la animación
         await chatFab.click();
 
         // Enviar Mensaje

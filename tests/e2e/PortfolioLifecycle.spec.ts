@@ -11,6 +11,8 @@ test.describe('Gestión de Portafolios (CRUD)', () => {
         await page.waitForTimeout(1500);
         await expect(page).toHaveURL(/\/dashboard-inversor/, { timeout: 30000 });
         await page.goto('/portfolio');
+        // Esperar a que el loader desaparezca
+        await expect(page.locator('.NeonLoader')).not.toBeVisible({ timeout: 20000 });
     });
 
     test('Crear, Editar y Borrar un Portafolio', async ({ page }) => {
