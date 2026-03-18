@@ -13,7 +13,7 @@ describe('FinanzAiChat Integration', () => {
     beforeEach(() => {
         server.use(
             http.post('*/api/ai/chat', async ({ request }) => {
-                return HttpResponse.json({ response: 'Hola, soy tu asistente financiero. He analizado tu consulta.' });
+                return HttpResponse.json({ respuesta: 'Hola, soy tu asistente financiero. He analizado tu consulta.' });
             })
         );
     });
@@ -32,10 +32,8 @@ describe('FinanzAiChat Integration', () => {
         const textarea = screen.getByPlaceholderText(/Escribe tu consulta/i);
         fireEvent.change(textarea, { target: { value: '¿Cómo va mi portafolio?' } });
         
-        const sendBtn = screen.getByRole('button', { name: '' }); 
-        // We can find the button by the icon class or just by it being the only other button
-        const submitBtn = screen.getAllByRole('button').find(b => b.className.includes('sendButton'));
-        fireEvent.click(submitBtn || sendBtn);
+        const sendBtn = screen.getByLabelText(/Enviar mensaje/i);
+        fireEvent.click(sendBtn);
 
         // 4. Verify AI response
         await waitFor(() => {

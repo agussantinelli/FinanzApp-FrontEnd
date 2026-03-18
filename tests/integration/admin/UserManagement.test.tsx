@@ -36,13 +36,16 @@ vi.mock('@/hooks/useAuth', () => ({
 describe('UserManagement Integration', () => {
     beforeEach(() => {
         server.use(
-            http.get('*/api/admin/users', () => {
+            http.get('*/api/dashboard/admin/stats', () => {
+                return HttpResponse.json({ totalUsuarios: 1, usuariosActivos: 1 });
+            }),
+            http.get('*/api/personas', () => {
                 return HttpResponse.json([
                     { id: '1', nombre: 'Test User', apellido: 'One', email: 'test@example.com', rol: 'INVERSOR', estado: 'ACTIVO' }
                 ]);
             }),
-            http.get('*/api/admin/stats', () => {
-                return HttpResponse.json({ totalUsuarios: 1, usuariosActivos: 1 });
+            http.get('*/api/portafolios/admin/todos', () => {
+                return HttpResponse.json([]);
             })
         );
     });
