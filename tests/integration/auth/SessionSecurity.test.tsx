@@ -38,10 +38,16 @@ describe('SessionSecurity Integration', () => {
             })
         );
 
+        if (typeof window !== 'undefined') {
+            sessionStorage.setItem('fa_token', 'fake-token');
+        }
+
+        const clearSpy = vi.spyOn(Storage.prototype, 'clear');
+
         render(<PortfolioPage />);
 
         await waitFor(() => {
-            expect(clearAuthSession).toHaveBeenCalled();
+            expect(clearSpy).toHaveBeenCalled();
         });
     });
 });
