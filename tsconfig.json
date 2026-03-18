@@ -19,6 +19,7 @@
       }
     ],
     "paths": {
+      "@/test/*": ["./tests/*"],
       "@/*": ["./src/*"]
     }
   },
@@ -28,7 +29,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    "tests/**/*"
   ],
   "exclude": ["node_modules"]
 }
