@@ -448,17 +448,17 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui</code></pre>
 <p>La estrategia de calidad se basa en un enfoque de pirámide de testing moderna, dividiendo las validaciones en tres capas:</p>
 
 <h3>⚡ Unit Tests (Vitest)</h3>
-<p>Validación de lógica de negocio aislada, utilidades y componentes base.</p>
+<p>Validación de lógica de negocio aislada, utilidades y componentes base. Se ejecutan automáticamente junto a los de integración con <code>pnpm test</code>.</p>
 <ul>
-    <li><strong>Comando:</strong> <code>pnpm test:unit</code></li>
+    <li><strong>Comando específico:</strong> <code>pnpm test:unit</code></li>
     <li><strong>Estado Actual:</strong> +500 tests unitarios pasando exitosamente.</li>
     <li><strong>Cobertura:</strong> Servicios Core, formateo, lógica de IA y componentes atómicos.</li>
 </ul>
 
 <h3>🧪 Integration Tests (Vitest + MSW)</h3>
-<p>Validación del "Contrato Interno" entre Hooks, UI y Servicios con red mockeada.</p>
+<p>Validación del "Contrato Interno" entre Hooks, UI y Servicios con red mockeada. Se ejecutan automáticamente junto a los unitarios con <code>pnpm test</code>.</p>
 <ul>
-    <li><strong>Comando:</strong> <code>pnpm test:integration</code></li>
+    <li><strong>Comando específico:</strong> <code>pnpm test:integration</code></li>
     <li><strong>Enfoque:</strong> Flujos completos de Auth, Dashboard y Portafolio sin depender del backend real.</li>
 </ul>
 
