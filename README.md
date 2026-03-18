@@ -285,10 +285,19 @@
 
 <p>FinanzApp implementa un modelo de seguridad multicapa para proteger la información financiera y asegurar que los usuarios accedan solo a las funciones permitidas por su cargo.</p>
 
-<h3>🔐 Gestión de Sesión (JWT)</h3>
+<h3>🔐 Autenticación & Acceso</h3>
+<p>El sistema de seguridad implementa una arquitectura de defensa en profundidad:</p>
 <ul>
-    <li><strong>Interceptores de Red:</strong> Implementados en <code>http.ts</code>, inyectan automáticamente el token de portador (Bearer Token) del <code>sessionStorage</code> en el header de cada petición saliente.</li>
-    <li><strong>Control de Expiración:</strong> Ante un error <code>401 Unauthorized</code> (token vencido o inválido), el sistema limpia la sesión local y redirige al usuario a la pantalla de login con un mensaje informativo.</li>
+    <li><strong>Google Login (OIDC):</strong> Integración nativa OAuth 2.0 (Pop-up Flow) para autenticación segura y rápida.</li>
+    <li><strong>JWT Tradicional:</strong> Soporte completo para Email/Password con hashing robusto en el backend.</li>
+    <li><strong>Protección Anti-Bots:</strong> Integración de <strong>reCAPTCHA v2</strong> para bloquear tráfico automatizado en Login y Registro.</li>
+</ul>
+
+<h3>🔒 Manejo de Sesiones</h3>
+<ul>
+    <li><strong>Interceptores de Red:</strong> Implementados en <code>http.ts</code>, inyectan automáticamente el token de portador (Bearer Token) del <code>sessionStorage</code> en cada petición saliente.</li>
+    <li><strong>Persistencia Segura:</strong> Almacenamiento local de tokens (<code>fa_token</code>) y metadata de usuario (<code>fa_user</code>) para una experiencia fluida entre recargas.</li>
+    <li><strong>Control de Expiración:</strong> Ante un error <code>401 Unauthorized</code> (token vencido o inválido), el sistema limpia la sesión local y redirige al usuario al login.</li>
 </ul>
 
 <h3>👥 Arquitectura de Roles (RBAC)</h3>
@@ -456,35 +465,6 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui</code></pre>
   <b>💡 Nota de Integración:</b> Todos los <code>fetch</code> y llamadas de Axios del frontend apuntan dinámicamente a <code>NEXT_PUBLIC_API_URL</code>, incluyendo los endpoints protegidos mediante JWT.
 </blockquote>
 
-<hr />
-
-<h2>🔐 Autenticación</h2>
-
-<p>El sistema de seguridad implementa una arquitectura de defensa en profundidad:</p>
-
-<ul>
-    <li>
-        <strong>🏰 Identidad & Acceso:</strong>
-        <ul>
-            <li><strong>Google Login (OIDC):</strong> Integración nativa OAuth 2.0 (Pop-up Flow) para autenticación segura.</li>
-            <li><strong>JWT Tradicional:</strong> Soporte completo para Email/Password con hashing robusto en backend.</li>
-        </ul>
-    </li>
-    <li>
-        <strong>🤖 Protección Anti-Bots:</strong>
-        <ul>
-            <li><strong>ReCAPTCHA v2:</strong> Bloqueo proactivo de tráfico automatizado en Login y Registro.</li>
-        </ul>
-    </li>
-    <li>
-        <strong>🔒 Manejo de Sesiones:</strong>
-        <ul>
-            <li><strong>JWE (Encrypted JWT):</strong> Tokens opacos que ocultan claims sensibles del usuario.</li>
-            <li><strong>Persistencia Segura:</strong> Almacenamiento local de tokens (<code>fa_token</code>) y metadata de usuario (<code>fa_user</code>).</li>
-            <li><strong>Interceptores Axios:</strong> Inyección automática de headers <code>Authorization: Bearer</code> en cada request.</li>
-        </ul>
-    </li>
-</ul>
 
 <hr>
 
