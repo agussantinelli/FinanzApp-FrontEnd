@@ -220,6 +220,26 @@
 
 <hr>
 
+<h2>📥 Smart Parsing con IA (Importación de Excel)</h2>
+
+<p>FinanzApp resuelve el problema de la carga manual de datos históricos mediante un motor de importación inteligente que procesa archivos Excel de forma semántica.</p>
+
+<h3>🧠 Análisis Semántico con IA</h3>
+<ul>
+    <li><strong>Mapeo Inteligente:</strong> El backend utiliza IA para identificar columnas sin importar el orden o nombre exacto (ej. "Ticker", "Símbolo", "Activo" son normalizados automáticamente).</li>
+    <li><strong>Detección de Activos:</strong> Identifica activos locales (CEDEARs, Acciones AR) y criptoactivos, validando su existencia contra el universo de la plataforma.</li>
+    <li><strong>Normalización Masiva:</strong> Convierte formatos de fecha heterogéneos y limpia inconsistencias en separadores decimales de forma transparente para el usuario.</li>
+</ul>
+
+<h3>🛠️ Flujo de Importación Seguro</h3>
+<ul>
+    <li><strong>Previsualización Dinámica:</strong> Antes de impactar el portafolio, el usuario ve una tabla con los resultados del análisis de IA, donde puede corregir o descartar filas específicas.</li>
+    <li><strong>Validación de Integridad:</strong> El sistema previene importaciones que resultarían en saldos negativos basándose en la tenencia actual, asegurando la consistencia lógica de la cartera.</li>
+    <li><strong>Confirmación Atómica:</strong> Las operaciones se procesan en bloque en `ImportService.ts` tras la validación del usuario, garantizando un historial de transacciones limpio.</li>
+</ul>
+
+<hr>
+
 <h2>📁 Estructura del Proyecto</h2>
 
 <pre><code>FinanzApp-FrontEnd/
