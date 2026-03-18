@@ -60,6 +60,11 @@ global.IntersectionObserver = IntersectionObserver as any;
 global.requestAnimationFrame = vi.fn((callback) => setTimeout(callback, 0)) as unknown as (callback: FrameRequestCallback) => number;
 global.cancelAnimationFrame = vi.fn((id) => clearTimeout(id));
 
+// Mock scrollIntoView for JSDOM
+if (typeof window !== 'undefined') {
+    window.HTMLElement.prototype.scrollIntoView = vi.fn();
+}
+
 // Mock Canvas for Chart.js
 if (typeof HTMLCanvasElement !== 'undefined') {
     (HTMLCanvasElement.prototype as any).getContext = vi.fn(() => ({
