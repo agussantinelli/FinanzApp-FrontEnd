@@ -31,5 +31,8 @@ jobs:
     - name: Run lint
       run: pnpm run lint
 
-    - name: Run unit tests (Vitest)
-      run: pnpm exec vitest run
+    - name: Run unit tests
+      run: pnpm test:unit
+
+    - name: Run integration tests
+      run: pnpm test:integration
