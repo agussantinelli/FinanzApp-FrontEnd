@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import { vi, beforeAll, afterEach, afterAll } from 'vitest';
 import { TextEncoder, TextDecoder } from 'util';
+import { server } from './msw/server';
 
 Object.assign(global, { TextDecoder, TextEncoder });
 
@@ -46,3 +47,8 @@ global.cancelAnimationFrame = vi.fn((id) => clearTimeout(id));
 
 import React from 'react';
 React.useLayoutEffect = React.useEffect;
+
+// MSW Lifecycle
+beforeAll(() => server.listen({ onUnhandledRequest: 'warn' }));
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
