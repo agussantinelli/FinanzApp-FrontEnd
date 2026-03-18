@@ -21,7 +21,7 @@ vi.mock('@/hooks/useAuth', () => ({
     })
 }));
 
-describe('BuyOperation Integration', () => {
+describe('PerformOperation Integration', () => {
     const mockActivo = {
         id: '1',
         symbol: 'AAPL',
