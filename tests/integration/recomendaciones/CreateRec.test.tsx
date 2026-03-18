@@ -91,10 +91,12 @@ describe('CreateRecommendation Integration', () => {
 
         // 4. Asset Row search
         const assetSearch = screen.getByRole('combobox', { name: /Buscar Activo/i });
+        fireEvent.focus(assetSearch);
         fireEvent.change(assetSearch, { target: { value: 'AAPL' } });
         fireEvent.input(assetSearch, { target: { value: 'AAPL' } });
         
-        const assetOption = await screen.findByRole('option', { name: /AAPL/i }, { timeout: 10000 });
+        // The option renders symbol as a separate Typography element
+        const assetOption = await screen.findByText('AAPL', {}, { timeout: 10000 });
         fireEvent.click(assetOption);
 
         // 5. Fill asset values

@@ -69,10 +69,11 @@ describe('PerformOperation Integration', () => {
 
         // 1. Search for asset
         const autocomplete = screen.getByLabelText(/Buscar Activo/i);
+        fireEvent.focus(autocomplete);
         fireEvent.change(autocomplete, { target: { value: 'AAPL' } });
         
-        // Wait for suggestion and click it
-        const option = await screen.findByRole('option', { name: /AAPL/i });
+        // Wait for suggestion and click it - the option renders symbol as bold text
+        const option = await screen.findByText('AAPL', {}, { timeout: 10000 });
         fireEvent.click(option);
 
         // 2. Select Portfolio
