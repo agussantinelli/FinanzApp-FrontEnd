@@ -21,16 +21,16 @@ test.describe('Asistente Financiero (FinanzAI)', () => {
         // Enviar Mensaje
         const input = page.locator('textarea[placeholder*="consulta" i], textarea[placeholder*="Escribe" i]').first();
         await expect(input).toBeVisible();
-        await input.fill('¿Cómo está compuesto mi portafolio hoy?');
+        await input.fill('¿Cómo está el mercado hoy?');
         await page.keyboard.press('Enter');
 
         // Verificar que aparece el mensaje del usuario
-        await expect(page.locator('.message-user')).toContainText('Cómo está compuesto mi portafolio hoy');
+        await expect(page.locator('.message-user')).toContainText('Cómo está el mercado hoy');
 
         // Verificar respuesta de IA (Streaming/Loading)
         const aiMessage = page.locator('.message-ai, .prose');
         await expect(aiMessage).toBeVisible({ timeout: 30000 });
-        
+
         // Verificar que la respuesta tiene contenido (no está vacía)
         const text = await aiMessage.innerText();
         expect(text.length).toBeGreaterThan(10);
