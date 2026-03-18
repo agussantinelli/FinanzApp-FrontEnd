@@ -1,8 +1,9 @@
-import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@/test/test-utils';
+import { vi, describe, it, expect } from 'vitest';
+import { render, waitFor } from '@/test/test-utils';
 import PortfolioPage from '@/app/portfolio/page';
 import { server } from '@/test/msw/server';
 import { http, HttpResponse } from 'msw';
+import { clearAuthSession } from '@/services/AuthService';
 
 // Mock navigation
 vi.mock('next/navigation', () => ({
@@ -24,12 +25,12 @@ vi.mock('@/services/AuthService', async (importOriginal) => {
         ...original,
         hasRole: vi.fn(() => true),
         getCurrentUser: vi.fn(() => mockUser),
-        logout: vi.fn(),
+        clearAuthSession: vi.fn(),
     };
 });
 
 describe('SessionSecurity Integration', () => {
-    it('should handle 401 Unauthorized by logging out', async () => {
+    it('should handle 401 Unauthorized by clearing session', async () => {
         // Intercept any call and return 401
         server.use(
             http.get('*/portafolios/mis-portafolios', () => {
@@ -40,8 +41,7 @@ describe('SessionSecurity Integration', () => {
         render(<PortfolioPage />);
 
         await waitFor(() => {
-            const { logout } = require('@/services/AuthService');
-            expect(logout).toHaveBeenCalled();
+            expect(clearAuthSession).toHaveBeenCalled();
         });
     });
 });

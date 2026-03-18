@@ -9,9 +9,6 @@ vi.mock('next/navigation', () => ({
     usePathname: () => '/dashboard',
 }));
 
-// Mock scrollIntoView for JSDOM
-window.HTMLElement.prototype.scrollIntoView = vi.fn();
-
 describe('FinanzAiChat Integration', () => {
     beforeEach(() => {
         server.use(

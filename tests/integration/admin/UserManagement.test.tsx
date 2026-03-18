@@ -19,7 +19,7 @@ const mockUser = { id: 1, nombre: 'Admin', rol: RolUsuario.Admin };
 
 // Mock AuthService so RoleGuard passes
 vi.mock('@/services/AuthService', () => ({
-    hasRole: vi.fn((role) => role === RolUsuario.Admin),
+    hasRole: vi.fn((roles) => Array.isArray(roles) ? roles.includes(RolUsuario.Admin) : roles === RolUsuario.Admin),
     getCurrentUser: vi.fn(() => mockUser),
     getToken: vi.fn(() => 'fake-token'),
 }));
