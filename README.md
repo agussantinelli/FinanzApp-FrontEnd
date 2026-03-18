@@ -177,32 +177,33 @@
 <h2>📁 Estructura del Proyecto</h2>
 
 <pre><code>FinanzApp-FrontEnd/
+├── .github/                                     # Configuración de GitHub (Workflows CI/CD)
 ├── .agent/skills/                               # Directorio de Skills (Guías Avanzadas para IA)
 ├── public/                                      # Archivos estáticos accesibles públicamente
 ├── src/                                         # Código fuente principal
 │   ├── app/                                     # App Router (Next.js 16+)
-│   │   ├── access-denied/                       # Página de acceso denegado
-│   │   ├── activos/                             # Buscador y detalles de Activos
+│   │   ├── access-denied/                       # Pantalla de error para permisos insuficientes
+│   │   ├── activos/                             # Buscador global y detalle técnico de activos
 │   │   ├── auth/                                # Módulos de Login, Registro y Recuperación
 │   │   │   ├── forgot-password/                 # Formulario para solicitar recuperación de cuenta
 │   │   │   ├── google-callback/                 # Manejador del token retornado por Google Auth
 │   │   │   ├── login/                           # Pantalla de acceso con email/password y reCAPTCHA
 │   │   │   ├── register/                        # Registro de nuevos usuarios inversores
 │   │   │   └── reset-password/                  # Pantalla final de cambio de contraseña con token
-│   │   ├── dashboard-admin/                     # Panel de Administración (Guard: Admin)
-│   │   ├── dashboard-experto/                   # Dashboard para Expertos Financieros
-│   │   ├── dashboard-inversor/                  # Home del Inversor (Resumen)
-│   │   ├── estrategias/                         # Estrategias de Inversión (Copy Trading)
-│   │   ├── movimientos/                         # Historial de transacciones
-│   │   ├── noticias/                            # Sección de novedades financieras
-│   │   ├── operaciones/                         # Mis Operaciones / Historial
-│   │   ├── perfil/                              # Perfil de Usuario (Edición y Foto)
-│   │   ├── portfolio/                           # Visualización y análisis patrimonial
-│   │   ├── recomendaciones/                     # Señales de expertos y comunidad
-│   │   ├── registrar-operacion/                 # Formulario de Compra/Venta
-│   │   ├── reportes/                            # Análisis de mercado y tendencias
-│   │   ├── styles/                              # Estilos globales de páginas
-│   │   └── page.tsx                             # Landing Page pública
+│   │   ├── dashboard-admin/                     # Panel de control para administradores de la plataforma
+│   │   ├── dashboard-experto/                   # Dashboard para expertos (Emisión de señales)
+│   │   ├── dashboard-inversor/                  # Vista principal del inversor (Resumen patrimonial)
+│   │   ├── estrategias/                         # Explorador de carteras públicas y copy trading
+│   │   ├── movimientos/                         # Historial detallado de ingresos y egresos
+│   │   ├── noticias/                            # Feed de novedades financieras y mercado
+│   │   ├── operaciones/                         # Gestión de historial de transacciones e importación
+│   │   ├── perfil/                              # Ajustes de cuenta y actualización de avatar
+│   │   ├── portfolio/                           # Análisis patrimonial, composición y valuación
+│   │   ├── recomendaciones/                     # Feed de señales de inversión de la comunidad
+│   │   ├── registrar-operacion/                 # Formulario dinámico de compra y venta
+│   │   ├── reportes/                            # Generación de informes en PDF y Excel
+│   │   ├── styles/                              # Estilos CSS específicos de páginas
+│   │   └── page.tsx                             # Landing Page principal del proyecto
 │   ├── components/                              # Componentes React Reutilizables
 │   │   ├── auth/                                # Componentes de seguridad (RoleGuard)
 │   │   ├── cards/                               # Tarjetas de UI (Activos, Noticias)
@@ -212,13 +213,13 @@
 │   │   ├── portfolio/                           # Componentes específicos del Portafolio
 │   │   ├── sections/                            # Secciones de Landing/Dashboard
 │   │   └── ui/                                  # Componentes base
-│   ├── config/                                  # Configuración global
-│   ├── hooks/                                   # Custom Hooks (Lógica de negocio encapsulada)
-│   ├── lib/                                     # Utilidades Core (Cliente HTTP, Caché)
-│   ├── services/                                # Comunicación con API Backend (Axios + DTOs)
-│   ├── theme/                                   # Tema y configuración de Material UI
-│   ├── types/                                   # Definiciones TypeScript (Interfaces)
-│   └── utils/                                   # Helpers de formateo y strings
+│   ├── config/                                  # Configuración global y constantes de la aplicación
+│   ├── hooks/                                   # Custom Hooks para encapsular lógica de estado y API
+│   ├── lib/                                     # Cliente HTTP centralizado (Axios) y utilidades core
+│   ├── services/                                # Capa de servicios para comunicación con la API
+│   ├── theme/                                   # Definición de paleta de colores (Dark/Neon) y temas MUI
+│   ├── types/                                   # Interfaces y Enums de TypeScript para el dominio
+│   └── utils/                                   # Helpers de formateo (moneda, fechas) y validaciones
 ├── tests/                                       # Infraestructura y Tests de Sistema
 │   ├── e2e/                                     # Tests End-to-End (Playwright)
 │   ├── integration/                             # Tests de Integración (Hooks + UI + Services)
@@ -233,12 +234,13 @@
 │   │   └── recomendaciones/                     # Creación y visualización de señales
 │   ├── msw/                                     # Mocking de API (Handlers & Server)
 │   └── setup.ts                                 # Configuración global de Vitest
-├── .env.local                                   # Variables de entorno
-├── eslint.config.mjs                            # Configuración de Linter
-├── next.config.ts                               # Configuración del framework
-├── package.json                                 # Dependencias y scripts
-├── tsconfig.json                                # Configuración de TypeScript
-└── vitest.config.mts                            # Configuración de Tests Unitarios
+├── .env.local                                   # Variables de entorno (API URL, Google Client ID)
+├── eslint.config.mjs                            # Reglas de linting y estandarización de código
+├── next.config.ts                               # Configuración técnica del framework Next.js
+├── package.json                                 # Dependencias, scripts y metadatos del proyecto
+├── playwright.config.ts                         # Configuración del motor de pruebas E2E
+├── tsconfig.json                                # Configuración del compilador de TypeScript
+└── vitest.config.mts                            # Configuración de los tests Unitarios e Integración
 </code></pre>
 
 <hr>
