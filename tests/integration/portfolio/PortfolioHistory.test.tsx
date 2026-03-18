@@ -51,6 +51,9 @@ describe('PortfolioHistory Integration', () => {
                     { fecha: '2024-03-01', valorTotal: 1000 },
                     { fecha: '2024-03-18', valorTotal: 1200 }
                 ]);
+            }),
+            http.get('*/api/dolar', () => {
+                return HttpResponse.json({ "Oficial": { "compra": 800, "venta": 850 }, "Blue": { "compra": 1000, "venta": 1050 } });
             })
         );
     });

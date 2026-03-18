@@ -1,5 +1,5 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { render, screen, waitFor, fireEvent } from '@/test/test-utils';
+import { render, screen, waitFor, fireEvent, within } from '@/test/test-utils';
 import PortfolioPage from '@/app/portfolio/page';
 import { server } from '@/test/msw/server';
 import { http, HttpResponse } from 'msw';
@@ -70,11 +70,17 @@ describe('PortfolioManagement Integration', () => {
         const createBtn = screen.getByRole('button', { name: /^Crear$/i });
         fireEvent.click(createBtn);
 
+        // Wait for Create dialog to close before continuing to Edit
+        await waitFor(() => {
+            expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+        });
+
         // 2. Edit Portfolio
         const editBtn = await screen.findByLabelText(/Editar detalles/i);
         fireEvent.click(editBtn);
 
-        const editNameInput = screen.getByLabelText(/Nombre/i);
+        const editDialog = screen.getByRole('dialog');
+        const editNameInput = within(editDialog).getByLabelText(/Nombre/i);
         fireEvent.change(editNameInput, { target: { value: 'Cartera Editada' } });
 
         const saveBtn = screen.getByRole('button', { name: /Guardar Cambios/i });
