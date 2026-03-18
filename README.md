@@ -445,31 +445,29 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui</code></pre>
 
 <h2>🧪 Testing Strategy</h2>
 
-<p>La estrategia de calidad se basa en un enfoque de pirámide de testing moderna, priorizando velocidad en unitariedad y robustez en flujos críticos.</p>
+<p>La estrategia de calidad se basa en un enfoque de pirámide de testing moderna, dividiendo las validaciones en tres capas:</p>
 
-<h3>⚡ Unit & Integration (Vitest)</h3>
-<p>Validación de lógica de negocio, hooks y componentes aislados.</p>
+<h3>⚡ Unit Tests (Vitest)</h3>
+<p>Validación de lógica de negocio aislada, utilidades y componentes base.</p>
 <ul>
-    <li><strong>Comando Visual:</strong> <code>pnpm test</code> o <code>pnpm test:unit</code> (Modo Watch interactivo)</li>
-    <li><strong>Estado Actual:</strong> 510 tests unitarios pasando exitosamente en 123 archivos.</li>
-    <li><strong>Cobertura:</strong>
-        <ul>
-            <li>Servicios Core (Auth, Activos, Operaciones, Portafolio, Dashboard).</li>
-            <li>Mercado y Cotizaciones (Dólar, Crypto, Stocks, Cedears).</li>
-            <li>Administración y Consultas (AdminService, AdminConsultasService).</li>
-            <li>Algoritmos de valuación, formateo y lógica de IA (AiService).</li>
-            <li>Lógica de estado (Hooks: <code>useAuth</code>, <code>useActivosFilters</code>).</li>
-            <li>Renderizado de componentes base (Buttons, Modals, Navbar).</li>
-        </ul>
-    </li>
+    <li><strong>Comando:</strong> <code>pnpm test:unit</code></li>
+    <li><strong>Estado Actual:</strong> +500 tests unitarios pasando exitosamente.</li>
+    <li><strong>Cobertura:</strong> Servicios Core, formateo, lógica de IA y componentes atómicos.</li>
 </ul>
 
-<h3>🎭 End-to-End (Playwright)</h3>
+<h3>🧪 Integration Tests (Vitest + MSW)</h3>
+<p>Validación del "Contrato Interno" entre Hooks, UI y Servicios con red mockeada.</p>
+<ul>
+    <li><strong>Comando:</strong> <code>pnpm test:integration</code></li>
+    <li><strong>Enfoque:</strong> Flujos completos de Auth, Dashboard y Portafolio sin depender del backend real.</li>
+</ul>
+
+<h3>🎭 End-to-End Tests (Playwright)</h3>
 <p>Simulación de usuario real en navegadores (Chromium, Firefox, WebKit).</p>
 <ul>
-    <li><strong>Comando Visual:</strong> <code>pnpm test:e2e</code> (Abre la interfaz gráfica)</li>
+    <li><strong>Comando:</strong> <code>pnpm test:e2e</code> (Abre la interfaz gráfica)</li>
+    <li><strong>Cobertura Principal:</strong> El test verifica el "Happy Path": Login, Dashboard, Portafolio, Compra de Activo y persistencia.</li>
 </ul>
-<p><strong>Cobertura Principal:</strong> El test verifica el camino más importante del usuario: inicia sesión, revisa su saldo en el Dashboard, va a su Portafolio, compra Bitcoin y confirma que la operación se haya guardado correctamente.</p>
 
 <hr>
 
