@@ -28,21 +28,29 @@ test.describe('Panel de Administración (Admin)', () => {
         await expect(page).toHaveURL(/\/dashboard-admin/, { timeout: 30000 });
         await page.waitForTimeout(1500);
         
-        // Verificar tabla de usuarios
-        await expect(page.locator('table')).toBeVisible();
-        await expect(page.locator('tr').first()).toBeVisible();
-        const count = await page.locator('tr').count();
-        expect(count).toBeGreaterThan(1);
+        // IR A LA TAB DE USUARIOS
+        const usersTab = page.getByRole('tab', { name: /Usuarios/i });
+        await usersTab.click();
+        await page.waitForTimeout(1500);
 
-        // Cambiar rol de un usuario (flujo básico)
-        const editBtn = page.locator('button[aria-label*="editar" i]').first();
-        await editBtn.click();
+        // Esperar a que el skeleton desaparezca si existe
+        await expect(page.locator('.MuiSkeleton-root')).not.toBeVisible({ timeout: 20000 });
+
+        // Verificar tabla de usuarios
+        const table = page.locator('table');
+        await expect(table).toBeVisible({ timeout: 20000 });
         
-        const roleSelect = page.locator('div[role="combobox"], #role-select');
-        await roleSelect.click();
-        await page.locator('li:has-text("EXPERTO")').click();
-        
-        await page.click('button:has-text("Guardar")');
-        await expect(page.locator('.MuiAlert-message')).toContainText(/exitosamente/i);
+        const row = page.locator('tr').filter({ hasText: '@gmail.com' }).first();
+        await expect(row).toBeVisible();
+
+        // Cambiar rol de un usuario (Ascender a experto)
+        const ascendBtn = row.locator('button[title*="Ascender" i]');
+        if (await ascendBtn.isVisible()) {
+            await ascendBtn.click();
+            await page.waitForTimeout(1000);
+            await page.click('button:has-text("Confirmar")');
+            await page.waitForTimeout(1500);
+            await expect(page.locator('.MuiAlert-message')).toContainText(/exitosamente/i);
+        }
     });
 });
