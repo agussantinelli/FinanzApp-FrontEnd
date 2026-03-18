@@ -174,6 +174,32 @@
 
 <hr>
 
+<h2>📦 Estrategia de Caché & Persistencia</h2>
+
+<p>Para maximizar la performance y reducir la carga sobre la API de cotizaciones, FinanzApp implementa un sistema híbrido de persistencia y caché en memoria.</p>
+
+<h3>🧠 Caché en Memoria (In-Memory Map)</h3>
+<ul>
+    <li><strong><code>assetsCache</code>:</strong> Un <code>Map</code> en el cliente que almacena la información estática de los activos (nombres, logos, tipos). Evita miles de peticiones redundantes en el buscador y el dashboard.</li>
+    <li><strong><code>isFullCache</code>:</strong> Un flag booleano que determina si ya se ha descargado el universo completo de activos, optimizando las consultas globales.</li>
+    <li><strong>Ubicación:</strong> <code>src/lib/activos-cache.ts</code> y <code>src/lib/recomendaciones-cache.ts</code>.</li>
+</ul>
+
+<h3>🔐 Persistencia de Sesión (SessionStorage)</h3>
+<ul>
+    <li><strong><code>fa_token</code>:</strong> JWT almacenado en el <code>sessionStorage</code> para autorizar cada request mediante interceptores de Axios.</li>
+    <li><strong><code>fa_user</code>:</strong> Metadata del usuario (nombre, rol, expiración) persistida para permitir navegaciones fluidas sin consultar el perfil constantemente.</li>
+    <li><strong>Seguridad:</strong> Al cerrar el navegador o la pestaña, la sesión se limpia automáticamente (comportamiento nativo de <code>sessionStorage</code>).</li>
+</ul>
+
+<h3>🧹 Ciclo de Vida y Limpieza</h3>
+<ul>
+    <li><strong>Cierre de Sesión:</strong> Al ejecutar <code>clearAuthSession()</code>, el sistema limpia atómicamente tanto el storage de acceso como los mapas de caché de activos para asegurar que no quede información residual.</li>
+    <li><strong>Verificación Proactiva:</strong> El servicio de autenticación realiza un "probe" silencioso al dashboard en el primer render para validar que el token sigue siendo válido antes de permitir el acceso a rutas protegidas.</li>
+</ul>
+
+<hr>
+
 <h2>📁 Estructura del Proyecto</h2>
 
 <pre><code>FinanzApp-FrontEnd/
@@ -453,7 +479,6 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui</code></pre>
 <p><strong>🚫 Control de Acceso:</strong> Intento de acceso no autorizado (ej. Inversor &rarr; ruta Admin) dispara una redirección automática a <code>/access-denied</code>.</p>
 
 <hr>
-
 
 <h2>🧪 Testing Strategy</h2>
 
