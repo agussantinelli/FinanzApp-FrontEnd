@@ -61,7 +61,7 @@ describe('PortfolioManagement Integration', () => {
         });
 
         // 1. Create Portfolio
-        const addBtn = screen.getByLabelText(/Crear nuevo portafolio/i);
+        const addBtn = screen.getByLabelText(/Nuevo portafolio/i);
         fireEvent.click(addBtn);
 
         const nameInput = screen.getByLabelText(/Nombre/i);
@@ -76,7 +76,7 @@ describe('PortfolioManagement Integration', () => {
         });
 
         // 2. Edit Portfolio
-        const editBtn = await screen.findByLabelText(/Editar detalles/i);
+        const editBtn = await screen.findByLabelText(/Editar portafolio/i);
         fireEvent.click(editBtn);
 
         const editDialog = screen.getByRole('dialog');

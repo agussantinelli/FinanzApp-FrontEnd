@@ -76,7 +76,7 @@ describe('AssetDetail Integration', () => {
             http.get('**/api/operaciones/historial/1', () => HttpResponse.json([])),
             http.get('**/api/operaciones/persona/1', () => HttpResponse.json([])),
             http.get('**/portafolios/mis-portafolios', () => HttpResponse.json([])),
-            http.post('**/api/activos/seguir/1', () => HttpResponse.json({ success: true })),
+            http.post('**/api/activos/1/seguir', () => HttpResponse.json({ success: true })),
             http.get('**/api/dolar', () => HttpResponse.json({ "Oficial": { "compra": 800, "venta": 850 }, "Blue": { "compra": 1000, "venta": 1050 } }))
         );
     });

@@ -45,6 +45,12 @@ describe('ImportFlow Integration', () => {
             }),
             http.post('*/api/import/confirm', () => {
                 return HttpResponse.json({ message: 'Importación exitosa' });
+            }),
+            http.get('*/api/operaciones/persona/1', () => {
+                return HttpResponse.json([]);
+            }),
+            http.get('*/api/dolar/cotizaciones', () => {
+                return HttpResponse.json([]);
             })
         );
     });
