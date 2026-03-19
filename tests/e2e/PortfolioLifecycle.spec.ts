@@ -20,26 +20,29 @@ test.describe('Gestión de Portafolios (CRUD)', () => {
         const editedName = `${portfolioName} EDIT`;
 
         // Crear
-        await page.click('button:has-text("Nuevo Portafolio"), [aria-label="Nuevo Portafolio"]');
-        await page.fill('input[name="nombre"]', portfolioName);
-        await page.fill('textarea[name="descripcion"]', 'Creado por test E2E');
-        await page.click('button:has-text("Guardar"), button:has-text("Crear")');
-        await page.waitForTimeout(1500);
+        await page.click('button[aria-label="Nuevo portafolio"], button:has-text("Crear Nuevo Portafolio")');
+        await page.getByLabel('Nombre').fill(portfolioName);
+        await page.getByLabel('Descripción (Opcional)').fill('Creado por test E2E');
+        await page.click('button:has-text("Crear")');
+        await page.waitForTimeout(2000);
 
         // Verificar creación
-        await expect(page.locator('h5, .MuiTypography-h5')).toContainText(portfolioName);
+        await expect(page.locator('h4, .MuiTypography-h4')).toContainText(portfolioName);
 
         // Editar
-        await page.click('button[aria-label*="editar" i], .edit-portfolio-btn');
-        await page.fill('input[name="nombre"]', editedName);
-        await page.click('button:has-text("Guardar"), button:has-text("Actualizar")');
+        await page.click('button[aria-label="Editar portafolio"]');
+        await page.getByLabel('Nombre').fill(editedName);
+        await page.click('button:has-text("Guardar Cambios")');
+        await page.waitForTimeout(2000);
 
         // Verificar edición
-        await expect(page.locator('h5, .MuiTypography-h5')).toContainText(editedName);
+        await expect(page.locator('h4, .MuiTypography-h4')).toContainText(editedName);
 
-        // Borrar
-        await page.click('button[aria-label*="eliminar" i], .delete-portfolio-btn');
-        await page.click('button:has-text("Confirmar"), button:has-text("Eliminar")');
+        // Borrar - Está dentro del diálogo de edición
+        await page.click('button[aria-label="Editar portafolio"]');
+        await page.click('button[aria-label="Eliminar portafolio"]');
+        await page.click('button[aria-label="Confirmar eliminación de portafolio"]');
+        await page.waitForTimeout(2000);
 
         // Verificar que ya no está el nombre editado
         await expect(page.locator('h5, .MuiTypography-h5')).not.toContainText(editedName);

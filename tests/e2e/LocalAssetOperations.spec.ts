@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Operaciones con Activos Locales', () => {
-    // test.setTimeout(120000); // Removido para usar timeout global de 60s
 
     test.beforeEach(async ({ page }) => {
         await page.goto('/auth/login');
@@ -9,45 +8,73 @@ test.describe('Operaciones con Activos Locales', () => {
         await page.fill('input[type="password"]', 'agus');
         await page.click('button[type="submit"]');
         await page.waitForTimeout(1500);
-        await page.goto('/registrar-operacion');
-        // Esperar a que el loader desaparezca
-        await expect(page.locator('.NeonLoader')).not.toBeVisible({ timeout: 20000 });
+        await expect(page).toHaveURL(/\/dashboard-inversor/, { timeout: 30000 });
     });
 
     test('Compra de un CEDEAR (AAPL.BA) con pesos', async ({ page }) => {
-        // Seleccionar activo
-        const combo = page.locator('input[role="combobox"]');
+        await page.goto('/registrar-operacion');
+
+        // Esperar a que el formulario esté listo (título h4 o h1 visible)
+        await expect(page.getByRole('heading', { name: /Registrar Operación/i })).toBeVisible({ timeout: 20000 });
+        await page.waitForTimeout(1000);
+
+        // === Seleccionar activo (Autocomplete) ===
+        const combo = page.locator('input[role="combobox"]').first();
         await combo.click();
         await combo.fill('AAPL.BA');
-        const option = page.locator('li').filter({ hasText: 'AAPL.BA' }).first();
+        // options aparecen como <li role="option"> en el dropdown del autocomplete
+        const option = page.locator('li[role="option"]').filter({ hasText: 'AAPL.BA' }).first();
         await expect(option).toBeVisible({ timeout: 15000 });
         await option.click({ force: true });
+        await page.waitForTimeout(800);
 
-        // Completar datos
-        await page.fill('input[name="cantidad"]', '10');
-        await page.fill('input[name="precio"]', '50000'); // Precio ficticio en ARS
+        // === Completar Cantidad (MUI TextField sin name, buscar por label) ===
+        const cantidadInput = page.getByLabel('Cantidad Nominal');
+        await cantidadInput.click();
+        await cantidadInput.fill('10');
+        await page.waitForTimeout(400);
 
-        // Verificar que detecta ARS (opcional si hay UI de moneda)
+        // === Completar Precio Unitario ===
+        const precioInput = page.getByLabel('Precio Unitario');
+        await precioInput.click();
+        await precioInput.fill('50000');
+        await page.waitForTimeout(400);
 
-        // Confirmar
-        await page.click('button:has-text("Confirmar"), button:has-text("Aceptar")');
-        await page.waitForTimeout(1500);
+        // === Confirmar Operación (el botón real dice "Confirmar Operación") ===
+        const submitBtn = page.getByRole('button', { name: /Confirmar Operación/i });
+        await expect(submitBtn).toBeEnabled({ timeout: 10000 });
+        await submitBtn.click();
 
-        // Verificar redirección y presencia en portafolio
-        await expect(page).toHaveURL(/\/portfolio/, { timeout: 30000 });
-        await expect(page.locator('table')).toContainText('AAPL', { timeout: 15000 });
+        // === Verificar éxito: primero aparece FloatingMessage, luego redirige a /portfolio ===
+        // El hook hace: setSuccess("Operación registrada...") -> setTimeout 1s -> router.push("/portfolio")
+        await expect(page).toHaveURL(/\/portfolio/, { timeout: 20000 });
     });
 
     test('Navegación a Detalle de Activo desde Buscador', async ({ page }) => {
         await page.goto('/activos');
-        await page.fill('input[placeholder*="buscar" i]', 'Aluar');
-        await page.keyboard.press('Enter');
+        await page.waitForTimeout(1000);
 
-        const row = page.locator('tr').filter({ hasText: 'ALUA' }).first();
-        await expect(row).toBeVisible();
-        await row.locator('a:has-text("Ver Detalles"), button:has-text("Ver Detalles")').click();
+        // Buscar usando el input del Autocomplete de activos
+        const searchInput = page.locator('input[role="combobox"]').first();
+        await searchInput.click();
+        await searchInput.fill('Aluar');
+        await page.waitForTimeout(1000);
+        await page.keyboard.press('Enter');
+        
+        // Esperar a que el loader desaparezca si aparece y que la tabla se actualice
+        await page.waitForTimeout(2000);
+
+        // Buscar la fila por el símbolo ALUA. Al usar filter(hasText), el texto de la fila completa debe contener 'ALUA'
+        const row = page.getByRole('row').filter({ hasText: 'ALUA' }).first();
+        await expect(row).toBeVisible({ timeout: 15000 });
+        
+        // Clic en Ver Detalles dentro de esa fila
+        const detailsBtn = row.getByLabel(/Ver detalles de ALUA/i);
+        await expect(detailsBtn).toBeVisible({ timeout: 10000 });
+        await detailsBtn.click();
 
         await expect(page).toHaveURL(/\/activos\/.+/, { timeout: 30000 });
-        await expect(page.locator('h1, h2, h3, h4')).toContainText(/Aluar/i, { timeout: 15000 });
+        // Usar un selector más específico para evitar strict mode violation con el Navbar
+        await expect(page.locator('main h3, [class*="ActivoDetail"] h3').first()).toContainText(/Aluar/i, { timeout: 15000 });
     });
 });

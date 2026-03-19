@@ -25,14 +25,18 @@ test.describe('Asistente Financiero (FinanzAI)', () => {
         await page.keyboard.press('Enter');
 
         // Verificar que aparece el mensaje del usuario
-        await expect(page.locator('.message-user')).toContainText('Cómo está el mercado hoy');
+        await expect(page.locator('[class*="userMessage"]')).toContainText('Cómo está el mercado hoy');
 
         // Verificar respuesta de IA (Streaming/Loading)
-        const aiMessage = page.locator('.message-ai, .prose');
-        await expect(aiMessage).toBeVisible({ timeout: 30000 });
+        const aiMessage = page.locator('.message-ai, [class*="aiMessage"]').last();
+        // Esperar a que el indicador de carga desaparezca si existe
+        await expect(page.locator('.TypingIndicator, [class*="TypingIndicator"]').first()).not.toBeVisible({ timeout: 45000 });
+        await expect(aiMessage).toBeVisible({ timeout: 15000 });
 
         // Verificar que la respuesta tiene contenido (no está vacía)
-        const text = await aiMessage.innerText();
-        expect(text.length).toBeGreaterThan(10);
+        await expect(async () => {
+            const text = await aiMessage.innerText();
+            expect(text.length).toBeGreaterThan(10);
+        }).toPass({ timeout: 10000 });
     });
 });
