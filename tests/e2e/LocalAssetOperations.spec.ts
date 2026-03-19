@@ -74,7 +74,15 @@ test.describe('Operaciones con Activos Locales', () => {
         await detailsBtn.click();
 
         await expect(page).toHaveURL(/\/activos\/.+/, { timeout: 30000 });
-        // Usar un selector más específico para evitar strict mode violation con el Navbar
-        await expect(page.locator('main h3, [class*="ActivoDetail"] h3').first()).toContainText(/Aluar/i, { timeout: 15000 });
+        // Verificación robusta del símbolo y nombre
+        await expect(page.locator('[class*="symbolText"]').first()).toContainText('ALUA.BA', { timeout: 15000 });
+        
+        // El usuario reportó que no "toca el botón de comprar"
+        const buyBtn = page.locator('button:has-text("Comprar ALUA.BA"), button:has-text("Comprar")').first();
+        await expect(buyBtn).toBeVisible({ timeout: 10000 });
+        await buyBtn.click();
+        
+        // Debería ir a registrar operación
+        await expect(page).toHaveURL(/\/registrar-operacion/, { timeout: 15000 });
     });
 });
