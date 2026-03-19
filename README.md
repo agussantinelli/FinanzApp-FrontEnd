@@ -564,7 +564,7 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui</code></pre>
 <p>Validación del "Contrato Interno" entre Hooks, UI y Servicios con red mockeada. Se ejecutan automáticamente junto a los unitarios con <code>pnpm test</code>.</p>
 <ul>
     <li><strong>Comando específico:</strong> <code>pnpm test:integration</code></li>
-    <li><strong>Estado Actual:</strong> 16 tests de integración pasando exitosamente.</li>
+    <li><strong>Estado Actual:</strong> 16 archivos de test (32 tests individuales) pasando exitosamente.</li>
     <li><strong>Misión:</strong> Garantizar que la interacción entre la interfaz de usuario, los hooks de lógica y las llamadas a servicios (con interceptado de red vía MSW) sea consistente y libre de errores de integración antes de llegar a E2E.</li>
     <li><strong>Enfoque:</strong> Flujos completos de Auth, Dashboard y Portafolio sin depender del backend real.</li>
 </ul>
