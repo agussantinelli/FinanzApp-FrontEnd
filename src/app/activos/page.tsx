@@ -459,15 +459,16 @@ export default function Activos() {
                           )}
                         </TableCell>
                         <TableCell align="right">
-                          <Button
-                            component={Link}
-                            href={`/activos/${activo.symbol}`}
-                            variant="outlined"
-                            size="small"
-                            className={styles.detailsButton}
-                          >
-                            Ver Detalles
-                          </Button>
+                            <Button
+                                component={Link}
+                                href={`/activos/${activo.symbol}`}
+                                variant="outlined"
+                                size="small"
+                                className={styles.detailsButton}
+                                aria-label={`Ver detalles de ${activo.symbol}`}
+                            >
+                                Ver Detalles
+                            </Button>
                         </TableCell>
                       </TableRow>
                     ))}

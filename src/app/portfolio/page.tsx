@@ -265,7 +265,7 @@ const PortfolioContent = () => {
                     {isOwner && (
                       <>
                         <Tooltip title="Cambiar de portafolio">
-                          <IconButton size="small" onClick={handleMenuClick}>
+                          <IconButton size="small" onClick={handleMenuClick} aria-label="Cambiar de portafolio">
                             <KeyboardArrowDownIcon />
                           </IconButton>
                         </Tooltip>
@@ -289,7 +289,7 @@ const PortfolioContent = () => {
 
                     {isOwner && (
                       <Tooltip title="Editar detalles">
-                        <IconButton size="small" onClick={() => setEditOpen(true)}>
+                        <IconButton size="small" onClick={() => setEditOpen(true)} aria-label="Editar portafolio">
                           <EditIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>
@@ -297,7 +297,7 @@ const PortfolioContent = () => {
 
                     {isOwner && (
                       <Tooltip title="Crear nuevo portafolio">
-                        <IconButton size="small" onClick={() => setCreateOpen(true)}>
+                        <IconButton size="small" onClick={() => setCreateOpen(true)} aria-label="Nuevo portafolio">
                           <AddIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>

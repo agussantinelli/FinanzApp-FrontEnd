@@ -201,6 +201,7 @@ export function EditPortfolioDialog({ open, onClose, onSuccess, portfolio }: Edi
                                 size="small"
                                 onClick={handleDelete}
                                 disabled={loading}
+                                aria-label="Confirmar eliminación de portafolio"
                             >
                                 Confirmar Eliminación
                             </Button>
@@ -212,6 +213,7 @@ export function EditPortfolioDialog({ open, onClose, onSuccess, portfolio }: Edi
                             color="error"
                             onClick={handleDelete}
                             disabled={loading || portfolio?.esPrincipal}
+                            aria-label="Eliminar portafolio"
                         >
                             Eliminar Portafolio
                         </Button>

@@ -286,7 +286,7 @@ export default function RegisterPage() {
                 helperText={fieldErrors.password2}
               />
 
-              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }} aria-label="Sección de CAPTCHA">
                 <ReCAPTCHA
                   sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
                   onChange={(token) => setRecaptchaToken(token)}
