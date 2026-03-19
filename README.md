@@ -662,7 +662,7 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui</code></pre>
 </table>
 
 <h3>🎭 End-to-End Tests (Playwright)</h3>
-<p>Simulación de usuario real en navegadores (Chromium, Firefox, WebKit) para validar la integridad de los flujos más críticos de la plataforma.</p>
+<p>Simulación de usuario real en navegadores (Chromium, Firefox, WebKit) para validar la integridad de los <strong>10 flujos</strong> de prueba más críticos de la plataforma, distribuidos en <strong>6 archivos</strong> de especificación.</p>
 
 <table>
     <thead>
