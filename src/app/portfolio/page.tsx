@@ -60,6 +60,7 @@ const PortfolioContent = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [createOpen, setCreateOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
+  const [successMsg, setSuccessMsg] = React.useState<string | null>(null);
 
 
   React.useEffect(() => {
@@ -97,9 +98,13 @@ const PortfolioContent = () => {
     refreshPortfolios();
   };
 
-  const handleEditSuccess = () => {
+  const handleEditSuccess = (deleted?: boolean) => {
     refreshPortfolios();
-    refresh();
+    if (deleted) {
+      setSuccessMsg("Portafolio Borrado Correctamente");
+    } else {
+      refresh();
+    }
   };
 
 
@@ -581,6 +586,12 @@ const PortfolioContent = () => {
           message={error || ""}
           severity="error"
           onClose={() => { }}
+        />
+        <FloatingMessage
+          open={!!successMsg}
+          message={successMsg}
+          severity="success"
+          onClose={() => setSuccessMsg(null)}
         />
       </Box>
     </RoleGuard >

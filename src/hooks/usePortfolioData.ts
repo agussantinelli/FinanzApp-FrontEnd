@@ -73,7 +73,8 @@ export function usePortfolioData() {
 
                 if (data.length > 0) {
                     if (!selectedId || !data.find(p => p.id === selectedId)) {
-                        setSelectedId(data[0].id);
+                        const principal = data.find(p => p.esPrincipal) || data[0];
+                        setSelectedId(principal.id);
                     }
                 } else {
                     setSelectedId("");
