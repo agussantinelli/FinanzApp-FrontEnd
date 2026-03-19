@@ -662,10 +662,84 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui</code></pre>
 </table>
 
 <h3>🎭 End-to-End Tests (Playwright)</h3>
-<p>Simulación de usuario real en navegadores (Chromium, Firefox, WebKit).</p>
+<p>Simulación de usuario real en navegadores (Chromium, Firefox, WebKit) para validar la integridad de los flujos más críticos de la plataforma.</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nombre del Flujo</th>
+            <th>Características / Acciones</th>
+            <th>Motivo de la Prueba</th>
+            <th>Archivo de Test</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Acceso denegado para Inversores</strong></td>
+            <td>Intento de acceso a <code>/dashboard-admin</code> con rol Inversor.</td>
+            <td>Validar la protección de rutas administrativas contra accesos no autorizados.</td>
+            <td><code>AdminControlPanel.spec.ts</code></td>
+        </tr>
+        <tr>
+            <td><strong>Gestión de Usuarios (Admin)</strong></td>
+            <td>Cambio de roles (Inversor ↔ Experto) desde el panel de control.</td>
+            <td>Asegurar que las funciones de administración de permisos operen correctamente.</td>
+            <td><code>AdminControlPanel.spec.ts</code></td>
+        </tr>
+        <tr>
+            <td><strong>Consulta FinanzAI (Streaming)</strong></td>
+            <td>Apertura de chatbot, envío de consulta y recepción de respuesta IA.</td>
+            <td>Garantizar la disponibilidad del asistente inteligente y el procesamiento en tiempo real.</td>
+            <td><code>AiFinancialChat.spec.ts</code></td>
+        </tr>
+        <tr>
+            <td><strong>Login, Logout y Persistencia</strong></td>
+            <td>Ciclo de sesión completo y verificación de persistencia tras login.</td>
+            <td>Verificar el motor de autenticación y el manejo de tokens de sesión.</td>
+            <td><code>AuthFlow.spec.ts</code></td>
+        </tr>
+        <tr>
+            <td><strong>Manejo de Credenciales Inválidas</strong></td>
+            <td>Intento de login con datos erróneos y validación de alertas.</td>
+            <td>Asegurar que el sistema bloquee accesos con credenciales incorrectas.</td>
+            <td><code>AuthFlow.spec.ts</code></td>
+        </tr>
+        <tr>
+            <td><strong>Protección de Rutas Privadas</strong></td>
+            <td>Navegación directa a <code>/portfolio</code> sin estar autenticado.</td>
+            <td>Confirmar que las rutas sensibles redirijan correctamente al login.</td>
+            <td><code>AuthFlow.spec.ts</code></td>
+        </tr>
+        <tr>
+            <td><strong>Flujo Crítico: Compra de BTC</strong></td>
+            <td>Login → Portafolio → Registro de Operación → Compra de Bitcoin.</td>
+            <td>Validar la integración de los módulos de Auth, Portfolio y Operaciones.</td>
+            <td><code>CryptoAssetPurchase.spec.ts</code></td>
+        </tr>
+        <tr>
+            <td><strong>Compra de CEDEAR (AAPL.BA)</strong></td>
+            <td>Registro de operación indicando cantidad y precio en pesos.</td>
+            <td>Verificar la carga de activos locales y su impacto en el portafolio.</td>
+            <td><code>LocalAssetOperations.spec.ts</code></td>
+        </tr>
+        <tr>
+            <td><strong>Buscador → Detalle → Compra</strong></td>
+            <td>Búsqueda de activo, navegación a ficha técnica e inicio de compra.</td>
+            <td>Garantizar la fluidez en la navegación entre el mercado y la operativa.</td>
+            <td><code>LocalAssetOperations.spec.ts</code></td>
+        </tr>
+        <tr>
+            <td><strong>CRUD de Portafolios</strong></td>
+            <td>Creación, edición de nombre y eliminación de una cartera.</td>
+            <td>Validar la gestión completa de recursos personalizados del usuario.</td>
+            <td><code>PortfolioLifecycle.spec.ts</code></td>
+        </tr>
+    </tbody>
+</table>
+
 <ul>
-    <li><strong>Comando:</strong> <code>pnpm test:e2e</code> (Abre la interfaz gráfica)</li>
-    <li><strong>Cobertura Principal:</strong> El test verifica el "Happy Path": Login, Dashboard, Portafolio, Compra de Activo y persistencia.</li>
+    <li><strong>Comando:</strong> <code>pnpm test:e2e</code> (Ejecuta Playwright en modo headed/ui)</li>
+    <li><strong>Configuración:</strong> Localizada en <code>playwright.config.ts</code>.</li>
 </ul>
 
 <hr>
