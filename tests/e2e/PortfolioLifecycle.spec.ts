@@ -48,9 +48,12 @@ test.describe('Gestión de Portafolios (CRUD)', () => {
         await page.click('button[aria-label="Editar portafolio"]');
         await page.click('button[aria-label="Eliminar portafolio"]');
         await page.click('button[aria-label="Confirmar eliminación de portafolio"]');
+        
+        // Verificar mensaje de éxito
+        await expect(page.locator('text=Portafolio Borrado Correctamente')).toBeVisible({ timeout: 10000 });
         await page.waitForTimeout(2000);
 
         // Verificar que ya no está el nombre editado
-        await expect(page.locator('h5, .MuiTypography-h5')).not.toContainText(editedName);
+        await expect(page.locator('[class*="headerTitle"]').first()).not.toContainText(editedName);
     });
 });
