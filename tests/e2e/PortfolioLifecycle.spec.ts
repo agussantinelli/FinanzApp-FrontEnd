@@ -24,10 +24,16 @@ test.describe('Gestión de Portafolios (CRUD)', () => {
         await page.getByLabel('Nombre').fill(portfolioName);
         await page.getByLabel('Descripción (Opcional)').fill('Creado por test E2E');
         await page.click('button:has-text("Crear")');
+        await page.waitForTimeout(2500);
+
+        // Cambiar al nuevo portafolio si no se seleccionó automáticamente
+        await page.click('button[aria-label="Cambiar de portafolio"]');
+        await page.waitForTimeout(1000);
+        await page.click(`text=${portfolioName}`);
         await page.waitForTimeout(2000);
 
-        // Verificar creación
-        await expect(page.locator('h4, .MuiTypography-h4')).toContainText(portfolioName);
+        // Verificar creación - Usar clase específica para evitar colisión con Navbar/Cards
+        await expect(page.locator('[class*="headerTitle"]').first()).toContainText(portfolioName);
 
         // Editar
         await page.click('button[aria-label="Editar portafolio"]');
@@ -36,7 +42,7 @@ test.describe('Gestión de Portafolios (CRUD)', () => {
         await page.waitForTimeout(2000);
 
         // Verificar edición
-        await expect(page.locator('h4, .MuiTypography-h4')).toContainText(editedName);
+        await expect(page.locator('[class*="headerTitle"]').first()).toContainText(editedName);
 
         // Borrar - Está dentro del diálogo de edición
         await page.click('button[aria-label="Editar portafolio"]');
