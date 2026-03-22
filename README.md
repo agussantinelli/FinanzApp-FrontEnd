@@ -23,7 +23,7 @@
     <img src="https://img.shields.io/badge/ESLint-9.17.0-4B32C3?style=for-the-badge&logo=eslint&logoColor=white" alt="ESLint Badge"/>
     <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel Badge"/>
     <img src="https://img.shields.io/badge/Material%20UI-7.3.4-007FFF?style=for-the-badge&logo=mui&logoColor=white" alt="MUI Badge"/>
-    <img src="https://img.shields.io/badge/React_Markdown-9.0.3-000000?style=for-the-badge&logo=markdown&logoColor=white" alt="React Markdown Badge"/>
+    <img src="https://img.shields.io/badge/Streamdown-2.5.0-000000?style=for-the-badge&logo=markdown&logoColor=white" alt="Streamdown Badge"/>
     <img src="https://img.shields.io/badge/React_Icons-5.5.0-E91E63?style=for-the-badge&logo=react&logoColor=white" alt="React Icons Badge"/>
     <img src="https://img.shields.io/badge/Google_reCAPTCHA-v2-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="reCAPTCHA Badge"/>
     <img src="https://img.shields.io/badge/Google_Identity-OAuth_2.0-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Google Identity Badge"/>
@@ -166,7 +166,7 @@
         </tr>
         <tr>
             <td><strong>Utilidades</strong></td>
-            <td>React Markdown / XLSX</td>
+            <td>Streamdown / XLSX</td>
             <td>Renderizado de texto enriquecido y procesamiento de hojas de cálculo.</td>
         </tr>
     </tbody>
@@ -207,7 +207,7 @@
 <h3>🗣️ Interfaz y Experiencia (Frontend)</h3>
 <ul>
     <li><strong>Componente Flotante (FAB):</strong> Implementado en <code>FinanzAiChat.tsx</code>, permite acceso inmediato desde cualquier sección del dashboard sin interrumpir la navegación.</li>
-    <li><strong>Renderizado Enriquecido:</strong> Soporte completo para <strong>Markdown</strong> mediante <code>react-markdown</code>, permitiendo que la IA responda con tablas, listas y énfasis visual para mejor claridad financiera.</li>
+    <li><strong>Renderizado Enriquecido:</strong> Soporte completo para <strong>Markdown</strong> mediante <code>streamdown</code>, permitiendo que la IA responda con tablas, listas y énfasis visual de forma fluida durante el streaming.</li>
     <li><strong>Indicadores de UX:</strong> Sistema de <code>TypingIndicator</code> que gestiona la percepción de tiempo de respuesta mientras el LLM procesa la consulta.</li>
 </ul>
 
