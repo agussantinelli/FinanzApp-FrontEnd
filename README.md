@@ -219,7 +219,7 @@
 </ul>
 
 <h3>🤖 Streaming del Chatbot (IA)</h3>
-<p>La comunicación en tiempo real entre el **asistente inteligente** y el usuario utiliza <strong>Server-Sent Events (SSE)</strong> con una capa de robustez adicional:</p>
+<p>La comunicación en tiempo real entre el <b>asistente inteligente</b> y el usuario utiliza <strong>Server-Sent Events (SSE)</strong> con una capa de robustez adicional:</p>
 <ul>
     <li><strong>Encapsulamiento JSON:</strong> Cada fragmento (chunk) se envía como un objeto JSON <code>{"c": "..."}</code> para preservar caracteres especiales, espacios y saltos de línea sin riesgo de corrupción por el protocolo HTTP.</li>
     <li><strong>Flush Proactivo:</strong> Uso de <code>FlushAsync()</code> en el backend asegura que el cliente reciba los tokens de forma instantánea.</li>
