@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import DolarSection from './DolarSection';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useDolarData } from '@/hooks/useDolarData';
 
 // Mock hook
@@ -45,15 +45,49 @@ describe('DolarSection', () => {
 
     it('shows loading state', () => {
         (useDolarData as any).mockReturnValue({
-            firstRow: [],
-            secondRow: [],
-            loading: true,
-            updatedAt: null,
-            fetchData: mockFetchData,
-            normalizeName: (name: string) => name,
+            firstRow: [], secondRow: [], loading: true, updatedAt: null, fetchData: mockFetchData, normalizeName: (n: any) => n
         });
         render(<DolarSection />);
         expect(screen.getByText('Actualizando...')).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /Actualizando/ })).toBeDisabled();
+        expect(screen.getByRole('button')).toBeDisabled();
+    });
+
+    it('displays formatted updatedAt correctly', () => {
+        const date = new Date(2025, 2, 22, 16, 45);
+        (useDolarData as any).mockReturnValue({
+            firstRow: [], secondRow: [], loading: false, updatedAt: date, fetchData: mockFetchData, normalizeName: (n: any) => n
+        });
+        render(<DolarSection />);
+        // Matches "04:45 p. m." or "16:45"
+        expect(screen.getByText(/4:45/i)).toBeInTheDocument();
+    });
+
+    it('renders only the headers if data is empty', () => {
+        (useDolarData as any).mockReturnValue({
+            firstRow: [], secondRow: [], loading: false, updatedAt: new Date(), fetchData: mockFetchData, normalizeName: (n: any) => n
+        });
+        render(<DolarSection />);
+        expect(screen.queryByTestId('dolar-card')).not.toBeInTheDocument();
+    });
+
+    it('renders multiple cards in rows', () => {
+        (useDolarData as any).mockReturnValue({
+            firstRow: [{ nombre: 'D1' }, { nombre: 'D2' }],
+            secondRow: [{ nombre: 'D3' }],
+            loading: false, fetchData: mockFetchData, normalizeName: (n: any) => n
+        });
+        render(<DolarSection />);
+        expect(screen.getAllByTestId('dolar-card')).toHaveLength(3);
+    });
+
+    it('contains a link to see more details/history', () => {
+        render(<DolarSection />);
+        expect(screen.getByText(/Ver gráfico/i)).toBeInTheDocument();
+    });
+
+    it('verifies typography variants used', () => {
+        render(<DolarSection />);
+        const title = screen.getByText('Cotizaciones del dólar');
+        expect(title.tagName).toBe('H5');
     });
 });

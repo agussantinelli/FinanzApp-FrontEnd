@@ -81,13 +81,25 @@ describe('CryptoSection', () => {
 
     it('handles manual refresh', async () => {
         render(<CryptoSection />);
-        
-        // Wait for initial load
         await screen.findAllByTestId('crypto-card');
-        
         const btn = screen.getByText(/Actualizar/i);
         fireEvent.click(btn);
-
         await waitFor(() => expect(getTopCryptos).toHaveBeenCalledTimes(2));
+    });
+
+    it('handles error state gracefully', async () => {
+        (getTopCryptos as any).mockRejectedValue(new Error("Network Error"));
+        render(<CryptoSection />);
+        // The component currently doesn't have an error UI, it just stops loading
+        await waitFor(() => expect(screen.getByText(/Actualizar/i)).toBeInTheDocument());
+        expect(screen.queryByTestId('crypto-card')).not.toBeInTheDocument();
+    });
+
+    it('renders empty list if no data returned', async () => {
+        (getTopCryptos as any).mockResolvedValue([]);
+        render(<CryptoSection />);
+        // Currently renders nothing in the grid if empty
+        await waitFor(() => expect(screen.getByText(/Actualizar/i)).toBeInTheDocument());
+        expect(screen.queryByTestId('crypto-card')).not.toBeInTheDocument();
     });
 });

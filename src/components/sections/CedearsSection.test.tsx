@@ -36,12 +36,51 @@ describe('CedearsSection', () => {
 
     it('renders empty state', () => {
         (useCedearsData as any).mockReturnValue({
-            rows: [],
-            withDerived: [],
-            loading: false,
-            fetchData: mockFetchData
+            rows: [], withDerived: [], loading: false, fetchData: mockFetchData
         });
         render(<CedearsSection />);
         expect(screen.getByText('No se encontraron cotizaciones.')).toBeInTheDocument();
+    });
+
+    it('uses usSymbol if company mapping is missing', () => {
+        (useCedearsData as any).mockReturnValue({
+            rows: [[{ localSymbol: 'XYZ.BA', usSymbol: 'XYZ' }]],
+            withDerived: [{ localSymbol: 'XYZ.BA', usSymbol: 'XYZ' }],
+            loading: false, fetchData: mockFetchData
+        });
+        render(<CedearsSection />);
+        expect(screen.getByText('XYZ')).toBeInTheDocument();
+    });
+
+    it('shows loading state on button', () => {
+        (useCedearsData as any).mockReturnValue({
+            rows: [], withDerived: [], loading: true, fetchData: mockFetchData
+        });
+        render(<CedearsSection />);
+        expect(screen.getByText('Actualizando...')).toBeInTheDocument();
+        expect(screen.getByRole('button')).toBeDisabled();
+    });
+
+    it('displays formatted updatedAt correctly', () => {
+        const date = new Date(2025, 2, 22, 10, 15);
+        (useCedearsData as any).mockReturnValue({
+            rows: [], withDerived: [], loading: false, updatedAt: date, fetchData: mockFetchData
+        });
+        render(<CedearsSection />);
+        expect(screen.getByText(/10:15/i)).toBeInTheDocument();
+    });
+
+    it('renders multiple rows of cards', () => {
+         const extendedRows = [
+            [{ localSymbol: 'AAPL.BA', usSymbol: 'AAPL' }],
+            [{ localSymbol: 'AMZN.BA', usSymbol: 'AMZN' }]
+         ];
+         (useCedearsData as any).mockReturnValue({
+            rows: extendedRows, withDerived: extendedRows.flat(),
+            loading: false, fetchData: mockFetchData
+        });
+        render(<CedearsSection />);
+        expect(screen.getByText('Apple')).toBeInTheDocument();
+        expect(screen.getByText('Amazon')).toBeInTheDocument();
     });
 });

@@ -32,4 +32,24 @@ describe('MarketHoursCard', () => {
         const { container } = render(<MarketHoursCard />);
         expect(container.querySelector('svg')).toBeInTheDocument();
     });
+
+    it('renders specific text for Nasdaq', () => {
+        render(<MarketHoursCard />);
+        // Find the strong tag and verify it's part of the expected section
+        const nasdaqLabel = screen.getByText('Nasdaq');
+        expect(nasdaqLabel.tagName).toBe('STRONG');
+    });
+
+    it('verifies typography of the header', () => {
+        render(<MarketHoursCard />);
+        const header = screen.getByText(/Horarios de mercado/i);
+        expect(header.parentElement?.tagName).toBe('DIV');
+    });
+
+    it('displays the correct range for Nasdaq', () => {
+        render(<MarketHoursCard />);
+        const nasdaqLine = screen.getByText('Nasdaq').closest('p');
+        expect(nasdaqLine).toHaveTextContent(/11:30/);
+        expect(nasdaqLine).toHaveTextContent(/18:00/);
+    });
 });

@@ -51,4 +51,46 @@ describe('AccionesARSection', () => {
         fireEvent.click(screen.getByText('Actualizar'));
         expect(mockFetchData).toHaveBeenCalled();
     });
+    
+    it('shows loading state in button when loading', () => {
+        (useStocksData as any).mockReturnValue({
+            rowsEnergetico: [], rowsBancario: [], rowsExtra: [],
+            loading: true, error: null, updatedAt: new Date(), fetchData: mockFetchData
+        });
+        render(<AccionesARSection />);
+        expect(screen.getByText('Actualizando...')).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /actualizando/i })).toBeDisabled();
+    });
+
+    it('displays formatted updatedAt timestamp', () => {
+        const date = new Date(2025, 2, 22, 14, 30);
+        (useStocksData as any).mockReturnValue({
+            rowsEnergetico: [], rowsBancario: [], rowsExtra: [],
+            loading: false, error: null, updatedAt: date, fetchData: mockFetchData
+        });
+        render(<AccionesARSection />);
+        // Use a regex that ignores dots/spaces between AM/PM (e.g., "02:30 p. m.")
+        expect(screen.getByText(/2:30/i)).toBeInTheDocument();
+    });
+
+    it('renders extra sector when populated', () => {
+        (useStocksData as any).mockReturnValue({
+            rowsEnergetico: [], rowsBancario: [],
+            rowsExtra: [[{ localSymbol: 'TXAR' }]],
+            loading: false, error: null, updatedAt: new Date(), fetchData: mockFetchData
+        });
+        render(<AccionesARSection />);
+        expect(screen.getByText('Otros')).toBeInTheDocument();
+        expect(screen.getByText('TXAR')).toBeInTheDocument();
+    });
+
+    it('does not render data rows if sectors are empty', () => {
+        (useStocksData as any).mockReturnValue({
+            rowsEnergetico: [], rowsBancario: [], rowsExtra: [],
+            loading: false, error: null, updatedAt: new Date(), fetchData: mockFetchData
+        });
+        render(<AccionesARSection />);
+        const cards = screen.queryAllByTestId('stocks-card');
+        expect(cards.length).toBe(0);
+    });
 });
