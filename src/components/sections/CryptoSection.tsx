@@ -18,10 +18,15 @@ export default function CryptoSection() {
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const res = await getTopCryptos();
-    setData(res);
-    setUpdatedAt(new Date());
-    setLoading(false);
+    try {
+      const res = await getTopCryptos();
+      setData(res);
+      setUpdatedAt(new Date());
+    } catch (err) {
+      console.error("Error fetching crypto data:", err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
