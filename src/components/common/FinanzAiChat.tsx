@@ -6,7 +6,8 @@ import { Box, Typography } from "@mui/material";
 import { RiRobot2Line } from "react-icons/ri";
 import SendIcon from "@mui/icons-material/Send";
 import CloseIcon from "@mui/icons-material/Close";
-import ReactMarkdown from 'react-markdown';
+import { Streamdown } from "streamdown";
+import "streamdown/styles.css";
 import { TypingIndicator } from "@/components/ui/TypingIndicator";
 import styles from "./styles/FinanzAiChat.module.css";
 import { streamChatWithAi } from "@/services/AiService";
@@ -98,7 +99,7 @@ export default function FinanzAiChat() {
                                     }`}
                             >
                                 <div className={styles.markdownContent}>
-                                    <ReactMarkdown>{msg.text}</ReactMarkdown>
+                                    <Streamdown>{msg.text}</Streamdown>
                                 </div>
                             </Box>
                         ))}
