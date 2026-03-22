@@ -12,8 +12,21 @@ vi.mock('next/navigation', () => ({
 describe('FinanzAiChat Integration', () => {
     beforeEach(() => {
         server.use(
-            http.post('*/api/ai/chat', async ({ request }) => {
-                return HttpResponse.json({ respuesta: 'Hola, soy tu asistente financiero. He analizado tu consulta.' });
+            http.post('*/api/ai/chat', async () => {
+                const encoder = new TextEncoder();
+                const stream = new ReadableStream({
+                    start(controller) {
+                        const chunk = encoder.encode('data: {"c": "He analizado tu consulta"}\n\n');
+                        controller.enqueue(chunk);
+                        controller.close();
+                    },
+                });
+
+                return new HttpResponse(stream, {
+                    headers: {
+                        'Content-Type': 'text/event-stream',
+                    },
+                });
             })
         );
     });
