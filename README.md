@@ -218,7 +218,7 @@
     <li><strong>Manejo de Errores:</strong> Gestión robusta de timeouts y fallos de API para asegurar que el chat siempre brinde una respuesta de contingencia amigable.</li>
 </ul>
 
-<h3>🤖 Streaming del Chatbot (IA)</h3>
+<h3>💬 Streaming del Chatbot (IA)</h3>
 <p>La comunicación en tiempo real entre el <b>asistente inteligente</b> y el usuario utiliza <strong>Server-Sent Events (SSE)</strong> con una capa de robustez adicional:</p>
 <ul>
     <li><strong>Encapsulamiento JSON:</strong> Cada fragmento (chunk) se envía como un objeto JSON <code>{"c": "..."}</code> para preservar caracteres especiales, espacios y saltos de línea sin riesgo de corrupción por el protocolo HTTP.</li>
