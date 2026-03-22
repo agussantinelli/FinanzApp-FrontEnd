@@ -218,6 +218,14 @@
     <li><strong>Manejo de Errores:</strong> Gestión robusta de timeouts y fallos de API para asegurar que el chat siempre brinde una respuesta de contingencia amigable.</li>
 </ul>
 
+<h3>🤖 Streaming del Chatbot (IA)</h3>
+<p>La comunicación en tiempo real entre el **asistente inteligente** y el usuario utiliza <strong>Server-Sent Events (SSE)</strong> con una capa de robustez adicional:</p>
+<ul>
+    <li><strong>Encapsulamiento JSON:</strong> Cada fragmento (chunk) se envía como un objeto JSON <code>{"c": "..."}</code> para preservar caracteres especiales, espacios y saltos de línea sin riesgo de corrupción por el protocolo HTTP.</li>
+    <li><strong>Flush Proactivo:</strong> Uso de <code>FlushAsync()</code> en el backend asegura que el cliente reciba los tokens de forma instantánea.</li>
+    <li><strong>Eficiencia:</strong> La biblioteca <code>streamdown</code> en el frontend procesa este flujo JSON, permitiendo renderizar Markdown incompleto en tiempo real.</li>
+</ul>
+
 <hr>
 
 <h2>📥 Smart Parsing con IA (Importación de Excel)</h2>
