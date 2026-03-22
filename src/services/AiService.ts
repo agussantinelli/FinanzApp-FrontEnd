@@ -36,8 +36,12 @@ export async function streamChatWithAi(message: string, onChunk: (text: string) 
 
         for (const line of lines) {
             if (line.startsWith("data: ")) {
-                const chunk = line.substring(6);
-                if (chunk) onChunk(chunk);
+                try {
+                    const data = JSON.parse(line.substring(6));
+                    if (data.c) onChunk(data.c);
+                } catch {
+                    /* Ignorar chunks que no sean JSON válido */
+                }
             }
         }
     }
