@@ -556,7 +556,7 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=tu_site_key_aqui</code></pre>
 <p>Validación de lógica de negocio aislada, utilidades y componentes base. Se ejecutan automáticamente junto a los de integración con <code>pnpm test</code>.</p>
 <ul>
     <li><strong>Comando específico:</strong> <code>pnpm test:unit</code></li>
-    <li><strong>Estado Actual:</strong> +500 tests unitarios pasando exitosamente.</li>
+    <li><strong>Estado Actual:</strong> +540 tests unitarios pasando exitosamente.</li>
     <li><strong>Cobertura:</strong> Servicios Core, formateo, lógica de IA y componentes atómicos.</li>
 </ul>
 
