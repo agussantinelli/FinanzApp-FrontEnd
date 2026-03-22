@@ -2,14 +2,14 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { Box, Typography, IconButton } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { RiRobot2Line } from "react-icons/ri";
 import SendIcon from "@mui/icons-material/Send";
 import CloseIcon from "@mui/icons-material/Close";
 import ReactMarkdown from 'react-markdown';
 import { TypingIndicator } from "@/components/ui/TypingIndicator";
 import styles from "./styles/FinanzAiChat.module.css";
-import { chatWithAi } from "@/services/AiService";
+import { streamChatWithAi } from "@/services/AiService";
 
 interface Message {
     id: number;
@@ -50,15 +50,26 @@ export default function FinanzAiChat() {
         setInputValue("");
         setLoading(true);
 
+        const aiMsgId = Date.now() + 1;
+        let accumulatedText = "";
+
         try {
-            const responseText = await chatWithAi(userMsg.text);
-            const aiMsg: Message = { id: Date.now() + 1, text: responseText, sender: "ai" };
-            setMessages((prev) => [...prev, aiMsg]);
+            await streamChatWithAi(userMsg.text, (chunk) => {
+                setLoading(false);
+                accumulatedText += chunk;
+                
+                setMessages((prev) => {
+                    const existing = prev.find(m => m.id === aiMsgId);
+                    if (existing) {
+                        return prev.map(m => m.id === aiMsgId ? { ...m, text: accumulatedText } : m);
+                    }
+                    return [...prev, { id: aiMsgId, text: accumulatedText, sender: "ai" }];
+                });
+            });
         } catch (error) {
-            const errorMsg: Message = { id: Date.now() + 1, text: "Lo siento, tuve un problema al procesar tu consulta.", sender: "ai" };
-            setMessages((prev) => [...prev, errorMsg]);
-        } finally {
             setLoading(false);
+            const errorMsg: Message = { id: Date.now() + 2, text: "Lo siento, tuve un problema al procesar tu consulta.", sender: "ai" };
+            setMessages((prev) => [...prev, errorMsg]);
         }
     };
 
