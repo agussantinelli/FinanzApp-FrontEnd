@@ -65,14 +65,95 @@ describe('useAuth hook', () => {
 
         expect(result.current.user).toBe(null);
 
-        // Update mock for next call
         (getCurrentUser as any).mockReturnValue(mockUser);
 
-        // Trigger event
         act(() => {
             window.dispatchEvent(new Event('fa-auth-changed'));
         });
 
         expect(result.current.user).toEqual(mockUser);
+    });
+
+    it('should have isAuthenticated as false when no user', () => {
+        (getCurrentUser as any).mockReturnValue(null);
+        const { result } = renderHook(() => useAuth());
+        expect(result.current.isAuthenticated).toBe(false);
+    });
+
+    it('should have isAuthenticated as true when user exists', () => {
+        (getCurrentUser as any).mockReturnValue(mockUser);
+        const { result } = renderHook(() => useAuth());
+        expect(result.current.isAuthenticated).toBe(true);
+    });
+
+    it('should call verifySession on initialization', () => {
+        renderHook(() => useAuth());
+        expect(verifySession).toHaveBeenCalled();
+    });
+
+    it('should reload user when refreshUser is called', () => {
+        (getCurrentUser as any).mockReturnValue(null);
+        const { result } = renderHook(() => useAuth());
+        
+        (getCurrentUser as any).mockReturnValue(mockUser);
+        act(() => {
+            result.current.refreshUser();
+        });
+
+        expect(result.current.user).toEqual(mockUser);
+        expect(verifySession).toHaveBeenCalledTimes(2); // once on init, once on refresh
+    });
+
+    it('should maintain stable logout reference', () => {
+        const { result, rerender } = renderHook(() => useAuth());
+        const firstLogout = result.current.logout;
+        
+        rerender();
+        expect(result.current.logout).toBe(firstLogout);
+    });
+
+    it('should maintain stable refreshUser reference', () => {
+        const { result, rerender } = renderHook(() => useAuth());
+        const firstRefresh = result.current.refreshUser;
+        
+        rerender();
+        expect(result.current.refreshUser).toBe(firstRefresh);
+    });
+
+    it('should clean up event listener on unmount', () => {
+        const removeSpy = vi.spyOn(window, 'removeEventListener');
+        const { unmount } = renderHook(() => useAuth());
+        
+        unmount();
+        expect(removeSpy).toHaveBeenCalledWith('fa-auth-changed', expect.any(Function));
+    });
+
+    it('should handle transition from user to null', () => {
+        (getCurrentUser as any).mockReturnValue(mockUser);
+        const { result } = renderHook(() => useAuth());
+
+        expect(result.current.user).toEqual(mockUser);
+
+        (getCurrentUser as any).mockReturnValue(null);
+        act(() => {
+            window.dispatchEvent(new Event('fa-auth-changed'));
+        });
+
+        expect(result.current.user).toBe(null);
+    });
+
+    it('should not crash if getCurrentUser returns undefined', () => {
+        (getCurrentUser as any).mockReturnValue(undefined);
+        const { result } = renderHook(() => useAuth());
+        expect(result.current.user).toBe(undefined);
+        expect(result.current.isAuthenticated).toBe(false);
+    });
+
+    it('should handle loading state transition', () => {
+        (getCurrentUser as any).mockReturnValue(mockUser);
+        const { result } = renderHook(() => useAuth());
+        // In this test environment, useEffect runs immediately during renderHook
+        // so loading will already be false.
+        expect(result.current.loading).toBe(false);
     });
 });
