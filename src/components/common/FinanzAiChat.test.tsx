@@ -1,11 +1,11 @@
 import { render, screen, fireEvent, waitFor, act } from '@/test/test-utils';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import FinanzAiChat from './FinanzAiChat';
-import { chatWithAi } from '@/services/AiService';
+import { streamChatWithAi } from '@/services/AiService';
 import { usePathname } from 'next/navigation';
 
 vi.mock('@/services/AiService', () => ({
-    chatWithAi: vi.fn(),
+    streamChatWithAi: vi.fn(),
 }));
 
 vi.mock('next/navigation', () => ({
@@ -36,7 +36,11 @@ describe('FinanzAiChat', () => {
     });
 
     it('sends a message and receives AI response', async () => {
-        (chatWithAi as any).mockResolvedValue('Hello from AI');
+        (streamChatWithAi as any).mockImplementation(async (message: string, onChunk: (chunk: string) => void) => {
+            onChunk('Hello from AI');
+            return Promise.resolve();
+        });
+        
         render(<FinanzAiChat />);
         
         // Open chat
@@ -47,14 +51,14 @@ describe('FinanzAiChat', () => {
             const textarea = screen.getByPlaceholderText(/Escribe tu consulta/i);
             fireEvent.change(textarea, { target: { value: 'Hi AI' } });
             
-            const form = screen.getByRole('textbox').closest('form')!;
+            const form = screen.getByPlaceholderText(/Escribe tu consulta/i).closest('form')!;
             fireEvent.submit(form);
         });
 
         expect(screen.getByText('Hi AI')).toBeInTheDocument();
         
         await waitFor(() => {
-            expect(chatWithAi).toHaveBeenCalledWith('Hi AI');
+            expect(streamChatWithAi).toHaveBeenCalledWith('Hi AI', expect.any(Function));
             expect(screen.getByText('Hello from AI')).toBeInTheDocument();
         });
     });
