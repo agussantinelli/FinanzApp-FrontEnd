@@ -296,7 +296,7 @@
 <h3>🔐 Autenticación & Acceso</h3>
 <p>El sistema de seguridad implementa una arquitectura de defensa en profundidad:</p>
 <ul>
-    <li><strong>Google Login (OIDC):</strong> Integración nativa OAuth 2.0 (Pop-up Flow) para autenticación segura y rápida.</li>
+    <li><strong>Google Login (OIDC):</strong> Integración nativa OAuth 2.0 para autenticación segura y rápida.</li>
     <li><strong>JWT Tradicional:</strong> Soporte completo para Email/Password con hashing robusto en el backend.</li>
     <li><strong>Protección Anti-Bots:</strong> Integración de <strong>reCAPTCHA v2</strong> para bloquear tráfico automatizado en Login y Registro.</li>
 </ul>
