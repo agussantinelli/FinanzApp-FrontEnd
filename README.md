@@ -98,6 +98,7 @@
     <li><strong>🌐 Inversión Social:</strong> Explora las estrategias más rentables de la comunidad, visualiza sus portafolios y aprende de los mejores inversores.</li>
     <li><strong>✨ UX Refinada:</strong> Experiencia premium con mensajes flotantes, tablas con edición inline, filtros rápidos y estilos visuales de alto contraste (Neon/Dark Mode).</li>
     <li><strong>🛡️ Seguridad Integral:</strong> Protección de identidad mediante Google Login, reCAPTCHA v2 invisible y confirmaciones explícitas para acciones administrativas críticas.</li>
+    <li><strong>♿ Accesibilidad Universal:</strong> Interfaz inclusiva diseñada bajo estándares WCAG 2.1, con navegación por teclado completa, lectores de pantalla optimizados (Aria-Labels) y gestión de estados dinámicos.</li>
     <li><strong>🤖 FinanzAI:</strong> Asistente financiero inteligente flotante, integrado con IA para responder consultas en tiempo real con formato enriquecido.</li>
 </ul>
 
