@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { validateTemporalConsistency } from './operacionValidation';
+import { validateTemporalConsistency } from '../operacionValidation';
 import { TipoOperacion } from '@/types/Operacion';
 
 describe('operacionValidation utility', () => {

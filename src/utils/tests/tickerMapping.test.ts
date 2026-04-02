@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getTickerForDolar } from './tickerMapping';
+import { getTickerForDolar } from '../tickerMapping';
 
 describe('tickerMapping utility', () => {
     it('returns undefined if no name is provided', () => {

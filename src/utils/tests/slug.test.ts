@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createSlug } from './slug';
+import { createSlug } from '../slug';
 
 describe('slug utility', () => {
     it('converts text to lowercase and replaces spaces with dashes', () => {

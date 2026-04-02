@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatARS, formatUSD, formatPercentage, formatQuantity, formatDateTime } from './format';
+import { formatARS, formatUSD, formatPercentage, formatQuantity, formatDateTime } from '../format';
 
 describe('format utils', () => {
     describe('formatARS', () => {
