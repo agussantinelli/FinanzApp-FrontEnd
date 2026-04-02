@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent, Typography } from "@mui/material";
+import { Card, CardContent, Typography, CardActionArea } from "@mui/material";
 import { DualQuoteDTO } from "@/types/Market";
 import styles from "./styles/IndexCard.module.css";
 import { formatARS, formatUSD, formatPercentage } from "@/utils/format";
@@ -42,9 +42,7 @@ export default function IndexCard({ data: d }: Props) {
         return (
             <Card
                 className={`${styles.accionesCard} ${styles.riskCard}`}
-                onClick={() => targetSymbol && router.push(`/activos/${targetSymbol}`)}
                 sx={{
-                    cursor: 'pointer',
                     transition: 'transform 0.2s, box-shadow 0.2s',
                     '&:hover': {
                         transform: 'translateY(-4px)',
@@ -52,20 +50,25 @@ export default function IndexCard({ data: d }: Props) {
                     }
                 }}
             >
-                <CardContent className={styles.riskCardContent}>
-                    <Typography variant="h6" className={styles.cardTitleRisk}>
-                        {title}
-                    </Typography>
-                    <Typography variant="caption" className={`${styles.cardSubtitleRisk} ${styles.riskSubtitleBlock}`}>
-                        {subtitle}
-                    </Typography>
-                    <Typography variant="h3" className={styles.riskValue}>
-                        {Math.round(d.usPriceUSD)}
-                    </Typography>
-                    <Typography variant="caption" className={styles.cardSubtitleRisk}>
-                        Puntos Básicos (pbs)
-                    </Typography>
-                </CardContent>
+                <CardActionArea 
+                    onClick={() => targetSymbol && router.push(`/activos/${targetSymbol}`)}
+                    aria-label={`Ver detalles de ${title}`}
+                >
+                    <CardContent className={styles.riskCardContent}>
+                        <Typography variant="h6" className={styles.cardTitleRisk}>
+                            {title}
+                        </Typography>
+                        <Typography variant="caption" className={`${styles.cardSubtitleRisk} ${styles.riskSubtitleBlock}`}>
+                            {subtitle}
+                        </Typography>
+                        <Typography variant="h3" className={styles.riskValue}>
+                            {Math.round(d.usPriceUSD)}
+                        </Typography>
+                        <Typography variant="caption" className={styles.cardSubtitleRisk}>
+                            Puntos Básicos (pbs)
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
             </Card>
         );
     }
@@ -77,9 +80,7 @@ export default function IndexCard({ data: d }: Props) {
     return (
         <Card
             className={styles.accionesCard}
-            onClick={() => targetSymbol && router.push(`/activos/${targetSymbol}`)}
             sx={{
-                cursor: 'pointer',
                 transition: 'transform 0.2s, box-shadow 0.2s',
                 '&:hover': {
                     transform: 'translateY(-4px)',
@@ -87,41 +88,52 @@ export default function IndexCard({ data: d }: Props) {
                 }
             }}
         >
-            <CardContent>
-                <Typography variant="h6" className={styles.cardTitle}>
-                    {title}
-                </Typography>
+            <CardActionArea 
+                onClick={() => targetSymbol && router.push(`/activos/${targetSymbol}`)}
+                aria-label={`Ver detalles de ${title}`}
+            >
+                <CardContent>
+                    <Typography variant="h6" className={styles.cardTitle}>
+                        {title}
+                    </Typography>
 
-                <Typography variant="caption" className={styles.cardSubtitle}>
-                    {subtitle}
-                </Typography>
+                    <Typography variant="caption" className={styles.cardSubtitle}>
+                        {subtitle}
+                    </Typography>
 
-                <Typography className={styles.cardSymbol}>
-                    {d.localSymbol}
-                </Typography>
+                    <Typography className={styles.cardSymbol}>
+                        {d.localSymbol}
+                    </Typography>
 
-                <Typography className={styles.cardText}>
-                    {labelArs}: <strong>{formatARS(d.usPriceARS)}</strong>
-                    {d.usChangePct !== undefined && d.usChangePct !== null && (
-                        <span className={`${styles.changePercent} ${d.usChangePct >= 0 ? styles.positive : styles.negative}`}>
-                            {d.usChangePct > 0 ? "+" : ""}{formatPercentage(d.usChangePct)}%
-                        </span>
-                    )}
-                </Typography>
+                    <Typography className={styles.cardText}>
+                        {labelArs}: <strong>{formatARS(d.usPriceARS)}</strong>
+                        {d.usChangePct !== undefined && d.usChangePct !== null && (
+                            <span 
+                                className={`${styles.changePercent} ${d.usChangePct >= 0 ? styles.positive : styles.negative}`}
+                                aria-label={`Variación porcentual: ${d.usChangePct > 0 ? "subió" : "bajó"} ${formatPercentage(d.usChangePct)}%`}
+                            >
+                                {d.usChangePct > 0 ? "+" : ""}{formatPercentage(d.usChangePct)}%
+                            </span>
+                        )}
+                    </Typography>
 
-                <Typography className={styles.cardText}>
-                    {labelUsd}: <strong>{formatUSD(d.usPriceUSD)}</strong>
-                    {d.usChangePct !== undefined && d.usChangePct !== null && (
-                        <span className={`${styles.changePercent} ${d.usChangePct >= 0 ? styles.positive : styles.negative}`}>
-                            {d.usChangePct > 0 ? "+" : ""}{formatPercentage(d.usChangePct)}%
-                        </span>
-                    )}
-                </Typography>
+                    <Typography className={styles.cardText}>
+                        {labelUsd}: <strong>{formatUSD(d.usPriceUSD)}</strong>
+                        {d.usChangePct !== undefined && d.usChangePct !== null && (
+                            <span 
+                                className={`${styles.changePercent} ${d.usChangePct >= 0 ? styles.positive : styles.negative}`}
+                                aria-label={`Variación porcentual internacional: ${d.usChangePct > 0 ? "subió" : "bajó"} ${formatPercentage(d.usChangePct)}%`}
+                            >
+                                {d.usChangePct > 0 ? "+" : ""}{formatPercentage(d.usChangePct)}%
+                            </span>
+                        )}
+                    </Typography>
 
-                <Typography variant="caption" color="text.secondary" className={styles.cardRate}>
-                    Tasa (CCL): {d.usedDollarRate.toLocaleString("es-AR")}
-                </Typography>
-            </CardContent>
+                    <Typography variant="caption" color="text.secondary" className={styles.cardRate}>
+                        Tasa (CCL): {d.usedDollarRate.toLocaleString("es-AR")}
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
         </Card>
     );
 }

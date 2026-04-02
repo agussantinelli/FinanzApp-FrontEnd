@@ -58,7 +58,7 @@ export default function FinanzAiChat() {
             await streamChatWithAi(userMsg.text, (chunk) => {
                 setLoading(false);
                 accumulatedText += chunk;
-                
+
                 setMessages((prev) => {
                     const existing = prev.find(m => m.id === aiMsgId);
                     if (existing) {
@@ -126,9 +126,9 @@ export default function FinanzAiChat() {
                             disabled={loading}
                             rows={1}
                         />
-                        <button 
-                            type="submit" 
-                            className={styles.sendButton} 
+                        <button
+                            type="submit"
+                            className={styles.sendButton}
                             disabled={loading || !inputValue.trim()}
                             aria-label="Enviar mensaje"
                         >

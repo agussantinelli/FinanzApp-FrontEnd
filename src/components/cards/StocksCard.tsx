@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, Typography } from "@mui/material";
+import { Card, CardContent, Typography, CardActionArea } from "@mui/material";
 import { DualQuoteDTO } from "@/types/Market";
 import styles from "./styles/StocksCard.module.css";
 import { formatARS, formatUSD, formatPercentage } from "@/utils/format";
@@ -18,9 +18,7 @@ export default function StocksCard({ data: d, title }: Props) {
     return (
         <Card
             className={styles.accionesCard}
-            onClick={() => router.push(`/activos/${d.localSymbol}`)}
             sx={{
-                cursor: 'pointer',
                 transition: 'transform 0.2s, box-shadow 0.2s',
                 '&:hover': {
                     transform: 'translateY(-4px)',
@@ -28,40 +26,51 @@ export default function StocksCard({ data: d, title }: Props) {
                 }
             }}
         >
-            <CardContent>
-                <Typography variant="h6" className={styles.cardTitle}>
-                    {displayTitle}
-                </Typography>
+            <CardActionArea 
+                onClick={() => router.push(`/activos/${d.localSymbol}`)}
+                aria-label={`Ver detalles de ${displayTitle}`}
+            >
+                <CardContent>
+                    <Typography variant="h6" className={styles.cardTitle}>
+                        {displayTitle}
+                    </Typography>
 
-                <Typography variant="caption" className={styles.cardSubtitle}>
-                    {isCedearLocal ? `Precio local = CEDEAR · Ratio ${d.cedearRatio}:1` : "Precio local = Acción BYMA (no CEDEAR)"}
-                </Typography>
+                    <Typography variant="caption" className={styles.cardSubtitle}>
+                        {isCedearLocal ? `Precio local = CEDEAR · Ratio ${d.cedearRatio}:1` : "Precio local = Acción BYMA (no CEDEAR)"}
+                    </Typography>
 
-                <Typography className={styles.cardSymbol}>
-                    {d.localSymbol} ↔ {d.usSymbol}
-                </Typography>
+                    <Typography className={styles.cardSymbol}>
+                        {d.localSymbol} ↔ {d.usSymbol}
+                    </Typography>
 
-                <Typography className={styles.cardText}>
-                    Local (ARS): <strong>{formatARS(d.localPriceARS)}</strong>
-                    {d.localChangePct !== undefined && d.localChangePct !== null && (
-                        <span className={`${styles.changePercent} ${d.localChangePct >= 0 ? styles.positive : styles.negative}`}>
-                            {d.localChangePct > 0 ? "+" : ""}{formatPercentage(d.localChangePct)}%
-                        </span>
-                    )}
-                </Typography>
-                <Typography className={styles.cardText}>
-                    USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong>
-                    {d.usChangePct !== undefined && d.usChangePct !== null && (
-                        <span className={`${styles.changePercent} ${d.usChangePct >= 0 ? styles.positive : styles.negative}`}>
-                            {d.usChangePct > 0 ? "+" : ""}{formatPercentage(d.usChangePct)}%
-                        </span>
-                    )}
-                </Typography>
+                    <Typography className={styles.cardText}>
+                        Local (ARS): <strong>{formatARS(d.localPriceARS)}</strong>
+                        {d.localChangePct !== undefined && d.localChangePct !== null && (
+                            <span 
+                                className={`${styles.changePercent} ${d.localChangePct >= 0 ? styles.positive : styles.negative}`}
+                                aria-label={`Variación local: ${d.localChangePct > 0 ? "subió" : "bajó"} ${formatPercentage(d.localChangePct)}%`}
+                            >
+                                {d.localChangePct > 0 ? "+" : ""}{formatPercentage(d.localChangePct)}%
+                            </span>
+                        )}
+                    </Typography>
+                    <Typography className={styles.cardText}>
+                        USA (USD): <strong>{formatUSD(d.usPriceUSD)}</strong>
+                        {d.usChangePct !== undefined && d.usChangePct !== null && (
+                            <span 
+                                className={`${styles.changePercent} ${d.usChangePct >= 0 ? styles.positive : styles.negative}`}
+                                aria-label={`Variación USA: ${d.usChangePct > 0 ? "subió" : "bajó"} ${formatPercentage(d.usChangePct)}%`}
+                            >
+                                {d.usChangePct > 0 ? "+" : ""}{formatPercentage(d.usChangePct)}%
+                            </span>
+                        )}
+                    </Typography>
 
-                <Typography variant="caption" color="text.secondary" className={styles.cardRate}>
-                    Tasa (CCL): {d.usedDollarRate.toLocaleString("es-AR")}
-                </Typography>
-            </CardContent>
+                    <Typography variant="caption" color="text.secondary" className={styles.cardRate}>
+                        Tasa (CCL): {d.usedDollarRate.toLocaleString("es-AR")}
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
         </Card>
     );
 }

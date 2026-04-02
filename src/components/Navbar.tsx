@@ -165,7 +165,7 @@ export default function Navbar() {
                 <Button
                   color="inherit"
                   onClick={handleOpenMoreMenu}
-                  endIcon={<ArrowDropDownIcon />}
+                  endIcon={<ArrowDropDownIcon aria-hidden="true" />}
                   className={styles.moreButton}
                 >
                   Más
@@ -223,7 +223,7 @@ export default function Navbar() {
                 <Button
                   color="inherit"
                   onClick={handleOpenUserMenu}
-                  endIcon={<ArrowDropDownIcon />}
+                  endIcon={<ArrowDropDownIcon aria-hidden="true" />}
                   className={styles.userButton}
                 >
                   {roleLabel} •{" "}
@@ -246,7 +246,7 @@ export default function Navbar() {
                     }}
                   >
                     <ListItemIcon>
-                      <AccountCircleIcon fontSize="small" />
+                      <AccountCircleIcon aria-hidden="true" fontSize="small" />
                     </ListItemIcon>
                     Perfil
                   </MenuItem>
@@ -257,7 +257,7 @@ export default function Navbar() {
 
                   <MenuItem onClick={handleLogout}>
                     <ListItemIcon>
-                      <LogoutIcon fontSize="small" />
+                      <LogoutIcon aria-hidden="true" fontSize="small" />
                     </ListItemIcon>
                     Cerrar sesión
                   </MenuItem>
@@ -267,8 +267,8 @@ export default function Navbar() {
           </Box>
 
           <Box className={styles.mobileMenuIconBox}>
-            <IconButton color="inherit" onClick={toggle(true)} aria-label="menu">
-              <MenuIcon />
+            <IconButton color="inherit" onClick={toggle(true)} aria-label="menú de navegación">
+              <MenuIcon aria-hidden="true" />
             </IconButton>
           </Box>
         </Toolbar>

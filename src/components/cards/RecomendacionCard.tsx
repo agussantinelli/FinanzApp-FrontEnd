@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createSlug } from "@/utils/slug";
 import {
-    Card, CardContent, Typography, Box, Chip, Divider, Stack, Avatar
+    Card, CardContent, Typography, Box, Chip, Divider, Stack, Avatar, CardActionArea
 } from '@mui/material';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
@@ -95,146 +95,164 @@ export default function RecomendacionCard({ item, showStatus = false, isAdmin = 
     let resolutionConfig = null;
     if (item.estado === EstadoRecomendacion.Cerrada && item.esAcertada !== null && item.esAcertada !== undefined) {
         if (item.esAcertada) {
-            resolutionConfig = { label: "Acertada", color: "success", icon: <CheckCircleIcon /> };
+            resolutionConfig = { label: "Acertada", color: "success", icon: <CheckCircleIcon aria-hidden="true" /> };
         } else {
-            resolutionConfig = { label: "Fallida", color: "error", icon: <CancelIcon /> };
+            resolutionConfig = { label: "Fallida", color: "error", icon: <CancelIcon aria-hidden="true" /> };
         }
     }
 
     return (
         <Card
             variant="outlined"
-            onClick={() => router.push(`/recomendaciones/${createSlug(item.titulo)}`)}
             sx={{
                 height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
                 position: 'relative',
                 transition: 'transform 0.2s, box-shadow 0.2s',
-                '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 4px 20px rgba(0,0,0,0.4)', borderColor: 'primary.main', cursor: 'pointer' },
+                '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 4px 20px rgba(0,0,0,0.4)', borderColor: 'primary.main' },
                 borderColor: item.esDestacada ? colors.neon.gold : undefined,
                 boxShadow: item.esDestacada ? `0 0 10px ${colors.neon.gold}40` : undefined
             }}
         >
-            {item.esDestacada && (
-                <Box sx={{ position: 'absolute', top: 0, right: 0, p: 0.5, backgroundColor: colors.neon.gold, borderBottomLeftRadius: 8, color: 'black', zIndex: 5 }}>
-                    <StarIcon fontSize="small" />
-                </Box>
-            )}
+            <CardActionArea
+                onClick={() => router.push(`/recomendaciones/${createSlug(item.titulo)}`)}
+                aria-label={`Ver detalles de la recomendación: ${item.titulo}`}
+                sx={{
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'stretch',
+                    justifyContent: 'flex-start',
+                    '& .MuiCardActionArea-focusHighlight': {
+                        backgroundColor: 'transparent'
+                    }
+                }}
+            >
+                {item.esDestacada && (
+                    <Box sx={{ position: 'absolute', top: 0, right: 0, p: 0.5, backgroundColor: colors.neon.gold, borderBottomLeftRadius: 8, color: 'black', zIndex: 5 }}>
+                        <StarIcon aria-hidden="true" fontSize="small" />
+                    </Box>
+                )}
 
-            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', textDecoration: 'none', color: 'inherit' }}>
-                <CardContent sx={{ flex: 1 }}>
-                    <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={1}>
-                        <Box>
-                            <Typography variant="overline" color="text.secondary">
-                                {item.fuente} • {formattedDate}
-                            </Typography>
-                            <Typography variant="h6" component="div" sx={{ lineHeight: 1.2, mb: 0.5 }}>
-                                {item.titulo}
-                            </Typography>
+                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', textDecoration: 'none', color: 'inherit' }}>
+                    <CardContent sx={{ flex: 1 }}>
+                        <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={1}>
+                            <Box>
+                                <Typography variant="overline" color="text.secondary">
+                                    {item.fuente} • {formattedDate}
+                                </Typography>
+                                <Typography variant="h6" component="div" sx={{ lineHeight: 1.2, mb: 0.5 }}>
+                                    {item.titulo}
+                                </Typography>
 
-                            <Link
-                                href={`/recomendaciones/me?userId=${item.autorId}`}
-                                onClick={(e) => e.stopPropagation()}
-                                style={{ textDecoration: 'none', color: 'inherit' }}
-                            >
-                                <Typography variant="caption" color="primary" sx={{ display: 'flex', alignItems: 'center', gap: 0.5, '&:hover': { textDecoration: 'underline' } }}>
-                                    <Avatar src={item.fotoPerfil} sx={{ width: 20, height: 20, fontSize: 10 }}>
+                                <Typography 
+                                    variant="caption" 
+                                    color="primary" 
+                                    sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
+                                    aria-label={`Autor: ${item.autorNombre}`}
+                                >
+                                    <Avatar src={item.fotoPerfil} sx={{ width: 20, height: 20, fontSize: 10 }} aria-hidden="true">
                                         {item.autorNombre ? item.autorNombre[0].toUpperCase() : '?'}
                                     </Avatar>
                                     {item.autorNombre}
                                 </Typography>
-                            </Link>
+                            </Box>
+
+                            <Box display="flex" gap={1} flexWrap="wrap">
+                                {resolutionConfig && (
+                                    <Chip
+                                        label={resolutionConfig.label}
+                                        color={resolutionConfig.color as any}
+                                        size="small"
+                                        icon={resolutionConfig.icon}
+                                        variant="filled"
+                                        sx={{ fontWeight: 'bold' }}
+                                    />
+                                )}
+                                {showStatus && estadoConfig && !resolutionConfig && (
+                                    <Chip
+                                        label={estadoConfig.label}
+                                        color={estadoConfig.color as any}
+                                        size="small"
+                                        variant="filled"
+                                        sx={{ fontWeight: 'bold' }}
+                                    />
+                                )}
+                                <Chip
+                                    label={item.riesgo}
+                                    color={getRiesgoColor(item.riesgo) as any}
+                                    size="small"
+                                    icon={<ShieldIcon aria-hidden="true" />}
+                                    variant="outlined"
+                                />
+                            </Box>
                         </Box>
 
-                        <Box display="flex" gap={1} flexWrap="wrap">
-                            {resolutionConfig && (
-                                <Chip
-                                    label={resolutionConfig.label}
-                                    color={resolutionConfig.color as any}
-                                    size="small"
-                                    icon={resolutionConfig.icon}
-                                    variant="filled"
-                                    sx={{ fontWeight: 'bold' }}
-                                />
-                            )}
-                            {showStatus && estadoConfig && !resolutionConfig && (
-                                <Chip
-                                    label={estadoConfig.label}
-                                    color={estadoConfig.color as any}
-                                    size="small"
-                                    variant="filled"
-                                    sx={{ fontWeight: 'bold' }}
-                                />
-                            )}
+                        <Box mb={2}>
+                            <Typography variant="body2" color="text.secondary">
+                                {item.cantidadActivos} activo{item.cantidadActivos !== 1 ? 's' : ''} recomendados.
+                                <br />
+                                Ver detalle completo para más información.
+                            </Typography>
+                        </Box>
+
+                        <Stack direction="row" spacing={1} mb={2}>
                             <Chip
-                                label={item.riesgo}
-                                color={getRiesgoColor(item.riesgo) as any}
+                                icon={<AccessTimeIcon aria-hidden="true" style={{ color: 'inherit' }} />}
+                                label={getHorizonteLabel(item.horizonte)}
                                 size="small"
-                                icon={<ShieldIcon />}
                                 variant="outlined"
+                                sx={{
+                                    fontSize: '0.75rem',
+                                    fontWeight: 'bold',
+                                    ...getHorizonteStyle(item.horizonte),
+                                    backgroundColor: 'rgba(0,0,0,0.2)'
+                                }}
                             />
+                        </Stack>
+
+                        <Divider sx={{ my: 1 }} />
+
+                        <Box mt={1} display="flex" justifyContent="space-between" alignItems="center">
+                            <Typography variant="caption" color="text.secondary" fontStyle="italic">
+                                Haz clic para ver la estrategia completa.
+                            </Typography>
                         </Box>
-                    </Box>
+                    </CardContent>
+                </Box>
+            </CardActionArea>
 
-                    <Box mb={2}>
-                        <Typography variant="body2" color="text.secondary">
-                            {item.cantidadActivos} activo{item.cantidadActivos !== 1 ? 's' : ''} recomendados.
-                            <br />
-                            Ver detalle completo para más información.
-                        </Typography>
-                    </Box>
-
-                    <Stack direction="row" spacing={1} mb={2}>
-                        <Chip
-                            icon={<AccessTimeIcon style={{ color: 'inherit' }} />}
-                            label={getHorizonteLabel(item.horizonte)}
+            {isAdmin && item.estado === EstadoRecomendacion.Pendiente && (
+                <Box sx={{ px: 2, pb: 2, zIndex: 2, position: 'relative' }}>
+                    <Stack direction="row" spacing={1} justifyContent="flex-end">
+                        <IconButton
                             size="small"
-                            variant="outlined"
-                            sx={{
-                                fontSize: '0.75rem',
-                                fontWeight: 'bold',
-                                ...getHorizonteStyle(item.horizonte),
-                                backgroundColor: 'rgba(0,0,0,0.2)'
+                            color="success"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onApprove?.();
                             }}
-                        />
+                            aria-label="Aprobar"
+                            title="Aprobar"
+                        >
+                            <ThumbUpIcon aria-hidden="true" fontSize="small" />
+                        </IconButton>
+                        <IconButton
+                            size="small"
+                            color="error"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onReject?.();
+                            }}
+                            aria-label="Rechazar"
+                            title="Rechazar"
+                        >
+                            <ThumbDownIcon aria-hidden="true" fontSize="small" />
+                        </IconButton>
                     </Stack>
-
-                    <Divider sx={{ my: 1 }} />
-
-                    <Box mt={1} display="flex" justifyContent="space-between" alignItems="center">
-                        <Typography variant="caption" color="text.secondary" fontStyle="italic">
-                            Haz clic para ver la estrategia completa.
-                        </Typography>
-                        {isAdmin && item.estado === EstadoRecomendacion.Pendiente && (
-                            <Stack direction="row" spacing={1}>
-                                <IconButton
-                                    size="small"
-                                    color="success"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        onApprove?.();
-                                    }}
-                                    title="Aprobar"
-                                >
-                                    <ThumbUpIcon fontSize="small" />
-                                </IconButton>
-                                <IconButton
-                                    size="small"
-                                    color="error"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        onReject?.();
-                                    }}
-                                    title="Rechazar"
-                                >
-                                    <ThumbDownIcon fontSize="small" />
-                                </IconButton>
-                            </Stack>
-                        )}
-                    </Box>
-                </CardContent>
-            </Box>
+                </Box>
+            )}
         </Card>
     );
 }
