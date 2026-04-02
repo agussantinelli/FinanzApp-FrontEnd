@@ -11,7 +11,7 @@ To maintain 100% reliability and prevent visual or logic regressions in the Fina
 ## Guidelines
 1. **Rule of One**: Every `.ts` or `.tsx` file in `src/services`, `src/store`, `src/utils`, `src/hooks`, or `src/components` MUST have a matching `.test.ts` or `.test.tsx` file.
 2. **Location**: Test files MUST be located in a nested `tests/` directory within the same directory as the source file (Except for `src/app/`, where they remain in the same directory).
-3. **Naming**: If the file is `useAuth.ts`, the test file MUST be `useAuth.test.ts`.
+3. **Naming**: If the file is `useAuth.ts`, the test file MUST be `useAuth.test.ts` and reside in a `tests/` subdirectory.
 4. **Content**:
     - **Logic/Services/Hooks**: Tests must cover main success paths and edge cases.
     - **Components**: Tests must cover rendering, user interaction, and state changes (using Vitest + React Testing Library).
@@ -34,9 +34,16 @@ src/app/dashboard/
 └── page.test.tsx
 ```
 
-### Incorrect Structure (Missing Test)
+### Incorrect Structure (Missing Test or Wrong Location)
 ```
 src/components/common/
-└── Button.tsx
-(Error: Missing Button.test.tsx)
+├── Button.tsx
+└── Button.test.tsx  <-- ERROR: Should be in src/components/common/tests/
+```
+
+### Incorrect Structure (Missing Folder)
+```
+src/hooks/
+├── useAuth.ts
+└── useAuth.test.ts  <-- ERROR: Should be in src/hooks/tests/
 ```
