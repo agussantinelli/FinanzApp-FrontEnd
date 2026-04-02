@@ -4,7 +4,7 @@ import {
     downloadPortfolioExcel, 
     downloadMisOperacionesPdf, 
     downloadMisOperacionesExcel 
-} from './ReportesService';
+} from '../ReportesService';
 import { http } from '@/lib/http';
 
 vi.mock('@/lib/http', () => ({

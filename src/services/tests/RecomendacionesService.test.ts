@@ -5,7 +5,7 @@ import {
     getRecomendaciones,
     createRecomendacion,
     getRecomendacionById
-} from './RecomendacionesService';
+} from '../RecomendacionesService';
 import { http } from '@/lib/http';
 
 vi.mock('@/lib/http', () => ({

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getTopCryptos, getCryptoBySymbol } from './CryptoService';
+import { getTopCryptos, getCryptoBySymbol } from '../CryptoService';
 import { http } from '@/lib/http';
 
 vi.mock('@/lib/http', () => ({

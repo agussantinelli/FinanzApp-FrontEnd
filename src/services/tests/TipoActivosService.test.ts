@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getTiposActivo, getTiposActivoNoMoneda } from './TipoActivosService';
+import { getTiposActivo, getTiposActivoNoMoneda } from '../TipoActivosService';
 import { http } from '@/lib/http';
 
 vi.mock('@/lib/http', () => ({

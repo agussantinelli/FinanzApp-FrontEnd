@@ -4,7 +4,7 @@ import {
     getExpertoStats, 
     getAdminStats, 
     getAdminPortfolioStats 
-} from './DashboardService';
+} from '../DashboardService';
 import { http } from '@/lib/http';
 
 vi.mock('@/lib/http', () => ({

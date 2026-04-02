@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { analyzeFile, confirmImport } from './ImportService';
+import { analyzeFile, confirmImport } from '../ImportService';
 import { http } from '@/lib/http';
 
 vi.mock('@/lib/http', () => ({

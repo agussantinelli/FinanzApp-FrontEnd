@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { chatWithAi } from './AiService';
+import { chatWithAi } from '../AiService';
 import { http } from '@/lib/http';
 
 vi.mock('@/lib/http', () => ({

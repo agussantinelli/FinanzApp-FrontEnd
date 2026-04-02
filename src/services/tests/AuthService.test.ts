@@ -15,7 +15,7 @@ import {
     resetPasswordRequest,
     resetPasswordConfirm,
     getHomePathForRole
-} from './AuthService';
+} from '../AuthService';
 import { http } from '@/lib/http';
 import { RolUsuario } from '@/types/Usuario';
 

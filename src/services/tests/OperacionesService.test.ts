@@ -8,7 +8,7 @@ import {
     createOperacion, 
     updateOperacion,
     deleteOperacion 
-} from './OperacionesService';
+} from '../OperacionesService';
 import { http } from '@/lib/http';
 
 vi.mock('@/lib/http', () => ({

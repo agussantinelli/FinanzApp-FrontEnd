@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getRegisterGeoData } from './GeoService';
+import { getRegisterGeoData } from '../GeoService';
 import { http } from '@/lib/http';
 
 vi.mock('@/lib/http', () => ({

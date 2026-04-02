@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getStockDuals, getIndices } from './StocksService';
+import { getStockDuals, getIndices } from '../StocksService';
 import { http } from '@/lib/http';
 
 vi.mock('@/lib/http', () => ({

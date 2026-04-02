@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getCotizacionesDolar } from './DolarService';
+import { getCotizacionesDolar } from '../DolarService';
 import { http } from '@/lib/http';
 
 vi.mock('@/lib/http', () => ({

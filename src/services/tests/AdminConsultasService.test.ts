@@ -3,7 +3,7 @@ import {
     getOperacionesAdmin, 
     getOperacionesDeHoy, 
     getPortafoliosAdmin 
-} from './AdminConsultasService';
+} from '../AdminConsultasService';
 import { http } from '@/lib/http';
 
 vi.mock('@/lib/http', () => ({

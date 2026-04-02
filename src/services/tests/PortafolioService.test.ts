@@ -12,7 +12,7 @@ import {
     toggleDestacado,
     toggleTopPortafolio,
     deletePortafolio
-} from './PortafolioService';
+} from '../PortafolioService';
 import { http } from '@/lib/http';
 
 vi.mock('@/lib/http', () => ({

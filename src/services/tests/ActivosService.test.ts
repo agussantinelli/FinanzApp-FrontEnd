@@ -14,7 +14,7 @@ import {
     getActivosByTipoAndSector,
     getActivosFavoritos,
     toggleSeguirActivo 
-} from './ActivosService';
+} from '../ActivosService';
 import { http } from '@/lib/http';
 import * as ActivosCache from '@/lib/activos-cache';
 

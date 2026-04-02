@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getSectores, getSectorById } from './SectorService';
+import { getSectores, getSectorById } from '../SectorService';
 import { http } from '@/lib/http';
 
 vi.mock('@/lib/http', () => ({

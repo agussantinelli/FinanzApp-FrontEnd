@@ -8,7 +8,7 @@ import {
     demoteToInversor,
     uploadUserPhoto,
     deletePersona
-} from './PersonaService';
+} from '../PersonaService';
 import { http } from '@/lib/http';
 
 vi.mock('@/lib/http', () => ({
