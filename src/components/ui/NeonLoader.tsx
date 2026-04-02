@@ -7,11 +7,12 @@ import { NeonLoaderProps } from '@/types/ComponentProps';
 
 const NeonLoader: React.FC<NeonLoaderProps> = ({ message = "Cargando...", size = 60 }) => {
     return (
-        <Box className={styles.container}>
+        <Box className={styles.container} role="status" aria-busy="true">
             <Box className={styles.loaderWrapper}>
                 <Box
                     className={styles.glowEffect}
                     sx={{ width: size, height: size }}
+                    aria-hidden="true"
                 />
                 <CircularProgress
                     size={size}
@@ -22,7 +23,7 @@ const NeonLoader: React.FC<NeonLoaderProps> = ({ message = "Cargando...", size =
                     }}
                 />
             </Box>
-            <Typography variant="h6" className={styles.loadingText}>
+            <Typography variant="h6" className={styles.loadingText} aria-live="polite">
                 {message}
             </Typography>
         </Box>

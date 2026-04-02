@@ -316,17 +316,19 @@ export default function ImportExcelModal({ open, onClose, onSuccess }: ImportExc
                         <Button onClick={analyze} variant="contained" disabled={!file}>Analizar Archivo</Button>
                     </>
                 )}
-                {step === "PREVIEW" && (
+                {(step === "PREVIEW" || step === "CONFIRMING") && (
                     <>
                         <Button onClick={() => setStep("UPLOAD")}>Atrás</Button>
                         <Button
                             onClick={confirm}
                             variant="contained"
-                            disabled={!previewData?.items.some((i: ImportedItemPreviewDTO) => i.isValid)}
+                            disabled={!previewData?.items.some((i: ImportedItemPreviewDTO) => i.isValid) || step === "CONFIRMING"}
                             color="primary"
                             sx={{ fontWeight: 'bold' }}
+                            aria-busy={step === "CONFIRMING"}
+                            aria-label={step === "CONFIRMING" ? "Confirmando importación..." : "Confirmar Importación"}
                         >
-                            Confirmar Importación
+                            {step === "CONFIRMING" ? <CircularProgress size={24} aria-hidden="true" /> : "Confirmar Importación"}
                         </Button>
                     </>
                 )}
