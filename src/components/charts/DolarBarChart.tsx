@@ -137,7 +137,11 @@ export default function DolarBarChart() {
       </Box>
 
       <CardContent className={styles.kpiCardContent}>
-        <Box className={styles.chartContainer}>
+        <Box 
+          className={styles.chartContainer}
+          role="img"
+          aria-label={`Gráfico de barras de cotizaciones del dólar: ${data.map(d => `${d.nombre}: venta ${ARS(d.venta || 0)}`).join(', ')}.`}
+        >
           <Bar data={chart.data as any} options={chart.options as any} />
         </Box>
       </CardContent>

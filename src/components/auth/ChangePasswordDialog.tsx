@@ -100,7 +100,15 @@ export default function ChangePasswordDialog({ open, onClose }: ChangePasswordDi
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} disabled={loading}>Cancelar</Button>
-                    <Button type="submit" variant="contained" disabled={loading || success}>Cambiar</Button>
+                    <Button 
+                        type="submit" 
+                        variant="contained" 
+                        disabled={loading || success}
+                        aria-busy={loading}
+                        aria-label={loading ? "Cambiando contraseña..." : "Cambiar contraseña"}
+                    >
+                        {loading ? "Cambiando..." : "Cambiar"}
+                    </Button>
                 </DialogActions>
             </form>
         </Dialog>

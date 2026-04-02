@@ -24,7 +24,8 @@ import {
     Select,
     MenuItem,
     FormControl,
-    InputLabel
+    InputLabel,
+    IconButton
 } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -135,7 +136,7 @@ export default function ImportExcelModal({ open, onClose, onSuccess }: ImportExc
                                         alignItems: 'center'
                                     }}
                                 >
-                                    <CloudUploadIcon sx={{ fontSize: 48, color: 'text.secondary', mb: 1 }} />
+                                    <CloudUploadIcon aria-hidden="true" sx={{ fontSize: 48, color: 'text.secondary', mb: 1 }} />
                                     <Typography color="text.secondary" variant="h6">
                                         {file ? file.name : "Click o arrastra tu Excel aquí"}
                                     </Typography>
@@ -152,7 +153,7 @@ export default function ImportExcelModal({ open, onClose, onSuccess }: ImportExc
 
                     {step === "ANALYZING" && (
                         <Box sx={{ width: '100%', textAlign: 'center', py: 4 }}>
-                            <CircularProgress size={40} />
+                            <CircularProgress size={40} aria-busy="true" aria-label="Analizando archivo con inteligencia artificial" />
                             <Typography sx={{ mt: 2, fontWeight: 500 }}>Analizando archivo con IA...</Typography>
                             <Typography variant="caption" color="text.secondary">Esto puede tomar unos segundos.</Typography>
                         </Box>
@@ -164,12 +165,16 @@ export default function ImportExcelModal({ open, onClose, onSuccess }: ImportExc
                                 <Typography variant="subtitle1" gutterBottom fontWeight="bold">Resumen de Análisis:</Typography>
                                 <Stack direction="row" spacing={2} sx={{ mb: 1 }}>
                                     <Box sx={{ color: 'success.main', display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                                        <CheckCircleIcon fontSize="small" />
-                                        <Typography variant="body2" fontWeight="bold">{previewData.items.filter((i: ImportedItemPreviewDTO) => i.isValid).length} válidas</Typography>
+                                        <CheckCircleIcon fontSize="small" aria-hidden="true" />
+                                        <Typography variant="body2" fontWeight="bold">
+                                            {previewData.items.filter((i: ImportedItemPreviewDTO) => i.isValid).length} válidas
+                                        </Typography>
                                     </Box>
                                     <Box sx={{ color: 'error.main', display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                                        <ErrorIcon fontSize="small" />
-                                        <Typography variant="body2" fontWeight="bold">{previewData.items.filter((i: ImportedItemPreviewDTO) => !i.isValid).length} con errores</Typography>
+                                        <ErrorIcon fontSize="small" aria-hidden="true" />
+                                        <Typography variant="body2" fontWeight="bold">
+                                            {previewData.items.filter((i: ImportedItemPreviewDTO) => !i.isValid).length} con errores
+                                        </Typography>
                                     </Box>
                                 </Stack>
                             </Box>
@@ -233,9 +238,9 @@ export default function ImportExcelModal({ open, onClose, onSuccess }: ImportExc
                                             >
                                                 <TableCell>
                                                     {item.isValid ?
-                                                        <Tooltip title="Válido"><CheckCircleIcon color="success" fontSize="small" /></Tooltip>
+                                                        <Tooltip title="Válido"><CheckCircleIcon color="success" fontSize="small" aria-label="Operación válida" /></Tooltip>
                                                         :
-                                                        <Tooltip title={item.validationMessage || "Error"}><ErrorIcon color="error" fontSize="small" /></Tooltip>
+                                                        <Tooltip title={item.validationMessage || "Error"}><ErrorIcon color="error" fontSize="small" aria-label={`Error: ${item.validationMessage || "Dato inválido"}`} /></Tooltip>
                                                     }
                                                 </TableCell>
                                                 <TableCell align="left">{item.fecha ? new Date(item.fecha).toLocaleDateString() : '-'}</TableCell>
@@ -249,14 +254,25 @@ export default function ImportExcelModal({ open, onClose, onSuccess }: ImportExc
                                                 <TableCell align="left">{item.moneda}</TableCell>
                                                 <TableCell align="center">
                                                     <Tooltip title="Editar">
-                                                        <Button size="small" onClick={() => handleEditClick(item, index)} sx={{ minWidth: 30 }}>
-                                                            <EditIcon fontSize="small" />
-                                                        </Button>
+                                                        <IconButton 
+                                                            size="small" 
+                                                            onClick={() => handleEditClick(item, index)} 
+                                                            sx={{ minWidth: 30 }}
+                                                            aria-label={`Editar operación de ${item.symbol}`}
+                                                        >
+                                                            <EditIcon fontSize="small" aria-hidden="true" />
+                                                        </IconButton>
                                                     </Tooltip>
                                                     <Tooltip title="Eliminar">
-                                                        <Button size="small" onClick={() => deleteItem(index)} color="error" sx={{ minWidth: 30 }}>
-                                                            <DeleteIcon fontSize="small" />
-                                                        </Button>
+                                                        <IconButton 
+                                                            size="small" 
+                                                            onClick={() => deleteItem(index)} 
+                                                            color="error" 
+                                                            sx={{ minWidth: 30 }}
+                                                            aria-label={`Eliminar operación de ${item.symbol}`}
+                                                        >
+                                                            <DeleteIcon fontSize="small" aria-hidden="true" />
+                                                        </IconButton>
                                                     </Tooltip>
                                                 </TableCell>
                                             </TableRow>

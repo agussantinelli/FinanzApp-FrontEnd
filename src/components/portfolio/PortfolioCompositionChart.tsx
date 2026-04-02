@@ -119,7 +119,11 @@ export default function PortfolioCompositionChart({ activos, totalPesos, totalDo
                 Distribución de Activos
             </Typography>
 
-            <Box sx={{ position: 'relative', width: '100%', height: '100%', maxHeight: 350 }}> {/* Reduced from 400 */}
+            <Box 
+                sx={{ position: 'relative', width: '100%', height: '100%', maxHeight: 350 }}
+                role="img"
+                aria-label={`Gráfico circular que muestra la distribución de ${activos.length} activos en el portafolio. ${activos.map(a => `${a.symbol}: ${formatPercentage(a.porcentajeCartera)}%`).join(', ')}.`}
+            >
                 {activos.length > 0 ? (
                     <Doughnut data={data} options={options} />
                 ) : (

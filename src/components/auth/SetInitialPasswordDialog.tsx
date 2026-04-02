@@ -103,7 +103,15 @@ export default function SetInitialPasswordDialog({ open, onClose }: SetInitialPa
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} disabled={loading}>Cancelar</Button>
-                    <Button type="submit" variant="contained" disabled={loading || success}>Guardar</Button>
+                    <Button 
+                        type="submit" 
+                        variant="contained" 
+                        disabled={loading || success}
+                        aria-busy={loading}
+                        aria-label={loading ? "Guardando contraseña..." : "Guardar contraseña"}
+                    >
+                        {loading ? "Guardando..." : "Guardar"}
+                    </Button>
                 </DialogActions>
             </form>
         </Dialog>

@@ -83,6 +83,7 @@ function LoginContent() {
                 fullWidth
                 disabled={loading}
                 className={styles.submitButton}
+                aria-busy={loading}
               >
                 {loading ? "Ingresando..." : "Entrar"}
               </Button>
@@ -117,7 +118,8 @@ function LoginContent() {
                 <Box
                   component="img"
                   src="/google-logo.svg"
-                  alt="Google Logo"
+                  alt=""
+                  aria-hidden="true"
                   width="20px"
                   height="20px"
                 />

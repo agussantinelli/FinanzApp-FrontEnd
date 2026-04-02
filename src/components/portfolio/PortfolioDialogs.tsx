@@ -81,8 +81,14 @@ export function CreatePortfolioDialog({ open, onClose, onSuccess }: CreatePortfo
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose} disabled={loading}>Cancelar</Button>
-                <Button onClick={handleSubmit} variant="contained" disabled={!nombre.trim() || loading}>
-                    {loading ? <CircularProgress size={24} /> : "Crear"}
+                <Button 
+                    onClick={handleSubmit} 
+                    variant="contained" 
+                    disabled={!nombre.trim() || loading}
+                    aria-busy={loading}
+                    aria-label={loading ? "Creando portafolio..." : "Crear portafolio"}
+                >
+                    {loading ? <CircularProgress size={24} aria-hidden="true" /> : "Crear"}
                 </Button>
             </DialogActions>
         </Dialog>
@@ -227,8 +233,14 @@ export function EditPortfolioDialog({ open, onClose, onSuccess, portfolio }: Edi
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose} disabled={loading}>Cancelar</Button>
-                <Button onClick={handleSubmit} variant="contained" disabled={!nombre.trim() || loading}>
-                    {loading ? <CircularProgress size={24} /> : "Guardar Cambios"}
+                <Button 
+                    onClick={handleSubmit} 
+                    variant="contained" 
+                    disabled={!nombre.trim() || loading}
+                    aria-busy={loading}
+                    aria-label={loading ? "Guardando cambios del portafolio..." : "Guardar cambios"}
+                >
+                    {loading ? <CircularProgress size={24} aria-hidden="true" /> : "Guardar Cambios"}
                 </Button>
             </DialogActions>
         </Dialog>

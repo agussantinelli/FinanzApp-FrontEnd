@@ -313,6 +313,7 @@ export default function RegisterPage() {
                 fullWidth
                 disabled={submitting}
                 className={styles.submitButton}
+                aria-busy={submitting}
               >
                 {submitting ? "Creando cuenta..." : "Crear cuenta"}
               </Button>
