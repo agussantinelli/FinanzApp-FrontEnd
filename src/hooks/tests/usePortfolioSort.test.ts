@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { usePortfolioSort } from './usePortfolioSort';
+import { usePortfolioSort } from '../usePortfolioSort';
 
 describe('usePortfolioSort hook', () => {
     const mockActivos = [

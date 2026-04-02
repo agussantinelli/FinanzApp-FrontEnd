@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useAdminUsers } from './useAdminUsers';
+import { useAdminUsers } from '../useAdminUsers';
 import { getPersonas, promoteToExperto, demoteToInversor } from '@/services/PersonaService';
 
 vi.mock('@/services/PersonaService', () => ({

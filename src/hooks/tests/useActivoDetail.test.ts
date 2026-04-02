@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useActivoDetail } from './useActivoDetail';
+import { useActivoDetail } from '../useActivoDetail';
 import { getActivoById, getActivoByTicker } from '@/services/ActivosService';
 import { getRecomendacionesByActivo, getRecomendacionById } from '@/services/RecomendacionesService';
 import { getActivoFromCache } from '@/lib/activos-cache';

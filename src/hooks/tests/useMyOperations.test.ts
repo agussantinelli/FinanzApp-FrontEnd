@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
-import { useMyOperations } from './useMyOperations';
+import { useMyOperations } from '../useMyOperations';
 import { useAuth } from '@/hooks/useAuth';
 import { getOperacionesByPersona } from '@/services/OperacionesService';
 import { getCotizacionesDolar } from '@/services/DolarService';

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
-import { useActivosFilters } from './useActivosFilters';
+import { useActivosFilters } from '../useActivosFilters';
 import * as ActivosService from '@/services/ActivosService';
 import * as TipoActivosService from '@/services/TipoActivosService';
 import * as SectorService from '@/services/SectorService';

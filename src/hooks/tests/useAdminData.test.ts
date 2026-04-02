@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useAdminData } from './useAdminData';
+import { useAdminData } from '../useAdminData';
 import { getDashboardStats, getAdminPortfolioStats, getAllOperations } from '@/services/AdminService';
 import { getPersonas } from '@/services/PersonaService';
 import { getActivosNoMoneda } from '@/services/ActivosService';

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useImportExcel } from './useImportExcel';
+import { useImportExcel } from '../useImportExcel';
 import { analyzeFile, confirmImport } from '@/services/ImportService';
 import { usePortfolioData } from '@/hooks/usePortfolioData';
 

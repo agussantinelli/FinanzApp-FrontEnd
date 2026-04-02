@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useIndicesData } from './useIndicesData';
+import { useIndicesData } from '../useIndicesData';
 import { getIndices } from '@/services/StocksService';
 
 vi.mock('@/services/StocksService', () => ({

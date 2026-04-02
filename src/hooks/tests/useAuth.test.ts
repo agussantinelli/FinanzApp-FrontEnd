@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useAuth } from './useAuth';
+import { useAuth } from '../useAuth';
 import { getCurrentUser, clearAuthSession, verifySession } from '@/services/AuthService';
 import { useRouter } from 'next/navigation';
 

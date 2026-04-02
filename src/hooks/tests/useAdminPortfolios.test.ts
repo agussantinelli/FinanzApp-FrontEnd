@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useAdminPortfolios } from './useAdminPortfolios';
+import { useAdminPortfolios } from '../useAdminPortfolios';
 import { getPortafoliosAdmin, getPortafolioValuado, toggleDestacado, deletePortafolio } from '@/services/PortafolioService';
 
 vi.mock('@/services/PortafolioService', () => ({

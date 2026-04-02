@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useMisRecomendaciones } from './useMisRecomendaciones';
+import { useMisRecomendaciones } from '../useMisRecomendaciones';
 import { useAuth } from '@/hooks/useAuth';
 import { useRecomendaciones } from '@/hooks/useRecomendaciones';
 import { getSectores } from '@/services/SectorService';

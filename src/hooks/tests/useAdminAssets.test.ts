@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useAdminAssets } from './useAdminAssets';
+import { useAdminAssets } from '../useAdminAssets';
 import { getActivosNoMoneda, createActivo, updateActivo, deleteActivo } from '@/services/ActivosService';
 
 vi.mock('@/services/ActivosService', () => ({

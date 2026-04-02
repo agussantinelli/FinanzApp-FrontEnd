@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useAdminRecommendations } from './useAdminRecommendations';
+import { useAdminRecommendations } from '../useAdminRecommendations';
 import { getRecomendacionesAdmin, destacarRecomendacion, aprobarRecomendacion } from '@/services/RecomendacionesService';
 
 vi.mock('@/services/RecomendacionesService', () => ({

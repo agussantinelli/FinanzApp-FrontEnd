@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useDolarData } from './useDolarData';
+import { useDolarData } from '../useDolarData';
 import { getCotizacionesDolar } from '@/services/DolarService';
 
 vi.mock('@/services/DolarService', () => ({

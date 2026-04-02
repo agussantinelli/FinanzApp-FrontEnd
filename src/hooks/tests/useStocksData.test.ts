@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useStocksData } from './useStocksData';
+import { useStocksData } from '../useStocksData';
 import { getStockDuals } from '@/services/StocksService';
 import { getCotizacionesDolar } from '@/services/DolarService';
 

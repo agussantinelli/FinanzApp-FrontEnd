@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { usePortfolioData } from './usePortfolioData';
+import { usePortfolioData } from '../usePortfolioData';
 import { useAuth } from '@/hooks/useAuth';
 import { getMisPortafolios, getPortafolioValuado } from '@/services/PortafolioService';
 

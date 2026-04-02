@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useRegister } from './useRegister';
+import { useRegister } from '../useRegister';
 import { getRegisterGeoData, register as registerService, getHomePathForRole } from '@/services/AuthService';
 import { useRouter } from 'next/navigation';
 

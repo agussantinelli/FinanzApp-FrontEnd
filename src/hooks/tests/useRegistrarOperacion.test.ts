@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useRegistrarOperacion } from './useRegistrarOperacion';
+import { useRegistrarOperacion } from '../useRegistrarOperacion';
 import { getActivoById, searchActivos } from '@/services/ActivosService';
 import { createOperacion, getOperacionesByPersona } from '@/services/OperacionesService';
 import { getMisPortafolios, getPortafolioValuado } from '@/services/PortafolioService';

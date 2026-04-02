@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useLogin } from './useLogin';
+import { useLogin } from '../useLogin';
 import { login, googleLogin, getHomePathForRole } from '@/services/AuthService';
 import { useRouter, useSearchParams } from 'next/navigation';
 
