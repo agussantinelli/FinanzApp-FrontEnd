@@ -340,6 +340,20 @@
 
 <hr>
 
+<h2>♿ Accesibilidad</h2>
+
+<p>FinanzApp está comprometida con la inclusión y la usabilidad universal, implementando estándares de accesibilidad para asegurar que todos los usuarios puedan gestionar sus finanzas sin barreras.</p>
+
+<h3>🛠️ Estándares Web (WCAG 2.1)</h3>
+<ul>
+    <li><strong>Navegación por Teclado:</strong> Interfaz totalmente operable mediante teclado, con indicadores de foco visibles y gestión semántica del orden de tabulación (<code>tabindex</code>).</li>
+    <li><strong>Lectores de Pantalla (ARIA):</strong> Uso extensivo de atributos ARIA (<code>aria-label</code>, <code>role</code>, <code>aria-live</code>) para proporcionar contexto semántico a tecnologías de asistencia.</li>
+    <li><strong>Contraste y Legibilidad:</strong> Paleta de colores Neon/Dark optimizada para alto contraste, facilitando la lectura en diversas condiciones de iluminación.</li>
+    <li><strong>Componentes Inclusivos:</strong> Implementación de componentes de MUI ajustados para ser "Keyboard-Friendly", como el uso de <code>CardActionArea</code> para tarjetas interactivas.</li>
+</ul>
+
+<hr>
+
 <h2>📁 Estructura del Proyecto</h2>
 
 <pre><code>FinanzApp-FrontEnd/
