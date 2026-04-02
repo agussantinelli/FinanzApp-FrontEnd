@@ -40,7 +40,7 @@ describe('StocksCard', () => {
 
     it('navigates to local symbol', () => {
         render(<StocksCard data={mockData} />);
-        fireEvent.click(screen.getByText('Grupo Galicia').closest('div[class*="MuiCard-root"]')!);
+        fireEvent.click(screen.getByRole('button', { name: /ver detalles de grupo galicia/i }));
         expect(mockPush).toHaveBeenCalledWith('/activos/GGAL');
     });
 });

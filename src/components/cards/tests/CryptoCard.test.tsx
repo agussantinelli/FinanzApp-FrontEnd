@@ -35,7 +35,7 @@ describe('CryptoCard', () => {
 
     it('navigates on click', () => {
         render(<CryptoCard data={mockData} />);
-        fireEvent.click(screen.getByText('Bitcoin').closest('div[class*="MuiCard-root"]')!);
+        fireEvent.click(screen.getByRole('button', { name: /ver detalles de bitcoin/i }));
         expect(mockPush).toHaveBeenCalledWith('/activos/BTC');
     });
 

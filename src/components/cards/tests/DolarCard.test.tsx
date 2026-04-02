@@ -28,14 +28,14 @@ describe('DolarCard', () => {
 
     it('navigates if ticker is provided', () => {
         render(<DolarCard data={mockData} title="Dolar Oficial" ticker="DOLAR" />);
-        fireEvent.click(screen.getByText('Dolar Oficial').closest('div[class*="MuiCard-root"]')!);
+        fireEvent.click(screen.getByRole('button', { name: /ver detalles de dolar oficial/i }));
         expect(mockPush).toHaveBeenCalledWith('/activos/DOLAR');
     });
 
     it('does not navigate if no ticker', () => {
         mockPush.mockClear();
         render(<DolarCard data={mockData} title="Dolar Oficial" />);
-        fireEvent.click(screen.getByText('Dolar Oficial').closest('div[class*="MuiCard-root"]')!);
+        fireEvent.click(screen.getByText('Dolar Oficial').closest('.MuiPaper-root')!);
         expect(mockPush).not.toHaveBeenCalled();
     });
 });

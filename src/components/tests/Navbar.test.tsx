@@ -121,7 +121,7 @@ describe('Navbar', () => {
 
     it('opens mobile drawer on menu icon click', async () => {
         render(<Navbar />);
-        const menuIcon = screen.getByLabelText('menu');
+        const menuIcon = screen.getByLabelText('menú de navegación');
         fireEvent.click(menuIcon);
 
         // Drawer items (unauth)
@@ -170,7 +170,7 @@ describe('Navbar', () => {
         });
 
         render(<Navbar />);
-        const menuIcon = screen.getByLabelText('menu');
+        const menuIcon = screen.getByLabelText('menú de navegación');
         fireEvent.click(menuIcon);
 
         // Auth more items in mobile

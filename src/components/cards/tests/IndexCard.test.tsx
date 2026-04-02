@@ -60,8 +60,7 @@ describe('IndexCard', () => {
 
     it('navigates to detail on click', () => {
         render(<IndexCard data={mockData} />);
-        const card = screen.getByText("S&P 500").closest('.MuiPaper-root')!;
-        fireEvent.click(card);
+        fireEvent.click(screen.getByRole('button', { name: /ver detalles de s&p 500/i }));
         expect(mockPush).toHaveBeenCalledWith('/activos/^GSPC');
     });
 });

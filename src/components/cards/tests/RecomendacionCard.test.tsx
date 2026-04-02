@@ -17,9 +17,9 @@ vi.mock('next/link', () => {
 });
 
 const mockItem: RecomendacionResumenDTO = {
-    id: 1,
+    id: "1",
     titulo: "Buy Apple",
-    autorId: 10,
+    autorId: "10",
     autorNombre: "Expert",
     fotoPerfil: "url",
     fecha: "2023-10-01",
@@ -28,7 +28,7 @@ const mockItem: RecomendacionResumenDTO = {
     riesgo: "Moderado",
     horizonte: "CortoPlazo",
     cantidadActivos: 1,
-    esAcertada: null,
+    esAcertada: undefined,
     fuente: "Analysis"
 };
 
@@ -48,7 +48,7 @@ describe('RecomendacionCard', () => {
 
     it('navigates to detail on click', () => {
         render(<RecomendacionCard item={mockItem} />);
-        fireEvent.click(screen.getByText("Buy Apple").closest('div[class*="MuiCard-root"]')!);
+        fireEvent.click(screen.getByRole('button', { name: /ver detalles/i }));
         expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('/recomendaciones/buy-apple'));
     });
 
