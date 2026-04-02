@@ -67,7 +67,7 @@ describe('PortfolioManagement Integration', () => {
         const nameInput = screen.getByLabelText(/Nombre/i);
         fireEvent.change(nameInput, { target: { value: 'Nueva Cartera' } });
 
-        const createBtn = screen.getByRole('button', { name: /^Crear$/i });
+        const createBtn = screen.getByRole('button', { name: /Crear portafolio/i });
         fireEvent.click(createBtn);
 
         // Wait for Create dialog to close before continuing to Edit
@@ -83,7 +83,7 @@ describe('PortfolioManagement Integration', () => {
         const editNameInput = within(editDialog).getByLabelText(/Nombre/i);
         fireEvent.change(editNameInput, { target: { value: 'Cartera Editada' } });
 
-        const saveBtn = screen.getByRole('button', { name: /Guardar Cambios/i });
+        const saveBtn = screen.getByRole('button', { name: /Guardar cambios/i });
         fireEvent.click(saveBtn);
 
         await waitFor(() => {
