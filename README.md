@@ -415,6 +415,7 @@
 <p>Este proyecto utiliza un sistema de <strong>Skills</strong> (guías avanzadas) para asegurar que cualquier desarrollo (humano o por IA) siga estrictamente los estándares arquitectónicos del proyecto:</p>
 
 <ul>
+    <li><strong>♿ Web Accessibility:</strong> Estándar obligatorio (WCAG 2.1) para la inclusión, navegación por teclado y uso de lectores de pantalla.</li>
     <li><strong>🏗️ Arquitectura Modular:</strong> Reglas estrictas sobre la separación de capas (Types, Services, Hooks, Components).</li>
     <li><strong>🎣 React Hooks:</strong> Mejores prácticas para hooks personalizados, fomentando la extracción de lógica a <code>utils</code>.</li>
     <li><strong>🧪 Test Enforcement:</strong> Regla "One-to-One" que exige un archivo de test por cada archivo de lógica o componente.</li>
