@@ -9,6 +9,7 @@ This skill serves as a central index for all architectural and development guide
 
 ## Frontend Skills (`FinanzApp-FrontEnd`)
 
+- **[accessibility](file:///c:/Users/Agus/Documents/FinanzApp/FinanzApp-FrontEnd/.agent/skills/accessibility/SKILL.md)**: Reglas obligatorias para garantizar la accesibilidad web (A11y).
 - **[api-communication](file:///c:/Users/Agus/Documents/FinanzApp/FinanzApp-FrontEnd/.agent/skills/api-communication/SKILL.md)**: Mandatory rules for API communication using the central `http` client.
 - **[clean-structure](file:///c:/Users/Agus/Documents/FinanzApp/FinanzApp-FrontEnd/.agent/skills/clean-structure/SKILL.md)**: Component organization and modern React principles for the FrontEnd.
 - **[code-quality](file:///c:/Users/Agus/Documents/FinanzApp/FinanzApp-FrontEnd/.agent/skills/code-quality/SKILL.md)**: Guidelines for clean code, readability, and the "No Comments" policy.
