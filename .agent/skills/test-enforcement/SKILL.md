@@ -10,7 +10,7 @@ To maintain 100% reliability and prevent visual or logic regressions in the Fina
 
 ## Guidelines
 1. **Rule of One**: Every `.ts` or `.tsx` file in `src/services`, `src/store`, `src/utils`, `src/hooks`, or `src/components` MUST have a matching `.test.ts` or `.test.tsx` file.
-2. **Location**: Test files must be located in the same directory as the file they are testing.
+2. **Location**: Test files MUST be located in a nested `tests/` directory within the same directory as the source file (Except for `src/app/`, where they remain in the same directory).
 3. **Naming**: If the file is `useAuth.ts`, the test file MUST be `useAuth.test.ts`.
 4. **Content**:
     - **Logic/Services/Hooks**: Tests must cover main success paths and edge cases.
@@ -19,11 +19,19 @@ To maintain 100% reliability and prevent visual or logic regressions in the Fina
 
 ## Examples
 
-### Correct Structure
+### Correct Structure (Logic/Utils/Hooks)
 ```
-src/components/common/
-├── Button.tsx
-└── Button.test.tsx
+src/hooks/
+├── useAuth.ts
+└── tests/
+    └── useAuth.test.ts
+```
+
+### Correct Structure (App Router - Exception)
+```
+src/app/dashboard/
+├── page.tsx
+└── page.test.tsx
 ```
 
 ### Incorrect Structure (Missing Test)
