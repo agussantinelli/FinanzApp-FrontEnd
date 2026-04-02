@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getAvatarColor } from './icons-appearance';
+import { getAvatarColor } from '../icons-appearance';
 
 describe('icons-appearance', () => {
     it('should return correct color for Accion', () => {

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import theme from './theme';
-import { colors } from './design-tokens';
+import theme from '../theme';
+import { colors } from '../design-tokens';
 
 describe('theme configuration', () => {
     it('should have dark mode enabled', () => {
