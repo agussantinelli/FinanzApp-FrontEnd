@@ -4,7 +4,7 @@ import {
     getAllRecomendacionesFromCache, 
     cacheRecomendaciones, 
     clearRecomendacionesCache 
-} from './recomendaciones-cache';
+} from '../recomendaciones-cache';
 import { RecomendacionDTO, Riesgo, Horizonte } from '@/types/Recomendacion';
 
 describe('recomendaciones-cache', () => {

@@ -4,7 +4,7 @@ import {
     getAllActivosFromCache, 
     cacheActivos, 
     clearCache 
-} from './activos-cache';
+} from '../activos-cache';
 import { ActivoDTO } from '@/types/Activo';
 
 describe('activos-cache', () => {

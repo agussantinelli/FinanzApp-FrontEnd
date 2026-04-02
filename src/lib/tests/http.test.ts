@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { http } from './http';
+import { http } from '../http';
 import { clearCache } from '@/lib/activos-cache';
 
 vi.mock('@/lib/activos-cache', () => ({
